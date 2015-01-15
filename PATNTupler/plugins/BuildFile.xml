@@ -1,0 +1,9 @@
+<use name="DataFormats/PatCandidates"/>
+<use name="FWCore/Framework"/>
+<use name="FWCore/PluginManager"/>
+<use name="FWCore/ParameterSet"/>
+<use name="NTupler/PATNTupler"/>
+<flags EDM_PLUGIN="1"/>
+
+<library name="NTuplerPATNTuplerPlugins" file="*.cc">
+</library>
