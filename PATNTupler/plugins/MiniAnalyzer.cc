@@ -39,6 +39,13 @@
 #include "DataFormats/PatCandidates/interface/MET.h"
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 
+//...for histograms creation
+#include "FWCore/ServiceRegistry/interface/Service.h"
+#include "CommonTools/UtilAlgos/interface/TFileService.h"
+
+//ROOT HEADERS
+#include "TTree.h"
+
 //NTuple object headers
 #include "NTupler/PATNTupler/interface/EventInfo.hh"
 #include "NTupler/PATNTupler/interface/Particles.hh"
@@ -93,6 +100,10 @@ class MiniAnalyzer : public edm::EDAnalyzer {
       edm::EDGetTokenT<pat::JetCollection> fatjetToken_;
       edm::EDGetTokenT<pat::METCollection> metToken_;
 
+      //Ntuple Tree
+      edm::Service<TFileService> fHistos;
+      TTree* EventDataTree;
+
       //Variables whose values will be stored as branches...
       //ran::Event* event_;
       ran::EventInfo evtInfo{};
@@ -124,6 +135,16 @@ MiniAnalyzer::MiniAnalyzer(const edm::ParameterSet& iConfig):
     fatjetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"))),
     metToken_(consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets")))
 {
+    EventDataTree = fHistos->make<TTree>("EventDataTree", "Event data tree");
+
+    //Setting up the links between variables and branches...
+    //event_ = 0;	
+    //EventDataTree->Branch("event","ran::Event", &event_, 64000, 1); // This line was taken from Jim's tupiliser
+    EventDataTree->Branch("evtInfo","ran::EventInfo",&evtInfo);
+    EventDataTree->Branch("electronCollection","std::vector<ran::ElectronStruct>", &electronCollection, 64000, 1); 
+    EventDataTree->Branch("muonCollection","std::vector<ran::MuonStruct>", &muonCollection, 64000, 1); 
+    EventDataTree->Branch("jetCollection","std::vector<ran::JetStruct>", &jetCollection, 64000, 1);
+
 }
 
 
@@ -218,6 +239,10 @@ MiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     printf("\n");
 
+    electronCollection = new std::vector<ran::ElectronStruct>();
+    muonCollection = new std::vector<ran::MuonStruct>();
+    jetCollection = new std::vector<ran::JetStruct>();
+
     //Clearing contents/setting default values of variables that should get new values in each event...
     ResetEventByEventVariables();
 
@@ -233,7 +258,14 @@ MiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     //Read in Jets
     ReadInJets(iEvent);
-	
+
+    //Fill Ntuple
+    EventDataTree->Fill();	
+
+    //delete event_;
+    delete electronCollection;
+    delete muonCollection;
+    delete jetCollection;
 
 #ifdef THIS_IS_AN_EVENT_EXAMPLE
    Handle<ExampleData> pIn;
@@ -257,6 +289,15 @@ MiniAnalyzer::beginJob()
 void 
 MiniAnalyzer::endJob() 
 {
+
+  //Write out Ntuple
+  	std::cout << "   done." << std::endl;
+	
+	
+	fHistos->cd();
+	EventDataTree->Write();
+
+	std::cout << std::endl;
 }
 
 // ------------ method called when starting to processes a run  ------------
