@@ -1,7 +1,6 @@
 <use name="DataFormats/PatCandidates"/>
 <use name="root"/>
 <use name="boost"/>
-<use name="SHarper/HEEPAnalyzer"/>
 
 <export>
    <use name="root"/>
