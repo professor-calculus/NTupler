@@ -69,12 +69,6 @@ namespace ran{
     double bestTrk_dxy_vtx() const {return muon->bestTrk_dxy_vtx;}///< Quality cuts applied to the primary vertex
     double bestTrk_dz_vtx() const {return muon->bestTrk_dz_vtx;}///< Quality cuts applied to the primary vertex
 
-    double pTune_pt() const {return muon->pTune_pt;}///<Muon pt called from muon::tevOptimized. Only required for releases younger than CMSSW_5_3_6_patch1
-    double pTune_ptError() const {return muon->pTune_ptError;}///<  Muon pt error called from muon::tevOptimized. Only required for releases younger than CMSSW_5_3_6_patch1
-    double pTune_dxy() const {return muon->pTune_dxy;}///< Muon dxy. Best muon quantities called from muon::tevOptimized. Only required for releases younger than CMSSW_5_3_6_patch1
-    double pTune_dz() const {return muon->pTune_dz;}///< Muon dz. Best muon quantities called from muon::tevOptimized. Only required for releases younger than CMSSW_5_3_6_patch1
-
-
   private:
     const ran::MuonStruct* muon;
 

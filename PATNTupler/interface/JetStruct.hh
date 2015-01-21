@@ -10,19 +10,19 @@ namespace ran{
     JetStruct(); ///< default constructor
     virtual ~JetStruct(){} ///< destructor
     double et;///< et
+    double pt;/// < pt
+    double mass;/// < mass
     double eta;///< eta 
     double jetProbabilityBJetTags;///< jetProbabilityBJetTags b tag discriminator
     double jetBProbabilityBJetTags;///< jetBProbabilityBJetTags b tag discriminator
     double trackCountingHighEffBJetTags;///< trackCountingHighEffBJetTags b tag discriminator
     double trackCountingHighPurBJetTags;///< trackCountingHighPurBJetTags b tag discriminator
-    double simpleSecondaryVertexBJetTags;///< simpleSecondaryVertexBJetTags b tag discriminator
-    double combinedSecondaryVertexBJetTags;///< combinedSecondaryVertexBJetTags b tag discriminator
-    double combinedSecondaryVertexMVABJetTags;///< combinedSecondaryVertexMVABJetTags b tag discriminator
-    double impactParameterMVABJetTags;///< impactParameterMVABJetTags b tag discriminator
-    double softElectronBJetTags;///< softElectronBJetTags b tag discriminator
-    double softMuonBJetTags;///< softMuonBJetTags b tag discriminator
-    double softMuonNoIPBJetTags;///< softMuonNoIPBJetTags b tag discriminator
-    int partonFlavour;///<  MC parton flavour (sensible values for MC only!) 
+    double simpleSecondaryVertexHighEffBJetTags;///< simpleSecondaryVertexHighEffBJetTags b tag discriminator
+    double simpleSecondaryVertexHighPurBJetTags;///< combinedSecondaryVertexBJetTags b tag discriminator
+    double combinedInclusiveSecondaryVertexBJetTags;///< combinedInclusiveSecondaryVertexBJetTags b tag discriminator
+    double jecFactor_unCorrected;///<factor applied to jet pt to get uncorrect jet pt
+    double userFloat_pileupJetId_fullDiscriminant;///< userFloat pileup jet ID
+    int partonFlavour;///<  MC parton flavour (sensible values for MC only obviously!) 
     ClassDef(JetStruct,1)//Struct class definition
   };
 
