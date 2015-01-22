@@ -21,17 +21,20 @@ namespace ran{
     double e1x5() const {return electron->e1x5;}///< e1x5
     double deltaPhiSuperClusterTrackAtVtx() const {return electron->deltaPhiSuperClusterTrackAtVtx;}
     double hadronicOverEm() const {return electron->hadronicOverEm;}///< H/E
-    int nrMissHits() const {return electron->nrMissHits;}///< Number of missing hits
+    //int nrMissHits() const {return electron->nrMissHits;}///< Number of missing hits
     double scSigmaIEtaIEta() const {return electron->scSigmaIEtaIEta;}
     double dr03EcalRecHitSumEt() const {return electron->dr03EcalRecHitSumEt;}
     double dr03HcalDepth1TowerSumEt() const {return electron->dr03HcalDepth1TowerSumEt;}
-    double dr03TkSumPt() const {return electron->dr03TkSumPt;} 
-    double pfIso_chgHad() const {return electron->pfIso_chgHad;}///<Particle Flow Charged hadron isolation
+    double dr03TkSumPt() const {return electron->dr03TkSumPt;}
+    double sigmaIetaIeta() const {return electron->sigmaIetaIeta;}///< sigmaIetaIeta
+    double full5x5_sigmaIetaIeta() const {return electron->full5x5_sigmaIetaIeta;}///<full5x5_sigmaIetaIeta
+    bool passConversionVeto() const {return electron->passConversionVeto;}///< passConversionVeto
+    /*double pfIso_chgHad() const {return electron->pfIso_chgHad;}///<Particle Flow Charged hadron isolation
     double pfIso_neutHad() const {return electron->pfIso_neutHad;}///<Particle Flow neutral hadron isolation
-    double pfIso_pht() const {return electron->pfIso_pht;}///<Particle Flow photon isolation
+    double pfIso_pht() const {return electron->pfIso_pht;}///<Particle Flow photon isolation */
 
     //HEEP variables
-    double heep_et() const {return electron->heep_et;}///< HEEP et
+    /*    double heep_et() const {return electron->heep_et;}///< HEEP et
     double heep_gsfEt() const {return electron->heep_gsfEt;}///< HEEP GSF et
     double heep_scEt() const {return electron->heep_scEt;}///< HEEP supercluster et
     double heep_energy() const {return electron->heep_energy;}///< HEEP energy
@@ -100,7 +103,7 @@ namespace ran{
     double heep_isolHadRel03() const {return electron->heep_isolHadRel03;}///< HEEP
     int heep_numMissInnerHits() const {return electron->heep_numMissInnerHits;}///< HEEP
     int heep_cutCode() const {return electron->heep_cutCode;}///< HEEP cutcode. INVALID = 0x40000000
-  
+    */
   private:
     const ran::ElectronStruct* electron;
 

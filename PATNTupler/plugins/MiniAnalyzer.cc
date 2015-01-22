@@ -381,8 +381,38 @@ void MiniAnalyzer::ReadInEvtInfo(bool beVerbose, const edm::Event& edmEventObjec
       evtInfo.evtNum = edmEventObject.id().event(); 
 }
 
-void MiniAnalyzer::ReadInElectrons(const edm::Event& edmEvent)
+void MiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 {
+    edm::Handle<pat::ElectronCollection> electrons;
+    iEvent.getByToken(electronToken_, electrons);
+    for (const pat::Electron &iEle : *electrons) {
+        ran::ElectronStruct ithElec;
+
+	ithElec.pt = iEle.pt();
+	ithElec.eta = iEle.eta();
+
+	ithElec.gsfTrack_available = iEle.gsfTrack().isAvailable();
+	ithElec.scEta = iEle.superCluster()->eta();
+	ithElec.scEnergy = iEle.superCluster()->energy();
+	ithElec.ecalDrivenSeed = iEle.ecalDrivenSeed();
+	ithElec.sigmaIetaIeta = iEle.sigmaIetaIeta();
+	ithElec.full5x5_sigmaIetaIeta = iEle.full5x5_sigmaIetaIeta();
+	ithElec.passConversionVeto = iEle.passConversionVeto();
+	ithElec.e2x5Max = iEle.e2x5Max();
+	ithElec.e5x5 = iEle.e5x5();
+	ithElec.e1x5 = iEle.e1x5();
+	ithElec.deltaPhiSuperClusterTrackAtVtx = iEle.deltaPhiSuperClusterTrackAtVtx();
+	ithElec.hadronicOverEm = iEle.hadronicOverEm();
+	//ithElec.nrMissHits = iEle.gsfTrack()->trackerExpectedHitsInner().numberOfHits();
+	ithElec.scSigmaIEtaIEta = iEle.scSigmaIEtaIEta();
+	ithElec.dr03EcalRecHitSumEt = iEle.dr03EcalRecHitSumEt();
+	ithElec.dr03HcalDepth1TowerSumEt = iEle.dr03HcalDepth1TowerSumEt();
+	ithElec.dr03TkSumPt = iEle.dr03TkSumPt();
+	//ithElec.pfIso_chgHad = iEle.pfIsolationVariables().chargedHadronIso;
+	//ithElec.pfIso_neutHad = iEle.pfIsolationVariables().neutralHadronIso;
+	//ithElec.pfIso_pht = iEle.pfIsolationVariables().photonIso;
+
+    }
 
 }
 //Read in jet vars

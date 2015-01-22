@@ -27,14 +27,19 @@ namespace ran{
     double e1x5;///< e1x5
     double deltaPhiSuperClusterTrackAtVtx;///< 
     double hadronicOverEm;///< H/E
-    int nrMissHits;///< Number of missing hits
+    //int nrMissHits;///< Number of missing hits
     double scSigmaIEtaIEta;///< 
     double dr03EcalRecHitSumEt;///< 
     double dr03HcalDepth1TowerSumEt;///< 
     double dr03TkSumPt;///< 
-    double pfIso_chgHad;///<Particle Flow Charged hadron isolation
+    double sigmaIetaIeta;///< sigmaIetaIeta
+    double full5x5_sigmaIetaIeta;///<full5x5_sigmaIetaIeta
+    bool passConversionVeto;///< passConversionVeto
+    /*double pfIso_chgHad;///<Particle Flow Charged hadron isolation
     double pfIso_neutHad;///<Particle Flow neutral hadron isolation
-    double pfIso_pht;///<Particle Flow photon isolation
+    double pfIso_pht;///<Particle Flow photon isolation  */
+
+    /*
 
     double heep_et;///<HEEP et
     double heep_gsfEt;///<HEEP gsf electron et
@@ -116,7 +121,7 @@ namespace ran{
 
     int heep_numMissInnerHits;
 
-    int heep_cutCode;///< HEEP cutcode. INVALID = 0x40000000
+    int heep_cutCode;///< HEEP cutcode. INVALID = 0x40000000   */
 
     ClassDef(ElectronStruct,1)//ElectronStruct class definition
   };
