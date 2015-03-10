@@ -15,17 +15,17 @@
 
 //RAL PARTICLE HEADERS
 #include "NtpReader.hh"
-#include "../interface/EventInfo.hh" //del this
+//#include "../interface/EventInfo.hh" //del this
 
 using std::cout;
-using boost::shared_ptr;
+using boost::shared_ptr; //DROP BOOST AND USE C++11
 using ran::ElectronStruct;
 using ran::MuonStruct;
 using ran::JetStruct;
 
 int main(){
 
-  //Two ways to access the data.
+  //Example of two ways to access the data.
   //1. Using helper class NtpReader
   //2. Standard ROOT DIY
 
@@ -47,39 +47,43 @@ int main(){
        iter != vectorOfFiles.end(); ++iter){//loop over ntuple files
     shared_ptr<TFile> g = shared_ptr<TFile> (new TFile((*iter).c_str() ));
 
-  TTree *eventtTree = (TTree*)g->Get("demo/EventDataTree"); //get the tree
+    TTree *eventtTree = (TTree*)g->Get("demo/EventDataTree"); //get the tree
 
-  NtpReader testE(eventtTree); //instantiate NtpReader which takes tree to analyse as input
-  //NtpReader testE("test.list","demo/EventDataTree");
-  testE.setEventInfoBranch("evtInfo");//Specify the branches you want to look at. Each branch has its own setter method
-  cout << "Num of Entries is: " <<  testE.getLastEntry() << "\n";
+    NtpReader testE(eventtTree, "evtInfo"); //instantiate NtpReader which takes tree to analyse as input
+    //testE.setEventInfoBranch("evtInfo");//Specify the branches you want to look at. Each branch has its own setter method. Need to move this to the constructor
+    cout << "Num of Entries is: " <<  testE.getLastEntry() << "\n";
 
   
-  for (testE.setEntryNumber(0); testE.getEntryNumber() < testE.getLastEntry(); testE.nextEntry()){//loop over events in a file
+    for (testE.setEntryNumber(0); testE.getEntryNumber() < testE.getLastEntry(); testE.nextEntry()){//loop over events in a file
+      /*
+      cout << "Entry number is: " << testE.getEntryNumber() << "\n";
+      cout <<"Run Number is: " << testE.runNum() << "\n";
+      cout <<"Event Number is: " << testE.evtNum() << "\n";
 
-    cout << "Entry number is: " << testE.getEntryNumber() << "\n";
- 
-    cout <<"Run Number is: " << testE.runNum() << "\n";
-    cout <<"Event Number is: " << testE.evtNum() << "\n";
+      //lets test the new method
 
-    //lets test the new method
+      std::vector<ran::NtElectron> elist = testE.getParticleCollection<ran::NtElectron, ran::ElectronStruct>("electronCollection");
+    
+      if (!elist.empty()){
+	cout << "New member EventNumber: " << testE.getEntryNumber() << "\n";
+	cout << "electron Pt: " << (elist.at(0)).pt() << "\n";     //print pt
+	//cout << "HEEP et: " << (elist.at(0)).heep_et() << "\n";
+      }
+    
+      std::vector<ran::NtJet> jlist = testE.getParticleCollection<ran::NtJet, ran::JetStruct>("jetCollection");
+      if (!jlist.empty()){
+	cout << "Jet Et: " << (jlist.at(0)).et() << "\n"; //print et
+      }
+    
+      std::vector<ran::NtMuon> mlist = testE.getParticleCollection<ran::NtMuon, ran::MuonStruct>("muonCollection");
+      if (!mlist.empty()){
+	cout << "Muon pt: " << (mlist.at(0)).pt() << "\n"; //print et
+      }
 
-    std::vector<ran::NtElectron> elist = testE.getParticleCollection<ran::NtElectron, ran::ElectronStruct>("electronCollection");
-    
-    if (!elist.empty()){
-      cout << "New member EventNumber: " << testE.getEntryNumber() << "\n";
-      cout << "Pt: " << (elist.at(0)).pt() << "\n";     //print pt
-      //cout << "HEEP et: " << (elist.at(0)).heep_et() << "\n";
-    }
-    
-    std::vector<ran::NtJet> jlist = testE.getParticleCollection<ran::NtJet, ran::JetStruct>("jetCollection");
-    if (!jlist.empty()){
-      cout << "Jet Et: " << (jlist.at(0)).et() << "\n"; //print et
-    }
-    
-    //at the end of the loop
-    //testE.nextEntry();//increment eventnumber in ntuple
-  }//end of loop over number of events in a file
+      */
+      //at the end of the loop
+      //testE.nextEntry();//increment eventnumber in ntuple
+    }//end of loop over number of events in a file
   }//end of loop over ntuple files
   
 
@@ -117,24 +121,34 @@ int main(){
   for (unsigned int i = 0; i < numEvents; ++i){
     branch->GetEntry(i); // set tree object for each event i
     //Electron collection contain structs (ElectronStruct). We want to use our own electon class which is composed of the struct (NtElectron) 
-    shared_ptr<std::vector<ran::NtElectron> > ralEVector = shared_ptr<std::vector<ran::NtElectron> > (new std::vector<ran::NtElectron>());
+    //    shared_ptr<std::vector<ran::NtElectron> > ralEVector = shared_ptr<std::vector<ran::NtElectron> > (new std::vector<ran::NtElectron>());
+    shared_ptr<std::vector<ran::NtElectron> > ralEVector = shared_ptr<std::vector<ran::NtElectron> > (new std::vector<ran::NtElectron>(electronVector->begin(), electronVector->end()));
     //This function generates a vector of NtElectron from a vector of ElectronStruct
-    fillE(ralEVector.get(),electronVector.get());
+    //fillE(ralEVector.get(),electronVector.get());
+    //fillParticleVector<ran::NtElectron, ran::ElectronStruct>(ralEVector.get(),electronVector.get());
 
     for (std::vector<ran::ElectronStruct>::const_iterator iter = electronVector->begin();
 	 iter != electronVector->end(); ++iter){ //look at electrons using structs in ntuple
-      //std::cout << "ev pt: " << (*iter).pt << "\n";
+      std::cout << "ev pt: " << (*iter).pt << "\n";
     }
 
     for (std::vector<ran::NtElectron>::const_iterator iter = ralEVector->begin();
 	 iter != ralEVector->end(); ++iter){ //look at the electrons using our electron class
-      //std::cout << "rv pt: " << (*iter).pt() << "\n";
+      std::cout << "rv pt: " << (*iter).pt() << "\n";
     }
 
     //can do the same with muons and jets
-    /*
+    
     muonBranch->GetEntry(i); // set tree object eMeEvent for each event i
-    if(!muonVector->empty()){//if it is not empty
+
+    shared_ptr<std::vector<ran::NtMuon> > ralMuVector = shared_ptr<std::vector<ran::NtMuon> > (new std::vector<ran::NtMuon>(muonVector->begin(), muonVector->end()));
+    if(!ralMuVector->empty()){//if it is not empty
+      std::cout << "muon size: " << ralMuVector->size() << "\n";
+      std::cout << "muon pt: "<< (ralMuVector->at(0)).pt() << "\n";
+    }
+
+    /*
+      if(!muonVector->empty()){//if it is not empty
       std::cout << "muon size: " << muonVector->size() << "\n";
       std::cout << "muon pt: "<< (muonVector->at(0)).pt << "\n";
     }

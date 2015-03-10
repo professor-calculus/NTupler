@@ -32,6 +32,9 @@ using std::string;
 class NtpReader{
 public:
   NtpReader(TTree* inTree) : ntpEvtNum(0), maxEvents(inTree->GetEntries()), evtTree(inTree){}///< Constructor
+  NtpReader(TTree* inTree, const TString& branchName) : ntpEvtNum(0), maxEvents(inTree->GetEntries()), evtTree(inTree){ ///< Constructor
+    setEventInfoBranch(branchName);
+  }
   NtpReader(string listOfFiles, string treeName);///< Constructor
   unsigned int runNum() const {return evtInfo->runNum;}//return the run number
   unsigned int evtNum() const {return evtInfo->evtNum;}//return the event number
@@ -57,24 +60,20 @@ private:
   shared_ptr<ran::EventInfo> evtInfo;
 };
 
+inline void NtpReader::setEntryInfo(){
+  eventInfoBranch->GetEntry(ntpEvtNum);
+}
+
 template <typename T, typename U> 
 std::vector<T> NtpReader::getParticleCollection(const TString& branchName){
-  std::vector<U>* particleVector = new std::vector<U>();
+  std::vector<U>* particleVector = new std::vector<U>(); //memory management, need the new
   
   TBranch* particleBranch = evtTree->GetBranch(branchName);
   particleBranch->SetAddress(&particleVector);
   particleBranch->GetEntry(ntpEvtNum);
 
-  std::vector<T> ntpParticleVector;
-  ntpParticleVector.reserve(particleVector->size());
-  //loop over source vector and fill new vector
-  for (typename std::vector<U>::const_iterator iter = particleVector->begin();
-       iter != particleVector->end(); ++iter){
-    T particle(*iter);
-    ntpParticleVector.push_back(particle);
-    //should delete particleVector afterwards
-  }
-
+  std::vector<T> ntpParticleVector(particleVector->begin(), particleVector->end());
+  
   //release memory, may need to be careful about this, should relase it at next event
   //delete particleVector;
 
@@ -83,5 +82,8 @@ std::vector<T> NtpReader::getParticleCollection(const TString& branchName){
 
 void fillE(std::vector<ran::NtElectron>*, 
 	   const std::vector<ran::ElectronStruct>*);///< Fill a vector of NtElectrons from a vector of ElectronStructs
+
+
+
 
 #endif

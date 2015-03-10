@@ -41,14 +41,10 @@ std::vector<ran::NtElectron>  NtpReader::testBranch2(const TString& branchName){
   return ntpElectronVector;
 }
 
-void NtpReader::setEventInfoBranch(const TString& branchName){
+void NtpReader::setEventInfoBranch(const TString& branchName){ // This needs to be in the constructor. Shouldn't need to set this separately
   evtInfo = shared_ptr< ran::EventInfo >(new ran::EventInfo());
   eventInfoBranch = evtTree->GetBranch(branchName);
   eventInfoBranch->SetAddress(&evtInfo);
-}
-
-void NtpReader::setEntryInfo(){
-  eventInfoBranch->GetEntry(ntpEvtNum);
 }
 
 bool NtpReader::isLastEntry(){
@@ -59,6 +55,8 @@ bool NtpReader::isLastEntry(){
   }
 }
 
+
+//Should make this a template like genparticle collection. Also no need to loop just use vector constructor
 void fillE(std::vector<ran::NtElectron>* ralECollection, 
 	   const std::vector<ran::ElectronStruct>* eCollection){
   //reserve vector size at least the same size as vector to be copied
@@ -69,3 +67,6 @@ void fillE(std::vector<ran::NtElectron>* ralECollection,
     ralECollection->push_back(elec);
   }
 }
+
+
+

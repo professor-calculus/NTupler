@@ -386,7 +386,7 @@ void MiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
     iEvent.getByToken(electronToken_, electrons);
     for (const pat::Electron &iEle : *electrons) {
         ran::ElectronStruct ithElec;
-
+	//UNESSCESSARY ADDITONAL COPY. SHOULD FILL DIRECTLY INTO THE VECTOR RATHER THAN CREATING AN OBJECT, FILLING IT AND THEN COPYING IT IN THE VECTOR
 	ithElec.pt = iEle.pt();
 	ithElec.eta = iEle.eta();
 
@@ -410,6 +410,7 @@ void MiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 	//ithElec.pfIso_chgHad = iEle.pfIsolationVariables().chargedHadronIso;
 	//ithElec.pfIso_neutHad = iEle.pfIsolationVariables().neutralHadronIso;
 	//ithElec.pfIso_pht = iEle.pfIsolationVariables().photonIso;
+        electronCollection->push_back(ithElec);
 
     }
 
