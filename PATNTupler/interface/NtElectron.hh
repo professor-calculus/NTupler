@@ -20,7 +20,7 @@ namespace ran{
     double e5x5() const {return electron->e5x5;}///< e5x5
     double e1x5() const {return electron->e1x5;}///< e1x5
     double deltaPhiSuperClusterTrackAtVtx() const {return electron->deltaPhiSuperClusterTrackAtVtx;}
-    double hadronicOverEm() const {return electron->hadronicOverEm;}///< H/E
+    double hadronicOverEm() const {return electron->hadronicOverEm;}///< H/E 
     //int nrMissHits() const {return electron->nrMissHits;}///< Number of missing hits
     double scSigmaIEtaIEta() const {return electron->scSigmaIEtaIEta;}
     double dr03EcalRecHitSumEt() const {return electron->dr03EcalRecHitSumEt;}
@@ -28,7 +28,7 @@ namespace ran{
     double dr03TkSumPt() const {return electron->dr03TkSumPt;}
     double sigmaIetaIeta() const {return electron->sigmaIetaIeta;}///< sigmaIetaIeta
     double full5x5_sigmaIetaIeta() const {return electron->full5x5_sigmaIetaIeta;}///<full5x5_sigmaIetaIeta
-    bool passConversionVeto() const {return electron->passConversionVeto;}///< passConversionVeto
+    bool passConversionVeto() const {return electron->passConversionVeto;}///< passConversionVeto 
     /*double pfIso_chgHad() const {return electron->pfIso_chgHad;}///<Particle Flow Charged hadron isolation
     double pfIso_neutHad() const {return electron->pfIso_neutHad;}///<Particle Flow neutral hadron isolation
     double pfIso_pht() const {return electron->pfIso_pht;}///<Particle Flow photon isolation */

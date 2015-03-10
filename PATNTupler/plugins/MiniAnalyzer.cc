@@ -94,8 +94,8 @@ class MiniAnalyzer : public edm::EDAnalyzer {
       edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
       edm::EDGetTokenT<pat::MuonCollection> muonToken_;
       edm::EDGetTokenT<pat::ElectronCollection> electronToken_;
-      edm::EDGetTokenT<pat::TauCollection> tauToken_;
-      edm::EDGetTokenT<pat::PhotonCollection> photonToken_;
+      //edm::EDGetTokenT<pat::TauCollection> tauToken_;
+      // edm::EDGetTokenT<pat::PhotonCollection> photonToken_;
       edm::EDGetTokenT<pat::JetCollection> jetToken_;
       edm::EDGetTokenT<pat::JetCollection> fatjetToken_;
       edm::EDGetTokenT<pat::METCollection> metToken_;
@@ -129,8 +129,8 @@ MiniAnalyzer::MiniAnalyzer(const edm::ParameterSet& iConfig):
     vtxToken_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
     muonToken_(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
     electronToken_(consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electrons"))),
-    tauToken_(consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("taus"))),
-    photonToken_(consumes<pat::PhotonCollection>(iConfig.getParameter<edm::InputTag>("photons"))),
+    //tauToken_(consumes<pat::TauCollection>(iConfig.getParameter<edm::InputTag>("taus"))),
+    //photonToken_(consumes<pat::PhotonCollection>(iConfig.getParameter<edm::InputTag>("photons"))),
     jetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jets"))),
     fatjetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"))),
     metToken_(consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets")))
@@ -200,7 +200,7 @@ MiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
         //printf("elec with pt %4.1f, supercluster eta %+5.3f, sigmaIetaIeta %.3f (%.3f with full5x5 shower shapes), pass conv veto %d\n", el.pt(), el.superCluster()->eta(), el.sigmaIetaIeta(), el.full5x5_sigmaIetaIeta(), el.passConversionVeto());
     }
 
-    edm::Handle<pat::PhotonCollection> photons;
+    /* edm::Handle<pat::PhotonCollection> photons;
     iEvent.getByToken(photonToken_, photons);
     for (const pat::Photon &pho : *photons) {
         if (pho.pt() < 20 or pho.chargedHadronIso()/pho.pt() > 0.3) continue;
@@ -214,11 +214,11 @@ MiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
         //printf("tau  with pt %4.1f, dxy signif %.1f, ID(byMediumCombinedIsolationDeltaBetaCorr3Hits) %.1f, lead candidate pt %.1f, pdgId %d \n",
         //            tau.pt(), tau.dxy_Sig(), tau.tauID("byMediumCombinedIsolationDeltaBetaCorr3Hits"), tau.leadCand()->pt(), tau.leadCand()->pdgId());
     }
-
+    */
 
     edm::Handle<pat::JetCollection> jets;
     iEvent.getByToken(jetToken_, jets);
-    int ijet = 0;
+    /*int ijet = 0;
     for (const pat::Jet &j : *jets) {
         if (j.pt() < 20) continue;
         //printf("jet  with pt %5.1f (raw pt %5.1f), eta %+4.2f, btag CSV %.3f, CISV %.3f, pileup mva disc %+.2f\n",
@@ -230,8 +230,8 @@ MiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	      //const pat::PackedCandidate &cand = dynamic_cast<const pat::PackedCandidate &>(*daus[i2]);
                 //printf("         constituent %3d: pt %6.2f, dz(pv) %+.3f, pdgId %+3d\n", i2,cand.pt(),cand.dz(PV.position()),cand.pdgId());
             }
-        }
-    }
+	    }
+	    }*/
 
 
     edm::Handle<pat::JetCollection> fatjets;
@@ -392,8 +392,8 @@ void MiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 
 	ithElec.gsfTrack_available = iEle.gsfTrack().isAvailable();
 	ithElec.scEta = iEle.superCluster()->eta();
-	ithElec.scEnergy = iEle.superCluster()->energy();
-	ithElec.ecalDrivenSeed = iEle.ecalDrivenSeed();
+	ithElec.scEnergy = iEle.superCluster()->energy(); 
+	ithElec.ecalDrivenSeed = iEle.ecalDrivenSeed(); 
 	ithElec.sigmaIetaIeta = iEle.sigmaIetaIeta();
 	ithElec.full5x5_sigmaIetaIeta = iEle.full5x5_sigmaIetaIeta();
 	ithElec.passConversionVeto = iEle.passConversionVeto();
@@ -402,7 +402,7 @@ void MiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 	ithElec.e1x5 = iEle.e1x5();
 	ithElec.deltaPhiSuperClusterTrackAtVtx = iEle.deltaPhiSuperClusterTrackAtVtx();
 	ithElec.hadronicOverEm = iEle.hadronicOverEm();
-	//ithElec.nrMissHits = iEle.gsfTrack()->trackerExpectedHitsInner().numberOfHits();
+	//ithElec.nrMissHits = iEle.gsfTrack().trackerExpectedHitsInner().numberOfHits();
 	ithElec.scSigmaIEtaIEta = iEle.scSigmaIEtaIEta();
 	ithElec.dr03EcalRecHitSumEt = iEle.dr03EcalRecHitSumEt();
 	ithElec.dr03HcalDepth1TowerSumEt = iEle.dr03HcalDepth1TowerSumEt();
