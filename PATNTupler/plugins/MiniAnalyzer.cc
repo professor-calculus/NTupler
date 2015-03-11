@@ -385,7 +385,8 @@ void MiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
     edm::Handle<pat::ElectronCollection> electrons;
     iEvent.getByToken(electronToken_, electrons);
     for (const pat::Electron &iEle : *electrons) {
-        ran::ElectronStruct ithElec;
+      electronCollection->push_back(ran::ElectronStruct{});
+      ran::ElectronStruct &ithElec = electronCollection->back();
 	//UNESSCESSARY ADDITONAL COPY. SHOULD FILL DIRECTLY INTO THE VECTOR RATHER THAN CREATING AN OBJECT, FILLING IT AND THEN COPYING IT IN THE VECTOR
 	ithElec.pt = iEle.pt();
 	ithElec.eta = iEle.eta();
@@ -410,7 +411,7 @@ void MiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 	//ithElec.pfIso_chgHad = iEle.pfIsolationVariables().chargedHadronIso;
 	//ithElec.pfIso_neutHad = iEle.pfIsolationVariables().neutralHadronIso;
 	//ithElec.pfIso_pht = iEle.pfIsolationVariables().photonIso;
-        electronCollection->push_back(ithElec);
+        //electronCollection->push_back(ithElec);
 
     }
 
@@ -421,7 +422,9 @@ void MiniAnalyzer::ReadInJets(const edm::Event& iEvent)
     edm::Handle<pat::JetCollection> jets;
     iEvent.getByToken(jetToken_, jets);
     for (const pat::Jet &iJet: *jets) {
-      ran::JetStruct ithJet;
+      jetCollection->push_back(ran::JetStruct{});
+
+      ran::JetStruct &ithJet = jetCollection->back();
       ithJet.pt = iJet.pt();
       ithJet.et = iJet.et();
       ithJet.eta = iJet.eta();
@@ -441,7 +444,6 @@ void MiniAnalyzer::ReadInJets(const edm::Event& iEvent)
 
 
       ithJet.partonFlavour = iJet.partonFlavour();
-      jetCollection->push_back(ithJet);
 
     }
 
@@ -462,109 +464,111 @@ void MiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
 
     for (const pat::Muon &imuon : *muons) {
       
-      ran::MuonStruct aMuon; // should put this in the muon collection and then fill the members in the collection rather than creating an object, filling and then copying
-       aMuon.pt = imuon.pt();
-       aMuon.eta = imuon.eta();
-       aMuon.p4                 = imuon.p4();
-       aMuon.charge             = imuon.charge();
-       aMuon.isGlobalMuon       = imuon.isGlobalMuon();
-       aMuon.isTrackerMuon      = imuon.isTrackerMuon();
-       aMuon.isStandAloneMuon   = imuon.isStandAloneMuon();
-       aMuon.numMatchedMuonStns = imuon.numberOfMatchedStations();
+      muonCollection->push_back(ran::MuonStruct{}); 
+      ran::MuonStruct &aMuon = muonCollection->back(); 
+
+      aMuon.pt = imuon.pt();
+      aMuon.eta = imuon.eta();
+      aMuon.p4                 = imuon.p4();
+      aMuon.charge             = imuon.charge();
+      aMuon.isGlobalMuon       = imuon.isGlobalMuon();
+      aMuon.isTrackerMuon      = imuon.isTrackerMuon();
+      aMuon.isStandAloneMuon   = imuon.isStandAloneMuon();
+      aMuon.numMatchedMuonStns = imuon.numberOfMatchedStations();
    
-       aMuon.dB                 = imuon.dB();
+      aMuon.dB                 = imuon.dB();
 
-       aMuon.isPFIsolationValid = imuon.isPFIsolationValid();
-       aMuon.pfIsoR03_sumChgHadPt  = imuon.pfIsolationR03().sumChargedHadronPt;
-       aMuon.pfIsoR03_chgPartPt = imuon.pfIsolationR03().sumChargedParticlePt;
-       aMuon.pfIsoR03_sumNeutHadPt =  imuon.pfIsolationR03().sumNeutralHadronEt;
-       aMuon.pfIsoR03_sumPhtEt =  imuon.pfIsolationR03().sumPhotonEt;
-       aMuon.isIsolationValid   = imuon.isIsolationValid();
-       aMuon.isolR03_sumPt      = imuon.isolationR03().sumPt;
-       aMuon.isolR03_emEt       = imuon.isolationR03().emEt;
-       aMuon.isolR03_hadEt      = imuon.isolationR03().hadEt;
+      aMuon.isPFIsolationValid = imuon.isPFIsolationValid();
+      aMuon.pfIsoR03_sumChgHadPt  = imuon.pfIsolationR03().sumChargedHadronPt;
+      aMuon.pfIsoR03_chgPartPt = imuon.pfIsolationR03().sumChargedParticlePt;
+      aMuon.pfIsoR03_sumNeutHadPt =  imuon.pfIsolationR03().sumNeutralHadronEt;
+      aMuon.pfIsoR03_sumPhtEt =  imuon.pfIsolationR03().sumPhotonEt;
+      aMuon.isIsolationValid   = imuon.isIsolationValid();
+      aMuon.isolR03_sumPt      = imuon.isolationR03().sumPt;
+      aMuon.isolR03_emEt       = imuon.isolationR03().emEt;
+      aMuon.isolR03_hadEt      = imuon.isolationR03().hadEt;
 
-        // Global track information ...
-       if(imuon.globalTrack().get()!=0){
-	 aMuon.globTrk_exists = true;
-	 aMuon.globTrk_pT            = imuon.globalTrack()->pt();
-	 aMuon.globTrk_eta           = imuon.globalTrack()->eta();
-	 aMuon.globTrk_phi           = imuon.globalTrack()->phi();
-	 aMuon.globTrk_charge        = imuon.globalTrack()->charge();
-	 aMuon.globTrk_numberOfValidMuonHits = imuon.globalTrack()->hitPattern().numberOfValidMuonHits();
-	 aMuon.globTrk_normalisedChi2 = imuon.globalTrack()->normalizedChi2();
-       } else {
-	 aMuon.globTrk_exists = false;
-	 aMuon.globTrk_pT    = -999.9;       
-	 aMuon.globTrk_eta  = -999.9;        
-	 aMuon.globTrk_phi  = -999.9;         
-	 aMuon.globTrk_charge  = -999.9;      
-	 aMuon.globTrk_numberOfValidMuonHits = -999.9;
-	 aMuon.globTrk_normalisedChi2 = -999.9;
-       }
+      // Global track information ...
+      if(imuon.globalTrack().get()!=0){
+	aMuon.globTrk_exists = true;
+	aMuon.globTrk_pT            = imuon.globalTrack()->pt();
+	aMuon.globTrk_eta           = imuon.globalTrack()->eta();
+	aMuon.globTrk_phi           = imuon.globalTrack()->phi();
+	aMuon.globTrk_charge        = imuon.globalTrack()->charge();
+	aMuon.globTrk_numberOfValidMuonHits = imuon.globalTrack()->hitPattern().numberOfValidMuonHits();
+	aMuon.globTrk_normalisedChi2 = imuon.globalTrack()->normalizedChi2();
+      } else {
+	aMuon.globTrk_exists = false;
+	aMuon.globTrk_pT    = -999.9;       
+	aMuon.globTrk_eta  = -999.9;        
+	aMuon.globTrk_phi  = -999.9;         
+	aMuon.globTrk_charge  = -999.9;      
+	aMuon.globTrk_numberOfValidMuonHits = -999.9;
+	aMuon.globTrk_normalisedChi2 = -999.9;
+      }
 
-       // Inner track information ...
-       if(imuon.innerTrack().get()!=0){
-	 aMuon.inTrk_exists = true;
-	 aMuon.inTrk_pT               = imuon.innerTrack()->pt();
-	 aMuon.inTrk_eta              = imuon.innerTrack()->eta();
-	 aMuon.inTrk_phi              = imuon.innerTrack()->phi();
-	 aMuon.inTrk_charge           = imuon.innerTrack()->charge();
-	 aMuon.inTrk_numValidPixHits  = imuon.innerTrack()->hitPattern().numberOfValidPixelHits();
-	 aMuon.inTrk_numValidTrkrHits = imuon.innerTrack()->hitPattern().numberOfValidTrackerHits();
-	 aMuon.inTrk_trackerLayersWithMeasurement =  imuon.innerTrack()->hitPattern().trackerLayersWithMeasurement();
-	 aMuon.inTrk_dxyVsOrigin      = imuon.innerTrack()->dxy(); // Really, this should be calculated as innerTrack()->dxy(vertex->position()), but no vertex information is read in at the moment, and MuonRecoPerformance2010 TWiki page => Can calculate this approximately just relative to (0,0,0)
-	 aMuon.trk_trkrLayersWHits    = imuon.track()->hitPattern().trackerLayersWithMeasurement();
-       } else {
-	 aMuon.inTrk_exists = false;
-	 aMuon.inTrk_pT               = -999.9;
-	 aMuon.inTrk_eta              = -999.9;
-	 aMuon.inTrk_phi              = -999.9;
-	 aMuon.inTrk_charge           = -999.9;
-	 aMuon.inTrk_numValidPixHits  = -999.9;
-	 aMuon.inTrk_numValidTrkrHits = -999.9;
-	 aMuon.inTrk_trackerLayersWithMeasurement = -999.9; 
-	 aMuon.inTrk_dxyVsOrigin      = -999.9;
-       }
+      // Inner track information ...
+      if(imuon.innerTrack().get()!=0){
+	aMuon.inTrk_exists = true;
+	aMuon.inTrk_pT               = imuon.innerTrack()->pt();
+	aMuon.inTrk_eta              = imuon.innerTrack()->eta();
+	aMuon.inTrk_phi              = imuon.innerTrack()->phi();
+	aMuon.inTrk_charge           = imuon.innerTrack()->charge();
+	aMuon.inTrk_numValidPixHits  = imuon.innerTrack()->hitPattern().numberOfValidPixelHits();
+	aMuon.inTrk_numValidTrkrHits = imuon.innerTrack()->hitPattern().numberOfValidTrackerHits();
+	aMuon.inTrk_trackerLayersWithMeasurement =  imuon.innerTrack()->hitPattern().trackerLayersWithMeasurement();
+	aMuon.inTrk_dxyVsOrigin      = imuon.innerTrack()->dxy(); // Really, this should be calculated as innerTrack()->dxy(vertex->position()), but no vertex information is read in at the moment, and MuonRecoPerformance2010 TWiki page => Can calculate this approximately just relative to (0,0,0)
+	aMuon.trk_trkrLayersWHits    = imuon.track()->hitPattern().trackerLayersWithMeasurement();
+      } else {
+	aMuon.inTrk_exists = false;
+	aMuon.inTrk_pT               = -999.9;
+	aMuon.inTrk_eta              = -999.9;
+	aMuon.inTrk_phi              = -999.9;
+	aMuon.inTrk_charge           = -999.9;
+	aMuon.inTrk_numValidPixHits  = -999.9;
+	aMuon.inTrk_numValidTrkrHits = -999.9;
+	aMuon.inTrk_trackerLayersWithMeasurement = -999.9; 
+	aMuon.inTrk_dxyVsOrigin      = -999.9;
+      }
 
-       // Outer track information ...
-       if(imuon.outerTrack().get()!=0){
-	 aMuon.outTrk_exists = true;
-	 aMuon.outTrk_pT     = imuon.outerTrack()->pt();
-	 aMuon.outTrk_eta    = imuon.outerTrack()->eta();
-	 aMuon.outTrk_phi    = imuon.outerTrack()->phi();
-	 aMuon.outTrk_charge = imuon.outerTrack()->charge();
-       } else {
-	 aMuon.outTrk_exists = false;
-	 aMuon.outTrk_pT     = -999.9;
-	 aMuon.outTrk_eta    = -999.9;
-	 aMuon.outTrk_phi    = -999.9;
-	 aMuon.outTrk_charge = 999;
-       }
+      // Outer track information ...
+      if(imuon.outerTrack().get()!=0){
+	aMuon.outTrk_exists = true;
+	aMuon.outTrk_pT     = imuon.outerTrack()->pt();
+	aMuon.outTrk_eta    = imuon.outerTrack()->eta();
+	aMuon.outTrk_phi    = imuon.outerTrack()->phi();
+	aMuon.outTrk_charge = imuon.outerTrack()->charge();
+      } else {
+	aMuon.outTrk_exists = false;
+	aMuon.outTrk_pT     = -999.9;
+	aMuon.outTrk_eta    = -999.9;
+	aMuon.outTrk_phi    = -999.9;
+	aMuon.outTrk_charge = 999;
+      }
 
           
-       if( imuon.muonBestTrack().get()!=0 ){
-	 aMuon.bestTrk_exists = true;
-	 aMuon.bestTrk_dxy_bspot   = -999.9; // NEED TO ADD THE CORRECT VERTEX imuon.muonBestTrack()->dxy( h_beamSpot->position() );
-	 aMuon.bestTrk_dxy_vtx     = -999.9;//NEED TO ADD THE CORRECT VERTEX imuon.muonBestTrack()->dxy( mainPrimaryVertexIt->position() );
-	 aMuon.bestTrk_dz_vtx      = -999.9;//NEED TO ADD THE CORRECT VERTEX imuon.muonBestTrack()->dz( mainPrimaryVertexIt->position() );
-	 aMuon.dxy                = imuon.muonBestTrack()->dxy(pV.position());
-	 aMuon.dz                 = imuon.muonBestTrack()->dz(pV.position());
+      if( imuon.muonBestTrack().get()!=0 ){
+	aMuon.bestTrk_exists = true;
+	aMuon.bestTrk_dxy_bspot   = -999.9; // NEED TO ADD THE CORRECT VERTEX imuon.muonBestTrack()->dxy( h_beamSpot->position() );
+	aMuon.bestTrk_dxy_vtx     = -999.9;//NEED TO ADD THE CORRECT VERTEX imuon.muonBestTrack()->dxy( mainPrimaryVertexIt->position() );
+	aMuon.bestTrk_dz_vtx      = -999.9;//NEED TO ADD THE CORRECT VERTEX imuon.muonBestTrack()->dz( mainPrimaryVertexIt->position() );
+	aMuon.dxy                = imuon.muonBestTrack()->dxy(pV.position());
+	aMuon.dz                 = imuon.muonBestTrack()->dz(pV.position());
 
-	 //need to remove pt tune members from muon object
-       } else {
-	 aMuon.bestTrk_exists = false;
-	 aMuon.bestTrk_dxy_bspot   = -999.9;
-	 aMuon.bestTrk_dxy_vtx     = -999.9;
-	 aMuon.bestTrk_dz_vtx      = -999.9;
-	 aMuon.dxy                = -999.9;
-	 aMuon.dz                 = -999.9;
+	//need to remove pt tune members from muon object
+      } else {
+	aMuon.bestTrk_exists = false;
+	aMuon.bestTrk_dxy_bspot   = -999.9;
+	aMuon.bestTrk_dxy_vtx     = -999.9;
+	aMuon.bestTrk_dz_vtx      = -999.9;
+	aMuon.dxy                = -999.9;
+	aMuon.dz                 = -999.9;
 
-       }
-       //add muon to Muon collection
-       muonCollection->push_back(aMuon);
-    //unessesary  copy here should fill inside the vector. fill a reference to muonCollection->back() or something
-       // or assign to the pointer obtained from muonCollection->back()
+      }
+      //add muon to Muon collection
+      muonCollection->push_back(aMuon);
+      //unessesary  copy here should fill inside the vector. fill a reference to muonCollection->back() or something
+      // or assign to the pointer obtained from muonCollection->back()
 
     }
 

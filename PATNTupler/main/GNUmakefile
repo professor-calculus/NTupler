@@ -5,8 +5,8 @@ ROOTLIBS      = $(shell ${ROOTSYS}/bin/root-config --libs)
 ROOTGLIBS     = $(shell ${ROOTSYS}/bin/root-config --glibs)
 CERNLIB       = /cern/pro/lib
 
-CXX = g++
-LD  = g++
+CXX = g++ -std=c++11
+LD  = g++ -std=c++11
 
 CXXFLAGS      = -g -O2 -Wall -fPIC -pg
 #CXXFLAGS      = -O2 -Wall -fPIC

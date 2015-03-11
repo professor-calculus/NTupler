@@ -13,7 +13,7 @@ process.source = cms.Source("PoolSource",
     )
 )
 
-process.TFileService = cms.Service("TFileService", fileName=cms.string('nTuple2.root'))
+process.TFileService = cms.Service("TFileService", fileName=cms.string('nTuple3.root'))
 
 process.demo = cms.EDAnalyzer("MiniAnalyzer",
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),

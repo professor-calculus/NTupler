@@ -1,0 +1,70 @@
+\hypertarget{classNtpReader}{\section{Ntp\-Reader Class Reference}
+\label{classNtpReader}\index{Ntp\-Reader@{Ntp\-Reader}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classNtpReader_af11ecbda21ac8dd55e71103f22ace772}{\hyperlink{classNtpReader_af11ecbda21ac8dd55e71103f22ace772}{Ntp\-Reader} (T\-Tree $\ast$in\-Tree)}\label{classNtpReader_af11ecbda21ac8dd55e71103f22ace772}
+
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\hyperlink{classNtpReader_a31e2f7a7d23d553bc219e11f2e0c8c43}{Ntp\-Reader} (T\-Tree $\ast$in\-Tree, const T\-String \&branch\-Name)
+\item 
+\hypertarget{classNtpReader_a562709cebd6681f242e3d61d45a4b10c}{\hyperlink{classNtpReader_a562709cebd6681f242e3d61d45a4b10c}{Ntp\-Reader} (string list\-Of\-Files, string tree\-Name)}\label{classNtpReader_a562709cebd6681f242e3d61d45a4b10c}
+
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\hypertarget{classNtpReader_aa5ea42a326bcfaa6024810d33249c300}{unsigned int {\bfseries run\-Num} () const }\label{classNtpReader_aa5ea42a326bcfaa6024810d33249c300}
+
+\item 
+\hypertarget{classNtpReader_a33826fc73883946d273d5fe0f40be06f}{unsigned int {\bfseries evt\-Num} () const }\label{classNtpReader_a33826fc73883946d273d5fe0f40be06f}
+
+\item 
+\hypertarget{classNtpReader_aed39639a2892ce1d7874e74e86f30525}{unsigned int {\bfseries lumi\-Sec} () const }\label{classNtpReader_aed39639a2892ce1d7874e74e86f30525}
+
+\item 
+\hypertarget{classNtpReader_acde9dee5818258f9ef2fe62cf5248582}{void \hyperlink{classNtpReader_acde9dee5818258f9ef2fe62cf5248582}{set\-Event\-Info\-Branch} (const T\-String \&branch\-Name)}\label{classNtpReader_acde9dee5818258f9ef2fe62cf5248582}
+
+\begin{DoxyCompactList}\small\item\em Sets the event info branch. \end{DoxyCompactList}\item 
+\hypertarget{classNtpReader_a625467bc99cd81f63d4ef73c34bcf26c}{void \hyperlink{classNtpReader_a625467bc99cd81f63d4ef73c34bcf26c}{set\-Entry\-Info} ()}\label{classNtpReader_a625467bc99cd81f63d4ef73c34bcf26c}
+
+\begin{DoxyCompactList}\small\item\em sets the event information \end{DoxyCompactList}\item 
+\hypertarget{classNtpReader_a34265ba45134f25e07088d0731890882}{{\footnotesize template$<$typename T , typename U $>$ }\\std\-::vector$<$ T $>$ {\bfseries get\-Particle\-Collection} (const T\-String \&branch\-Name)}\label{classNtpReader_a34265ba45134f25e07088d0731890882}
+
+\item 
+\hypertarget{classNtpReader_a8dd674f3e6f47cc330f80cb3012d73c0}{std\-::vector$<$ \hyperlink{classran_1_1NtElectron}{ran\-::\-Nt\-Electron} $>$ {\bfseries test\-Branch2} (const T\-String \&branch\-Name)}\label{classNtpReader_a8dd674f3e6f47cc330f80cb3012d73c0}
+
+\item 
+\hypertarget{classNtpReader_a22d356eb785288fd3f6b7505b1c0f4f1}{bool \hyperlink{classNtpReader_a22d356eb785288fd3f6b7505b1c0f4f1}{is\-Last\-Entry} ()}\label{classNtpReader_a22d356eb785288fd3f6b7505b1c0f4f1}
+
+\begin{DoxyCompactList}\small\item\em Checks if last event in the ntuple. \end{DoxyCompactList}\item 
+\hypertarget{classNtpReader_ac5efd42974d0c40ae189c8fafe3c0cdc}{unsigned int {\bfseries get\-Last\-Entry} ()}\label{classNtpReader_ac5efd42974d0c40ae189c8fafe3c0cdc}
+
+\item 
+\hypertarget{classNtpReader_aaee876d696eb198343478b2c191f1675}{unsigned int \hyperlink{classNtpReader_aaee876d696eb198343478b2c191f1675}{get\-Entry\-Number} () const }\label{classNtpReader_aaee876d696eb198343478b2c191f1675}
+
+\begin{DoxyCompactList}\small\item\em Returns the current event number. \end{DoxyCompactList}\item 
+\hypertarget{classNtpReader_a04ccaa20b936feab664f0c207c092de5}{void \hyperlink{classNtpReader_a04ccaa20b936feab664f0c207c092de5}{next\-Entry} ()}\label{classNtpReader_a04ccaa20b936feab664f0c207c092de5}
+
+\begin{DoxyCompactList}\small\item\em Increment to next event and set eventinfo. \end{DoxyCompactList}\item 
+\hypertarget{classNtpReader_a943e5eefd0b499331c932541d90d9fd3}{void \hyperlink{classNtpReader_a943e5eefd0b499331c932541d90d9fd3}{rese\-Entry} ()}\label{classNtpReader_a943e5eefd0b499331c932541d90d9fd3}
+
+\begin{DoxyCompactList}\small\item\em Reset to first event and set eventinfo. \end{DoxyCompactList}\item 
+\hypertarget{classNtpReader_ab7bee0e570b8fdd32dff91ec1acf3851}{void \hyperlink{classNtpReader_ab7bee0e570b8fdd32dff91ec1acf3851}{set\-Entry\-Number} (unsigned int num\-Value)}\label{classNtpReader_ab7bee0e570b8fdd32dff91ec1acf3851}
+
+\begin{DoxyCompactList}\small\item\em Set the event number and set eventinfo. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classNtpReader_a31e2f7a7d23d553bc219e11f2e0c8c43}{\index{Ntp\-Reader@{Ntp\-Reader}!Ntp\-Reader@{Ntp\-Reader}}
+\index{Ntp\-Reader@{Ntp\-Reader}!NtpReader@{Ntp\-Reader}}
+\subsubsection[{Ntp\-Reader}]{\setlength{\rightskip}{0pt plus 5cm}Ntp\-Reader\-::\-Ntp\-Reader (
+\begin{DoxyParamCaption}
+\item[{T\-Tree $\ast$}]{in\-Tree, }
+\item[{const T\-String \&}]{branch\-Name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{classNtpReader_a31e2f7a7d23d553bc219e11f2e0c8c43}
+$<$ Constructor 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+interface/Ntp\-Reader.\-hh\item 
+src/Ntp\-Reader.\-cc\end{DoxyCompactItemize}

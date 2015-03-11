@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <memory>
 
 //ROOT HEADERS
 #include <TFile.h>
@@ -15,10 +16,8 @@
 
 //RAL PARTICLE HEADERS
 #include "NtpReader.hh"
-//#include "../interface/EventInfo.hh" //del this
 
 using std::cout;
-using boost::shared_ptr; //DROP BOOST AND USE C++11
 using ran::ElectronStruct;
 using ran::MuonStruct;
 using ran::JetStruct;
@@ -121,7 +120,6 @@ int main(){
   for (unsigned int i = 0; i < numEvents; ++i){
     branch->GetEntry(i); // set tree object for each event i
     //Electron collection contain structs (ElectronStruct). We want to use our own electon class which is composed of the struct (NtElectron) 
-    //    shared_ptr<std::vector<ran::NtElectron> > ralEVector = shared_ptr<std::vector<ran::NtElectron> > (new std::vector<ran::NtElectron>());
     shared_ptr<std::vector<ran::NtElectron> > ralEVector = shared_ptr<std::vector<ran::NtElectron> > (new std::vector<ran::NtElectron>(electronVector->begin(), electronVector->end()));
     //This function generates a vector of NtElectron from a vector of ElectronStruct
     //fillE(ralEVector.get(),electronVector.get());
