@@ -39,6 +39,11 @@
 #include "DataFormats/PatCandidates/interface/MET.h"
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 
+//...in order to use the heep::Ele class ...
+#include "SHarper/HEEPAnalyzer/interface/HEEPEle.h"
+#include "SHarper/HEEPAnalyzer/interface/HEEPEleSelector.h"
+
+
 //...for histograms creation
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
@@ -111,6 +116,13 @@ class MiniAnalyzer : public edm::EDAnalyzer {
       std::vector<ran::MuonStruct>* muonCollection;
       std::vector<ran::JetStruct>* jetCollection;
       bool vBool_;
+
+      
+      edm::InputTag eleRhoCorrLabel_;      
+      bool applyRhoCorrToEleIsol_;
+      edm::InputTag verticesLabel_;
+      heep::EleSelector cuts_;
+
 };
 
 //
@@ -133,7 +145,11 @@ MiniAnalyzer::MiniAnalyzer(const edm::ParameterSet& iConfig):
     //photonToken_(consumes<pat::PhotonCollection>(iConfig.getParameter<edm::InputTag>("photons"))),
     jetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jets"))),
     fatjetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"))),
-    metToken_(consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets")))
+    metToken_(consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets"))),
+    eleRhoCorrLabel_(iConfig.getParameter<edm::InputTag>("eleRhoCorrLabel")),
+    applyRhoCorrToEleIsol_(iConfig.getParameter<bool>("applyRhoCorrToEleIsol")),
+    verticesLabel_(iConfig.getParameter<edm::InputTag>("verticesLabel")),
+    cuts_(iConfig)
 {
     EventDataTree = fHistos->make<TTree>("EventDataTree", "Event data tree");
 
@@ -382,39 +398,148 @@ void MiniAnalyzer::ReadInEvtInfo(bool beVerbose, const edm::Event& edmEventObjec
 
 void MiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 {
-    edm::Handle<pat::ElectronCollection> electrons;
-    iEvent.getByToken(electronToken_, electrons);
-    for (const pat::Electron &iEle : *electrons) {
-      electronCollection->push_back(ran::ElectronStruct{});
-      ran::ElectronStruct &ithElec = electronCollection->back();
-	//UNESSCESSARY ADDITONAL COPY. SHOULD FILL DIRECTLY INTO THE VECTOR RATHER THAN CREATING AN OBJECT, FILLING IT AND THEN COPYING IT IN THE VECTOR
-	ithElec.pt = iEle.pt();
-	ithElec.eta = iEle.eta();
 
-	ithElec.gsfTrack_available = iEle.gsfTrack().isAvailable();
-	ithElec.scEta = iEle.superCluster()->eta();
-	ithElec.scEnergy = iEle.superCluster()->energy(); 
-	ithElec.ecalDrivenSeed = iEle.ecalDrivenSeed(); 
-	ithElec.sigmaIetaIeta = iEle.sigmaIetaIeta();
-	ithElec.full5x5_sigmaIetaIeta = iEle.full5x5_sigmaIetaIeta();
-	ithElec.passConversionVeto = iEle.passConversionVeto();
-	ithElec.e2x5Max = iEle.e2x5Max();
-	ithElec.e5x5 = iEle.e5x5();
-	ithElec.e1x5 = iEle.e1x5();
-	ithElec.deltaPhiSuperClusterTrackAtVtx = iEle.deltaPhiSuperClusterTrackAtVtx();
-	ithElec.hadronicOverEm = iEle.hadronicOverEm();
-	//ithElec.nrMissHits = iEle.gsfTrack().trackerExpectedHitsInner().numberOfHits();
-	ithElec.scSigmaIEtaIEta = iEle.scSigmaIEtaIEta();
-	ithElec.dr03EcalRecHitSumEt = iEle.dr03EcalRecHitSumEt();
-	ithElec.dr03HcalDepth1TowerSumEt = iEle.dr03HcalDepth1TowerSumEt();
-	ithElec.dr03TkSumPt = iEle.dr03TkSumPt();
-	//ithElec.pfIso_chgHad = iEle.pfIsolationVariables().chargedHadronIso;
-	//ithElec.pfIso_neutHad = iEle.pfIsolationVariables().neutralHadronIso;
-	//ithElec.pfIso_pht = iEle.pfIsolationVariables().photonIso;
-        //electronCollection->push_back(ithElec);
+  edm::Handle<double> rhoHandle;
+  iEvent.getByLabel(eleRhoCorrLabel_,rhoHandle);
+  double rho = applyRhoCorrToEleIsol_ ? *rhoHandle : 0;
 
-    }
+  edm::Handle<reco::VertexCollection> verticesHandle;
+  iEvent.getByLabel(verticesLabel_,verticesHandle);
+  math::XYZPoint pvPos(0,0,0);
+  if(!verticesHandle->empty()) pvPos = verticesHandle->front().position();
 
+  edm::Handle<pat::ElectronCollection> electrons;
+  iEvent.getByToken(electronToken_, electrons);
+  for (const pat::Electron &iEle : *electrons) {
+    electronCollection->push_back(ran::ElectronStruct{});
+    ran::ElectronStruct &ithElec = electronCollection->back();
+     
+    ithElec.pt = iEle.pt();
+    ithElec.eta = iEle.eta();
+
+    ithElec.gsfTrack_available = iEle.gsfTrack().isAvailable();
+    ithElec.scEta = iEle.superCluster()->eta();
+    ithElec.scEnergy = iEle.superCluster()->energy(); 
+    ithElec.ecalDrivenSeed = iEle.ecalDrivenSeed(); 
+    ithElec.sigmaIetaIeta = iEle.sigmaIetaIeta();
+    ithElec.full5x5_sigmaIetaIeta = iEle.full5x5_sigmaIetaIeta();
+    ithElec.passConversionVeto = iEle.passConversionVeto();
+    ithElec.e2x5Max = iEle.e2x5Max();
+    ithElec.e5x5 = iEle.e5x5();
+    ithElec.e1x5 = iEle.e1x5();
+    ithElec.deltaPhiSuperClusterTrackAtVtx = iEle.deltaPhiSuperClusterTrackAtVtx();
+    ithElec.hadronicOverEm = iEle.hadronicOverEm();
+    //ithElec.nrMissHits = iEle.gsfTrack().trackerExpectedHitsInner().numberOfHits();
+    ithElec.scSigmaIEtaIEta = iEle.scSigmaIEtaIEta();
+    ithElec.dr03EcalRecHitSumEt = iEle.dr03EcalRecHitSumEt();
+    ithElec.dr03HcalDepth1TowerSumEt = iEle.dr03HcalDepth1TowerSumEt();
+    ithElec.dr03TkSumPt = iEle.dr03TkSumPt();
+    //ithElec.pfIso_chgHad = iEle.pfIsolationVariables().chargedHadronIso;
+    //ithElec.pfIso_neutHad = iEle.pfIsolationVariables().neutralHadronIso;
+    //ithElec.pfIso_pht = iEle.pfIsolationVariables().photonIso;
+    //electronCollection->push_back(ithElec);
+
+    heep::Ele heepEle(iEle);//instantiate HEEP variable
+    //HEEP variables
+    ithElec.heep_isPatEle = heepEle.isPatEle();
+    ithElec.heep_et = heepEle.et();
+    ithElec.heep_gsfEt =    heepEle.gsfEt();
+    ithElec.heep_scEt   =   heepEle.scEt();
+    ithElec.heep_energy  =  heepEle.energy();
+    ithElec.heep_gsfEnergy = heepEle.gsfEnergy();
+    ithElec.heep_caloEnergy= heepEle.caloEnergy();
+    ithElec.heep_ecalEnergyError = heepEle.gsfEle().ecalEnergyError();
+    ithElec.heep_eta     =  heepEle.eta();
+    ithElec.heep_scEta =      heepEle.scEta();
+    ithElec.heep_detEta =     heepEle.detEta();
+    ithElec.heep_detEtaAbs =  heepEle.detEtaAbs();
+    ithElec.heep_phi =        heepEle.phi();
+    ithElec.heep_scPhi =      heepEle.scPhi();
+    ithElec.heep_detPhi =     heepEle.detPhi();
+    ithElec.heep_zVtx =       heepEle.zVtx();
+    ithElec.heep_p4 =         heepEle.p4();
+    ithElec.heep_gsfP4 =      heepEle.gsfP4();
+
+    //Variables storing the heep::Ele method values - Classification...
+    ithElec.heep_classification =  heepEle.classification();
+    ithElec.heep_isEcalDriven =    heepEle.isEcalDriven();
+    ithElec.heep_isTrackerDriven = heepEle.isTrackerDriven();
+    ithElec.heep_isEB =            heepEle.isEB();
+    ithElec.heep_isEE =            heepEle.isEE();
+
+    //Variables storing the heep::Ele method values - track methods ...
+    ithElec.heep_charge =    heepEle.charge();
+    ithElec.heep_trkCharge = heepEle.trkCharge();
+    ithElec.heep_pVtx =      heepEle.pVtx();
+    ithElec.heep_pCalo =     heepEle.pCalo();
+    ithElec.heep_ptVtx =     heepEle.ptVtx();
+    ithElec.heep_ptCalo =    heepEle.ptCalo();
+
+    /* if(heepEle.gsfEle().closestCtfTrackRef().get()==0){
+      ithElec.heep_closestCtfTrk_pt = -999.9;
+      ithElec.heep_closestCtfTrk_eta = -999.9;
+      ithElec.heep_closestCtfTrk_phi = -999.9;
+    } else {
+      ithElec.heep_closestCtfTrk_pt = heepEle.gsfEle().closestCtfTrackRef().get()->pt();
+      ithElec.heep_closestCtfTrk_eta = heepEle.gsfEle().closestCtfTrackRef().get()->eta();
+      ithElec.heep_closestCtfTrk_phi = heepEle.gsfEle().closestCtfTrackRef().get()->phi();
+
+      }*/
+
+    //Variables storing the heep::Ele method values ...
+    ithElec.heep_hOverE =      heepEle.hOverE();
+    ithElec.heep_dEtaIn =      heepEle.dEtaIn();
+    ithElec.heep_dPhiIn =      heepEle.dPhiIn();
+    ithElec.heep_dPhiOut =     heepEle.dPhiOut();
+    ithElec.heep_epIn =        heepEle.epIn();
+    ithElec.heep_epOut =       heepEle.epOut();
+    ithElec.heep_fbrem =       heepEle.fbrem();
+    ithElec.heep_bremFrac =    heepEle.bremFrac();
+    ithElec.heep_invEOverInvP = heepEle.invEOverInvP();
+
+    //Variables storing the heep::Ele method values - shower shape variables ...
+    ithElec.heep_sigmaEtaEtaFull5x5 =      heepEle.sigmaEtaEtaFull5x5();
+    ithElec.heep_sigmaEtaEtaUnCorrFull5x5 = heepEle.sigmaEtaEtaUnCorrFull5x5();
+    ithElec.heep_sigmaIEtaIEtaFull5x5 =    heepEle.sigmaIEtaIEtaFull5x5();
+    ithElec.heep_e1x5Full5x5 =             heepEle.e1x5Full5x5();
+    ithElec.heep_e2x5MaxFull5x5 =          heepEle.e2x5MaxFull5x5();
+    ithElec.heep_e5x5Full5x5 =             heepEle.e5x5Full5x5();
+    ithElec.heep_e1x5Over5x5Full5x5 =      heepEle.e1x5Over5x5Full5x5();
+    ithElec.heep_e2x5MaxOver5x5Full5x5 =   heepEle.e2x5MaxOver5x5Full5x5();
+    /*
+    //ithElec.heep_scSigmaEtaEta = heepEle.scSigmaEtaEta();
+    ithElec.heep_scSigmaEtaEtaUnCorr = heepEle.scSigmaEtaEtaUnCorr();
+    ithElec.heep_scSigmaIEtaIEta = heepEle.scSigmaIEtaIEta();
+    ithElec.heep_scE1x5 = heepEle.scE1x5();
+    ithElec.heep_scE2x5Max = heepEle.scE2x5Max();
+    ithElec.heep_scE5x5 = heepEle.scE5x5();
+    ithElec.heep_scE1x5Over5x5 = heepEle.scE1x5Over5x5();
+    ithElec.heep_scE2x5MaxOver5x5 = heepEle.scE2x5MaxOver5x5();*/
+
+    //isolation, we use cone of 0.3
+    //first our rho correction funcs
+    ithElec.heep_rhoForIsolCorr = heepEle.rhoForIsolCorr();
+    ithElec.heep_applyRhoIsolCorr = heepEle.applyRhoIsolCorr();
+
+    //Variables storing the heep::Ele method values - isolation variables ...
+    ithElec.heep_isolEm =         heepEle.isolEm();
+    ithElec.heep_isolHad =        heepEle.isolHad();
+    ithElec.heep_isolHadDepth1 =  heepEle.isolHadDepth1();
+    ithElec.heep_isolHadDepth2 =  heepEle.isolHadDepth2();
+    ithElec.heep_isolPtTrks =     heepEle.isolPtTrks();
+    ithElec.heep_isolEmHadDepth1 = heepEle.isolEmHadDepth1();
+
+    ithElec.heep_isolPtTrksRel03 = heepEle.isolPtTrksRel03();
+    ithElec.heep_isolEmRel03 = heepEle.isolEmRel03();
+    ithElec.heep_isolHadRel03 = heepEle.isolHadRel03();
+
+    ithElec.heep_dxy = heepEle.dxy();
+
+    ithElec.heep_numMissInnerHits = heepEle.nrMissHits();
+
+    ithElec.heep_cutCode = cuts_.getCutCode(rho,pvPos,iEle);
+
+  }
 }
 //Read in jet vars
 void MiniAnalyzer::ReadInJets(const edm::Event& iEvent)

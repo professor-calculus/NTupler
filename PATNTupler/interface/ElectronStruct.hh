@@ -39,23 +39,23 @@ namespace ran{
     double pfIso_neutHad;///<Particle Flow neutral hadron isolation
     double pfIso_pht;///<Particle Flow photon isolation  */
 
-    /*
-
-    double heep_et;///<HEEP et
-    double heep_gsfEt;///<HEEP gsf electron et
-    double heep_scEt;///<HEEP super cluster et
-    double heep_energy;///<HEEP energy
-    double heep_gsfEnergy ;///<HEEP gsf energy
-    double heep_caloEnergy;///<HEEP calo energy
-    double heep_ecalEnergyError;///<HEEP ecal energy error
-    double heep_eta;///<HEEP eta
-    double heep_scEta;///<HEEP supercluster eta
-    double heep_detEta;///<HEEP delta eta
-    double heep_detEtaAbs;///<HEEP absolute delta eta
-    double heep_phi;///<HEEP phi
-    double heep_scPhi;///<HEEP super cluster phi
-    double heep_detPhi;///<HEEP delta phi
-    double heep_zVtx;///<HEEP z vertex
+    
+    bool heep_isPatEle;///<Is this a PAT electron
+    float heep_et;///<HEEP et
+    float heep_gsfEt;///<HEEP gsf electron et
+    float heep_scEt;///<HEEP super cluster et
+    float heep_energy;///<HEEP energy
+    float heep_gsfEnergy ;///<HEEP gsf energy
+    float heep_caloEnergy;///<HEEP calo energy
+    float heep_ecalEnergyError;///<HEEP ecal energy error
+    float heep_eta;///<HEEP eta
+    float heep_scEta;///<HEEP supercluster eta
+    float heep_detEta;///<HEEP delta eta
+    float heep_detEtaAbs;///<HEEP absolute delta eta
+    float heep_phi;///<HEEP phi
+    float heep_scPhi;///<HEEP super cluster phi
+    float heep_detPhi;///<HEEP delta phi
+    float heep_zVtx;///<HEEP z vertex
     XYZTLorentzVector heep_p4;///<HEEP four momentum
     XYZTLorentzVector heep_gsfP4;///<HEEP gsf four momentum
 
@@ -68,60 +68,62 @@ namespace ran{
 
     int heep_charge; ///<HEEP charge
     int heep_trkCharge;///<HEEP track charge
-    double heep_pVtx;///<HEEP p Vertex
-    double heep_pCalo;
-    double heep_ptVtx;
-    double heep_ptCalo;
+    float heep_pVtx;///<HEEP p Vertex
+    float heep_pCalo;
+    float heep_ptVtx;
+    float heep_ptCalo;
 
+    /*
+    float heep_closestCtfTrk_pt;
+    float heep_closestCtfTrk_eta;
+    float heep_closestCtfTrk_phi;
+    */
 
-    double heep_closestCtfTrk_pt;
-    double heep_closestCtfTrk_eta;
-    double heep_closestCtfTrk_phi;
+    float heep_hOverE;
+    float heep_dEtaIn;
+    float heep_dPhiIn;
+    float heep_dPhiOut;
+    float heep_epIn;
+    float heep_epOut;
+    float heep_fbrem;
+    float heep_bremFrac;
+    float heep_invEOverInvP;
+    float heep_sigmaEtaEtaFull5x5;
+    float heep_sigmaEtaEtaUnCorrFull5x5;
+    float heep_sigmaIEtaIEtaFull5x5;
+    float heep_e1x5Full5x5;
+    float heep_e2x5MaxFull5x5;
+    float heep_e5x5Full5x5;
+    float heep_e1x5Over5x5Full5x5;
+    float heep_e2x5MaxOver5x5Full5x5;
+    /*
+    //float heep_scSigmaEtaEta;
+    float heep_scSigmaEtaEtaUnCorr;
+    float heep_scSigmaIEtaIEta;
+    float heep_scE1x5;
+    float heep_scE2x5Max;
+    float heep_scE5x5;
+    float heep_scE1x5Over5x5;
+    float heep_scE2x5MaxOver5x5;*/
 
-    double heep_hOverE;
-    double heep_dEtaIn;
-    double heep_dPhiIn;
-    double heep_dPhiOut;
-    double heep_epIn;
-    double heep_epOut;
-    double heep_fbrem;
-    double heep_bremFrac;
-    double heep_invEOverInvP;
-    //double heep_sigmaEtaEta;
-    double heep_sigmaEtaEtaUnCorr;
-    double heep_sigmaIEtaIEta;
-    double heep_e1x5;
-    double heep_e2x5Max;
-    double heep_e5x5;
-    double heep_e1x5Over5x5;
-    double heep_e2x5MaxOver5x5;
- 
-    //double heep_scSigmaEtaEta;
-    double heep_scSigmaEtaEtaUnCorr;
-    double heep_scSigmaIEtaIEta;
-    double heep_scE1x5;
-    double heep_scE2x5Max;
-    double heep_scE5x5;
-    double heep_scE1x5Over5x5;
-    double heep_scE2x5MaxOver5x5;
-
-    double heep_rhoForIsolCorr;
+    float heep_rhoForIsolCorr;
     bool heep_applyRhoIsolCorr;
 
-    double heep_isolEm;
-    double heep_isolHad;
-    double heep_isolHadDepth1;
-    double heep_isolHadDepth2;
-    double heep_isolPtTrks;
-    double heep_isolEmHadDepth1;
+    float heep_isolEm;
+    float heep_isolHad;
+    float heep_isolHadDepth1;
+    float heep_isolHadDepth2;
+    float heep_isolPtTrks;
+    float heep_isolEmHadDepth1;
   
-    double heep_isolPtTrksRel03;
-    double heep_isolEmRel03;
-    double heep_isolHadRel03;
+    float heep_isolPtTrksRel03;
+    float heep_isolEmRel03;
+    float heep_isolHadRel03;
 
+    float heep_dxy;;///<HEEP dxy
     int heep_numMissInnerHits;
 
-    int heep_cutCode;///< HEEP cutcode. INVALID = 0x40000000   */
+    int heep_cutCode;///< HEEP cutcode. INVALID = 0x40000000   
 
     ClassDef(ElectronStruct,1)//ElectronStruct class definition
   };

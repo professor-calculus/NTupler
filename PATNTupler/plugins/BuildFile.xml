@@ -3,6 +3,7 @@
 <use name="FWCore/PluginManager"/>
 <use name="FWCore/ParameterSet"/>
 <use name="CommonTools/UtilAlgos"/>
+<use name="SHarper/HEEPAnalyzer"/>
 <use name="NTupler/PATNTupler"/>
 <flags EDM_PLUGIN="1"/>
 
