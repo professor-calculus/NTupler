@@ -11,6 +11,7 @@ namespace ran{
     double pt() const {return jet->pt;} ///<Particle pt
     double et() const {return jet->et;} ///<Particle et
     double eta() const {return jet->eta;}///<Particle eta
+    double phi() const {return jet->phi;}///<Particle phi
     double mass() const {return jet->mass;} ///<Particle mass
     double jetProbabilityBJetTags() const {return jet->jetProbabilityBJetTags;}///< jetProbabilityBJetTags b tag discriminator
     double jetBProbabilityBJetTags() const {return jet->jetBProbabilityBJetTags;}///< jetBProbabilityBJetTags b tag discriminator

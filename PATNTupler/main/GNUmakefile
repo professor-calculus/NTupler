@@ -43,7 +43,7 @@ run:	main.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/libRalParticle
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 %.o: 	%.cc %.hh
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-${OBJDIR}/libRalParticle.so:	${OBJDIR}/JetStruct.o  ${OBJDIR}/ElectronStruct.o ${OBJDIR}/MuonStruct.o ${OBJDIR}/ParticleDict.o 
+${OBJDIR}/libRalParticle.so:	${OBJDIR}/JetStruct.o  ${OBJDIR}/ElectronStruct.o ${OBJDIR}/MuonStruct.o ${OBJDIR}/MetStruct.o ${OBJDIR}/ParticleDict.o 
 	$(LD) $(SOFLAGS) -o $@ $^ $(GLIBS)	
 ${OBJDIR}/ParticleDict.o: ${TMPDIR}/ParticleDict.cc
 	$(CXX) $(CXXFLAGS) -c $< -o $@

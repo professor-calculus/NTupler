@@ -21,6 +21,7 @@ using std::cout;
 using ran::ElectronStruct;
 using ran::MuonStruct;
 using ran::JetStruct;
+using ran::MetStruct;
 
 int main(){
 

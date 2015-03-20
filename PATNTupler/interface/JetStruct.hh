@@ -13,6 +13,7 @@ namespace ran{
     double pt;/// < pt
     double mass;/// < mass
     double eta;///< eta 
+    double phi;/// < phi
     double jetProbabilityBJetTags;///< jetProbabilityBJetTags b tag discriminator
     double jetBProbabilityBJetTags;///< jetBProbabilityBJetTags b tag discriminator
     double trackCountingHighEffBJetTags;///< trackCountingHighEffBJetTags b tag discriminator

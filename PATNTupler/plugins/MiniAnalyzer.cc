@@ -545,6 +545,7 @@ void MiniAnalyzer::ReadInJets(const edm::Event& iEvent)
       ithJet.pt = iJet.pt();
       ithJet.et = iJet.et();
       ithJet.eta = iJet.eta();
+      ithJet.phi = iJet.phi();
       ithJet.mass = iJet.mass();
 
       ithJet.jecFactor_unCorrected = iJet.jecFactor("Uncorrected");
@@ -575,9 +576,15 @@ void MiniAnalyzer::ReadInMets(const edm::Event& iEvent)
 
       ran::MetStruct &ithMet = metCollection->back();
       ithMet.pt = iMet.pt();
+      ithMet.eta = iMet.eta();
       ithMet.phi = iMet.phi();
       ithMet.sumEt = iMet.sumEt();
       ithMet.genMet_pt = iMet.genMET()->pt();
+      //ithMet.metSignificance =  iMet.metSignificance();
+      //ithMet.etFractionHadronic = iMet.etFractionHadronic();
+      ithMet.isCaloMET = iMet.isCaloMET();
+      ithMet.isPFMET = iMet.isPFMET();
+      ithMet.isRecoMET = iMet.isRecoMET();
       ithMet.shiftedPt_JetEnUp = iMet.shiftedPt(pat::MET::JetEnUp);
       ithMet.shiftedPt_JetEnDown = iMet.shiftedPt(pat::MET::JetEnDown);   
     }
