@@ -5,5 +5,6 @@
 #include "../interface/ElectronStruct.hh"
 #include "../interface/JetStruct.hh"
 #include "../interface/MuonStruct.hh"
+#include "../interface/MetStruct.hh"
 
 #endif

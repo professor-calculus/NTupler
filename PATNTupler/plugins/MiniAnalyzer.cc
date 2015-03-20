@@ -93,6 +93,10 @@ class MiniAnalyzer : public edm::EDAnalyzer {
       ///For reading in the Jet information, and dumping it into ran::Event class ...
       void ReadInJets(const edm::Event&);
 
+      ///For reading in the Met information, and dumping it into ran::Event class ...
+      void ReadInMets(const edm::Event&);
+
+      
 
       // ----------member data ---------------------------
 
@@ -115,6 +119,7 @@ class MiniAnalyzer : public edm::EDAnalyzer {
       std::vector<ran::ElectronStruct>* electronCollection;
       std::vector<ran::MuonStruct>* muonCollection;
       std::vector<ran::JetStruct>* jetCollection;
+      std::vector<ran::MetStruct>* metCollection;
       bool vBool_;
 
       
@@ -148,8 +153,8 @@ MiniAnalyzer::MiniAnalyzer(const edm::ParameterSet& iConfig):
     metToken_(consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets"))),
     eleRhoCorrLabel_(iConfig.getParameter<edm::InputTag>("eleRhoCorrLabel")),
     applyRhoCorrToEleIsol_(iConfig.getParameter<bool>("applyRhoCorrToEleIsol")),
-    verticesLabel_(iConfig.getParameter<edm::InputTag>("verticesLabel")),
-    cuts_(iConfig)
+    verticesLabel_(iConfig.getParameter<edm::InputTag>("verticesLabel"))
+    //cuts_(iConfig)
 {
     EventDataTree = fHistos->make<TTree>("EventDataTree", "Event data tree");
 
@@ -160,7 +165,7 @@ MiniAnalyzer::MiniAnalyzer(const edm::ParameterSet& iConfig):
     EventDataTree->Branch("electronCollection","std::vector<ran::ElectronStruct>", &electronCollection, 64000, 1); 
     EventDataTree->Branch("muonCollection","std::vector<ran::MuonStruct>", &muonCollection, 64000, 1); 
     EventDataTree->Branch("jetCollection","std::vector<ran::JetStruct>", &jetCollection, 64000, 1);
-
+    EventDataTree->Branch("metCollection","std::vector<ran::MetStruct>", &metCollection, 64000, 1);
 }
 
 
@@ -270,6 +275,7 @@ MiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     electronCollection = new std::vector<ran::ElectronStruct>();
     muonCollection = new std::vector<ran::MuonStruct>();
     jetCollection = new std::vector<ran::JetStruct>();
+    metCollection = new std::vector<ran::MetStruct>();
 
     //Clearing contents/setting default values of variables that should get new values in each event...
     ResetEventByEventVariables();
@@ -287,6 +293,9 @@ MiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     //Read in Jets
     ReadInJets(iEvent);
 
+    //Read in Met
+    ReadInMets(iEvent);
+
     //Fill Ntuple
     EventDataTree->Fill();	
 
@@ -294,6 +303,7 @@ MiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     delete electronCollection;
     delete muonCollection;
     delete jetCollection;
+    delete metCollection;
 
 #ifdef THIS_IS_AN_EVENT_EXAMPLE
    Handle<ExampleData> pIn;
@@ -399,14 +409,14 @@ void MiniAnalyzer::ReadInEvtInfo(bool beVerbose, const edm::Event& edmEventObjec
 void MiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 {
 
-  edm::Handle<double> rhoHandle;
+  /*edm::Handle<double> rhoHandle;
   iEvent.getByLabel(eleRhoCorrLabel_,rhoHandle);
   double rho = applyRhoCorrToEleIsol_ ? *rhoHandle : 0;
 
   edm::Handle<reco::VertexCollection> verticesHandle;
   iEvent.getByLabel(verticesLabel_,verticesHandle);
   math::XYZPoint pvPos(0,0,0);
-  if(!verticesHandle->empty()) pvPos = verticesHandle->front().position();
+  if(!verticesHandle->empty()) pvPos = verticesHandle->front().position();*/
 
   edm::Handle<pat::ElectronCollection> electrons;
   iEvent.getByToken(electronToken_, electrons);
@@ -473,18 +483,7 @@ void MiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
     ithElec.heep_pVtx =      heepEle.pVtx();
     ithElec.heep_pCalo =     heepEle.pCalo();
     ithElec.heep_ptVtx =     heepEle.ptVtx();
-    ithElec.heep_ptCalo =    heepEle.ptCalo();
-
-    /* if(heepEle.gsfEle().closestCtfTrackRef().get()==0){
-      ithElec.heep_closestCtfTrk_pt = -999.9;
-      ithElec.heep_closestCtfTrk_eta = -999.9;
-      ithElec.heep_closestCtfTrk_phi = -999.9;
-    } else {
-      ithElec.heep_closestCtfTrk_pt = heepEle.gsfEle().closestCtfTrackRef().get()->pt();
-      ithElec.heep_closestCtfTrk_eta = heepEle.gsfEle().closestCtfTrackRef().get()->eta();
-      ithElec.heep_closestCtfTrk_phi = heepEle.gsfEle().closestCtfTrackRef().get()->phi();
-
-      }*/
+    ithElec.heep_ptCalo =    heepEle.ptCalo();    
 
     //Variables storing the heep::Ele method values ...
     ithElec.heep_hOverE =      heepEle.hOverE();
@@ -506,15 +505,7 @@ void MiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
     ithElec.heep_e5x5Full5x5 =             heepEle.e5x5Full5x5();
     ithElec.heep_e1x5Over5x5Full5x5 =      heepEle.e1x5Over5x5Full5x5();
     ithElec.heep_e2x5MaxOver5x5Full5x5 =   heepEle.e2x5MaxOver5x5Full5x5();
-    /*
-    //ithElec.heep_scSigmaEtaEta = heepEle.scSigmaEtaEta();
-    ithElec.heep_scSigmaEtaEtaUnCorr = heepEle.scSigmaEtaEtaUnCorr();
-    ithElec.heep_scSigmaIEtaIEta = heepEle.scSigmaIEtaIEta();
-    ithElec.heep_scE1x5 = heepEle.scE1x5();
-    ithElec.heep_scE2x5Max = heepEle.scE2x5Max();
-    ithElec.heep_scE5x5 = heepEle.scE5x5();
-    ithElec.heep_scE1x5Over5x5 = heepEle.scE1x5Over5x5();
-    ithElec.heep_scE2x5MaxOver5x5 = heepEle.scE2x5MaxOver5x5();*/
+    
 
     //isolation, we use cone of 0.3
     //first our rho correction funcs
@@ -537,7 +528,8 @@ void MiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 
     ithElec.heep_numMissInnerHits = heepEle.nrMissHits();
 
-    ithElec.heep_cutCode = cuts_.getCutCode(rho,pvPos,iEle);
+    //ithElec.heep_cutCode = cuts_.getCutCode(rho,pvPos,iEle);
+
 
   }
 }
@@ -570,6 +562,24 @@ void MiniAnalyzer::ReadInJets(const edm::Event& iEvent)
 
       ithJet.partonFlavour = iJet.partonFlavour();
 
+    }
+
+}
+
+void MiniAnalyzer::ReadInMets(const edm::Event& iEvent)
+{
+    edm::Handle<pat::METCollection> mets;
+    iEvent.getByToken(metToken_, mets);
+    for (const pat::MET &iMet: *mets) {
+      metCollection->push_back(ran::MetStruct{});
+
+      ran::MetStruct &ithMet = metCollection->back();
+      ithMet.pt = iMet.pt();
+      ithMet.phi = iMet.phi();
+      ithMet.sumEt = iMet.sumEt();
+      ithMet.genMet_pt = iMet.genMET()->pt();
+      ithMet.shiftedPt_JetEnUp = iMet.shiftedPt(pat::MET::JetEnUp);
+      ithMet.shiftedPt_JetEnDown = iMet.shiftedPt(pat::MET::JetEnDown);   
     }
 
 }

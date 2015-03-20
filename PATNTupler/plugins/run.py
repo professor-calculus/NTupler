@@ -15,6 +15,8 @@ process.source = cms.Source("PoolSource",
 
 process.TFileService = cms.Service("TFileService", fileName=cms.string('nTuple3.root'))
 
+from SHarper.HEEPAnalyzer.HEEPSelectionCuts_cfi import *
+
 process.demo = cms.EDAnalyzer("MiniAnalyzer",
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
@@ -25,6 +27,8 @@ process.demo = cms.EDAnalyzer("MiniAnalyzer",
     fatjets = cms.InputTag("slimmedJetsAK8"),
     mets = cms.InputTag("slimmedMETs"),
     eleLabel = cms.InputTag("patElectrons"),
+    barrelCuts = cms.PSet(heepBarrelCuts),
+    endcapCuts = cms.PSet(heepEndcapCuts),
     applyRhoCorrToEleIsol = cms.bool(True), 
     eleIsolEffectiveAreas = cms.PSet (heepEffectiveAreas),
     eleRhoCorrLabel = cms.InputTag("kt6PFJetsForIsolation","rho"),
