@@ -4,6 +4,7 @@
 #include "../interface/EventInfo.hh"
 #include "../interface/ElectronStruct.hh"
 #include "../interface/JetStruct.hh"
+#include "../interface/FatJetStruct.hh"
 #include "../interface/MuonStruct.hh"
 #include "../interface/MetStruct.hh"
 

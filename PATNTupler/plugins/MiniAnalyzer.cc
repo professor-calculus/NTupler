@@ -93,6 +93,9 @@ class MiniAnalyzer : public edm::EDAnalyzer {
       ///For reading in the Jet information, and dumping it into ran::Event class ...
       void ReadInJets(const edm::Event&);
 
+      ///For reading in the Fat Jet information, and dumping it into ran::Event class ...
+      void ReadInFatJets(const edm::Event&);
+
       ///For reading in the Met information, and dumping it into ran::Event class ...
       void ReadInMets(const edm::Event&);
 
@@ -119,6 +122,7 @@ class MiniAnalyzer : public edm::EDAnalyzer {
       std::vector<ran::ElectronStruct>* electronCollection;
       std::vector<ran::MuonStruct>* muonCollection;
       std::vector<ran::JetStruct>* jetCollection;
+      std::vector<ran::FatJetStruct>* fatjetCollection;
       std::vector<ran::MetStruct>* metCollection;
       bool vBool_;
 
@@ -165,6 +169,7 @@ MiniAnalyzer::MiniAnalyzer(const edm::ParameterSet& iConfig):
     EventDataTree->Branch("electronCollection","std::vector<ran::ElectronStruct>", &electronCollection, 64000, 1); 
     EventDataTree->Branch("muonCollection","std::vector<ran::MuonStruct>", &muonCollection, 64000, 1); 
     EventDataTree->Branch("jetCollection","std::vector<ran::JetStruct>", &jetCollection, 64000, 1);
+    EventDataTree->Branch("fatjetCollection","std::vector<ran::FatJetStruct>", &fatjetCollection, 64000, 1);
     EventDataTree->Branch("metCollection","std::vector<ran::MetStruct>", &metCollection, 64000, 1);
 }
 
@@ -275,6 +280,7 @@ MiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     electronCollection = new std::vector<ran::ElectronStruct>();
     muonCollection = new std::vector<ran::MuonStruct>();
     jetCollection = new std::vector<ran::JetStruct>();
+    fatjetCollection = new std::vector<ran::FatJetStruct>();
     metCollection = new std::vector<ran::MetStruct>();
 
     //Clearing contents/setting default values of variables that should get new values in each event...
@@ -293,6 +299,9 @@ MiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     //Read in Jets
     ReadInJets(iEvent);
 
+    //Read in Jets
+    ReadInFatJets(iEvent);
+
     //Read in Met
     ReadInMets(iEvent);
 
@@ -302,6 +311,7 @@ MiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     //delete event_;
     delete electronCollection;
     delete muonCollection;
+    delete fatjetCollection;
     delete jetCollection;
     delete metCollection;
 
@@ -561,6 +571,41 @@ void MiniAnalyzer::ReadInJets(const edm::Event& iEvent)
       ithJet.combinedInclusiveSecondaryVertexBJetTags =  iJet.bDiscriminator("combinedInclusiveSecondaryVertexBJetTags");
 
 
+      ithJet.partonFlavour = iJet.partonFlavour();
+
+    }
+
+}
+
+//Read in fat jet vars
+void MiniAnalyzer::ReadInFatJets(const edm::Event& iEvent)
+{
+    edm::Handle<pat::JetCollection> jets;
+    iEvent.getByToken(fatjetToken_, jets);
+    for (const pat::Jet &iJet: *jets) {
+      fatjetCollection->push_back(ran::FatJetStruct{});
+
+      ran::FatJetStruct &ithJet = fatjetCollection->back();
+      ithJet.pt = iJet.pt();
+      ithJet.et = iJet.et();
+      ithJet.eta = iJet.eta();
+      ithJet.phi = iJet.phi();
+      ithJet.mass = iJet.mass();
+
+      ithJet.jecFactor_unCorrected = iJet.jecFactor("Uncorrected");
+      ithJet.userFloat_ak8PFJets_CHSPrunedLinks = iJet.userFloat("ak8PFJetsCHSPrunedLinks");
+      ithJet.userFloat_ak8PFJets_CHSTrimmedLinks = iJet.userFloat("ak8PFJetsCHSTrimmedLinks");
+      ithJet.userFloat_ak8PFJets_CHSFilteredLinks = iJet.userFloat("ak8PFJetsCHSFilteredLinks");
+      ithJet.userFloat_cmsTopTag_PFJets_CHSLinksAK8 = iJet.userFloat("cmsTopTagPFJetsCHSLinksAK8");
+
+      //Assign the btag discriminators
+      ithJet.jetProbabilityBJetTags =  iJet.bDiscriminator("jetProbabilityBJetTags");
+      ithJet.jetBProbabilityBJetTags =  iJet.bDiscriminator("jetBProbabilityBJetTags");
+      ithJet.trackCountingHighEffBJetTags =  iJet.bDiscriminator("trackCountingHighEffBJetTags");   
+      ithJet.trackCountingHighPurBJetTags =  iJet.bDiscriminator("trackCountingHighPurBJetTags");
+      ithJet.simpleSecondaryVertexHighEffBJetTags =  iJet.bDiscriminator("simpleSecondaryVertexHighEffBJetTags");
+      ithJet.simpleSecondaryVertexHighPurBJetTags =  iJet.bDiscriminator("simpleSecondaryVertexHighPurBJetTags");
+      ithJet.combinedInclusiveSecondaryVertexBJetTags =  iJet.bDiscriminator("combinedInclusiveSecondaryVertexBJetTags");
       ithJet.partonFlavour = iJet.partonFlavour();
 
     }

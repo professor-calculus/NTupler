@@ -19,6 +19,7 @@
 #include "../interface/NtElectron.hh"
 #include "../interface/NtMuon.hh"
 #include "../interface/NtJet.hh"
+#include "../interface/NtFatJet.hh"
 #include "../interface/NtMet.hh"
 
 //ROOT headers

@@ -21,6 +21,7 @@ using std::cout;
 using ran::ElectronStruct;
 using ran::MuonStruct;
 using ran::JetStruct;
+using ran::FatJetStruct;
 using ran::MetStruct;
 
 int main(){
@@ -100,6 +101,8 @@ int main(){
   shared_ptr<std::vector<ran::ElectronStruct> > electronVector = shared_ptr<std::vector<ran::ElectronStruct> > (new std::vector<ElectronStruct>());
   shared_ptr<std::vector<ran::MuonStruct> > muonVector = shared_ptr<std::vector<ran::MuonStruct> > (new std::vector<MuonStruct>());
   shared_ptr<std::vector<ran::JetStruct> > jetVector = shared_ptr<std::vector<ran::JetStruct> > (new std::vector<JetStruct>());
+  shared_ptr<std::vector<ran::FatJetStruct> > fatjetVector = shared_ptr<std::vector<ran::FatJetStruct> > (new std::vector<FatJetStruct>());
+  shared_ptr<std::vector<ran::MetStruct> > metVector = shared_ptr<std::vector<ran::MetStruct> > (new std::vector<MetStruct>());
 
   //std::vector<ran::ElectronStruct>* electronVector = new std::vector<ElectronStruct>();  
   //evtTree->SetBranchAddress("electronCollection",&electronVector); 
@@ -112,6 +115,13 @@ int main(){
 
   TBranch* jetBranch = evtTree->GetBranch("jetCollection"); //load jet collection
   jetBranch->SetAddress(&jetVector);
+
+  TBranch* fatjetBranch = evtTree->GetBranch("fatjetCollection"); //load jet collection
+  fatjetBranch->SetAddress(&fatjetVector);
+
+
+  TBranch* metBranch = evtTree->GetBranch("metCollection"); //load met collection
+  metBranch->SetAddress(&metVector);
 
   const unsigned int numEvents = branch->GetEntries(); //All branches have the same number of entries
 
@@ -144,6 +154,30 @@ int main(){
     if(!ralMuVector->empty()){//if it is not empty
       std::cout << "muon size: " << ralMuVector->size() << "\n";
       std::cout << "muon pt: "<< (ralMuVector->at(0)).pt() << "\n";
+    }
+
+    jetBranch->GetEntry(i); // set tree object for each event i
+
+    shared_ptr<std::vector<ran::NtJet> > ralJetVector = shared_ptr<std::vector<ran::NtJet> > (new std::vector<ran::NtJet>(jetVector->begin(), jetVector->end()));
+    if(!ralJetVector->empty()){//if it is not empty
+      std::cout << "jet size: " << ralJetVector->size() << "\n";
+      std::cout << "jet pt: "<< (ralJetVector->at(0)).pt() << "\n";
+    }
+
+    fatjetBranch->GetEntry(i); // set tree object for each event i
+
+    shared_ptr<std::vector<ran::NtFatJet> > ralfatJetVector = shared_ptr<std::vector<ran::NtFatJet> > (new std::vector<ran::NtFatJet>(fatjetVector->begin(), fatjetVector->end()));
+    if(!ralfatJetVector->empty()){//if it is not empty
+      std::cout << "fat jet size: " << ralfatJetVector->size() << "\n";
+      std::cout << "fat jet pt: "<< (ralfatJetVector->at(0)).pt() << "\n";
+    }
+
+    metBranch->GetEntry(i); // set tree object for each event i
+
+    shared_ptr<std::vector<ran::NtMet> > ralMetVector = shared_ptr<std::vector<ran::NtMet> > (new std::vector<ran::NtMet>(metVector->begin(), metVector->end()));
+    if(!ralMetVector->empty()){//if it is not empty
+      std::cout << "met size: " << ralMetVector->size() << "\n";
+      std::cout << "met pt: "<< (ralMetVector->at(0)).pt() << "\n";
     }
 
     /*

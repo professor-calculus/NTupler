@@ -15,6 +15,7 @@
 #pragma link C++ class ran::ElectronStruct+;
 #pragma link C++ class ran::MuonStruct+;
 #pragma link C++ class ran::JetStruct+;
+#pragma link C++ class ran::FatJetStruct+;
 #pragma link C++ class ran::MetStruct+;
 
 #endif

@@ -15,10 +15,12 @@
 #pragma link C++ class ran::ElectronStruct+;
 #pragma link C++ class ran::MuonStruct+;
 #pragma link C++ class ran::JetStruct+;
+#pragma link C++ class ran::FatJetStruct+;
 #pragma link C++ class ran::MetStruct+;
 #pragma link C++ class std::vector< ran::ElectronStruct>;
 #pragma link C++ class std::vector< ran::MuonStruct>;
 #pragma link C++ class std::vector< ran::JetStruct>;
+#pragma link C++ class std::vector< ran::FatJetStruct>;
 #pragma link C++ class std::vector< ran::MetStruct>;
 
 #endif
