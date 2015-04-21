@@ -1,9 +1,9 @@
 // -*- C++ -*-
 //
-// Package:    Test/MiniAnalyzer
-// Class:      MiniAnalyzer
+// Package:    Test/RALMiniAnalyzer
+// Class:      RALMiniAnalyzer
 // 
-/**\class MiniAnalyzer MiniAnalyzer.cc Test/MiniAnalyzer/plugins/MiniAnalyzer.cc
+/**\class RALMiniAnalyzer RALMiniAnalyzer.cc Test/RALMiniAnalyzer/plugins/RALMiniAnalyzer.cc
 
  Description: [one line class summary]
 
@@ -60,10 +60,10 @@
 // class declaration
 //
 
-class MiniAnalyzer : public edm::EDAnalyzer {
+class RALMiniAnalyzer : public edm::EDAnalyzer {
    public:
-      explicit MiniAnalyzer(const edm::ParameterSet&);
-      ~MiniAnalyzer();
+      explicit RALMiniAnalyzer(const edm::ParameterSet&);
+      ~RALMiniAnalyzer();
 
       static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
@@ -145,7 +145,7 @@ class MiniAnalyzer : public edm::EDAnalyzer {
 //
 // constructors and destructor
 //
-MiniAnalyzer::MiniAnalyzer(const edm::ParameterSet& iConfig):
+RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
    //now do what ever initialization is needed
     vtxToken_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
     muonToken_(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
@@ -174,7 +174,7 @@ MiniAnalyzer::MiniAnalyzer(const edm::ParameterSet& iConfig):
 }
 
 
-MiniAnalyzer::~MiniAnalyzer()
+RALMiniAnalyzer::~RALMiniAnalyzer()
 {
  
    // do anything here that needs to be done at desctruction time
@@ -189,7 +189,7 @@ MiniAnalyzer::~MiniAnalyzer()
 
 // ------------ method called for each event  ------------
 void
-MiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
+RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
    using namespace edm;
 
@@ -329,13 +329,13 @@ MiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 // ------------ method called once each job just before starting event loop  ------------
 void 
-MiniAnalyzer::beginJob()
+RALMiniAnalyzer::beginJob()
 {
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
 void 
-MiniAnalyzer::endJob() 
+RALMiniAnalyzer::endJob() 
 {
 
   //Write out Ntuple
@@ -351,7 +351,7 @@ MiniAnalyzer::endJob()
 // ------------ method called when starting to processes a run  ------------
 /*
 void 
-MiniAnalyzer::beginRun(edm::Run const&, edm::EventSetup const&)
+RALMiniAnalyzer::beginRun(edm::Run const&, edm::EventSetup const&)
 {
 }
 */
@@ -359,7 +359,7 @@ MiniAnalyzer::beginRun(edm::Run const&, edm::EventSetup const&)
 // ------------ method called when ending the processing of a run  ------------
 /*
 void 
-MiniAnalyzer::endRun(edm::Run const&, edm::EventSetup const&)
+RALMiniAnalyzer::endRun(edm::Run const&, edm::EventSetup const&)
 {
 }
 */
@@ -367,7 +367,7 @@ MiniAnalyzer::endRun(edm::Run const&, edm::EventSetup const&)
 // ------------ method called when starting to processes a luminosity block  ------------
 /*
 void 
-MiniAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
+RALMiniAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
 {
 }
 */
@@ -375,14 +375,14 @@ MiniAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup 
 // ------------ method called when ending the processing of a luminosity block  ------------
 /*
 void 
-MiniAnalyzer::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
+RALMiniAnalyzer::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
 {
 }
 */
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void
-MiniAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+RALMiniAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //The following says we do not know what parameters are allowed so do no validation
   // Please change this to state exactly what you do use, even if it is no parameters
   edm::ParameterSetDescription desc;
@@ -391,10 +391,10 @@ MiniAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(MiniAnalyzer);
+DEFINE_FWK_MODULE(RALMiniAnalyzer);
 
 //------------ method for clearing contents/setting default values of variables that should get new values in each event -------------
-void MiniAnalyzer::ResetEventByEventVariables(){
+void RALMiniAnalyzer::ResetEventByEventVariables(){
 	
 	//Resetting the values of the event information variables...
   	evtInfo.runNum = 0;
@@ -409,14 +409,14 @@ void MiniAnalyzer::ResetEventByEventVariables(){
 
 //----------------------------------------------------------------------------------------------------
 //------------ method for reading in the event information (run no., lumi sec etc...)  ---------------
-void MiniAnalyzer::ReadInEvtInfo(bool beVerbose, const edm::Event& edmEventObject){
+void RALMiniAnalyzer::ReadInEvtInfo(bool beVerbose, const edm::Event& edmEventObject){
 
       evtInfo.runNum = edmEventObject.id().run();
       evtInfo.lumiSec = edmEventObject.id().luminosityBlock();
       evtInfo.evtNum = edmEventObject.id().event(); 
 }
 
-void MiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
+void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 {
 
   /*edm::Handle<double> rhoHandle;
@@ -544,7 +544,7 @@ void MiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
   }
 }
 //Read in jet vars
-void MiniAnalyzer::ReadInJets(const edm::Event& iEvent)
+void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent)
 {
     edm::Handle<pat::JetCollection> jets;
     iEvent.getByToken(jetToken_, jets);
@@ -578,7 +578,7 @@ void MiniAnalyzer::ReadInJets(const edm::Event& iEvent)
 }
 
 //Read in fat jet vars
-void MiniAnalyzer::ReadInFatJets(const edm::Event& iEvent)
+void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent)
 {
     edm::Handle<pat::JetCollection> jets;
     iEvent.getByToken(fatjetToken_, jets);
@@ -612,7 +612,7 @@ void MiniAnalyzer::ReadInFatJets(const edm::Event& iEvent)
 
 }
 
-void MiniAnalyzer::ReadInMets(const edm::Event& iEvent)
+void RALMiniAnalyzer::ReadInMets(const edm::Event& iEvent)
 {
     edm::Handle<pat::METCollection> mets;
     iEvent.getByToken(metToken_, mets);
@@ -639,7 +639,7 @@ void MiniAnalyzer::ReadInMets(const edm::Event& iEvent)
 //------------ method for reading in the values of the standard GSF electron variables ---------------
 //----------------------------------------------------------------------------------------------------
 //-------- Method for reading in the muon information, and dumping it into tsw::Event class ----------
-void MiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
+void RALMiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
 
     edm::Handle<reco::VertexCollection> vertices;
     iEvent.getByToken(vtxToken_, vertices);
