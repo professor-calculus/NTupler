@@ -90,7 +90,7 @@ int main(){
 
   //2. Method 2. DIY ROOT
 
-  TString fileName = "../plugins/nTuple2.root"; //specify root file to run over
+  TString fileName = "../plugins/nTuple.root"; //specify root file to run over
                                                    // will write a better way to run over a list of files
   shared_ptr<TFile> f = shared_ptr<TFile> (new TFile(fileName));
 
