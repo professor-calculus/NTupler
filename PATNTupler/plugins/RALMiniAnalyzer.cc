@@ -419,7 +419,7 @@ void RALMiniAnalyzer::ReadInEvtInfo(bool beVerbose, const edm::Event& edmEventOb
 void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 {
 
-  /*edm::Handle<double> rhoHandle;
+  /* edm::Handle<double> rhoHandle;
   iEvent.getByLabel(eleRhoCorrLabel_,rhoHandle);
   double rho = applyRhoCorrToEleIsol_ ? *rhoHandle : 0;
 
@@ -539,6 +539,7 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
     ithElec.heep_numMissInnerHits = heepEle.nrMissHits();
 
     //ithElec.heep_cutCode = cuts_.getCutCode(rho,pvPos,iEle);
+    ithElec.heep_cutCode = cuts_.getCutCode(iEle);
 
 
   }

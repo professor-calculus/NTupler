@@ -7,8 +7,8 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(5000) )
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-#        'root://dcap.pp.rl.ac.uk//pnfs/pp.rl.ac.uk/data/cms/store/mc/Spring14miniaod/TTbarH_M-125_13TeV_amcatnlo-pythia8-tauola/MINIAODSIM/PU20bx25_POSTLS170_V5-v1/00000/7CB96282-EA1E-E411-84B7-001E67396A22.root'
-        'file:/opt/ppd/scratch/olaiya/CMS/analysis/CMSSW_7_2_0/src/PhysicsTools/PatAlgos/test/miniAOD/patTuple.root'
+        'root://dcap.pp.rl.ac.uk//pnfs/pp.rl.ac.uk/data/cms/store/mc/Spring14miniaod/TTbarH_M-125_13TeV_amcatnlo-pythia8-tauola/MINIAODSIM/PU20bx25_POSTLS170_V5-v1/00000/7CB96282-EA1E-E411-84B7-001E67396A22.root'
+        #'file:/opt/ppd/scratch/olaiya/CMS/analysis/CMSSW_7_2_0/src/PhysicsTools/PatAlgos/test/miniAOD/patTuple.root'
 #lcg-ls "srm://heplnx204.pp.rl.ac.uk:8443/srm/managerv2?SFN=/pnfs/pp.rl.ac.uk/data/cms/store/mc/Spring14miniaod/TTbarH_M-125_13TeV_amcatnlo-pythia8-tauola/MINIAODSIM/PU20bx25_POSTLS170_V5-v1/00000/7CB96282-EA1E-E411-84B7-001E67396A22.root"
     )
 )
@@ -31,7 +31,7 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
     endcapCuts = cms.PSet(heepEndcapCuts),
     applyRhoCorrToEleIsol = cms.bool(True), 
     eleIsolEffectiveAreas = cms.PSet (heepEffectiveAreas),
-    eleRhoCorrLabel = cms.InputTag("kt6PFJetsForIsolation","rho"),
+    eleRhoCorrLabel = cms.InputTag("fixedGridRhoAll","rho"),
     verticesLabel = cms.InputTag("offlinePrimaryVerticesWithBS"),
 )
 
