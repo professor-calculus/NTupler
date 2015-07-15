@@ -8,7 +8,9 @@
 #include <TFile.h>
 #include <TTree.h>
 #include <TString.h>
-
+#include <TLorentzVector.h> 
+#include <TH1F.h>
+#include <TApplication.h>
 
 //BOOST HEADERS
 
@@ -18,13 +20,16 @@
 #include "NtpReader.hh"
 
 using std::cout;
+using std::ifstream;
 using ran::ElectronStruct;
 using ran::MuonStruct;
 using ran::JetStruct;
 using ran::FatJetStruct;
 using ran::MetStruct;
 
-int main(){
+int main(int argc, char** argv){
+
+   TApplication graphicsPlease("graphicsPlease", &argc, argv);
 
   //Example of two ways to access the data.
   //1. Using helper class NtpReader
@@ -128,6 +133,7 @@ int main(){
    cout << "Number of Entries is: " << numEvents << "\n";
 
   //loop over tree
+   TH1F *eeMass = new TH1F("eeMass","ee Mass",400,0,2000); //Make a smart pointer
   for (unsigned int i = 0; i < numEvents; ++i){
     branch->GetEntry(i); // set tree object for each event i
     //Electron collection contain structs (ElectronStruct). We want to use our own electon class which is composed of the struct (NtElectron) 
@@ -136,14 +142,29 @@ int main(){
     //fillE(ralEVector.get(),electronVector.get());
     //fillParticleVector<ran::NtElectron, ran::ElectronStruct>(ralEVector.get(),electronVector.get());
 
-    for (std::vector<ran::ElectronStruct>::const_iterator iter = electronVector->begin();
-	 iter != electronVector->end(); ++iter){ //look at electrons using structs in ntuple
-      std::cout << "ev pt: " << (*iter).pt << "\n";
-    }
-
+    std::vector<std::vector<ran::NtElectron>::const_iterator> heepElectrons;
     for (std::vector<ran::NtElectron>::const_iterator iter = ralEVector->begin();
 	 iter != ralEVector->end(); ++iter){ //look at the electrons using our electron class
-      std::cout << "rv pt: " << (*iter).pt() << "\n";
+      std::cout << "rv pt: " << iter->pt() << "\n";
+    
+
+    //Store electrons that pass HEEP cutcodes
+      if ( !(iter->heep_cutCode()) ){
+	heepElectrons.push_back(iter);
+
+      }
+
+    }
+
+    //do we have at least two HEEP electrons    
+    if (heepElectrons.size() > 1){
+      TLorentzVector ele1, ele2, res4v; 
+      ele1.SetPtEtaPhiM( heepElectrons[0]->pt() ,  heepElectrons[0]-> heep_eta(),  heepElectrons[0]-> heep_phi(), 0.000511);
+      ele2.SetPtEtaPhiM( heepElectrons[1]->pt() ,  heepElectrons[1]-> heep_eta(),  heepElectrons[1]-> heep_phi(), 0.000511);
+      res4v = ele1+ ele2;
+      double mass = res4v.M();
+      eeMass->Fill(mass);
+      std::cout << "mass: " << mass << "\n";
     }
 
     //can do the same with muons and jets
@@ -192,6 +213,9 @@ int main(){
       }*/
   }
 
+  eeMass->Draw("");
+  std::cout << "\n\n\nType Ctrl + C to return to the prompt\n";
+  graphicsPlease.Run();
   
-  return 0;
+  //return 0;
 }
