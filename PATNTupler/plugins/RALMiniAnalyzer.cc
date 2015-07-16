@@ -1,6 +1,3 @@
-//TO DOS
-// Store gsf phi
-
 // -*- C++ -*-
 //
 // Package:    Test/RALMiniAnalyzer
@@ -402,7 +399,7 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
      
     ithElec.pt = iEle.pt();
     ithElec.eta = iEle.eta();
-
+    ithElec.phi = iEle.phi();
     ithElec.gsfTrack_available = iEle.gsfTrack().isAvailable();
     ithElec.scEta = iEle.superCluster()->eta();
     ithElec.scEnergy = iEle.superCluster()->energy(); 

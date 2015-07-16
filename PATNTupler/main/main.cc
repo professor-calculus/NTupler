@@ -27,6 +27,15 @@ using ran::JetStruct;
 using ran::FatJetStruct;
 using ran::MetStruct;
 
+//Functor for ordering leptons by pt
+struct compareLeptonPt{
+
+  bool operator()(std::vector<ran::NtElectron>::const_iterator lhs, std::vector<ran::NtElectron>::const_iterator rhs){
+    return (lhs->pt() > rhs->pt()); //Sort highest pt first
+  }
+
+};
+
 int main(int argc, char** argv){
 
    TApplication graphicsPlease("graphicsPlease", &argc, argv);
@@ -66,7 +75,7 @@ int main(int argc, char** argv){
       cout <<"Run Number is: " << testE.runNum() << "\n";
       cout <<"Event Number is: " << testE.evtNum() << "\n";
 
-      //lets test the new method
+      //let's test the new method
 
       std::vector<ran::NtElectron> elist = testE.getParticleCollection<ran::NtElectron, ran::ElectronStruct>("electronCollection");
     
@@ -137,6 +146,7 @@ int main(int argc, char** argv){
   for (unsigned int i = 0; i < numEvents; ++i){
     branch->GetEntry(i); // set tree object for each event i
     //Electron collection contain structs (ElectronStruct). We want to use our own electon class which is composed of the struct (NtElectron) 
+
     shared_ptr<std::vector<ran::NtElectron> > ralEVector = shared_ptr<std::vector<ran::NtElectron> > (new std::vector<ran::NtElectron>(electronVector->begin(), electronVector->end()));
     //This function generates a vector of NtElectron from a vector of ElectronStruct
     //fillE(ralEVector.get(),electronVector.get());
@@ -150,14 +160,17 @@ int main(int argc, char** argv){
 
     //Store electrons that pass HEEP cutcodes
       if ( !(iter->heep_cutCode()) ){
-	heepElectrons.push_back(iter);
-
+	if (iter-> heep_et() >35.0){
+	  heepElectrons.push_back(iter);
+	}
       }
 
     }
 
     //do we have at least two HEEP electrons    
     if (heepElectrons.size() > 1){
+      //OK order them by pt. Highest first      
+      //std::sort(heepElectrons.begin(), heepElectrons.end(), compareLeptonPt{}); //Think they are already sorted
       TLorentzVector ele1, ele2, res4v; 
       ele1.SetPtEtaPhiM( heepElectrons[0]->pt() ,  heepElectrons[0]-> heep_eta(),  heepElectrons[0]-> heep_phi(), 0.000511);
       ele2.SetPtEtaPhiM( heepElectrons[1]->pt() ,  heepElectrons[1]-> heep_eta(),  heepElectrons[1]-> heep_phi(), 0.000511);

@@ -17,6 +17,7 @@ namespace ran{
     virtual ~ElectronStruct(){} ///< virtual destructor
     double pt;///< electron pt
     double eta;///< electron eta
+    double phi;;//electron phi
 
     bool gsfTrack_available;///< Is GSF track available
     double scEta;///< super cluster eta

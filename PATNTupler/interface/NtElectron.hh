@@ -11,7 +11,8 @@ namespace ran{
     NtElectron(const ran::ElectronStruct& anElectron) : electron(&anElectron){} ///< Constructor
     double pt() const {return electron->pt;} ///<Particle pt
     double eta() const {return electron->eta;}///<Particle eta
- 
+    double phi() const {return electron->phi;}///<Particle phi
+
     bool gsfTrack_available() const {return electron->gsfTrack_available;}///< Is GSF track available
     double scEta() const {return electron->scEta;}///< super cluster eta
     double scEnergy() const {return electron->scEnergy;}///< super cluster energy
