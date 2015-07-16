@@ -7,9 +7,10 @@
 
 //STL HEADERS
 #include <vector>
+#include <memory>
 
 //BOOST HEADERS
-#include <boost/shared_ptr.hpp>
+//#include <boost/shared_ptr.hpp>
 
 //STL HEADERS
 #include <string>
@@ -25,7 +26,7 @@
 //ROOT headers
 #include "TChain.h"
 
-using boost::shared_ptr;
+using std::shared_ptr;
 using ran::ElectronStruct;
 using ran::MuonStruct;
 using ran::JetStruct;
