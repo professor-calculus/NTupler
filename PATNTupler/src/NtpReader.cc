@@ -41,12 +41,6 @@ std::vector<ran::NtElectron>  NtpReader::testBranch2(const TString& branchName){
   return ntpElectronVector;
 }
 
-void NtpReader::setEventInfoBranch(const TString& branchName){ // This needs to be in the constructor. Shouldn't need to set this separately. Can then copy construct evtInfo and use a unique_ptr instead of a shared_ptr
-  evtInfo = shared_ptr< ran::EventInfo >(new ran::EventInfo());
-  eventInfoBranch = evtTree->GetBranch(branchName);
-  eventInfoBranch->SetAddress(&evtInfo);
-}
-
 bool NtpReader::isLastEntry(){
   if (maxEvents == ntpEvtNum){
     return true;

@@ -26,7 +26,7 @@
 //ROOT headers
 #include "TChain.h"
 
-using std::shared_ptr;
+using std::unique_ptr;
 using ran::ElectronStruct;
 using ran::MuonStruct;
 using ran::JetStruct;
@@ -35,14 +35,15 @@ using std::string;
 class NtpReader{
 public:
   NtpReader(TTree* inTree) : ntpEvtNum(0), maxEvents(inTree->GetEntries()), evtTree(inTree){}///< Constructor
-  NtpReader(TTree* inTree, const TString& branchName) : ntpEvtNum(0), maxEvents(inTree->GetEntries()), evtTree(inTree){ ///< Constructor
-    setEventInfoBranch(branchName);
+  NtpReader(TTree* inTree, const TString& branchName) : ntpEvtNum(0), maxEvents(inTree->GetEntries()), evtTree(inTree), evtInfo(unique_ptr< ran::EventInfo >(new ran::EventInfo())){ ///< Constructor
+      eventInfoBranch = evtTree->GetBranch(branchName);
+      eventInfoBranch->SetAddress(&evtInfo);
+      //setEventInfoBranch(branchName);
   }
   NtpReader(string listOfFiles, string treeName);///< Constructor
   unsigned int runNum() const {return evtInfo->runNum;}//return the run number
   unsigned int evtNum() const {return evtInfo->evtNum;}//return the event number
   unsigned int lumiSec() const {return evtInfo->lumiSec;}//return the lumisec
-  void setEventInfoBranch(const TString& branchName);///< Sets the event info branch
   void setEntryInfo();///< sets the event information
   template <typename T, typename U> std::vector<T> getParticleCollection(const TString& branchName);
   std::vector<ran::NtElectron> testBranch2(const TString& branchName);
@@ -56,11 +57,11 @@ private:
   unsigned int ntpEvtNum;///< Ntuple Event number
   unsigned int maxEvents; ///< Maximum number of events in the ntuple
   TTree* evtTree;///< Ntuple Tree
+  unique_ptr<ran::EventInfo> evtInfo;
   TBranch* eventInfoBranch; ///< Event info branch
   TBranch* electronBranch; ///< Electron branch
   TBranch* jetBranch; ///< Jet branch
   TBranch* muonBranch; ///< Muon branch
-  shared_ptr<ran::EventInfo> evtInfo;
 };
 
 inline void NtpReader::setEntryInfo(){

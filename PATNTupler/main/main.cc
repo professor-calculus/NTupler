@@ -19,7 +19,6 @@
 //RAL PARTICLE HEADERS
 #include "NtpReader.hh"
 
-using std::unique_ptr;
 using std::cout;
 using std::ifstream;
 using ran::ElectronStruct;
@@ -70,12 +69,12 @@ int main(int argc, char** argv){
   //2. Standard ROOT DIY
 
   //1. Method 1. Using NtpReader
-  /*
+  ///*
   //loop over files
 
   for (std::vector<string>::const_iterator iter = vectorOfFiles.begin();
        iter != vectorOfFiles.end(); ++iter){//loop over ntuple files
-    shared_ptr<TFile> g = shared_ptr<TFile> (new TFile((*iter).c_str() ));
+    unique_ptr<TFile> g = unique_ptr<TFile> (new TFile((*iter).c_str() ));
 
     TTree *eventtTree = (TTree*)g->Get("demo/EventDataTree"); //get the tree
 
@@ -115,7 +114,7 @@ int main(int argc, char** argv){
       //testE.nextEntry();//increment eventnumber in ntuple
     }//end of loop over number of events in a file
   }//end of loop over ntuple files
-  */
+  //*/
 
   //2. Method 2. DIY ROOT
 
