@@ -5,7 +5,7 @@
 #include "Math/LorentzVector.h"
 #include "TLorentzVector.h"
 
-typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > XYZTLorentzVectorD;
+typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > XYZTLorentzVectorD;
 typedef XYZTLorentzVectorD XYZTLorentzVector;
 
 /// RAL Analysis Ntuples library namespace
@@ -15,30 +15,30 @@ namespace ran{
   public:
     ElectronStruct(); ///< default constructor
     virtual ~ElectronStruct(){} ///< virtual destructor
-    double pt;///< electron pt
-    double eta;///< electron eta
-    double phi;//electron phi
+    float pt;///< electron pt
+    float eta;///< electron eta
+    float phi;//electron phi
 
     bool gsfTrack_available;///< Is GSF track available
-    double scEta;///< super cluster eta
-    double scEnergy;///< super cluster energy
+    float scEta;///< super cluster eta
+    float scEnergy;///< super cluster energy
     bool ecalDrivenSeed;///< is ecal driven
-    double e2x5Max;///< e2x5 max
-    double e5x5;///< e5x5
-    double e1x5;///< e1x5
-    double deltaPhiSuperClusterTrackAtVtx;///< 
-    double hadronicOverEm;///< H/E
+    float e2x5Max;///< e2x5 max
+    float e5x5;///< e5x5
+    float e1x5;///< e1x5
+    float deltaPhiSuperClusterTrackAtVtx;///< 
+    float hadronicOverEm;///< H/E
     //int nrMissHits;///< Number of missing hits
-    double scSigmaIEtaIEta;///< 
-    double dr03EcalRecHitSumEt;///< 
-    double dr03HcalDepth1TowerSumEt;///< 
-    double dr03TkSumPt;///< 
-    double sigmaIetaIeta;///< sigmaIetaIeta
-    double full5x5_sigmaIetaIeta;///<full5x5_sigmaIetaIeta
+    float scSigmaIEtaIEta;///< 
+    float dr03EcalRecHitSumEt;///< 
+    float dr03HcalDepth1TowerSumEt;///< 
+    float dr03TkSumPt;///< 
+    float sigmaIetaIeta;///< sigmaIetaIeta
+    float full5x5_sigmaIetaIeta;///<full5x5_sigmaIetaIeta
     bool passConversionVeto;///< passConversionVeto
-    /*double pfIso_chgHad;///<Particle Flow Charged hadron isolation
-    double pfIso_neutHad;///<Particle Flow neutral hadron isolation
-    double pfIso_pht;///<Particle Flow photon isolation  */
+    /*float pfIso_chgHad;///<Particle Flow Charged hadron isolation
+    float pfIso_neutHad;///<Particle Flow neutral hadron isolation
+    float pfIso_pht;///<Particle Flow photon isolation  */
 
     
     bool heep_isPatEle;///<Is this a PAT electron

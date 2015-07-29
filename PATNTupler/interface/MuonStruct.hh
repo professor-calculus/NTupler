@@ -11,61 +11,61 @@ namespace ran{
   struct MuonStruct: public TObject{
     MuonStruct(); ///< default constructor
     virtual ~MuonStruct(){} ///<virtual distructor
-    double pt ; ///< pt
-    double eta ; ///< eta 
+    float pt ; ///< pt
+    float eta ; ///< eta 
     ROOT::Math::XYZTVector p4 ; ///<
     int charge ; ///<
     bool isGlobalMuon ; ///<
     bool isTrackerMuon ; ///<
     bool isStandAloneMuon ; ///<
     int numMatchedMuonStns ; ///<
-    double dB; ///<
+    float dB; ///<
     bool isPFIsolationValid;///<Is particle flow isolation valid
-    double pfIsoR03_sumChgHadPt; ///<sum-pt of charged Hadro
-    double pfIsoR03_chgPartPt;///<sum-pt of charged Particles(inludes e/mu) 
-    double pfIsoR03_sumNeutHadPt;///<sum pt of neutral hadrons 
-    double pfIsoR03_sumPhtEt;///<sum pt of PF photons 
+    float pfIsoR03_sumChgHadPt; ///<sum-pt of charged Hadro
+    float pfIsoR03_chgPartPt;///<sum-pt of charged Particles(inludes e/mu) 
+    float pfIsoR03_sumNeutHadPt;///<sum pt of neutral hadrons 
+    float pfIsoR03_sumPhtEt;///<sum pt of PF photons 
     bool isIsolationValid; ///<Is isolation valid    
-    double isolR03_sumPt ; ///<
-    double isolR03_emEt ; ///<
-    double isolR03_hadEt ; ///<
+    float isolR03_sumPt ; ///<
+    float isolR03_emEt ; ///<
+    float isolR03_hadEt ; ///<
 
-    double dxy; ///< No quality cuts on the vertex
-    double dz; ///< No quality cuts on the vertex
+    float dxy; ///< No quality cuts on the vertex
+    float dz; ///< No quality cuts on the vertex
 
     // Kinematic variables from the global track ...
     bool globTrk_exists ; ///<
-    double globTrk_pT ; ///<
-    double globTrk_eta ; ///<
-    double globTrk_phi ; ///<
+    float globTrk_pT ; ///<
+    float globTrk_eta ; ///<
+    float globTrk_phi ; ///<
     int globTrk_charge ; ///<
     int globTrk_numberOfValidMuonHits ; ///<
-    double globTrk_normalisedChi2 ; ///<
+    float globTrk_normalisedChi2 ; ///<
 
     // ... and from the inner track ...
     bool inTrk_exists ; ///<
-    double inTrk_pT ; ///<
-    double inTrk_eta ; ///<
-    double inTrk_phi ; ///<
+    float inTrk_pT ; ///<
+    float inTrk_eta ; ///<
+    float inTrk_phi ; ///<
     int inTrk_charge ; ///<
     int inTrk_numValidPixHits ; ///<
     int inTrk_numValidTrkrHits ; ///<
-    double inTrk_trackerLayersWithMeasurement; ///<
-    double inTrk_dxyVsOrigin ; ///<
+    float inTrk_trackerLayersWithMeasurement; ///<
+    float inTrk_dxyVsOrigin ; ///<
     int  trk_trkrLayersWHits ; ///<
 
    // ... and from the outer track ...
     bool outTrk_exists ; ///<
-    double outTrk_pT ; ///<
-    double outTrk_eta ; ///<
-    double outTrk_phi ; ///<
+    float outTrk_pT ; ///<
+    float outTrk_eta ; ///<
+    float outTrk_phi ; ///<
     int outTrk_charge ; ///<
 
     // ... and from 'best' track ...
     bool   bestTrk_exists ; ///<
-    double bestTrk_dxy_bspot ; ///<
-    double bestTrk_dxy_vtx ; ///<
-    double bestTrk_dz_vtx ; ///<
+    float bestTrk_dxy_bspot ; ///<
+    float bestTrk_dxy_vtx ; ///<
+    float bestTrk_dz_vtx ; ///<
 
     ClassDef(MuonStruct,1)//MuonStruct class definition
   };

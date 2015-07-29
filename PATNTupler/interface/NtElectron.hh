@@ -9,30 +9,30 @@ namespace ran{
   public:
     NtElectron() : electron(0){} ///< Default constructor
     NtElectron(const ran::ElectronStruct& anElectron) : electron(&anElectron){} ///< Constructor
-    double pt() const {return electron->pt;} ///<Particle pt
-    double eta() const {return electron->eta;}///<Particle eta
-    double phi() const {return electron->phi;}///<Particle phi
+    float pt() const {return electron->pt;} ///<Particle pt
+    float eta() const {return electron->eta;}///<Particle eta
+    float phi() const {return electron->phi;}///<Particle phi
 
     bool gsfTrack_available() const {return electron->gsfTrack_available;}///< Is GSF track available
-    double scEta() const {return electron->scEta;}///< super cluster eta
-    double scEnergy() const {return electron->scEnergy;}///< super cluster energy
+    float scEta() const {return electron->scEta;}///< super cluster eta
+    float scEnergy() const {return electron->scEnergy;}///< super cluster energy
     bool ecalDrivenSeed() const {return electron->ecalDrivenSeed;}///< is ecal driven
-    double e2x5Max() const {return electron->e2x5Max;}///< e2x5 max
-    double e5x5() const {return electron->e5x5;}///< e5x5
-    double e1x5() const {return electron->e1x5;}///< e1x5
-    double deltaPhiSuperClusterTrackAtVtx() const {return electron->deltaPhiSuperClusterTrackAtVtx;}
-    double hadronicOverEm() const {return electron->hadronicOverEm;}///< H/E 
+    float e2x5Max() const {return electron->e2x5Max;}///< e2x5 max
+    float e5x5() const {return electron->e5x5;}///< e5x5
+    float e1x5() const {return electron->e1x5;}///< e1x5
+    float deltaPhiSuperClusterTrackAtVtx() const {return electron->deltaPhiSuperClusterTrackAtVtx;}
+    float hadronicOverEm() const {return electron->hadronicOverEm;}///< H/E 
     //int nrMissHits() const {return electron->nrMissHits;}///< Number of missing hits
-    double scSigmaIEtaIEta() const {return electron->scSigmaIEtaIEta;}
-    double dr03EcalRecHitSumEt() const {return electron->dr03EcalRecHitSumEt;}
-    double dr03HcalDepth1TowerSumEt() const {return electron->dr03HcalDepth1TowerSumEt;}
-    double dr03TkSumPt() const {return electron->dr03TkSumPt;}
-    double sigmaIetaIeta() const {return electron->sigmaIetaIeta;}///< sigmaIetaIeta
-    double full5x5_sigmaIetaIeta() const {return electron->full5x5_sigmaIetaIeta;}///<full5x5_sigmaIetaIeta
+    float scSigmaIEtaIEta() const {return electron->scSigmaIEtaIEta;}
+    float dr03EcalRecHitSumEt() const {return electron->dr03EcalRecHitSumEt;}
+    float dr03HcalDepth1TowerSumEt() const {return electron->dr03HcalDepth1TowerSumEt;}
+    float dr03TkSumPt() const {return electron->dr03TkSumPt;}
+    float sigmaIetaIeta() const {return electron->sigmaIetaIeta;}///< sigmaIetaIeta
+    float full5x5_sigmaIetaIeta() const {return electron->full5x5_sigmaIetaIeta;}///<full5x5_sigmaIetaIeta
     bool passConversionVeto() const {return electron->passConversionVeto;}///< passConversionVeto 
-    /*double pfIso_chgHad() const {return electron->pfIso_chgHad;}///<Particle Flow Charged hadron isolation
-    double pfIso_neutHad() const {return electron->pfIso_neutHad;}///<Particle Flow neutral hadron isolation
-    double pfIso_pht() const {return electron->pfIso_pht;}///<Particle Flow photon isolation */
+    /*float pfIso_chgHad() const {return electron->pfIso_chgHad;}///<Particle Flow Charged hadron isolation
+    float pfIso_neutHad() const {return electron->pfIso_neutHad;}///<Particle Flow neutral hadron isolation
+    float pfIso_pht() const {return electron->pfIso_pht;}///<Particle Flow photon isolation */
 
     //HEEP variables
     bool  heep_isPatEle() const {return electron-> heep_isPatEle;}///<Is this a PAT electron
