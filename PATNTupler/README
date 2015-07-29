@@ -1,7 +1,10 @@
-- A separate git repository from the CMSSW one is used /opt/ppd/scratch/olaiya/repo/git/NTupler.git/.git This is accessed by using rgit instead of git which is alias via the command alias rgit='git --git-dir=/opt/ppd/scratch/olaiya/repo/git/NTupler.git/.git'
-- You have to run rgit from inside the NTupler directory
-- The code that runs over the data and produces the ntuples is PATNTupler/plugins/MiniAnalyzer.cc which runs over miniAOD files as specified in PATNTupler/plugins/run.py
-- PATNTupler/plugins/run.py specifies the miniAOD files to run over. It can be a reduce miniAOD file or the standard miniAOD file. If it is a reducedMiniAOD file it needs to have the following collections:
+See NTupler/NtupleNotes.txt for more detailed instructions on running the package
+
+- A separate git repository (stored on gitlab) from the CMSSW one is used ssh://git@gitlab.cern.ch:7999/olaiya/NTupler.git 
+- Make sure you are setup with ssh keys in order to use gitlab
+- Access the package with the command ssh://git@gitlab.cern.ch:7999/olaiya/NTupler.git
+- The code that runs over the data and produces the ntuples is PATNTupler/plugins/RALMiniAnalyzer.cc which runs over miniAOD files as specified in PATNTupler/plugins/nTupleProduction.py
+- PATNTupler/plugins/nTupleProduction.py specifies the miniAOD files to run over. It can be a reduce miniAOD file or the standard miniAOD file. If it is a reducedMiniAOD file it needs to have the following collections:
 
 LHEEventProduct                    "source"                    ""                "LHEFile"   
 edm::TriggerResults                "TriggerResults"            ""                "PAT"       

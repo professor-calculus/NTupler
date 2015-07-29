@@ -1,20 +1,30 @@
 #Ntuple code runs over miniAOD and produces ROOT ntuples
-# The Ntuple code is checked into a separate git repository at the moment
-# I check out to a seperate directory and move it into CMSSW
+# The Ntuple code is checked into my own git repository on gitlab
+#
 
-git clone /opt/ppd/scratch/olaiya/repo/git/NTupler.git
+#THIS IS ONLY FOR WHEN WORKING AT RAL. Set up environment for sh/bash etc. Ignore the next two lines at CERN or elsewhere
+export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
+source $VO_CMS_SW_DIR/cmsset_default.sh
 
-#mv the package into your CMS release eg.
-mv NTupler /opt/ppd/scratch/olaiya/CMS/analysis/CMSSW_7_2_0/src/
-#setup environment
+#checkout release
+cmsrel CMSSW_7_4_4
+cd CMSSW_7_4_4/src
 cmsenv
-#check out HEEP package
-git cms-merge-topic Sam-Harper:HEEPID72X
-#build it
-scramv1 b -j 8
+git clone https://github.com/Sam-Harper/usercode.git SHarper
+cd SHarper/
+git checkout 74XNtup
+cd ..
+
+#check out NTupler package
+git clone ssh://git@gitlab.cern.ch:7999/olaiya/NTupler.git
+
+#build
+scramv1 b -j 20
+
 #change into ntuple directory
 cd NTupler/PATNTupler/plugins
 #If you want to run the ntuple code directly edit nTupleProduction.py to specify the file you want to run over
+cmsRun nTupleProduction.py 
 #Alternatively if you want to run a crab production edit the crab config file crabConfig_nTupleProd.py to run over the dataset and specify the output directory on the T2 where you want the ntuple to be written. Then submit
 source /cvmfs/cms.cern.ch/crab3/crab.csh
 crab submit -c crabConfig_nTupleProd.py
@@ -35,6 +45,7 @@ gmake
 # the file test.list contains the list of root files to run over.
 cat test.list          
 ../plugins/nTuple.root
-#main.cc has two examples of accessing root file. So a ROOT file is explicitly stated in the code. Make sure this file exists or chaneg the name to a file that does
+#main.cc has two examples of accessing root file. 
+
 
 
