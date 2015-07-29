@@ -112,6 +112,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
 
       // ----------member data ---------------------------
 
+      bool isMC_;
       edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
       edm::EDGetTokenT<pat::MuonCollection> muonToken_;
       edm::EDGetTokenT<pat::ElectronCollection> electronToken_;
@@ -157,6 +158,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
 //
 RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
    //now do what ever initialization is needed
+    isMC_(iConfig.getParameter<bool>("isThisMC")),
     vtxToken_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
     muonToken_(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
     electronToken_(consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electrons"))),
@@ -235,7 +237,7 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
      ReadInFatJets(iEvent);
 
      //Read in Met
-     //ReadInMets(iEvent); //See a problem reading in met. Need to fix it!
+     ReadInMets(iEvent);
 
      //Fill Ntuple
      EventDataTree->Fill();	
@@ -588,8 +590,8 @@ void RALMiniAnalyzer::ReadInMets(const edm::Event& iEvent)
       ithMet.pt = iMet.pt();
       ithMet.eta = iMet.eta();
       ithMet.phi = iMet.phi();
-      ithMet.sumEt = iMet.sumEt();
-      ithMet.genMet_pt = iMet.genMET()->pt();
+      ithMet.sumEt = iMet.sumEt(); 
+     
       //ithMet.metSignificance =  iMet.metSignificance();
       //ithMet.etFractionHadronic = iMet.etFractionHadronic();
       ithMet.isCaloMET = iMet.isCaloMET();
@@ -597,6 +599,14 @@ void RALMiniAnalyzer::ReadInMets(const edm::Event& iEvent)
       ithMet.isRecoMET = iMet.isRecoMET();
       ithMet.shiftedPt_JetEnUp = iMet.shiftedPt(pat::MET::JetEnUp);
       ithMet.shiftedPt_JetEnDown = iMet.shiftedPt(pat::MET::JetEnDown);   
+
+      //MC components
+      if (isMC_){
+	ithMet.genMet_pt = iMet.genMET()->pt();
+      } else {
+	ithMet.genMet_pt = -99999.9;
+      }
+
     }
 
 }

@@ -23,6 +23,7 @@ process.TFileService = cms.Service("TFileService", fileName=cms.string('nTuple.r
 from SHarper.HEEPAnalyzer.HEEPSelectionCuts_cfi import *
 
 process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
+    isThisMC = cms.bool(False),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),
     electrons = cms.InputTag("slimmedElectrons"),
