@@ -1,4 +1,5 @@
 #include <vector>
+#include <string>
 #include "../interface/EventInfo.hh"
 #include "../interface/Particles.hh"
 
@@ -11,6 +12,8 @@
 #pragma link C++ class std::vector<ULong64_t>;
 #pragma link C++ class std::vector< std::vector<float> >;
 #pragma link C++ class std::vector< std::vector<bool> >;
+#pragma link C++ class std::vector< std::vector<string> >;
+#pragma link C++ class std::vector< std::vector<char> >;
 #pragma link C++ class ran::EventInfo+;
 #pragma link C++ class ran::ElectronStruct+;
 #pragma link C++ class ran::MuonStruct+;

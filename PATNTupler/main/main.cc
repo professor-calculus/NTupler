@@ -1,7 +1,3 @@
-//TO DO
-//use c++ 11 shared pointers
-
-
 //STL HEADERS
 #include <iostream>
 #include <vector>
@@ -18,6 +14,7 @@
 
 //RAL PARTICLE HEADERS
 #include "NtpReader.hh"
+#include "TriggerPathToIndex.hh"
 
 using std::cout;
 using std::ifstream;
@@ -26,14 +23,13 @@ using ran::MuonStruct;
 using ran::JetStruct;
 using ran::FatJetStruct;
 using ran::MetStruct;
+using ran::TriggerPathToIndex;
 
 //Functor for ordering leptons by pt
 struct compareLeptonPt{
-
   bool operator()(std::vector<ran::NtElectron>::const_iterator lhs, std::vector<ran::NtElectron>::const_iterator rhs){
     return (lhs->pt() > rhs->pt()); //Sort highest pt first
   }
-
 };
 
 int main(int argc, char** argv){
@@ -117,21 +113,24 @@ int main(int argc, char** argv){
   //*/
 
   //2. Method 2. DIY ROOT
-
-  TH1F *eeMass = new TH1F("eeMass","ee Mass",400,0,2000); //Make a smart pointer
+  unique_ptr<TH1F> eeMass(new TH1F("eeMass","ee Mass",400,0,2000)); 
   std::cout << "size of vector: " << vectorOfFiles.size() << "\n";
   for (std::vector<string>::const_iterator fIter = vectorOfFiles.begin();
        fIter != vectorOfFiles.end(); ++fIter){//loop over ntuple files
     unique_ptr<TFile> f = unique_ptr<TFile> (new TFile((*fIter).c_str() ));
     std::cout << "Opening file: " << *fIter << "\n";
     TTree *evtTree = (TTree*)f->Get("demo/EventDataTree"); //get the tree
-    //We need to set up a pointer to  a vector of particle pointers
+    TTree *trigTree = (TTree*)f->Get("demo/TriggerPathsTree"); //get the tree
+    //We need to set up a pointer to  a vector of particle pointers (forgot what i originally meant here!)
     //using smart pointers so looks messy. Won't bother using typedefs to reduce the mess
-    unique_ptr<std::vector<ran::ElectronStruct> > electronVector = unique_ptr<std::vector<ran::ElectronStruct> > (new std::vector<ElectronStruct>());
-    unique_ptr<std::vector<ran::MuonStruct> > muonVector = unique_ptr<std::vector<ran::MuonStruct> > (new std::vector<MuonStruct>());
-    unique_ptr<std::vector<ran::JetStruct> > jetVector = unique_ptr<std::vector<ran::JetStruct> > (new std::vector<JetStruct>());
-    unique_ptr<std::vector<ran::FatJetStruct> > fatjetVector = unique_ptr<std::vector<ran::FatJetStruct> > (new std::vector<FatJetStruct>());
-    unique_ptr<std::vector<ran::MetStruct> > metVector = unique_ptr<std::vector<ran::MetStruct> > (new std::vector<MetStruct>());
+    unique_ptr<std::vector<ran::ElectronStruct> > electronVector(new std::vector<ElectronStruct>());
+    unique_ptr<std::vector<ran::MuonStruct> > muonVector(new std::vector<MuonStruct>());
+    unique_ptr<std::vector<ran::JetStruct> > jetVector(new std::vector<JetStruct>());
+    unique_ptr<std::vector<ran::FatJetStruct> > fatjetVector(new std::vector<FatJetStruct>());
+    unique_ptr<std::vector<ran::MetStruct> > metVector(new std::vector<MetStruct>());
+    unique_ptr<std::vector<char> > triggerFlagsVector(new std::vector<char>());
+
+    unique_ptr<std::vector<string> > triggerPathVector(new std::vector<string>());
 
     //std::vector<ran::ElectronStruct>* electronVector = new std::vector<ElectronStruct>();  
     //evtTree->SetBranchAddress("electronCollection",&electronVector); 
@@ -148,11 +147,22 @@ int main(int argc, char** argv){
     TBranch* fatjetBranch = evtTree->GetBranch("fatjetCollection"); //load jet collection
     fatjetBranch->SetAddress(&fatjetVector);
 
-
     TBranch* metBranch = evtTree->GetBranch("metCollection"); //load met collection
     metBranch->SetAddress(&metVector);
 
-    const unsigned int numEvents = branch->GetEntries(); //All branches have the same number of entries
+    TBranch* trigFlagBranch = evtTree->GetBranch("recordedTriggers"); //load met collection
+    trigFlagBranch->SetAddress(&triggerFlagsVector);
+
+    TBranch* trigBranch = trigTree->GetBranch("triggerPaths"); //load trigger collection
+    trigBranch->SetAddress(&triggerPathVector);
+
+    const unsigned int trigEntryNum = trigBranch->GetEntries()-1;
+
+     //Which trigger bit corresponds to trigger path HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW_v
+    TriggerPathToIndex tpti(*triggerPathVector); //Load in the list of trigger paths recoreded
+    unsigned int trigIndex = tpti.getTrigIndex("HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW_v");
+
+    const unsigned int numEvents = branch->GetEntries(); //All evtTree branches *should* have the same number of entries
 
     std::cout << "Number of Entries is: " << numEvents << "\n";
 
@@ -161,7 +171,7 @@ int main(int argc, char** argv){
       branch->GetEntry(i); // set tree object for each event i
       //Electron collection contain structs (ElectronStruct). We want to use our own electon class which is composed of the struct (NtElectron) 
 
-      unique_ptr<std::vector<ran::NtElectron> > ralEVector = unique_ptr<std::vector<ran::NtElectron> > (new std::vector<ran::NtElectron>(electronVector->begin(), electronVector->end()));
+      unique_ptr<std::vector<ran::NtElectron> > ralEVector(new std::vector<ran::NtElectron>(electronVector->begin(), electronVector->end()));
       //This function generates a vector of NtElectron from a vector of ElectronStruct
       //fillE(ralEVector.get(),electronVector.get());
       //fillParticleVector<ran::NtElectron, ran::ElectronStruct>(ralEVector.get(),electronVector.get());
@@ -174,12 +184,16 @@ int main(int argc, char** argv){
 	//Store electrons that pass HEEP cutcodes
 	if ( !(iter->heep_cutCode()) ){
 	  if (iter-> heep_et() >35.0){
-	    heepElectrons.push_back(iter);
+	    
+	    trigFlagBranch->GetEntry(i);
+	    //std::cout << "First Trigger bit is: " << int(triggerFlagsVector->at(0)) << "\n";
+	    trigBranch->GetEntry(trigEntryNum);//Entries should be the same
+	    //std::cout << "First Trigger is: " << triggerPathVector->at(0) << "\n";	   
+	    if (int(triggerFlagsVector->at(trigIndex))){
+	      heepElectrons.push_back(iter);
+	    }
 	  }
-	}
-
-     
-
+	}     
       }
 
       //do we have at least two HEEP electrons    
@@ -198,7 +212,7 @@ int main(int argc, char** argv){
     
       muonBranch->GetEntry(i); // set tree object eMeEvent for each event i
 
-      unique_ptr<std::vector<ran::NtMuon> > ralMuVector = unique_ptr<std::vector<ran::NtMuon> > (new std::vector<ran::NtMuon>(muonVector->begin(), muonVector->end()));
+      unique_ptr<std::vector<ran::NtMuon> > ralMuVector(new std::vector<ran::NtMuon>(muonVector->begin(), muonVector->end()));
       if(!ralMuVector->empty()){//if it is not empty
 	//std::cout << "muon size: " << ralMuVector->size() << "\n";
 	//std::cout << "muon pt: "<< (ralMuVector->at(0)).pt() << "\n";
@@ -206,7 +220,7 @@ int main(int argc, char** argv){
 
       jetBranch->GetEntry(i); // set tree object for each event i
 
-      unique_ptr<std::vector<ran::NtJet> > ralJetVector = unique_ptr<std::vector<ran::NtJet> > (new std::vector<ran::NtJet>(jetVector->begin(), jetVector->end()));
+      unique_ptr<std::vector<ran::NtJet> > ralJetVector(new std::vector<ran::NtJet>(jetVector->begin(), jetVector->end()));
       if(!ralJetVector->empty()){//if it is not empty
 	//std::cout << "jet size: " << ralJetVector->size() << "\n";
 	//std::cout << "jet pt: "<< (ralJetVector->at(0)).pt() << "\n";
@@ -214,7 +228,7 @@ int main(int argc, char** argv){
 
       fatjetBranch->GetEntry(i); // set tree object for each event i
 
-      unique_ptr<std::vector<ran::NtFatJet> > ralfatJetVector = unique_ptr<std::vector<ran::NtFatJet> > (new std::vector<ran::NtFatJet>(fatjetVector->begin(), fatjetVector->end()));
+      unique_ptr<std::vector<ran::NtFatJet> > ralfatJetVector(new std::vector<ran::NtFatJet>(fatjetVector->begin(), fatjetVector->end()));
       if(!ralfatJetVector->empty()){//if it is not empty
 	//std::cout << "fat jet size: " << ralfatJetVector->size() << "\n";
 	//std::cout << "fat jet pt: "<< (ralfatJetVector->at(0)).pt() << "\n";
@@ -222,7 +236,7 @@ int main(int argc, char** argv){
 
       metBranch->GetEntry(i); // set tree object for each event i
 
-      unique_ptr<std::vector<ran::NtMet> > ralMetVector = unique_ptr<std::vector<ran::NtMet> > (new std::vector<ran::NtMet>(metVector->begin(), metVector->end()));
+      unique_ptr<std::vector<ran::NtMet> > ralMetVector(new std::vector<ran::NtMet>(metVector->begin(), metVector->end()));
       if(!ralMetVector->empty()){//if it is not empty
 	//std::cout << "met size: " << ralMetVector->size() << "\n";
 	//std::cout << "met pt: "<< (ralMetVector->at(0)).pt() << "\n";

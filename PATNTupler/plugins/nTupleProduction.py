@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process("Demo")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(500) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
@@ -40,7 +40,7 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
     bits = cms.InputTag("TriggerResults","","HLT"),
     prescales = cms.InputTag("patTrigger"),
     objects = cms.InputTag("selectedPatTrigger"),
-    selectedTriggerPath = cms.string("HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW")
+    selectedTriggerPaths = cms.vstring("HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW_v","HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_v")#matches triggers that *contain* the stated names, so finish with _v to make sure your trigger name isn't a subset of others
 )
 
 process.load("SHarper.HEEPAnalyzer.HEEPAnalyzer_cfi")

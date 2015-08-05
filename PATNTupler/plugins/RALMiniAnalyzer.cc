@@ -60,6 +60,7 @@
 //NTuple object headers
 #include "NTupler/PATNTupler/interface/EventInfo.hh"
 #include "NTupler/PATNTupler/interface/Particles.hh"
+#include "NTupler/PATNTupler/interface/TriggerPathToIndex.hh"
 
 
 //
@@ -125,23 +126,27 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       edm::EDGetTokenT<edm::TriggerResults> triggerBits_;
       edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerObjects_;
       edm::EDGetTokenT<pat::PackedTriggerPrescales> triggerPrescales_;
-      std::string targetTriggerPath_;
+      std::vector<std::string> targetTriggerPaths_;
 
       //Ntuple Tree
       edm::Service<TFileService> fHistos;
       TTree* EventDataTree;
+      TTree* TriggerPathsTree;
 
       //Variables whose values will be stored as branches...
       //ran::Event* event_;
       ran::EventInfo evtInfo{};
-      std::vector<ran::ElectronStruct>* electronCollection;
-      std::vector<ran::MuonStruct>* muonCollection;
-      std::vector<ran::JetStruct>* jetCollection;
-      std::vector<ran::FatJetStruct>* fatjetCollection;
-      std::vector<ran::MetStruct>* metCollection;
+      std::vector<ran::ElectronStruct>* electronCollection_;
+      std::vector<ran::MuonStruct>* muonCollection_;
+      std::vector<ran::JetStruct>* jetCollection_;
+      std::vector<ran::FatJetStruct>* fatjetCollection_;
+      std::vector<ran::MetStruct>* metCollection_;
+      std::vector<string>* triggerPaths_;
+      std::vector<char>* recordedTriggers_;
       bool vBool_;
            
       heep::EleSelector cuts_;
+      ran::TriggerPathToIndex* hltTriggers_;
 
 };
 
@@ -171,7 +176,7 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     triggerBits_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("bits"))),
     triggerObjects_(consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("objects"))),
     triggerPrescales_(consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("prescales"))),
-    targetTriggerPath_(iConfig.getParameter<std::string>("selectedTriggerPath"))
+    targetTriggerPaths_(iConfig.getParameter<std::vector<std::string> >("selectedTriggerPaths"))
     //cuts_(iConfig)
 {
     EventDataTree = fHistos->make<TTree>("EventDataTree", "Event data tree");
@@ -180,11 +185,24 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     //event_ = 0;	
     //EventDataTree->Branch("event","ran::Event", &event_, 64000, 1); // This line was taken from Jim's tupiliser
     EventDataTree->Branch("evtInfo","ran::EventInfo",&evtInfo);
-    EventDataTree->Branch("electronCollection","std::vector<ran::ElectronStruct>", &electronCollection, 64000, 1); 
-    EventDataTree->Branch("muonCollection","std::vector<ran::MuonStruct>", &muonCollection, 64000, 1); 
-    EventDataTree->Branch("jetCollection","std::vector<ran::JetStruct>", &jetCollection, 64000, 1);
-    EventDataTree->Branch("fatjetCollection","std::vector<ran::FatJetStruct>", &fatjetCollection, 64000, 1);
-    EventDataTree->Branch("metCollection","std::vector<ran::MetStruct>", &metCollection, 64000, 1);
+    EventDataTree->Branch("electronCollection","std::vector<ran::ElectronStruct>", &electronCollection_, 64000, 1); 
+    EventDataTree->Branch("muonCollection","std::vector<ran::MuonStruct>", &muonCollection_, 64000, 1); 
+    EventDataTree->Branch("jetCollection","std::vector<ran::JetStruct>", &jetCollection_, 64000, 1);
+    EventDataTree->Branch("fatjetCollection","std::vector<ran::FatJetStruct>", &fatjetCollection_, 64000, 1);
+    EventDataTree->Branch("metCollection","std::vector<ran::MetStruct>", &metCollection_, 64000, 1);
+    EventDataTree->Branch("recordedTriggers", &recordedTriggers_);
+    //EventDataTree->Branch("recordedTriggers","std::vector<char>", &recordedTriggers_, 64000, 1);
+
+    //Seperate tree to store trigger names
+    TriggerPathsTree = fHistos->make<TTree>("TriggerPathsTree", "Trigger Paths tree");
+    TriggerPathsTree->Branch("triggerPaths", &triggerPaths_);
+
+
+    //Set Trigger paths
+    hltTriggers_ = new ran::TriggerPathToIndex(targetTriggerPaths_);
+
+    triggerPaths_ = new std::vector<std::string>();
+    triggerPaths_->insert(triggerPaths_->begin(),targetTriggerPaths_.begin(), targetTriggerPaths_.end());
 }
 
 
@@ -193,7 +211,7 @@ RALMiniAnalyzer::~RALMiniAnalyzer()
  
    // do anything here that needs to be done at desctruction time
    // (e.g. close files, deallocate resources etc.)
-
+  delete hltTriggers_;
 }
 
 
@@ -206,17 +224,24 @@ void
 RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
    using namespace edm;
-
-   //Does event pass any of our specified triggers    
+   
+   //instantiate vector to store trigger pass or fails
+   recordedTriggers_ = new std::vector<char>(hltTriggers_->size(), 0);
+   //Does event pass any of our specified triggers 
    bool triggerOfInterest = passedTrigger(iEvent);
+   
+   //for (unsigned int i = 0; i < recordedTriggers_->size(); ++i){
+   //  std::cout << "Trigger i (int): " << int(recordedTriggers_->at(i)) << " \n";
+   //}
 
    if (triggerOfInterest){
 
-     electronCollection = new std::vector<ran::ElectronStruct>();
-     muonCollection = new std::vector<ran::MuonStruct>();
-     jetCollection = new std::vector<ran::JetStruct>();
-     fatjetCollection = new std::vector<ran::FatJetStruct>();
-     metCollection = new std::vector<ran::MetStruct>();
+     electronCollection_ = new std::vector<ran::ElectronStruct>();
+     muonCollection_ = new std::vector<ran::MuonStruct>();
+     jetCollection_ = new std::vector<ran::JetStruct>();
+     fatjetCollection_ = new std::vector<ran::FatJetStruct>();
+     metCollection_ = new std::vector<ran::MetStruct>();
+    
 
      //Clearing contents/setting default values of variables that should get new values in each event...
      ResetEventByEventVariables();
@@ -243,11 +268,13 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
      EventDataTree->Fill();	
 
      //delete event_;
-     delete electronCollection;
-     delete muonCollection;
-     delete fatjetCollection;
-     delete jetCollection;
-     delete metCollection;
+     delete electronCollection_;
+     delete muonCollection_;
+     delete fatjetCollection_;
+     delete jetCollection_;
+     delete metCollection_;
+
+     delete recordedTriggers_;
 
    }//Passed Trigger? 
 
@@ -267,6 +294,9 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 void 
 RALMiniAnalyzer::beginJob()
 {
+  //Only write once at the start of a job
+  TriggerPathsTree->Fill();
+
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
@@ -280,6 +310,7 @@ RALMiniAnalyzer::endJob()
 	
 	fHistos->cd();
 	EventDataTree->Write();
+	TriggerPathsTree->Write();
 
 	std::cout << std::endl;
 }
@@ -362,9 +393,14 @@ bool RALMiniAnalyzer::passedTrigger(const edm::Event& iEvent){
   bool trigPass(false);
   for (unsigned int i = 0, n = triggerBits->size(); i < n; ++i) {
     std::string triggerPath =  names.triggerName(i);
-    if (triggerBits->accept(i) && (triggerPath.compare(0,targetTriggerPath_.size(),targetTriggerPath_) == 0)){
-      //string compare method compare(pos of first char to be compared, size of string to compare, string to compare )
-      trigPass =  true;
+    for (std::vector<std::string>::const_iterator triggerPath_Iter = targetTriggerPaths_.begin(); 
+	 triggerPath_Iter != targetTriggerPaths_.end(); ++triggerPath_Iter){// loop over the triggers I have specified via the config
+      if (triggerBits->accept(i) && (triggerPath.compare(0,triggerPath_Iter->size(),*triggerPath_Iter) == 0)){
+      //string compare method compare(pos of first char to be compared, size of string to compare, string to compare )       
+	recordedTriggers_->at(hltTriggers_->getTrigIndex(*triggerPath_Iter)) = 1;//non zero int means passed, zero is failed
+	std::cout <<"FOUND TRIGGER " << triggerPath << "\n";
+	trigPass =  true;
+      }
     }
   }
 
@@ -396,8 +432,8 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
   edm::Handle<pat::ElectronCollection> electrons;
   iEvent.getByToken(electronToken_, electrons);
   for (const pat::Electron &iEle : *electrons) {
-    electronCollection->push_back(ran::ElectronStruct{});
-    ran::ElectronStruct &ithElec = electronCollection->back();
+    electronCollection_->push_back(ran::ElectronStruct{});
+    ran::ElectronStruct &ithElec = electronCollection_->back();
      
     ithElec.pt = iEle.pt();
     ithElec.eta = iEle.eta();
@@ -423,7 +459,6 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
     //ithElec.pfIso_chgHad = iEle.pfIsolationVariables().chargedHadronIso;
     //ithElec.pfIso_neutHad = iEle.pfIsolationVariables().neutralHadronIso;
     //ithElec.pfIso_pht = iEle.pfIsolationVariables().photonIso;
-    //electronCollection->push_back(ithElec);
 
     heep::Ele heepEle(iEle);//instantiate HEEP variable
     //HEEP variables
@@ -516,9 +551,9 @@ void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent)
     edm::Handle<pat::JetCollection> jets;
     iEvent.getByToken(jetToken_, jets);
     for (const pat::Jet &iJet: *jets) {
-      jetCollection->push_back(ran::JetStruct{});
+      jetCollection_->push_back(ran::JetStruct{});
 
-      ran::JetStruct &ithJet = jetCollection->back();
+      ran::JetStruct &ithJet = jetCollection_->back();
       ithJet.pt = iJet.pt();
       ithJet.et = iJet.et();
       ithJet.eta = iJet.eta();
@@ -550,9 +585,9 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent)
     edm::Handle<pat::JetCollection> jets;
     iEvent.getByToken(fatjetToken_, jets);
     for (const pat::Jet &iJet: *jets) {
-      fatjetCollection->push_back(ran::FatJetStruct{});
+      fatjetCollection_->push_back(ran::FatJetStruct{});
 
-      ran::FatJetStruct &ithJet = fatjetCollection->back();
+      ran::FatJetStruct &ithJet = fatjetCollection_->back();
       ithJet.pt = iJet.pt();
       ithJet.et = iJet.et();
       ithJet.eta = iJet.eta();
@@ -584,9 +619,9 @@ void RALMiniAnalyzer::ReadInMets(const edm::Event& iEvent)
     edm::Handle<pat::METCollection> mets;
     iEvent.getByToken(metToken_, mets);
     for (const pat::MET &iMet: *mets) {
-      metCollection->push_back(ran::MetStruct{});
+      metCollection_->push_back(ran::MetStruct{});
 
-      ran::MetStruct &ithMet = metCollection->back();
+      ran::MetStruct &ithMet = metCollection_->back();
       ithMet.pt = iMet.pt();
       ithMet.eta = iMet.eta();
       ithMet.phi = iMet.phi();
@@ -626,8 +661,8 @@ void RALMiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
 
     for (const pat::Muon &imuon : *muons) {
       
-      muonCollection->push_back(ran::MuonStruct{}); 
-      ran::MuonStruct &aMuon = muonCollection->back(); 
+      muonCollection_->push_back(ran::MuonStruct{}); 
+      ran::MuonStruct &aMuon = muonCollection_->back(); 
 
       aMuon.pt = imuon.pt();
       aMuon.eta = imuon.eta();
@@ -727,11 +762,6 @@ void RALMiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
 	aMuon.dz                 = -999.9;
 
       }
-      //add muon to Muon collection
-      muonCollection->push_back(aMuon);
-      //unessesary  copy here should fill inside the vector. fill a reference to muonCollection->back() or something
-      // or assign to the pointer obtained from muonCollection->back()
-
     }
 
 }
