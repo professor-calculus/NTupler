@@ -229,12 +229,13 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
    recordedTriggers_ = new std::vector<char>(hltTriggers_->size(), 0);
    //Does event pass any of our specified triggers 
    bool triggerOfInterest = passedTrigger(iEvent);
-   
+   //triggerOfInterest = (isMC_) ? isMC_ : passedTrigger(iEvent);//Need to write trigger info for MC but not select events based on it
+
    //for (unsigned int i = 0; i < recordedTriggers_->size(); ++i){
    //  std::cout << "Trigger i (int): " << int(recordedTriggers_->at(i)) << " \n";
    //}
 
-   if (triggerOfInterest){
+   if (triggerOfInterest || isMC_){
 
      electronCollection_ = new std::vector<ran::ElectronStruct>();
      muonCollection_ = new std::vector<ran::MuonStruct>();
@@ -393,12 +394,13 @@ bool RALMiniAnalyzer::passedTrigger(const edm::Event& iEvent){
   bool trigPass(false);
   for (unsigned int i = 0, n = triggerBits->size(); i < n; ++i) {
     std::string triggerPath =  names.triggerName(i);
+    //std::cout << "TRIGGER IS: " << triggerPath << "\n";
     for (std::vector<std::string>::const_iterator triggerPath_Iter = targetTriggerPaths_.begin(); 
 	 triggerPath_Iter != targetTriggerPaths_.end(); ++triggerPath_Iter){// loop over the triggers I have specified via the config
       if (triggerBits->accept(i) && (triggerPath.compare(0,triggerPath_Iter->size(),*triggerPath_Iter) == 0)){
       //string compare method compare(pos of first char to be compared, size of string to compare, string to compare )       
 	recordedTriggers_->at(hltTriggers_->getTrigIndex(*triggerPath_Iter)) = 1;//non zero int means passed, zero is failed
-	std::cout <<"FOUND TRIGGER " << triggerPath << "\n";
+	//std::cout <<"FOUND TRIGGER " << triggerPath << "\n";
 	trigPass =  true;
       }
     }
