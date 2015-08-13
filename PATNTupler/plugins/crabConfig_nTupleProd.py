@@ -11,7 +11,7 @@ config.Data.inputDataset = '/ZPrimePSIToEEMuMu_M-4000_13TeV_pythia8/Spring14mini
 config.Data.inputDBS = 'global'
 config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 10
-config.Data.outLFN = '/store/user/olaiya/CRABTest' #Wherever you want the ntuples to go on the RAL T2
+config.Data.outLFNDirBase = '/store/user/olaiya/CRABTest' #Wherever you want the ntuples to go on the RAL T2
 config.Data.publication = False
 config.Data.publishDataName = 'RAL_nTuple_PROD'
 
