@@ -189,9 +189,9 @@ int main(int argc, char** argv){
 	    //std::cout << "First Trigger bit is: " << int(triggerFlagsVector->at(0)) << "\n";
 	    trigBranch->GetEntry(trigEntryNum);//Entries should be the same
 	    //std::cout << "First Trigger is: " << triggerPathVector->at(0) << "\n";	   
-	    if (int(triggerFlagsVector->at(trigIndex))){
+	    //if (int(triggerFlagsVector->at(trigIndex))){
 	      heepElectrons.push_back(iter);
-	    }
+	      //}
 	  }
 	}     
       }
