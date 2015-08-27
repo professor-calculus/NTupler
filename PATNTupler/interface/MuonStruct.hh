@@ -18,6 +18,7 @@ namespace ran{
     bool isGlobalMuon ; ///<
     bool isTrackerMuon ; ///<
     bool isStandAloneMuon ; ///<
+    bool isHighPtMuon; ///< is this a high pt muon
     int numMatchedMuonStns ; ///<
     float dB; ///<
     bool isPFIsolationValid;///<Is particle flow isolation valid
@@ -39,7 +40,9 @@ namespace ran{
     float globTrk_eta ; ///<
     float globTrk_phi ; ///<
     int globTrk_charge ; ///<
+    float globTrk_numberOfValidPixelHits;
     int globTrk_numberOfValidMuonHits ; ///<
+    float globTrk_trackerLayersWithMeasurement;
     float globTrk_normalisedChi2 ; ///<
 
     // ... and from the inner track ...
@@ -66,6 +69,15 @@ namespace ran{
     float bestTrk_dxy_bspot ; ///<
     float bestTrk_dxy_vtx ; ///<
     float bestTrk_dz_vtx ; ///<
+
+    //Tune P muons
+    bool tuneP_exists; //< Tune P exist
+    float tuneP_pt;///< pt
+    float tuneP_eta;///< eta
+    float tuneP_phi;///< phi
+    float tuneP_charge;///< charge
+    float tuneP_ptError;///< pt error 
+    float tuneP_dxy;///< dxy
 
     ClassDef(MuonStruct,1)//MuonStruct class definition
   };

@@ -16,6 +16,7 @@ namespace ran{
     bool isGlobalMuon() const {return muon->isGlobalMuon;}
     bool isTrackerMuon() const {return muon->isTrackerMuon;}
     bool isStandAloneMuon() const {return muon->isStandAloneMuon;}
+    bool isHighPtMuon() const {return muon->isHighPtMuon;} ///< is this a high pt muon
     int numMatchedMuonStns() const {return muon->numMatchedMuonStns;}
     
     bool isPFIsolationValid() const {return muon->isPFIsolationValid;}///<Is particle flow isolation valid
@@ -40,6 +41,8 @@ namespace ran{
     float globTrk_phi() const {return muon->globTrk_phi;}
     int globTrk_charge() const {return muon->globTrk_charge;}
     int globTrk_numberOfValidMuonHits() const {return muon->globTrk_numberOfValidMuonHits;}
+    int globTrk_numberOfValidPixelHits() const {return muon->globTrk_numberOfValidPixelHits;}
+    int globTrk_trackerLayersWithMeasurement() const {return muon->globTrk_trackerLayersWithMeasurement;}
     float globTrk_normalisedChi2() const {return muon->globTrk_normalisedChi2;}
 
     // ... and from the inner track ...
@@ -68,6 +71,17 @@ namespace ran{
     float bestTrk_dxy_bspot() const {return muon->bestTrk_dxy_bspot;}///<Beamspot vertex used
     float bestTrk_dxy_vtx() const {return muon->bestTrk_dxy_vtx;}///< Quality cuts applied to the primary vertex
     float bestTrk_dz_vtx() const {return muon->bestTrk_dz_vtx;}///< Quality cuts applied to the primary vertex
+
+    //Tune P muons
+
+    bool tuneP_exists() const {return muon->tuneP_exists;}///< tune P exist
+    float tuneP_pt() const {return muon->tuneP_pt;}///< pt
+    float tuneP_eta() const {return muon->tuneP_eta;}///< eta
+    float tuneP_phi() const {return muon->tuneP_phi;}///< phi
+    float tuneP_charge() const {return muon->tuneP_charge;}///< charge
+    float tuneP_ptError() const {return muon->tuneP_ptError;}///< pt error 
+    float tuneP_dxy() const {return muon->tuneP_dxy;}///< dxy
+
 
   private:
     const ran::MuonStruct* muon;

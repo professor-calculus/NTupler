@@ -28,7 +28,7 @@
 #include "FWCore/Framework/interface/MakerMacros.h"
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
-
+#include "DataFormats/MuonReco/interface/MuonCocktails.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
@@ -243,7 +243,6 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
      fatjetCollection_ = new std::vector<ran::FatJetStruct>();
      metCollection_ = new std::vector<ran::MetStruct>();
     
-
      //Clearing contents/setting default values of variables that should get new values in each event...
      ResetEventByEventVariables();
 
@@ -252,7 +251,7 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
      //Read in muons
      ReadInMuons(iEvent);
-      
+            
      //Read in Electrons
      ReadInElectrons(iEvent);
 
@@ -662,7 +661,7 @@ void RALMiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
     iEvent.getByToken(muonToken_, muons);
 
     for (const pat::Muon &imuon : *muons) {
-      
+
       muonCollection_->push_back(ran::MuonStruct{}); 
       ran::MuonStruct &aMuon = muonCollection_->back(); 
 
@@ -673,6 +672,7 @@ void RALMiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
       aMuon.isGlobalMuon       = imuon.isGlobalMuon();
       aMuon.isTrackerMuon      = imuon.isTrackerMuon();
       aMuon.isStandAloneMuon   = imuon.isStandAloneMuon();
+      aMuon.isHighPtMuon       = imuon.isHighPtMuon(pV);
       aMuon.numMatchedMuonStns = imuon.numberOfMatchedStations();
    
       aMuon.dB                 = imuon.dB();
@@ -694,7 +694,9 @@ void RALMiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
 	aMuon.globTrk_eta           = imuon.globalTrack()->eta();
 	aMuon.globTrk_phi           = imuon.globalTrack()->phi();
 	aMuon.globTrk_charge        = imuon.globalTrack()->charge();
+        aMuon.globTrk_numberOfValidPixelHits = imuon.globalTrack()->hitPattern().numberOfValidPixelHits();
 	aMuon.globTrk_numberOfValidMuonHits = imuon.globalTrack()->hitPattern().numberOfValidMuonHits();
+	aMuon.globTrk_trackerLayersWithMeasurement = imuon.globalTrack()->hitPattern().trackerLayersWithMeasurement(); 
 	aMuon.globTrk_normalisedChi2 = imuon.globalTrack()->normalizedChi2();
       } else {
 	aMuon.globTrk_exists = false;
@@ -763,7 +765,29 @@ void RALMiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
 	aMuon.dxy                = -999.9;
 	aMuon.dz                 = -999.9;
 
+      }      
+
+      //TuneP muons
+      if (imuon.tunePMuonBestTrack().get()!=0){
+	aMuon.tuneP_exists =true;
+	aMuon.tuneP_pt = imuon.tunePMuonBestTrack()->pt();
+	aMuon.tuneP_eta = imuon.tunePMuonBestTrack()->eta();
+	aMuon.tuneP_phi = imuon.tunePMuonBestTrack()->phi();
+	aMuon.tuneP_charge = imuon.tunePMuonBestTrack()->charge();
+	aMuon.tuneP_ptError = imuon.tunePMuonBestTrack()->ptError();
+	aMuon.tuneP_dxy = imuon.tunePMuonBestTrack()->dxy(pV.position());
+      }else{
+	aMuon.tuneP_exists =false;
+        aMuon.tuneP_pt = -999.9;
+	aMuon.tuneP_eta =-999.9;
+	aMuon.tuneP_phi = -999.9;
+	aMuon.tuneP_charge = -999.9;
+	aMuon.tuneP_ptError = -999.9;
+	aMuon.tuneP_dxy = -999.9;
+
+
       }
+
     }
 
 }
