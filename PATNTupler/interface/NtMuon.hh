@@ -44,6 +44,8 @@ namespace ran{
     int globTrk_numberOfValidPixelHits() const {return muon->globTrk_numberOfValidPixelHits;}
     int globTrk_trackerLayersWithMeasurement() const {return muon->globTrk_trackerLayersWithMeasurement;}
     float globTrk_normalisedChi2() const {return muon->globTrk_normalisedChi2;}
+    float globTrk_dxy() const {return muon->globTrk_dxy;}
+    float globTrk_dz() const {return muon->globTrk_dz;}
 
     // ... and from the inner track ...
 
@@ -55,6 +57,8 @@ namespace ran{
     int inTrk_numValidPixHits() const {return muon->inTrk_numValidPixHits;}
     int inTrk_numValidTrkrHits() const {return muon->inTrk_numValidTrkrHits;}
     float inTrk_dxyVsOrigin() const {return muon->inTrk_dxyVsOrigin;}
+    float inTrk_dxy() const {return muon->inTrk_dxy;}
+    float inTrk_dz() const {return muon->inTrk_dz;}
     int trk_trkrLayersWHits() const {return muon->trk_trkrLayersWHits;}
 
     // ... and from the outer track ...
@@ -64,6 +68,8 @@ namespace ran{
     float outTrk_eta() const {return muon->outTrk_eta;}
     float outTrk_phi() const {return muon->outTrk_phi;}
     int outTrk_charge() const {return muon->outTrk_charge;}
+    float outTrk_dxy() const {return muon->outTrk_dxy;}
+    float outTrk_dz() const {return muon->outTrk_dz;}
 
     // ... and from 'best' track ...
 
@@ -81,7 +87,7 @@ namespace ran{
     float tuneP_charge() const {return muon->tuneP_charge;}///< charge
     float tuneP_ptError() const {return muon->tuneP_ptError;}///< pt error 
     float tuneP_dxy() const {return muon->tuneP_dxy;}///< dxy
-
+    float tuneP_dz() const {return muon->tuneP_dz;}///< dxy
 
   private:
     const ran::MuonStruct* muon;

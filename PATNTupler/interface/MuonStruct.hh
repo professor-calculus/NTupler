@@ -44,6 +44,8 @@ namespace ran{
     int globTrk_numberOfValidMuonHits ; ///<
     float globTrk_trackerLayersWithMeasurement;
     float globTrk_normalisedChi2 ; ///<
+    float globTrk_dxy;///<
+    float globTrk_dz;///<
 
     // ... and from the inner track ...
     bool inTrk_exists ; ///<
@@ -55,6 +57,8 @@ namespace ran{
     int inTrk_numValidTrkrHits ; ///<
     float inTrk_trackerLayersWithMeasurement; ///<
     float inTrk_dxyVsOrigin ; ///<
+    float inTrk_dxy;///<
+    float inTrk_dz;///<
     int  trk_trkrLayersWHits ; ///<
 
    // ... and from the outer track ...
@@ -63,6 +67,8 @@ namespace ran{
     float outTrk_eta ; ///<
     float outTrk_phi ; ///<
     int outTrk_charge ; ///<
+    float outTrk_dxy ; ///<
+    float outTrk_dz ; ///<
 
     // ... and from 'best' track ...
     bool   bestTrk_exists ; ///<
@@ -78,6 +84,7 @@ namespace ran{
     float tuneP_charge;///< charge
     float tuneP_ptError;///< pt error 
     float tuneP_dxy;///< dxy
+    float tuneP_dz;///< dz
 
     ClassDef(MuonStruct,1)//MuonStruct class definition
   };

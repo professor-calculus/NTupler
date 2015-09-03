@@ -698,6 +698,8 @@ void RALMiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
 	aMuon.globTrk_numberOfValidMuonHits = imuon.globalTrack()->hitPattern().numberOfValidMuonHits();
 	aMuon.globTrk_trackerLayersWithMeasurement = imuon.globalTrack()->hitPattern().trackerLayersWithMeasurement(); 
 	aMuon.globTrk_normalisedChi2 = imuon.globalTrack()->normalizedChi2();
+	aMuon.globTrk_dxy            = imuon.globalTrack()->dxy(pV.position());
+        aMuon.globTrk_dz            = imuon.globalTrack()->dz(pV.position());
       } else {
 	aMuon.globTrk_exists = false;
 	aMuon.globTrk_pT    = -999.9;       
@@ -706,6 +708,8 @@ void RALMiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
 	aMuon.globTrk_charge  = -999.9;      
 	aMuon.globTrk_numberOfValidMuonHits = -999.9;
 	aMuon.globTrk_normalisedChi2 = -999.9;
+        aMuon.globTrk_dxy    = -999.9;       
+	aMuon.globTrk_dz  = -999.9;  
       }
 
       // Inner track information ...
@@ -719,6 +723,8 @@ void RALMiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
 	aMuon.inTrk_numValidTrkrHits = imuon.innerTrack()->hitPattern().numberOfValidTrackerHits();
 	aMuon.inTrk_trackerLayersWithMeasurement =  imuon.innerTrack()->hitPattern().trackerLayersWithMeasurement();
 	aMuon.inTrk_dxyVsOrigin      = imuon.innerTrack()->dxy(); // Really, this should be calculated as innerTrack()->dxy(vertex->position()), but no vertex information is read in at the moment, and MuonRecoPerformance2010 TWiki page => Can calculate this approximately just relative to (0,0,0)
+        aMuon.inTrk_dxy                = imuon.innerTrack()->dxy(pV.position());
+        aMuon.inTrk_dz                = imuon.innerTrack()->dz(pV.position());
 	aMuon.trk_trkrLayersWHits    = imuon.track()->hitPattern().trackerLayersWithMeasurement();
       } else {
 	aMuon.inTrk_exists = false;
@@ -730,6 +736,8 @@ void RALMiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
 	aMuon.inTrk_numValidTrkrHits = -999.9;
 	aMuon.inTrk_trackerLayersWithMeasurement = -999.9; 
 	aMuon.inTrk_dxyVsOrigin      = -999.9;
+        aMuon.inTrk_dxy = -999.9;
+	aMuon.inTrk_dz = -999.9;
       }
 
       // Outer track information ...
@@ -739,20 +747,24 @@ void RALMiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
 	aMuon.outTrk_eta    = imuon.outerTrack()->eta();
 	aMuon.outTrk_phi    = imuon.outerTrack()->phi();
 	aMuon.outTrk_charge = imuon.outerTrack()->charge();
+        aMuon.outTrk_dxy                = imuon.outerTrack()->dxy(pV.position());
+        aMuon.outTrk_dz                = imuon.outerTrack()->dz(pV.position());
       } else {
 	aMuon.outTrk_exists = false;
 	aMuon.outTrk_pT     = -999.9;
 	aMuon.outTrk_eta    = -999.9;
 	aMuon.outTrk_phi    = -999.9;
 	aMuon.outTrk_charge = 999;
+        aMuon.outTrk_dxy = -999.9;
+	aMuon.outTrk_dz = -999.9;
       }
 
           
       if( imuon.muonBestTrack().get()!=0 ){
 	aMuon.bestTrk_exists = true;
 	aMuon.bestTrk_dxy_bspot   = -999.9; // NEED TO ADD THE CORRECT VERTEX imuon.muonBestTrack()->dxy( h_beamSpot->position() );
-	aMuon.bestTrk_dxy_vtx     = -999.9;//NEED TO ADD THE CORRECT VERTEX imuon.muonBestTrack()->dxy( mainPrimaryVertexIt->position() );
-	aMuon.bestTrk_dz_vtx      = -999.9;//NEED TO ADD THE CORRECT VERTEX imuon.muonBestTrack()->dz( mainPrimaryVertexIt->position() );
+	aMuon.bestTrk_dxy_vtx     = imuon.muonBestTrack()->dxy(pV.position());
+	aMuon.bestTrk_dz_vtx      = imuon.muonBestTrack()->dz(pV.position());
 	aMuon.dxy                = imuon.muonBestTrack()->dxy(pV.position());
 	aMuon.dz                 = imuon.muonBestTrack()->dz(pV.position());
 
@@ -776,6 +788,7 @@ void RALMiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
 	aMuon.tuneP_charge = imuon.tunePMuonBestTrack()->charge();
 	aMuon.tuneP_ptError = imuon.tunePMuonBestTrack()->ptError();
 	aMuon.tuneP_dxy = imuon.tunePMuonBestTrack()->dxy(pV.position());
+        aMuon.tuneP_dz = imuon.tunePMuonBestTrack()->dz(pV.position());
       }else{
 	aMuon.tuneP_exists =false;
         aMuon.tuneP_pt = -999.9;
@@ -784,7 +797,7 @@ void RALMiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
 	aMuon.tuneP_charge = -999.9;
 	aMuon.tuneP_ptError = -999.9;
 	aMuon.tuneP_dxy = -999.9;
-
+	aMuon.tuneP_dz = -999.9;
 
       }
 
