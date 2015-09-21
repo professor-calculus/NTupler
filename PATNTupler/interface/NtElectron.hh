@@ -30,9 +30,9 @@ namespace ran{
     float sigmaIetaIeta() const {return electron->sigmaIetaIeta;}///< sigmaIetaIeta
     float full5x5_sigmaIetaIeta() const {return electron->full5x5_sigmaIetaIeta;}///<full5x5_sigmaIetaIeta
     bool passConversionVeto() const {return electron->passConversionVeto;}///< passConversionVeto 
-    /*float pfIso_chgHad() const {return electron->pfIso_chgHad;}///<Particle Flow Charged hadron isolation
-    float pfIso_neutHad() const {return electron->pfIso_neutHad;}///<Particle Flow neutral hadron isolation
-    float pfIso_pht() const {return electron->pfIso_pht;}///<Particle Flow photon isolation */
+    int inner_missing_hits() const {return electron->inner_missing_hits;}///<number of inner track missing hits
+    bool isEB() const {return electron->isEB;}///< GSF is EB
+    bool isEE() const {return electron->isEE;}///< GSF is EE
 
     //HEEP variables
     bool  heep_isPatEle() const {return electron-> heep_isPatEle;}///<Is this a PAT electron

@@ -27,6 +27,7 @@ namespace ran{
     float e5x5;///< e5x5
     float e1x5;///< e1x5
     float deltaPhiSuperClusterTrackAtVtx;///< 
+    float deltaEtaSuperClusterTrackAtVtx;///< 
     float hadronicOverEm;///< H/E
     //int nrMissHits;///< Number of missing hits
     float scSigmaIEtaIEta;///< 
@@ -36,9 +37,9 @@ namespace ran{
     float sigmaIetaIeta;///< sigmaIetaIeta
     float full5x5_sigmaIetaIeta;///<full5x5_sigmaIetaIeta
     bool passConversionVeto;///< passConversionVeto
-    /*float pfIso_chgHad;///<Particle Flow Charged hadron isolation
-    float pfIso_neutHad;///<Particle Flow neutral hadron isolation
-    float pfIso_pht;///<Particle Flow photon isolation  */
+    int inner_missing_hits;///<number of inner track missing hits
+    bool isEB;///< GSF is EB
+    bool isEE;///< GSF is EE
 
     
     bool heep_isPatEle;///<Is this a PAT electron

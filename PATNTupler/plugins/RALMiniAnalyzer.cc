@@ -451,6 +451,7 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
     ithElec.e5x5 = iEle.e5x5();
     ithElec.e1x5 = iEle.e1x5();
     ithElec.deltaPhiSuperClusterTrackAtVtx = iEle.deltaPhiSuperClusterTrackAtVtx();
+    ithElec.deltaEtaSuperClusterTrackAtVtx = iEle.deltaEtaSuperClusterTrackAtVtx();
     ithElec.hadronicOverEm = iEle.hadronicOverEm();
     //ithElec.nrMissHits = iEle.gsfTrack().trackerExpectedHitsInner().numberOfHits();
     ithElec.scSigmaIEtaIEta = iEle.scSigmaIEtaIEta();
@@ -460,6 +461,9 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
     //ithElec.pfIso_chgHad = iEle.pfIsolationVariables().chargedHadronIso;
     //ithElec.pfIso_neutHad = iEle.pfIsolationVariables().neutralHadronIso;
     //ithElec.pfIso_pht = iEle.pfIsolationVariables().photonIso;
+    ithElec.inner_missing_hits =  iEle.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
+    ithElec.isEB = iEle.isEB();
+    ithElec.isEE = iEle.isEE();
 
     heep::Ele heepEle(iEle);//instantiate HEEP variable
     //HEEP variables
