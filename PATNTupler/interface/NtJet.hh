@@ -13,13 +13,15 @@ namespace ran{
     float eta() const {return jet->eta;}///<Particle eta
     float phi() const {return jet->phi;}///<Particle phi
     float mass() const {return jet->mass;} ///<Particle mass
-    float jetProbabilityBJetTags() const {return jet->jetProbabilityBJetTags;}///< jetProbabilityBJetTags b tag discriminator
-    float jetBProbabilityBJetTags() const {return jet->jetBProbabilityBJetTags;}///< jetBProbabilityBJetTags b tag discriminator
-    float trackCountingHighEffBJetTags() const {return jet->trackCountingHighEffBJetTags;}///< trackCountingHighEffBJetTags b tag discriminator
-    float trackCountingHighPurBJetTags() const {return jet->trackCountingHighPurBJetTags;}///< trackCountingHighPurBJetTags b tag discriminator
-    float simpleSecondaryVertexHighEffBJetTags() const {return jet->simpleSecondaryVertexHighEffBJetTags;}///< simpleSecondaryVertexHighEffBJetTags b tag discriminator
-    float simpleSecondaryVertexHighPurBJetTags() const {return jet->simpleSecondaryVertexHighPurBJetTags;}///< simpleSecondaryVertexHighPurBJetTags b tag discriminator
-    float combinedInclusiveSecondaryVertexBJetTags() const {return jet->combinedInclusiveSecondaryVertexBJetTags;}///< combinedInclusiveSecondaryVertexBJetTags b tag discriminator
+    float pfJetProbabilityBJetTags() const {return jet->pfJetProbabilityBJetTags;}///< pfJetProbabilityBJetTags b tag discriminator
+    float pfJetBProbabilityBJetTags() const {return jet->pfJetBProbabilityBJetTags;}///< pfJetBProbabilityBJetTags b tag discriminator
+    float pfTrackCountingHighEffBJetTags() const {return jet->pfTrackCountingHighEffBJetTags;}///< pfTrackCountingHighEffBJetTags b tag discriminator
+    float pfTrackCountingHighPurBJetTags() const {return jet->pfTrackCountingHighPurBJetTags;}///< pfTrackCountingHighPurBJetTags b tag discriminator
+    float pfSimpleSecondaryVertexHighEffBJetTags() const {return jet->pfSimpleSecondaryVertexHighEffBJetTags;}///< pfSimpleSecondaryVertexHighEffBJetTags b tag discriminator
+    float pfSimpleSecondaryVertexHighPurBJetTags() const {return jet->pfSimpleSecondaryVertexHighPurBJetTags;}///< pfSimpleSecondaryVertexHighPurBJetTags b tag discriminator
+    float pfCombinedInclusiveSecondaryVertexV2BJetTags() const {return jet->pfCombinedInclusiveSecondaryVertexV2BJetTags;}///< pfCombinedInclusiveSecondaryVertexV2BJetTags b tag discriminator
+    float pfCombinedSecondaryVertexSoftLeptonBJetTags() const {return jet->pfCombinedSecondaryVertexSoftLeptonBJetTags;}//< pfCombinedSecondaryVertexSoftLeptonBJetTags b tag discriminator
+    float pfCombinedMVABJetTags() const {return jet->pfCombinedMVABJetTags;}///< pfCombinedMVABJetTags  b tag discriminator
     float jecFactor_unCorrected() const {return jet->jecFactor_unCorrected;}///< factor applied to jet pt to get uncorrect jet pt
     float userFloat_pileupJetId_fullDiscriminant() const {return jet->userFloat_pileupJetId_fullDiscriminant;}///<  userFloat pileup jet ID
 
