@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //
-// Package:    Test/RALMiniAnalyzer
+// Package:    plugin/RALMiniAnalyzer.cc
 // Class:      RALMiniAnalyzer
 // 
 /**\class RALMiniAnalyzer RALMiniAnalyzer.cc Test/RALMiniAnalyzer/plugins/RALMiniAnalyzer.cc
@@ -39,6 +39,8 @@
 #include "DataFormats/PatCandidates/interface/MET.h"
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 
+#include "DataFormats/Common/interface/ValueMap.h"
+
 #include "DataFormats/Math/interface/deltaR.h"
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
@@ -48,6 +50,8 @@
 //...in order to use the heep::Ele class ...
 #include "SHarper/HEEPAnalyzer/interface/HEEPEle.h"
 #include "SHarper/HEEPAnalyzer/interface/HEEPEleSelector.h"
+#include "SHarper/HEEPAnalyzer/interface/HEEPEvent.h"
+//#include "SHarper/HEEPAnalyzer/interface/HEEPEventHelper.h"
 
 
 //...for histograms creation
@@ -117,12 +121,13 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
       edm::EDGetTokenT<pat::MuonCollection> muonToken_;
       edm::EDGetTokenT<pat::ElectronCollection> electronToken_;
+      edm::EDGetTokenT<edm::ValueMap<int> > heepIdToken_;
       edm::EDGetTokenT<pat::JetCollection> jetToken_;
       edm::EDGetTokenT<pat::JetCollection> fatjetToken_;
       edm::EDGetTokenT<pat::METCollection> metToken_;
-      edm::InputTag eleRhoCorrLabel_;      
-      bool applyRhoCorrToEleIsol_;
-      edm::InputTag verticesLabel_;
+  //edm::InputTag eleRhoCorrLabel_;      
+  //bool applyRhoCorrToEleIsol_;
+  //  edm::InputTag verticesLabel_;
       edm::EDGetTokenT<edm::TriggerResults> triggerBits_;
       edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerObjects_;
       edm::EDGetTokenT<pat::PackedTriggerPrescales> triggerPrescales_;
@@ -167,18 +172,20 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     vtxToken_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
     muonToken_(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
     electronToken_(consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electrons"))),
+    heepIdToken_(consumes<edm::ValueMap<int>>(iConfig.getParameter<edm::InputTag>("heepId"))),
     jetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jets"))),
     fatjetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"))),
     metToken_(consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets"))),
-    eleRhoCorrLabel_(iConfig.getParameter<edm::InputTag>("eleRhoCorrLabel")),
-    applyRhoCorrToEleIsol_(iConfig.getParameter<bool>("applyRhoCorrToEleIsol")),
-    verticesLabel_(iConfig.getParameter<edm::InputTag>("verticesLabel")),
+    //eleRhoCorrLabel_(iConfig.getParameter<edm::InputTag>("eleRhoCorrLabel")),
+    //applyRhoCorrToEleIsol_(iConfig.getParameter<bool>("applyRhoCorrToEleIsol")),
+    //verticesLabel_(iConfig.getParameter<edm::InputTag>("verticesLabel")),
     triggerBits_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("bits"))),
     triggerObjects_(consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("objects"))),
     triggerPrescales_(consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("prescales"))),
     targetTriggerPaths_(iConfig.getParameter<std::vector<std::string> >("selectedTriggerPaths"))
     //cuts_(iConfig)
 {
+
     EventDataTree = fHistos->make<TTree>("EventDataTree", "Event data tree");
 
     //Setting up the links between variables and branches...
@@ -421,17 +428,12 @@ void RALMiniAnalyzer::ReadInEvtInfo(bool beVerbose, const edm::Event& edmEventOb
 void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 {
 
-  /* edm::Handle<double> rhoHandle;
-  iEvent.getByLabel(eleRhoCorrLabel_,rhoHandle);
-  double rho = applyRhoCorrToEleIsol_ ? *rhoHandle : 0;
-
-  edm::Handle<reco::VertexCollection> verticesHandle;
-  iEvent.getByLabel(verticesLabel_,verticesHandle);
-  math::XYZPoint pvPos(0,0,0);
-  if(!verticesHandle->empty()) pvPos = verticesHandle->front().position();*/
-
   edm::Handle<pat::ElectronCollection> electrons;
   iEvent.getByToken(electronToken_, electrons);
+  edm::Handle<edm::ValueMap<int> > heepId;
+  iEvent.getByToken(heepIdToken_,heepId);
+  size_t eleNr=0;
+
   for (const pat::Electron &iEle : *electrons) {
     electronCollection_->push_back(ran::ElectronStruct{});
     ran::ElectronStruct &ithElec = electronCollection_->back();
@@ -545,8 +547,11 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
     ithElec.heep_numMissInnerHits = heepEle.nrMissHits();
 
     //ithElec.heep_cutCode = cuts_.getCutCode(rho,pvPos,iEle);
-    ithElec.heep_cutCode = cuts_.getCutCode(iEle);
+    //ithElec.heep_cutCode = cuts_.getCutCode(iEle);
 
+    edm::Ptr<pat::Electron> elePtr(electrons,eleNr);
+    ithElec.heep_cutCode =  (*heepId)[elePtr];
+    ++eleNr;
 
   }
 }
@@ -569,14 +574,15 @@ void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent)
       ithJet.userFloat_pileupJetId_fullDiscriminant = iJet.userFloat("pileupJetId:fullDiscriminant");
 
       //Assign the btag discriminators
-      ithJet.jetProbabilityBJetTags =  iJet.bDiscriminator("jetProbabilityBJetTags");
-      ithJet.jetBProbabilityBJetTags =  iJet.bDiscriminator("jetBProbabilityBJetTags");
-      ithJet.trackCountingHighEffBJetTags =  iJet.bDiscriminator("trackCountingHighEffBJetTags");   
-      ithJet.trackCountingHighPurBJetTags =  iJet.bDiscriminator("trackCountingHighPurBJetTags");
-      ithJet.simpleSecondaryVertexHighEffBJetTags =  iJet.bDiscriminator("simpleSecondaryVertexHighEffBJetTags");
-      ithJet.simpleSecondaryVertexHighPurBJetTags =  iJet.bDiscriminator("simpleSecondaryVertexHighPurBJetTags");
-      ithJet.combinedInclusiveSecondaryVertexBJetTags =  iJet.bDiscriminator("combinedInclusiveSecondaryVertexBJetTags");
-
+      ithJet.pfJetProbabilityBJetTags =  iJet.bDiscriminator("pfJetProbabilityBJetTags");
+      ithJet.pfJetBProbabilityBJetTags =  iJet.bDiscriminator("pfJetBProbabilityBJetTags");
+      ithJet.pfTrackCountingHighEffBJetTags =  iJet.bDiscriminator("pfTrackCountingHighEffBJetTags");   
+      ithJet.pfTrackCountingHighPurBJetTags =  iJet.bDiscriminator("pfTrackCountingHighPurBJetTags");
+      ithJet.pfSimpleSecondaryVertexHighEffBJetTags =  iJet.bDiscriminator("pfSimpleSecondaryVertexHighEffBJetTags");
+      ithJet.pfSimpleSecondaryVertexHighPurBJetTags =  iJet.bDiscriminator("pfSimpleSecondaryVertexHighPurBJetTags");
+      ithJet.pfCombinedInclusiveSecondaryVertexV2BJetTags =  iJet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
+      ithJet.pfCombinedSecondaryVertexSoftLeptonBJetTags =  iJet.bDiscriminator("pfCombinedSecondaryVertexSoftLeptonBJetTags");
+      ithJet.pfCombinedMVABJetTags = iJet.bDiscriminator("pfCombinedMVABJetTags");
 
       ithJet.partonFlavour = iJet.partonFlavour();
 
@@ -606,13 +612,16 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent)
       ithJet.userFloat_cmsTopTag_PFJets_CHSLinksAK8 = iJet.userFloat("cmsTopTagPFJetsCHSLinksAK8");
 
       //Assign the btag discriminators
-      ithJet.jetProbabilityBJetTags =  iJet.bDiscriminator("jetProbabilityBJetTags");
-      ithJet.jetBProbabilityBJetTags =  iJet.bDiscriminator("jetBProbabilityBJetTags");
-      ithJet.trackCountingHighEffBJetTags =  iJet.bDiscriminator("trackCountingHighEffBJetTags");   
-      ithJet.trackCountingHighPurBJetTags =  iJet.bDiscriminator("trackCountingHighPurBJetTags");
-      ithJet.simpleSecondaryVertexHighEffBJetTags =  iJet.bDiscriminator("simpleSecondaryVertexHighEffBJetTags");
-      ithJet.simpleSecondaryVertexHighPurBJetTags =  iJet.bDiscriminator("simpleSecondaryVertexHighPurBJetTags");
-      ithJet.combinedInclusiveSecondaryVertexBJetTags =  iJet.bDiscriminator("combinedInclusiveSecondaryVertexBJetTags");
+      ithJet.pfJetProbabilityBJetTags =  iJet.bDiscriminator("pfJetProbabilityBJetTags");
+      ithJet.pfJetBProbabilityBJetTags =  iJet.bDiscriminator("pfJetBProbabilityBJetTags");
+      ithJet.pfTrackCountingHighEffBJetTags =  iJet.bDiscriminator("pfTrackCountingHighEffBJetTags");   
+      ithJet.pfTrackCountingHighPurBJetTags =  iJet.bDiscriminator("pfTrackCountingHighPurBJetTags");
+      ithJet.pfSimpleSecondaryVertexHighEffBJetTags =  iJet.bDiscriminator("pfSimpleSecondaryVertexHighEffBJetTags");
+      ithJet.pfSimpleSecondaryVertexHighPurBJetTags =  iJet.bDiscriminator("pfSimpleSecondaryVertexHighPurBJetTags");
+      ithJet.pfCombinedInclusiveSecondaryVertexV2BJetTags =  iJet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
+      ithJet.pfCombinedSecondaryVertexSoftLeptonBJetTags =  iJet.bDiscriminator("pfCombinedSecondaryVertexSoftLeptonBJetTags");
+      ithJet.pfCombinedMVABJetTags = iJet.bDiscriminator("pfCombinedMVABJetTags");
+
       ithJet.partonFlavour = iJet.partonFlavour();
 
     }
