@@ -549,8 +549,8 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
     //ithElec.heep_cutCode = cuts_.getCutCode(rho,pvPos,iEle);
     //ithElec.heep_cutCode = cuts_.getCutCode(iEle);
 
-    //edm::Ptr<pat::Electron> elePtr(electrons,eleNr);
-    //ithElec.heep_cutCode =  (*heepId)[elePtr];
+    edm::Ptr<pat::Electron> elePtr(electrons,eleNr);
+    ithElec.heep_cutCode =  (*heepId)[elePtr];
     ++eleNr;
 
   }
