@@ -24,6 +24,13 @@ namespace ran{
     float pfCombinedMVABJetTags() const {return jet->pfCombinedMVABJetTags;}///< pfCombinedMVABJetTags  b tag discriminator
     float jecFactor_unCorrected() const {return jet->jecFactor_unCorrected;}///< factor applied to jet pt to get uncorrect jet pt
     float userFloat_pileupJetId_fullDiscriminant() const {return jet->userFloat_pileupJetId_fullDiscriminant;}///<  userFloat pileup jet ID
+    float numberOfDaughters() const {return jet->numberOfDaughters;}///< Number of Jet daughters
+    float chargedMultiplicity() const {return jet->chargedMultiplicity;}///< charged multiplicity
+    float neutralHadronEnergyFraction() const {return jet->neutralHadronEnergyFraction;}///< neutralHadronEnergyFraction
+    float HFHadronEnergyFraction() const {return jet->HFHadronEnergyFraction;}///< HFHadronEnergyFraction
+    float neutralEmEnergyFraction() const {return jet->neutralEmEnergyFraction;}///< neutralEmEnergyFraction
+    float chargedEmEnergyFraction() const {return jet->chargedEmEnergyFraction;}///<chargedEmEnergyFraction
+    float chargedHadronEnergyFraction() const {return jet->chargedHadronEnergyFraction;}///<chargedHadronEnergyFraction
 
     int partonFlavour() const {return jet->partonFlavour;}///<  MC parton flavour (sensible values for MC only!) 
 

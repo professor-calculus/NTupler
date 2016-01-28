@@ -51,8 +51,6 @@
 #include "SHarper/HEEPAnalyzer/interface/HEEPEle.h"
 #include "SHarper/HEEPAnalyzer/interface/HEEPEleSelector.h"
 #include "SHarper/HEEPAnalyzer/interface/HEEPEvent.h"
-//#include "SHarper/HEEPAnalyzer/interface/HEEPEventHelper.h"
-
 
 //...for histograms creation
 #include "FWCore/ServiceRegistry/interface/Service.h"
@@ -125,9 +123,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       edm::EDGetTokenT<pat::JetCollection> jetToken_;
       edm::EDGetTokenT<pat::JetCollection> fatjetToken_;
       edm::EDGetTokenT<pat::METCollection> metToken_;
-  //edm::InputTag eleRhoCorrLabel_;      
-  //bool applyRhoCorrToEleIsol_;
-  //  edm::InputTag verticesLabel_;
+
       edm::EDGetTokenT<edm::TriggerResults> triggerBits_;
       edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerObjects_;
       edm::EDGetTokenT<pat::PackedTriggerPrescales> triggerPrescales_;
@@ -150,7 +146,6 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       std::vector<char>* recordedTriggers_;
       bool vBool_;
            
-      heep::EleSelector cuts_;
       ran::TriggerPathToIndex* hltTriggers_;
 
 };
@@ -432,6 +427,7 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
   iEvent.getByToken(electronToken_, electrons);
   edm::Handle<edm::ValueMap<int> > heepId;
   iEvent.getByToken(heepIdToken_,heepId);
+
   size_t eleNr=0;
 
   for (const pat::Electron &iEle : *electrons) {
@@ -546,9 +542,6 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 
     ithElec.heep_numMissInnerHits = heepEle.nrMissHits();
 
-    //ithElec.heep_cutCode = cuts_.getCutCode(rho,pvPos,iEle);
-    //ithElec.heep_cutCode = cuts_.getCutCode(iEle);
-
     edm::Ptr<pat::Electron> elePtr(electrons,eleNr);
     ithElec.heep_cutCode =  (*heepId)[elePtr];
     ++eleNr;
@@ -569,6 +562,13 @@ void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent)
       ithJet.eta = iJet.eta();
       ithJet.phi = iJet.phi();
       ithJet.mass = iJet.mass();
+      ithJet.numberOfDaughters = iJet.numberOfDaughters();
+      ithJet.chargedMultiplicity = iJet.chargedMultiplicity();
+      ithJet.neutralHadronEnergyFraction = iJet.neutralHadronEnergyFraction();
+      ithJet.HFHadronEnergyFraction = iJet.HFHadronEnergyFraction();
+      ithJet.neutralEmEnergyFraction = iJet.neutralEmEnergyFraction();
+      ithJet.chargedEmEnergyFraction = iJet.chargedEmEnergyFraction();
+      ithJet.chargedHadronEnergyFraction = iJet.chargedHadronEnergyFraction();
 
       ithJet.jecFactor_unCorrected = iJet.jecFactor("Uncorrected");
       ithJet.userFloat_pileupJetId_fullDiscriminant = iJet.userFloat("pileupJetId:fullDiscriminant");

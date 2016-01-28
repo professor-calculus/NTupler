@@ -25,6 +25,13 @@ namespace ran{
     float pfCombinedMVABJetTags;///<  pfCombinedMVABJetTags b tag discriminator
     float jecFactor_unCorrected;///<factor applied to jet pt to get uncorrect jet pt
     float userFloat_pileupJetId_fullDiscriminant;///< userFloat pileup jet ID
+    float numberOfDaughters;///< Number of Jet daughters
+    float chargedMultiplicity;///< charged multiplicity
+    float neutralHadronEnergyFraction;///< neutralHadronEnergyFraction
+    float HFHadronEnergyFraction;///< HFHadronEnergyFraction
+    float neutralEmEnergyFraction;///< neutralEmEnergyFraction
+    float chargedEmEnergyFraction;///<chargedEmEnergyFraction
+    float chargedHadronEnergyFraction;///<chargedHadronEnergyFraction
     int partonFlavour;///<  MC parton flavour (sensible values for MC only obviously!) 
     ClassDef(JetStruct,1)//Struct class definition
   };
