@@ -28,6 +28,13 @@ namespace ran{
     float userFloat_ak8PFJets_CHSTrimmedLinks;///< Trimed jets
     float userFloat_ak8PFJets_CHSFilteredLinks;///< Filtered jets
     float userFloat_cmsTopTag_PFJets_CHSLinksAK8;///< CMS Top Tagger
+    float numberOfDaughters;///< Number of Jet daughters
+    float chargedMultiplicity;///< charged multiplicity
+    float neutralHadronEnergyFraction;///< neutralHadronEnergyFraction
+    float HFHadronEnergyFraction;///< HFHadronEnergyFraction
+    float neutralEmEnergyFraction;///< neutralEmEnergyFraction
+    float chargedEmEnergyFraction;///<chargedEmEnergyFraction
+    float chargedHadronEnergyFraction;///<chargedHadronEnergyFraction
 
     int partonFlavour;///<  MC parton flavour (sensible values for MC only obviously!) 
     ClassDef(FatJetStruct,1)//Struct class definition

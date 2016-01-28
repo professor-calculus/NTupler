@@ -604,6 +604,13 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent)
       ithJet.eta = iJet.eta();
       ithJet.phi = iJet.phi();
       ithJet.mass = iJet.mass();
+      ithJet.numberOfDaughters = iJet.numberOfDaughters();
+      ithJet.chargedMultiplicity = iJet.chargedMultiplicity();
+      ithJet.neutralHadronEnergyFraction = iJet.neutralHadronEnergyFraction();
+      ithJet.HFHadronEnergyFraction = iJet.HFHadronEnergyFraction();
+      ithJet.neutralEmEnergyFraction = iJet.neutralEmEnergyFraction();
+      ithJet.chargedEmEnergyFraction = iJet.chargedEmEnergyFraction();
+      ithJet.chargedHadronEnergyFraction = iJet.chargedHadronEnergyFraction();
 
       ithJet.jecFactor_unCorrected = iJet.jecFactor("Uncorrected");
       ithJet.userFloat_ak8PFJets_CHSPrunedLinks = iJet.userFloat("ak8PFJetsCHSPrunedLinks");
