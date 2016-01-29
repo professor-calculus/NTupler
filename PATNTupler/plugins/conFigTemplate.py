@@ -3,11 +3,11 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process("Demo")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10000) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-        '/store/data/Run2015B/DoubleEG/MINIAOD/PromptReco-v1/000/251/244/00000/84B7599F-4E27-E511-9DEC-02163E014509.root'
+        'LISTOFFILESINSERTEDHERE'
     )
 )
 
@@ -15,13 +15,13 @@ process.source = cms.Source("PoolSource",
 process.load("Configuration.Geometry.GeometryRecoDB_cff")
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
-process.GlobalTag.globaltag = cms.string('MCRUN2_74_V9A')
+process.GlobalTag.globaltag = cms.string('GLOBALTAG_INSERTEDHERE')
 
-process.TFileService = cms.Service("TFileService", fileName=cms.string('nTuple.root'))
+process.TFileService = cms.Service("TFileService", fileName=cms.string('OUTPUTFILENAME_INSERTEDHERE'))
 
 process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
-    isThisMC = cms.bool(False),
-    #mcWeight = cms.double(MCWEIGHT_INSERTEDHERE),
+    isThisMC = cms.bool(ISTHISMCORNOT_INSERTEDHERE),
+    mcWeight = cms.double(MCWEIGHT_INSERTEDHERE),
     heepId = cms.InputTag("heepId"),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     muons = cms.InputTag("slimmedMuons"),

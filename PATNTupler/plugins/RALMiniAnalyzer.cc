@@ -238,7 +238,6 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
    //}
 
    if (triggerOfInterest || isMC_){
-
      electronCollection_ = new std::vector<ran::ElectronStruct>();
      muonCollection_ = new std::vector<ran::MuonStruct>();
      jetCollection_ = new std::vector<ran::JetStruct>();
@@ -434,6 +433,8 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
     electronCollection_->push_back(ran::ElectronStruct{});
     ran::ElectronStruct &ithElec = electronCollection_->back();
      
+    std::cout << "Found an electron\n";
+
     ithElec.pt = iEle.pt();
     ithElec.eta = iEle.eta();
     ithElec.phi = iEle.phi();
