@@ -230,14 +230,14 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
    //instantiate vector to store trigger pass or fails
    recordedTriggers_ = new std::vector<char>(hltTriggers_->size(), 0);
    //Does event pass any of our specified triggers 
-   bool triggerOfInterest = passedTrigger(iEvent);
+   //bool triggerOfInterest = passedTrigger(iEvent);
    //triggerOfInterest = (isMC_) ? isMC_ : passedTrigger(iEvent);//Need to write trigger info for MC but not select events based on it
 
    //for (unsigned int i = 0; i < recordedTriggers_->size(); ++i){
    //  std::cout << "Trigger i (int): " << int(recordedTriggers_->at(i)) << " \n";
    //}
 
-   if (triggerOfInterest || isMC_){
+   //if (triggerOfInterest || isMC_){
      electronCollection_ = new std::vector<ran::ElectronStruct>();
      muonCollection_ = new std::vector<ran::MuonStruct>();
      jetCollection_ = new std::vector<ran::JetStruct>();
@@ -277,7 +277,7 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
      delete recordedTriggers_;
 
-   }//Passed Trigger? 
+     //}//Passed Trigger? 
 
 #ifdef THIS_IS_AN_EVENT_EXAMPLE
    Handle<ExampleData> pIn;
@@ -358,9 +358,6 @@ RALMiniAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) 
   descriptions.addDefault(desc);
 }
 
-//define this as a plug-in
-DEFINE_FWK_MODULE(RALMiniAnalyzer);
-
 //------------ method for clearing contents/setting default values of variables that should get new values in each event -------------
 void RALMiniAnalyzer::ResetEventByEventVariables(){
 	
@@ -431,9 +428,7 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 
   for (const pat::Electron &iEle : *electrons) {
     electronCollection_->push_back(ran::ElectronStruct{});
-    ran::ElectronStruct &ithElec = electronCollection_->back();
-     
-    std::cout << "Found an electron\n";
+    ran::ElectronStruct &ithElec = electronCollection_->back();     
 
     ithElec.pt = iEle.pt();
     ithElec.eta = iEle.eta();
@@ -825,3 +820,5 @@ void RALMiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
     }
 
 }
+//define this as a plug-in
+DEFINE_FWK_MODULE(RALMiniAnalyzer);
