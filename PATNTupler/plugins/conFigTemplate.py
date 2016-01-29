@@ -55,3 +55,5 @@ useMiniAOD=True
 if useMiniAOD==True:
     process.heepId.verticesLabel=cms.InputTag("offlineSlimmedPrimaryVertices")
     process.heepId.eleLabel=cms.InputTag("slimmedElectrons")
+
+process.p = cms.Path(process.heepId*process.demo)
