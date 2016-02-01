@@ -46,10 +46,10 @@ int main(int argc, char** argv){
      std::cout << argv[0] << " <list of files>\n";
      return -1;
    }
-
+   //NEED TO RETURN AN ERROR IF FILE DOES NOT EXIST
   //need to read list of files and put contents into a vector
   string listOfFiles(argv[1]);
-  std::cout << "Reading file: " << argv[1] << "\n";
+  std::cout << "Reading file: " << listOfFiles << "\n";
   ifstream iFile(listOfFiles.c_str());
   string line;
   std::vector<string> vectorOfFiles;
@@ -67,7 +67,7 @@ int main(int argc, char** argv){
   //1. Method 1. Using NtpReader
   ///*
   //loop over files
-
+  /*
   for (std::vector<string>::const_iterator iter = vectorOfFiles.begin();
        iter != vectorOfFiles.end(); ++iter){//loop over ntuple files
     unique_ptr<TFile> g = unique_ptr<TFile> (new TFile((*iter).c_str() ));
@@ -78,7 +78,7 @@ int main(int argc, char** argv){
     //testE.setEventInfoBranch("evtInfo");//Specify the branches you want to look at. Each branch has its own setter method. Need to move this to the constructor
     cout << "Num of Entries is: " <<  testE.getLastEntry() << "\n";
 
-  
+    
     for (testE.setEntryNumber(0); testE.getEntryNumber() < testE.getLastEntry(); testE.nextEntry()){//loop over events in a file
       
       cout << "Entry number is: " << testE.getEntryNumber() << "\n";
@@ -104,13 +104,14 @@ int main(int argc, char** argv){
       if (!mlist.empty()){
 	cout << "Muon pt: " << (mlist.at(0)).pt() << "\n"; //print et
       }
-
+      
       
       //at the end of the loop
       //testE.nextEntry();//increment eventnumber in ntuple
     }//end of loop over number of events in a file
   }//end of loop over ntuple files
-  //*/
+  //
+  */
 
   //2. Method 2. DIY ROOT
   unique_ptr<TH1F> eeMass(new TH1F("eeMass","ee Mass",400,0,2000)); 
@@ -123,6 +124,7 @@ int main(int argc, char** argv){
     TTree *trigTree = (TTree*)f->Get("demo/TriggerPathsTree"); //get the tree
     //We need to set up a pointer to  a vector of particle pointers (forgot what i originally meant here!)
     //using smart pointers so looks messy. Won't bother using typedefs to reduce the mess
+    unique_ptr<ran::EventInfo> evtObj(new ran::EventInfo());
     unique_ptr<std::vector<ran::ElectronStruct> > electronVector(new std::vector<ElectronStruct>());
     unique_ptr<std::vector<ran::MuonStruct> > muonVector(new std::vector<MuonStruct>());
     unique_ptr<std::vector<ran::JetStruct> > jetVector(new std::vector<JetStruct>());
@@ -132,8 +134,8 @@ int main(int argc, char** argv){
 
     unique_ptr<std::vector<string> > triggerPathVector(new std::vector<string>());
 
-    //std::vector<ran::ElectronStruct>* electronVector = new std::vector<ElectronStruct>();  
-    //evtTree->SetBranchAddress("electronCollection",&electronVector); 
+    TBranch* evtBranch = evtTree->GetBranch("evtInfo"); //load event info collection
+    evtBranch->SetAddress(&evtObj);
 
     TBranch* branch = evtTree->GetBranch("electronCollection"); //load electron collection
     branch->SetAddress(&electronVector);
@@ -169,7 +171,12 @@ int main(int argc, char** argv){
     //loop over tree
     for (unsigned int i = 0; i < numEvents; ++i){
       branch->GetEntry(i); // set tree object for each event i
+      evtBranch->GetEntry(i); // set tree object for each event i
       //Electron collection contain structs (ElectronStruct). We want to use our own electon class which is composed of the struct (NtElectron) 
+
+      //cout << "Event Number is: " << evtObj->evtNum << "\n";
+      //cout << "Run Number is: " << evtObj->runNum << "\n";
+      //cout << "Lumi Sec is: " << evtObj->lumiSec << "\n";
 
       unique_ptr<std::vector<ran::NtElectron> > ralEVector(new std::vector<ran::NtElectron>(electronVector->begin(), electronVector->end()));
       //This function generates a vector of NtElectron from a vector of ElectronStruct
@@ -181,6 +188,15 @@ int main(int argc, char** argv){
 	   iter != ralEVector->end(); ++iter){ //look at the electrons using our electron class
 	//std::cout << "rv pt: " << iter->pt() << "\n";
 
+	if (iter->heep_cutCode() == 0){
+	cout << "HEEP cut codes: " <<  iter->heep_cutCode() << "\n";
+        cout << "HEEP cut et: " <<  iter->heep_et() << "\n";
+	cout << "HEEP scEta: " <<  iter->heep_scEt() << "\n";
+        cout << "GSF pt: " <<  iter->pt() << "\n";
+        cout << "GSF eta: " <<  iter->eta() << "\n";
+	cout << "GSF phi: " <<  iter->phi() << "\n";
+	cout << "GSF scEta: " <<  iter->scEta() << "\n";
+	}
 	//Store electrons that pass HEEP cutcodes
 	if ( !(iter->heep_cutCode()) ){
 	  if (iter-> heep_et() >35.0){
@@ -240,8 +256,7 @@ int main(int argc, char** argv){
       if(!ralMetVector->empty()){//if it is not empty
 	//std::cout << "met size: " << ralMetVector->size() << "\n";
 	//std::cout << "met pt: "<< (ralMetVector->at(0)).pt() << "\n";
-      }
-      
+      }      
     }
   }//loop over files
 

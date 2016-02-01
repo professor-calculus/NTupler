@@ -414,6 +414,10 @@ void RALMiniAnalyzer::ReadInEvtInfo(bool beVerbose, const edm::Event& edmEventOb
       evtInfo.runNum = edmEventObject.id().run();
       evtInfo.lumiSec = edmEventObject.id().luminosityBlock();
       evtInfo.evtNum = edmEventObject.id().event(); 
+
+      std::cout << "Event Number is: " << edmEventObject.id().event() << "\n";
+      std::cout << "Run Number is: " << edmEventObject.id().run() << "\n";
+      std:: cout << "Lumi Sec is: " << edmEventObject.id().luminosityBlock() << "\n";
 }
 
 void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
@@ -428,7 +432,7 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 
   for (const pat::Electron &iEle : *electrons) {
     electronCollection_->push_back(ran::ElectronStruct{});
-    ran::ElectronStruct &ithElec = electronCollection_->back();     
+    ran::ElectronStruct &ithElec = electronCollection_->back();        
 
     ithElec.pt = iEle.pt();
     ithElec.eta = iEle.eta();
@@ -540,8 +544,16 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 
     edm::Ptr<pat::Electron> elePtr(electrons,eleNr);
     ithElec.heep_cutCode =  (*heepId)[elePtr];
-    ++eleNr;
 
+    std::cout << "HEEP cut codes: " <<  (*heepId)[elePtr] << "\n";
+    std::cout << "HEEP cut et: " <<  heepEle.et() << "\n";
+    std::cout << "HEEP scEta: " <<   heepEle.scEt() << "\n";
+    std::cout << "GSF pt: " <<  iEle.pt() << "\n";
+    std::cout << "GSF eta: " <<  iEle.eta() << "\n";
+    std::cout << "GSF phi: " <<  iEle.phi() << "\n";
+    std::cout << "GSF scEta: " <<  iEle.superCluster()->eta() << "\n";
+
+    ++eleNr;   
   }
 }
 //Read in jet vars
@@ -649,8 +661,11 @@ void RALMiniAnalyzer::ReadInMets(const edm::Event& iEvent)
       ithMet.isCaloMET = iMet.isCaloMET();
       ithMet.isPFMET = iMet.isPFMET();
       ithMet.isRecoMET = iMet.isRecoMET();
-      ithMet.shiftedPt_JetEnUp = iMet.shiftedPt(pat::MET::JetEnUp);
-      ithMet.shiftedPt_JetEnDown = iMet.shiftedPt(pat::MET::JetEnDown);   
+      /*ithMet.shiftedPt_JetEnUp = iMet.shiftedPt(pat::MET::JetEnUp);
+       ithMet.shiftedPt_JetEnDown = iMet.shiftedPt(pat::MET::JetEnDown);   */
+
+      ithMet.shiftedPt_JetEnUp = -99999.99;
+      ithMet.shiftedPt_JetEnDown = -99999.99;
 
       //MC components
       if (isMC_){
