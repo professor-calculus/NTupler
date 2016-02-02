@@ -5,6 +5,8 @@
 #include <memory>
 #include <fstream>
 
+#include <sys/stat.h>
+
 //ROOT HEADERS
 #include <TFile.h>
 #include <TTree.h>
@@ -36,21 +38,47 @@ struct compareLeptonPt{
   }
 };
 
+inline bool does_file_exist (const std::string& name) {
+  struct stat buffer;   
+  return (stat (name.c_str(), &buffer) == 0); 
+}
+
 int main(int argc, char** argv){
 
+
+  //OK, parse the command line in an very elementary way`
    //read in from command line
    if (argc < 2){
-     std::cout << "Need to provide one argument eg.\n";
-     std::cout << argv[0] << " <list of files>\n";
+     std::cout << "Need to provide at least one argument eg.\n";
+     std::cout << argv[0] << " <list of files> <lumi json>\n";
      return -1;
    }
 
-   if (argc > 2){
-     std::cout << "Need to provide one argument eg.\n";
-     std::cout << argv[0] << " <list of files>\n";
+   if (argc > 3){
+     std::cout << "Need to provide at least one argument, maybe two eg.\n";
+     std::cout << argv[0] << " <list of files> <lumi json>\n";
      return -1;
    }
    //NEED TO RETURN AN ERROR IF FILE DOES NOT EXIST
+   //Does the files exist
+
+   if (!does_file_exist(string(argv[1]))){
+     std::cout << "File "+string(argv[1])+" does not exist\n";
+     return -1;
+   }
+
+   bool isMC(true);
+   std::string jsonFile;
+   if (argc == 3){
+     isMC = false;
+     jsonFile = string(argv[2]);
+     //exit if the json file does not exist
+     if (!does_file_exist(jsonFile)){
+       std::cout << "File "+jsonFile+" does not exist\n";
+       return -1;
+     }
+   }
+
   //need to read list of files and put contents into a vector
   string listOfFiles(argv[1]);
   std::cout << "Reading file: " << listOfFiles << "\n";
@@ -118,7 +146,7 @@ int main(int argc, char** argv){
   */
 
   //2. Method 2. DIY ROOT
-  GoodLumiChecker glc("goodRuns_246908-260627_13TeV.txt");//object to check if event passed certification
+  GoodLumiChecker glc(jsonFile);//object to check if event passed certification
   unique_ptr<TH1F> eeMass(new TH1F("eeMass","ee Mass",400,0,2000)); 
   std::cout << "size of vector: " << vectorOfFiles.size() << "\n";
   for (std::vector<string>::const_iterator fIter = vectorOfFiles.begin();
@@ -179,7 +207,7 @@ int main(int argc, char** argv){
       evtBranch->GetEntry(i); // set tree object for each event i
       //Electron collection contain structs (ElectronStruct). We want to use our own electon class which is composed of the struct (NtElectron) 
 
-      if (glc.isGoodLumiSec(evtObj->runNum,evtObj->lumiSec)){
+      if (isMC || glc.isGoodLumiSec(evtObj->runNum,evtObj->lumiSec)){
 	//cout << "Event Number is: " << evtObj->evtNum << "\n";
 	//cout << "Run Number is: " << evtObj->runNum << "\n";
 	//cout << "Lumi Sec is: " << evtObj->lumiSec << "\n";
