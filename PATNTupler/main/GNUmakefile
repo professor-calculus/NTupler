@@ -39,7 +39,7 @@ TMPDIR		= ../tmp
 
 # ================================================================================
 
-run:	main.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/libRalParticle.so
+run:	main.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 %.o: 	%.cc %.hh
 	$(CXX) $(CXXFLAGS) -c $< -o $@

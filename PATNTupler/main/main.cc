@@ -15,6 +15,7 @@
 
 //RAL PARTICLE HEADERS
 #include "NtpReader.hh"
+#include "GoodLumiChecker.hh"
 #include "TriggerPathToIndex.hh"
 
 using std::cout;
@@ -117,6 +118,7 @@ int main(int argc, char** argv){
   */
 
   //2. Method 2. DIY ROOT
+  GoodLumiChecker glc("goodRuns_246908-260627_13TeV.txt");//object to check if event passed certification
   unique_ptr<TH1F> eeMass(new TH1F("eeMass","ee Mass",400,0,2000)); 
   std::cout << "size of vector: " << vectorOfFiles.size() << "\n";
   for (std::vector<string>::const_iterator fIter = vectorOfFiles.begin();
@@ -177,81 +179,84 @@ int main(int argc, char** argv){
       evtBranch->GetEntry(i); // set tree object for each event i
       //Electron collection contain structs (ElectronStruct). We want to use our own electon class which is composed of the struct (NtElectron) 
 
-      //cout << "Event Number is: " << evtObj->evtNum << "\n";
-      //cout << "Run Number is: " << evtObj->runNum << "\n";
-      //cout << "Lumi Sec is: " << evtObj->lumiSec << "\n";
+      if (glc.isGoodLumiSec(evtObj->runNum,evtObj->lumiSec)){
+	//cout << "Event Number is: " << evtObj->evtNum << "\n";
+	//cout << "Run Number is: " << evtObj->runNum << "\n";
+	//cout << "Lumi Sec is: " << evtObj->lumiSec << "\n";
 
-      unique_ptr<std::vector<ran::NtElectron> > ralEVector(new std::vector<ran::NtElectron>(electronVector->begin(), electronVector->end()));
-      //This function generates a vector of NtElectron from a vector of ElectronStruct
-      //fillE(ralEVector.get(),electronVector.get());
-      //fillParticleVector<ran::NtElectron, ran::ElectronStruct>(ralEVector.get(),electronVector.get());
+	unique_ptr<std::vector<ran::NtElectron> > ralEVector(new std::vector<ran::NtElectron>(electronVector->begin(), electronVector->end()));
+	//This function generates a vector of NtElectron from a vector of ElectronStruct
+	//fillE(ralEVector.get(),electronVector.get());
+	//fillParticleVector<ran::NtElectron, ran::ElectronStruct>(ralEVector.get(),electronVector.get());
 
-      std::vector<std::vector<ran::NtElectron>::const_iterator> heepElectrons;
-      for (std::vector<ran::NtElectron>::const_iterator iter = ralEVector->begin();
-	   iter != ralEVector->end(); ++iter){ //look at the electrons using our electron class
-	//std::cout << "rv pt: " << iter->pt() << "\n";
+	std::vector<std::vector<ran::NtElectron>::const_iterator> heepElectrons;
+	for (std::vector<ran::NtElectron>::const_iterator iter = ralEVector->begin();
+	     iter != ralEVector->end(); ++iter){ //look at the electrons using our electron class
+	  //std::cout << "rv pt: " << iter->pt() << "\n";
 
-	//Store electrons that pass HEEP cutcodes
-	if ( !(iter->heep_cutCode()) ){
-	  if (iter-> heep_et() >35.0){
+	  //Store electrons that pass HEEP cutcodes
+	  if ( !(iter->heep_cutCode()) ){
+	    if (iter-> heep_et() >35.0){
 	    
-	    trigFlagBranch->GetEntry(i);
-	    //std::cout << "First Trigger bit is: " << int(triggerFlagsVector->at(0)) << "\n";
-	    trigBranch->GetEntry(trigEntryNum);//Entries should be the same
-	    //std::cout << "First Trigger is: " << triggerPathVector->at(0) << "\n";	   
-	    //if (int(triggerFlagsVector->at(trigIndex))){
+	      trigFlagBranch->GetEntry(i);
+	      //std::cout << "First Trigger bit is: " << int(triggerFlagsVector->at(0)) << "\n";
+	      trigBranch->GetEntry(trigEntryNum);//Entries should be the same
+	      //std::cout << "First Trigger is: " << triggerPathVector->at(0) << "\n";	   
+	      //if (int(triggerFlagsVector->at(trigIndex))){
 	      heepElectrons.push_back(iter);
 	      //}
-	  }
-	}     
-      }
+	    }
+	  }     
+	}
 
-      //do we have at least two HEEP electrons    
-      if (heepElectrons.size() > 1){
-	//OK order them by pt. Highest first      
-	//std::sort(heepElectrons.begin(), heepElectrons.end(), compareLeptonPt{}); //Think they are already sorted
-	TLorentzVector ele1, ele2, res4v; 
-	ele1.SetPtEtaPhiM( heepElectrons[0]->pt() ,  heepElectrons[0]-> heep_eta(),  heepElectrons[0]-> heep_phi(), 0.000511);
-	ele2.SetPtEtaPhiM( heepElectrons[1]->pt() ,  heepElectrons[1]-> heep_eta(),  heepElectrons[1]-> heep_phi(), 0.000511);
-	res4v = ele1+ ele2;
-	double mass = res4v.M();
-	eeMass->Fill(mass);
-      }
+	//do we have at least two HEEP electrons    
+	if (heepElectrons.size() > 1){
+	  //OK order them by pt. Highest first      
+	  //std::sort(heepElectrons.begin(), heepElectrons.end(), compareLeptonPt{}); //Think they are already sorted
+	  TLorentzVector ele1, ele2, res4v; 
+	  ele1.SetPtEtaPhiM( heepElectrons[0]->pt() ,  heepElectrons[0]-> heep_eta(),  heepElectrons[0]-> heep_phi(), 0.000511);
+	  ele2.SetPtEtaPhiM( heepElectrons[1]->pt() ,  heepElectrons[1]-> heep_eta(),  heepElectrons[1]-> heep_phi(), 0.000511);
+	  res4v = ele1+ ele2;
+	  double mass = res4v.M();
+	  eeMass->Fill(mass);
+	}
 
-      //can do the same with muons and jets
+	//can do the same with muons and jets
     
-      muonBranch->GetEntry(i); // set tree object eMeEvent for each event i
+	muonBranch->GetEntry(i); // set tree object eMeEvent for each event i
 
-      unique_ptr<std::vector<ran::NtMuon> > ralMuVector(new std::vector<ran::NtMuon>(muonVector->begin(), muonVector->end()));
-      if(!ralMuVector->empty()){//if it is not empty
-	//std::cout << "muon size: " << ralMuVector->size() << "\n";
-	//std::cout << "muon pt: "<< (ralMuVector->at(0)).pt() << "\n";
-      }
+	unique_ptr<std::vector<ran::NtMuon> > ralMuVector(new std::vector<ran::NtMuon>(muonVector->begin(), muonVector->end()));
+	if(!ralMuVector->empty()){//if it is not empty
+	  //std::cout << "muon size: " << ralMuVector->size() << "\n";
+	  //std::cout << "muon pt: "<< (ralMuVector->at(0)).pt() << "\n";
+	}
 
-      jetBranch->GetEntry(i); // set tree object for each event i
+	jetBranch->GetEntry(i); // set tree object for each event i
 
-      unique_ptr<std::vector<ran::NtJet> > ralJetVector(new std::vector<ran::NtJet>(jetVector->begin(), jetVector->end()));
-      if(!ralJetVector->empty()){//if it is not empty
-	//std::cout << "jet size: " << ralJetVector->size() << "\n";
-	//std::cout << "jet pt: "<< (ralJetVector->at(0)).pt() << "\n";
-      }
+	unique_ptr<std::vector<ran::NtJet> > ralJetVector(new std::vector<ran::NtJet>(jetVector->begin(), jetVector->end()));
+	if(!ralJetVector->empty()){//if it is not empty
+	  //std::cout << "jet size: " << ralJetVector->size() << "\n";
+	  //std::cout << "jet pt: "<< (ralJetVector->at(0)).pt() << "\n";
+	}
 
-      fatjetBranch->GetEntry(i); // set tree object for each event i
+	fatjetBranch->GetEntry(i); // set tree object for each event i
 
-      unique_ptr<std::vector<ran::NtFatJet> > ralfatJetVector(new std::vector<ran::NtFatJet>(fatjetVector->begin(), fatjetVector->end()));
-      if(!ralfatJetVector->empty()){//if it is not empty
-	//std::cout << "fat jet size: " << ralfatJetVector->size() << "\n";
-	//std::cout << "fat jet pt: "<< (ralfatJetVector->at(0)).pt() << "\n";
-      }
+	unique_ptr<std::vector<ran::NtFatJet> > ralfatJetVector(new std::vector<ran::NtFatJet>(fatjetVector->begin(), fatjetVector->end()));
+	if(!ralfatJetVector->empty()){//if it is not empty
+	  //std::cout << "fat jet size: " << ralfatJetVector->size() << "\n";
+	  //std::cout << "fat jet pt: "<< (ralfatJetVector->at(0)).pt() << "\n";
+	}
 
-      metBranch->GetEntry(i); // set tree object for each event i
+	metBranch->GetEntry(i); // set tree object for each event i
 
-      unique_ptr<std::vector<ran::NtMet> > ralMetVector(new std::vector<ran::NtMet>(metVector->begin(), metVector->end()));
-      if(!ralMetVector->empty()){//if it is not empty
-	//std::cout << "met size: " << ralMetVector->size() << "\n";
-	//std::cout << "met pt: "<< (ralMetVector->at(0)).pt() << "\n";
-      }      
-    }
+	unique_ptr<std::vector<ran::NtMet> > ralMetVector(new std::vector<ran::NtMet>(metVector->begin(), metVector->end()));
+	if(!ralMetVector->empty()){//if it is not empty
+	  //std::cout << "met size: " << ralMetVector->size() << "\n";
+	  //std::cout << "met pt: "<< (ralMetVector->at(0)).pt() << "\n";
+	}      
+
+      }// Certified event?
+    }//loop over events
   }//loop over files
 
   eeMass->Draw("");
