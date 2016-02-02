@@ -3,6 +3,7 @@
 #include <vector>
 #include <fstream>
 #include <memory>
+#include <fstream>
 
 //ROOT HEADERS
 #include <TFile.h>
@@ -18,6 +19,8 @@
 
 using std::cout;
 using std::ifstream;
+using std::ofstream;
+
 using ran::ElectronStruct;
 using ran::MuonStruct;
 using ran::JetStruct;
@@ -188,15 +191,6 @@ int main(int argc, char** argv){
 	   iter != ralEVector->end(); ++iter){ //look at the electrons using our electron class
 	//std::cout << "rv pt: " << iter->pt() << "\n";
 
-	if (iter->heep_cutCode() == 0){
-	cout << "HEEP cut codes: " <<  iter->heep_cutCode() << "\n";
-        cout << "HEEP cut et: " <<  iter->heep_et() << "\n";
-	cout << "HEEP scEta: " <<  iter->heep_scEt() << "\n";
-        cout << "GSF pt: " <<  iter->pt() << "\n";
-        cout << "GSF eta: " <<  iter->eta() << "\n";
-	cout << "GSF phi: " <<  iter->phi() << "\n";
-	cout << "GSF scEta: " <<  iter->scEta() << "\n";
-	}
 	//Store electrons that pass HEEP cutcodes
 	if ( !(iter->heep_cutCode()) ){
 	  if (iter-> heep_et() >35.0){
