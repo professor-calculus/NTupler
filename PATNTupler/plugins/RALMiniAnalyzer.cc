@@ -415,9 +415,6 @@ void RALMiniAnalyzer::ReadInEvtInfo(bool beVerbose, const edm::Event& edmEventOb
       evtInfo.lumiSec = edmEventObject.id().luminosityBlock();
       evtInfo.evtNum = edmEventObject.id().event(); 
 
-      std::cout << "Event Number is: " << edmEventObject.id().event() << "\n";
-      std::cout << "Run Number is: " << edmEventObject.id().run() << "\n";
-      std:: cout << "Lumi Sec is: " << edmEventObject.id().luminosityBlock() << "\n";
 }
 
 void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
@@ -544,15 +541,6 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 
     edm::Ptr<pat::Electron> elePtr(electrons,eleNr);
     ithElec.heep_cutCode =  (*heepId)[elePtr];
-
-    std::cout << "HEEP cut codes: " <<  (*heepId)[elePtr] << "\n";
-    std::cout << "HEEP cut et: " <<  heepEle.et() << "\n";
-    std::cout << "HEEP scEta: " <<   heepEle.scEt() << "\n";
-    std::cout << "GSF pt: " <<  iEle.pt() << "\n";
-    std::cout << "GSF eta: " <<  iEle.eta() << "\n";
-    std::cout << "GSF phi: " <<  iEle.phi() << "\n";
-    std::cout << "GSF scEta: " <<  iEle.superCluster()->eta() << "\n";
-
     ++eleNr;   
   }
 }
