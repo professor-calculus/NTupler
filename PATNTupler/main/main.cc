@@ -13,7 +13,7 @@
 #include <TString.h>
 #include <TLorentzVector.h> 
 #include <TH1F.h>
-#include <TApplication.h>
+
 
 //RAL PARTICLE HEADERS
 #include "NtpReader.hh"
@@ -48,30 +48,32 @@ int main(int argc, char** argv){
 
   //OK, parse the command line in an very elementary way`
    //read in from command line
-   if (argc < 2){
-     std::cout << "Need to provide at least one argument eg.\n";
-     std::cout << argv[0] << " <list of files> <lumi json>\n";
+   if (argc < 3){
+     std::cout << "Need to provide at least two arguments eg.\n";
+     std::cout << argv[0] << " <output.root> <list of files> <lumi json>\n";
      return -1;
    }
 
-   if (argc > 3){
+   if (argc > 4){
      std::cout << "Need to provide at least one argument, maybe two eg.\n";
-     std::cout << argv[0] << " <list of files> <lumi json>\n";
+     std::cout << argv[0] << "<output.root> <list of files> <lumi json>\n";
      return -1;
    }
-   //NEED TO RETURN AN ERROR IF FILE DOES NOT EXIST
+
+   //TString outRootFile(argv[1]);
+   char* outRootFile = argv[1];
    //Does the files exist
 
-   if (!does_file_exist(string(argv[1]))){
+   if (!does_file_exist(string(argv[2]))){
      std::cout << "File "+string(argv[1])+" does not exist\n";
      return -1;
    }
 
    bool isMC(true);
    std::string jsonFile;
-   if (argc == 3){
+   if (argc == 4){
      isMC = false;
-     jsonFile = string(argv[2]);
+     jsonFile = string(argv[3]);
      //exit if the json file does not exist
      if (!does_file_exist(jsonFile)){
        std::cout << "File "+jsonFile+" does not exist\n";
@@ -80,7 +82,7 @@ int main(int argc, char** argv){
    }
 
   //need to read list of files and put contents into a vector
-  string listOfFiles(argv[1]);
+  string listOfFiles(argv[2]);
   std::cout << "Reading file: " << listOfFiles << "\n";
   ifstream iFile(listOfFiles.c_str());
   string line;
@@ -89,8 +91,6 @@ int main(int argc, char** argv){
   while (getline(iFile,line)){
     vectorOfFiles.push_back(line);
   }
-
-  TApplication graphicsPlease("graphicsPlease", &argc, argv); //This messes with argv
  
   //Example of two ways to access the data.
   //1. Using helper class NtpReader
@@ -146,9 +146,11 @@ int main(int argc, char** argv){
   */
 
   //2. Method 2. DIY ROOT
+  TFile fout(outRootFile,"recreate");
+  //TFile f("out.root","new");
   GoodLumiChecker glc(jsonFile);//object to check if event passed certification
   unique_ptr<TH1F> eeMass(new TH1F("eeMass","ee Mass",400,0,2000)); 
-  std::cout << "size of vector: " << vectorOfFiles.size() << "\n";
+  eeMass->SetDirectory(&fout);
   for (std::vector<string>::const_iterator fIter = vectorOfFiles.begin();
        fIter != vectorOfFiles.end(); ++fIter){//loop over ntuple files
     unique_ptr<TFile> f = unique_ptr<TFile> (new TFile((*fIter).c_str() ));
@@ -287,9 +289,11 @@ int main(int argc, char** argv){
     }//loop over events
   }//loop over files
 
-  eeMass->Draw("");
-  std::cout << "\n\n\nType Ctrl + C to return to the prompt\n";
-  graphicsPlease.Run();
+  fout.cd();
+  eeMass->Write();
+  fout.Write();
+
+  //graphicsPlease.Run();
   
   //return 0;
 }

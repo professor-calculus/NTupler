@@ -14,6 +14,8 @@ parser.add_argument('--jobName', action='store', dest='jobType_par',
                     default='EE',help='Channel that we are running on')
 parser.add_argument('--json', action='store', dest='json_par',
                     default='', help='Good lumi json file to use')
+parser.add_argument('--output', action='store', dest='output_par',
+                    help='name of the output root file')
 results = parser.parse_args()
 
 inputListFile = open(results.inputList)
@@ -41,13 +43,13 @@ if (len(tmpList) > 0):
 for newDir in ["../tmp","../logs", "../deleteDir"]:
     subprocess.Popen(["mkdir", "-p", newDir], stdout=subprocess.PIPE)
 
-rootFileToScratch = ""
-outRootFile = ""
+subConJobFilename = "../tmp/subCondorJobs_"+results.jobType_par+".sh"
+subJobs = open(subConJobFilename,"w")
 
 #generate the executable for each job
 jobNum = 0
 for jobList in filesperJobList:
-    lFile = ../tmp/results.jobType_par+"_"+str(jobNum)+".list"
+    lFile = "../tmp/"+results.jobType_par+"_"+str(jobNum)+".list"
     outFiles = open(lFile,"w")
     for line in jobList:
         outFiles.write(line)
@@ -55,14 +57,18 @@ for jobList in filesperJobList:
     shellFileName = "../tmp/"+results.jobType_par+"_"+str(jobNum)+".sh"
     shellJob = open(shellFileName,"w")
 
+    rootFile = results.jobType_par+"_"+str(jobNum)+".root"
+    rootFileToScratch = "/scratch/"+rootFile
+    thisDir = os.environ['PWD']
+
     cmd = "#!/bin/bash\n"
     cmd += "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch/\n"
     cmd += "source $VO_CMS_SW_DIR/cmsset_default.sh\n"
-    cmd += "cd "+os.environ['CMSSW_BASE']+"/src/\n"
+    cmd += "cd "+thisDir+"/src/\n"
     cmd += "eval `scramv1 runtime -sh`\n"
     cmd += "cd "+os.environ['PWD']+"\n"
-    cmd += "./run "+lFile+" "+results.json_par+"\n"
-    cmd += "mv "+rootFileToScratch+" "+outRootFile+"\n"
+    cmd += "./run "+rootFileToScratch+" "+lFile+" "+results.json_par+"\n"
+    cmd += "mv "+rootFileToScratch+" "+thisDir+"/"+rootFile+"\n"
 
     shellJob.write(cmd)
     os.chmod(shellFileName, 0755)
