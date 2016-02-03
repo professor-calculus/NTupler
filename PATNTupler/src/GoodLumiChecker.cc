@@ -1,4 +1,4 @@
-#include "GoodLumiChecker.hh"
+#include "../interface/GoodLumiChecker.hh"
 
 #include <cstring>
 #include <fstream>
