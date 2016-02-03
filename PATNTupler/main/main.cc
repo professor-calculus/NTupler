@@ -65,7 +65,7 @@ int main(int argc, char** argv){
    //Does the files exist
 
    if (!does_file_exist(string(argv[2]))){
-     std::cout << "File "+string(argv[1])+" does not exist\n";
+     std::cout << "File "+string(argv[2])+" does not exist\n";
      return -1;
    }
 
@@ -83,7 +83,7 @@ int main(int argc, char** argv){
 
   //need to read list of files and put contents into a vector
   string listOfFiles(argv[2]);
-  std::cout << "Reading file: " << listOfFiles << "\n";
+  std::cout << "Reading file list: " << listOfFiles << "\n";
   ifstream iFile(listOfFiles.c_str());
   string line;
   std::vector<string> vectorOfFiles;
@@ -210,9 +210,6 @@ int main(int argc, char** argv){
       //Electron collection contain structs (ElectronStruct). We want to use our own electon class which is composed of the struct (NtElectron) 
 
       if (isMC || glc.isGoodLumiSec(evtObj->runNum,evtObj->lumiSec)){
-	//cout << "Event Number is: " << evtObj->evtNum << "\n";
-	//cout << "Run Number is: " << evtObj->runNum << "\n";
-	//cout << "Lumi Sec is: " << evtObj->lumiSec << "\n";
 
 	unique_ptr<std::vector<ran::NtElectron> > ralEVector(new std::vector<ran::NtElectron>(electronVector->begin(), electronVector->end()));
 	//This function generates a vector of NtElectron from a vector of ElectronStruct
@@ -222,7 +219,6 @@ int main(int argc, char** argv){
 	std::vector<std::vector<ran::NtElectron>::const_iterator> heepElectrons;
 	for (std::vector<ran::NtElectron>::const_iterator iter = ralEVector->begin();
 	     iter != ralEVector->end(); ++iter){ //look at the electrons using our electron class
-	  //std::cout << "rv pt: " << iter->pt() << "\n";
 
 	  //Store electrons that pass HEEP cutcodes
 	  if ( !(iter->heep_cutCode()) ){
