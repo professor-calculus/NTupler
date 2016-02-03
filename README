@@ -1,0 +1,64 @@
+#Ntuple code runs over miniAOD and produces ROOT ntuples
+# The Ntuple code is checked into my own git repository on gitlab
+#
+
+#THIS IS ONLY FOR WHEN WORKING AT RAL. Set up environment for sh/bash etc. Ignore the next two lines at CERN or elsewhere
+export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
+source $VO_CMS_SW_DIR/cmsset_default.sh
+
+#checkout release
+cmsrel CMSSW_7_4_8_patch1/
+CMSSW_7_4_8_patch1/src
+cmsenv
+git clone https://github.com/Sam-Harper/usercode.git SHarper
+cd SHarper/
+git checkout 74XNtup
+cd ..
+
+#check out NTupler package (you need to have setup ssh keys correctly at CERN)
+git clone ssh://git@gitlab.cern.ch:7999/olaiya/NTupler.git
+
+#build
+scramv1 b -j 16
+
+Producing the Ntuples
+======================
+#If you are not interested in producing the Ntuples because you already have them skip to the Running over the Ntuples section
+#change into ntuple directory
+cd NTupler/PATNTupler/plugins
+#If you want to run the ntuple code directly edit nTupleProduction.py to specify the file you want to run over
+cmsRun nTupleProduction.py 
+#Alternatively if you want to run a crab production edit the crab config file crabConfig_nTupleProd.py to run over the dataset and specify the output directory on the T2 where you want the ntuple to be written. Then submit
+source /cvmfs/cms.cern.ch/crab3/crab.csh
+crab submit -c crabConfig_nTupleProd.py
+#check the status
+crab status crab_projects/crab_RAL_nTuple_production --long
+
+
+Running over the Ntuples
+========================
+#To run over the ntuples go into the main directory where there is an example of running over the ntuples. Go into this directory and compile the code.
+
+cd NTupler/PATNTupler/main
+gmake
+
+#The code main.cc gives examples of how you can access the variables in the ntuple.
+#To run over a list of file execute the command
+./nTupAna output.root ntuples.list
+# output.root is the name of the ROOT file you want to generate. The content is specified in main.cc
+# the file ntuples.list contains the list of root files to run over.
+cat test.list          
+../plugins/nTuple.root
+# If you have a json file you want to use to run on certified data you can specify it too as follows:
+./nTupAna output.root ntuples.list goodRuns_246908-260627_13TeV.txt
+# The format of the json file is a little different to that provided by CMS. To generate the correct json format use the program in the main directory called convertJsonToCMSSWConfig.py as follows
+./convertJsonToCMSSWConfig.py  Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON.txt > goodRuns_246908-260627_13TeV.txt
+
+#main.cc has two examples of accessing root file. In here is where you code your analysis
+#Jobs can also be submitted to the batch machine if there are too many files to run over in one go
+./submitCondorNtupleJobs.py --inputFiles ntuples.list  --jobName Zprime --filesPerJob 50 --json goodRuns_246908-260627_13TeV.txt
+# --inputFiles requires the filename that contains the list of ntuples. --jobName is what you want to call the jobs. The default is EE.--filesPerJob is used to specify how many files per job you want. The files are taken from ntuples.list. --json wants the json file. This is optional
+#./submitCondorNtupleJobs.py will prepare the condor jobs in the tmp directory. So you will have to go there to run them. You will find a file in tmp called subCondorJobs_Zprime.sh which will submit the job
+cd ../tmp
+./subCondorJobs_Zprime.sh
+
