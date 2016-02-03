@@ -67,7 +67,7 @@ for jobList in filesperJobList:
     cmd += "cd "+thisDir+"/src/\n"
     cmd += "eval `scramv1 runtime -sh`\n"
     cmd += "cd "+os.environ['PWD']+"\n"
-    cmd += "./run "+rootFileToScratch+" "+lFile+" "+results.json_par+"\n"
+    cmd += "./nTupAna "+rootFileToScratch+" "+lFile+" "+results.json_par+"\n"
     cmd += "mv "+rootFileToScratch+" "+thisDir+"/"+rootFile+"\n"
 
     shellJob.write(cmd)

@@ -39,7 +39,7 @@ TMPDIR		= ../tmp
 
 # ================================================================================
 
-run:	main.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+nTupAna:	main.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 %.o: 	%.cc %.hh
 	$(CXX) $(CXXFLAGS) -c $< -o $@
@@ -56,5 +56,5 @@ ${TMPDIR}/ParticleDict.cc:	${INCDIR}/Particles.hh ${INCDIR}/ntpLinkDef.h
 	rootcint -f $@ -c $< ${INCDIR}/ntpLinkDef.h
 
 clean:
-	rm -rf run main.o ${OBJDIR}/* ${TMPDIR}/*
+	rm -rf nTupAna main.o ${OBJDIR}/* ${TMPDIR}/*
 
