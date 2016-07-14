@@ -7,12 +7,12 @@ export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
 source $VO_CMS_SW_DIR/cmsset_default.sh
 
 #checkout release
-cmsrel CMSSW_7_4_8_patch1/
-CMSSW_7_4_8_patch1/src
+cmsrel CMSSW_8_0_12/
+CMSSW_8_0_12/src
 cmsenv
 git clone https://github.com/Sam-Harper/usercode.git SHarper
 cd SHarper/
-git checkout 74XNtup
+git checkout HEEPID80X
 cd ..
 
 #check out NTupler package (you need to have setup ssh keys correctly at CERN)
