@@ -47,6 +47,21 @@
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
 
+#include "FWCore/Utilities/interface/InputTag.h"
+#include "FWCore/Utilities/interface/EDGetToken.h"
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
+#include "DataFormats/Common/interface/Ptr.h"
+#include "DataFormats/PatCandidates/interface/Electron.h"
+#include "DataFormats/Common/interface/ValueMap.h"
+#include "SHarper/HEEPAnalyzer/interface/HEEPCutCodes.h"
+#include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
+#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
+
+
+#include "TH1D.h"
+#include "CommonTools/UtilAlgos/interface/TFileService.h"
+#include "FWCore/ServiceRegistry/interface/Service.h"
+
 //...in order to use the heep::Ele class ...
 #include "SHarper/HEEPAnalyzer/interface/HEEPEle.h"
 #include "SHarper/HEEPAnalyzer/interface/HEEPEleSelector.h"
@@ -54,7 +69,6 @@
 
 //...for histograms creation
 #include "FWCore/ServiceRegistry/interface/Service.h"
-#include "CommonTools/UtilAlgos/interface/TFileService.h"
 
 //ROOT HEADERS
 #include "TTree.h"
@@ -118,11 +132,15 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       bool isMC_;
       edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
       edm::EDGetTokenT<pat::MuonCollection> muonToken_;
-      edm::EDGetTokenT<pat::ElectronCollection> electronToken_;
-      edm::EDGetTokenT<edm::ValueMap<int> > heepIdToken_;
+      edm::EDGetTokenT<edm::View<reco::GsfElectron> > electronToken_;
+  //edm::EDGetTokenT<edm::ValueMap<int> > heepIdToken_;
       edm::EDGetTokenT<pat::JetCollection> jetToken_;
       edm::EDGetTokenT<pat::JetCollection> fatjetToken_;
       edm::EDGetTokenT<pat::METCollection> metToken_;
+      edm::EDGetTokenT<edm::View<reco::GsfElectron> > eleAODToken_;
+      edm::EDGetTokenT<edm::View<reco::GsfElectron> > eleMiniAODToken_;
+      edm::EDGetTokenT<edm::ValueMap<bool> > vidToken_; //VID is versioned ID, is the standard E/gamma ID producer which we have configured for HEEP
+      edm::EDGetTokenT<edm::ValueMap<float> > trkIsolMapToken_;
 
       edm::EDGetTokenT<edm::TriggerResults> triggerBits_;
       edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> triggerObjects_;
@@ -130,7 +148,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       std::vector<std::string> targetTriggerPaths_;
 
       //Ntuple Tree
-      edm::Service<TFileService> fHistos;
+      //edm::Service<TFileService> fHistos;
       TTree* EventDataTree;
       TTree* TriggerPathsTree;
 
@@ -166,11 +184,12 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     isMC_(iConfig.getParameter<bool>("isThisMC")),
     vtxToken_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
     muonToken_(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
-    electronToken_(consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electrons"))),
-    heepIdToken_(consumes<edm::ValueMap<int>>(iConfig.getParameter<edm::InputTag>("heepId"))),
+    electronToken_(consumes<edm::View<reco::GsfElectron> >(iConfig.getParameter<edm::InputTag>("electrons"))),
     jetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jets"))),
     fatjetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"))),
     metToken_(consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets"))),
+    vidToken_(consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("vid"))),
+    trkIsolMapToken_(consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("trkIsolMap"))),
     //eleRhoCorrLabel_(iConfig.getParameter<edm::InputTag>("eleRhoCorrLabel")),
     //applyRhoCorrToEleIsol_(iConfig.getParameter<bool>("applyRhoCorrToEleIsol")),
     //verticesLabel_(iConfig.getParameter<edm::InputTag>("verticesLabel")),
@@ -181,8 +200,8 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     //cuts_(iConfig)
 {
 
-    EventDataTree = fHistos->make<TTree>("EventDataTree", "Event data tree");
-
+  //EventDataTree = fHistos->make<TTree>("EventDataTree", "Event data tree");
+    EventDataTree = new TTree("EventDataTree","EventDataTree");
     //Setting up the links between variables and branches...
     //event_ = 0;	
     //EventDataTree->Branch("event","ran::Event", &event_, 64000, 1); // This line was taken from Jim's tupiliser
@@ -196,7 +215,8 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     //EventDataTree->Branch("recordedTriggers","std::vector<char>", &recordedTriggers_, 64000, 1);
 
     //Seperate tree to store trigger names
-    TriggerPathsTree = fHistos->make<TTree>("TriggerPathsTree", "Trigger Paths tree");
+    //TriggerPathsTree = fHistos->make<TTree>("TriggerPathsTree", "Trigger Paths tree");
+    TriggerPathsTree = new TTree("TrigTree","EventDataTree");
     TriggerPathsTree->Branch("triggerPaths", &triggerPaths_);
 
 
@@ -266,7 +286,7 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
      ReadInMets(iEvent);
 
      //Fill Ntuple
-     EventDataTree->Fill();	
+     //EventDataTree->Fill();	
 
      //delete event_;
      delete electronCollection_;
@@ -309,7 +329,7 @@ RALMiniAnalyzer::endJob()
   	std::cout << "   done." << std::endl;
 	
 	
-	fHistos->cd();
+	//fHistos->cd();
 	EventDataTree->Write();
 	TriggerPathsTree->Write();
 
@@ -420,20 +440,33 @@ void RALMiniAnalyzer::ReadInEvtInfo(bool beVerbose, const edm::Event& edmEventOb
 void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 {
 
-  edm::Handle<pat::ElectronCollection> electrons;
-  iEvent.getByToken(electronToken_, electrons);
-  edm::Handle<edm::ValueMap<int> > heepId;
-  iEvent.getByToken(heepIdToken_,heepId);
+  //edm::Handle<pat::ElectronCollection> electrons;
+  //iEvent.getByToken(electronToken_, electrons);
+  //edm::Handle<edm::ValueMap<int> > heepId;
+  //iEvent.getByToken(heepIdToken_,heepId);
 
-  size_t eleNr=0;
+  edm::Handle<edm::View<reco::GsfElectron> > eleHandle;
+  edm::Handle<edm::ValueMap<bool> > vid;
+  edm::Handle<edm::ValueMap<float> > trkIsolMap;
+  
+  iEvent.getByToken(electronToken_,eleHandle);
+  iEvent.getByToken(vidToken_,vid);
+  iEvent.getByToken(trkIsolMapToken_,trkIsolMap);
 
-  for (const pat::Electron &iEle : *electrons) {
+  //size_t eleNr=0;
+
+  for(size_t eleNr=0;eleNr<eleHandle->size();eleNr++){
+    //for (const pat::Electron &iEle : *electrons) {
     electronCollection_->push_back(ran::ElectronStruct{});
     ran::ElectronStruct &ithElec = electronCollection_->back();        
 
+    edm::Ptr<reco::GsfElectron> elePtr(eleHandle,eleNr);
+    const reco::GsfElectron& iEle = *elePtr; //Saves me having to replace the iEle's below to elePtr pointers. Just being lazy
+
+    ithElec.et = iEle.et();
     ithElec.pt = iEle.pt();
     ithElec.eta = iEle.eta();
-    ithElec.phi = iEle.phi();
+    ithElec.phi = iEle.phi();    
 
     ithElec.gsfTrack_available = iEle.gsfTrack().isAvailable();
     ithElec.scEta = iEle.superCluster()->eta();
@@ -441,7 +474,7 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
     ithElec.ecalDrivenSeed = iEle.ecalDrivenSeed(); 
     ithElec.sigmaIetaIeta = iEle.sigmaIetaIeta();
     ithElec.full5x5_sigmaIetaIeta = iEle.full5x5_sigmaIetaIeta();
-    ithElec.passConversionVeto = iEle.passConversionVeto();
+    //ithElec.passConversionVeto = iEle.passConversionVeto();
     ithElec.e2x5Max = iEle.e2x5Max();
     ithElec.e5x5 = iEle.e5x5();
     ithElec.e1x5 = iEle.e1x5();
@@ -481,6 +514,8 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
     ithElec.heep_p4 =         heepEle.p4();
     ithElec.heep_gsfP4 =      heepEle.gsfP4();
 
+    cout << "Et is: " << ithElec.et << "\n";
+    cout << "HEEP Et is: " << ithElec.heep_et << "\n";
     //Variables storing the heep::Ele method values - Classification...
     ithElec.heep_classification =  heepEle.classification();
     ithElec.heep_isEcalDriven =    heepEle.isEcalDriven();
@@ -520,8 +555,8 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 
     //isolation, we use cone of 0.3
     //first our rho correction funcs
-    ithElec.heep_rhoForIsolCorr = heepEle.rhoForIsolCorr();
-    ithElec.heep_applyRhoIsolCorr = heepEle.applyRhoIsolCorr();
+    //ithElec.heep_rhoForIsolCorr = heepEle.rhoForIsolCorr();
+    //ithElec.heep_applyRhoIsolCorr = heepEle.applyRhoIsolCorr();
 
     //Variables storing the heep::Ele method values - isolation variables ...
     ithElec.heep_isolEm =         heepEle.isolEm();
@@ -538,10 +573,11 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
     ithElec.heep_dxy = heepEle.dxy();
 
     ithElec.heep_numMissInnerHits = heepEle.nrMissHits();
-
-    edm::Ptr<pat::Electron> elePtr(electrons,eleNr);
-    ithElec.heep_cutCode =  (*heepId)[elePtr];
-    ++eleNr;   
+    ithElec.passHEEPID = (*vid)[elePtr];
+    ithElec.HEEPtrkIsol = (*trkIsolMap)[elePtr];
+    //edm::Ptr<pat::Electron> elePtr(electrons,eleNr);
+    //ithElec.heep_cutCode =  (*heepId)[elePtr];
+    //++eleNr;   
   }
 }
 //Read in jet vars
@@ -609,21 +645,24 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent)
       ithJet.chargedHadronEnergyFraction = iJet.chargedHadronEnergyFraction();
 
       ithJet.jecFactor_unCorrected = iJet.jecFactor("Uncorrected");
-      ithJet.userFloat_ak8PFJets_CHSPrunedLinks = iJet.userFloat("ak8PFJetsCHSPrunedLinks");
-      ithJet.userFloat_ak8PFJets_CHSTrimmedLinks = iJet.userFloat("ak8PFJetsCHSTrimmedLinks");
-      ithJet.userFloat_ak8PFJets_CHSFilteredLinks = iJet.userFloat("ak8PFJetsCHSFilteredLinks");
-      ithJet.userFloat_cmsTopTag_PFJets_CHSLinksAK8 = iJet.userFloat("cmsTopTagPFJetsCHSLinksAK8");
 
-      //Assign the btag discriminators
-      ithJet.pfJetProbabilityBJetTags =  iJet.bDiscriminator("pfJetProbabilityBJetTags");
-      ithJet.pfJetBProbabilityBJetTags =  iJet.bDiscriminator("pfJetBProbabilityBJetTags");
-      ithJet.pfTrackCountingHighEffBJetTags =  iJet.bDiscriminator("pfTrackCountingHighEffBJetTags");   
-      ithJet.pfTrackCountingHighPurBJetTags =  iJet.bDiscriminator("pfTrackCountingHighPurBJetTags");
-      ithJet.pfSimpleSecondaryVertexHighEffBJetTags =  iJet.bDiscriminator("pfSimpleSecondaryVertexHighEffBJetTags");
-      ithJet.pfSimpleSecondaryVertexHighPurBJetTags =  iJet.bDiscriminator("pfSimpleSecondaryVertexHighPurBJetTags");
-      ithJet.pfCombinedInclusiveSecondaryVertexV2BJetTags =  iJet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
-      ithJet.pfCombinedSecondaryVertexSoftLeptonBJetTags =  iJet.bDiscriminator("pfCombinedSecondaryVertexSoftLeptonBJetTags");
-      ithJet.pfCombinedMVABJetTags = iJet.bDiscriminator("pfCombinedMVABJetTags");
+      ithJet.NjettinessAK8_tau1 = iJet.userFloat("NjettinessAK8:tau1");    //
+      ithJet.NjettinessAK8_tau2 = iJet.userFloat("NjettinessAK8:tau2");    //  Access the n-subjettiness variables
+      ithJet.NjettinessAK8_tau3 = iJet.userFloat("NjettinessAK8:tau3");    // 
+ 
+      ithJet.CHSsoftdrop_mass = iJet.userFloat("ak8PFJetsCHSSoftDropMass"); // access to soft drop mass
+      ithJet.CHSpruned_mass = iJet.userFloat("ak8PFJetsCHSPrunedMass");     // access to pruned mass
+
+      /*ithJet.puppi_pt = iJet.userFloat("ak8PFJetsPuppiValueMap:pt");
+      ithJet.puppi_mass = iJet.userFloat("ak8PFJetsPuppiValueMap:mass");
+      ithJet.puppi_eta = iJet.userFloat("ak8PFJetsPuppiValueMap:eta");
+      ithJet.puppi_phi = iJet.userFloat("ak8PFJetsPuppiValueMap:phi");
+      ithJet.puppi_tau1 = iJet.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau1");
+      ithJet.puppi_tau2 = iJet.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau2");
+      ithJet.puppi_tau3 = iJet.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau3");*/
+
+
+      
 
       ithJet.partonFlavour = iJet.partonFlavour();
 
