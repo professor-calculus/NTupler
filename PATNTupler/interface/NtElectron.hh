@@ -10,7 +10,7 @@ namespace ran{
     NtElectron() : electron(0){} ///< Default constructor
     NtElectron(const ran::ElectronStruct& anElectron) : electron(&anElectron){} ///< Constructor
     float pt() const {return electron->pt;} ///<Particle pt
-    float et() const {return electron->pt;} ///<Particle et
+    float et() const {return electron->et;} ///<Particle et
     float eta() const {return electron->eta;}///<Particle eta
     float phi() const {return electron->phi;}///<Particle phi
 
