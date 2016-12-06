@@ -10,6 +10,7 @@ namespace ran{
     NtElectron() : electron(0){} ///< Default constructor
     NtElectron(const ran::ElectronStruct& anElectron) : electron(&anElectron){} ///< Constructor
     float pt() const {return electron->pt;} ///<Particle pt
+    float et() const {return electron->pt;} ///<Particle et
     float eta() const {return electron->eta;}///<Particle eta
     float phi() const {return electron->phi;}///<Particle phi
 
@@ -105,7 +106,9 @@ namespace ran{
     float heep_isolHadRel03() const {return electron->heep_isolHadRel03;}///< HEEP
     int heep_numMissInnerHits() const {return electron->heep_numMissInnerHits;}///< HEEP
     float heep_dxy() const { return electron->heep_dxy;}///<HEEP dxy
-    int heep_cutCode() const {return electron->heep_cutCode;}///< HEEP cutcode. INVALID = 0x40000000
+    //int heep_cutCode() const {return electron->heep_cutCode;}///< HEEP cutcode. INVALID = 0x40000000
+    bool passHEEPID() const { return electron->passHEEPID;}///< Pass HEEP ID
+    float HEEPtrkIsol() const { return electron->HEEPtrkIsol;}///< HEEP trk Isolation
     
   private:
     const ran::ElectronStruct* electron;

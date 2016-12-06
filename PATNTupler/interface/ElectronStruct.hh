@@ -15,6 +15,7 @@ namespace ran{
   public:
     ElectronStruct(); ///< default constructor
     virtual ~ElectronStruct(){} ///< virtual destructor
+    float et;///< electron et
     float pt;///< electron pt
     float eta;///< electron eta
     float phi;//electron phi
@@ -125,7 +126,9 @@ namespace ran{
     float heep_dxy;;///<HEEP dxy
     int heep_numMissInnerHits;
 
-    int heep_cutCode;///< HEEP cutcode. INVALID = 0x40000000   
+    bool passHEEPID;///< Pass HEEP ID
+    float HEEPtrkIsol;///< HEEP trk Isolation
+    //int heep_cutCode;///< HEEP cutcode. INVALID = 0x40000000   
 
     ClassDef(ElectronStruct,1)//ElectronStruct class definition
   };
