@@ -19,9 +19,9 @@ namespace ran{
     float pfTrackCountingHighPurBJetTags() const {return jet->pfTrackCountingHighPurBJetTags;}///< pfTrackCountingHighPurBJetTags b tag discriminator
     float pfSimpleSecondaryVertexHighEffBJetTags() const {return jet->pfSimpleSecondaryVertexHighEffBJetTags;}///< pfSimpleSecondaryVertexHighEffBJetTags b tag discriminator
     float pfSimpleSecondaryVertexHighPurBJetTags() const {return jet->pfSimpleSecondaryVertexHighPurBJetTags;}///< pfSimpleSecondaryVertexHighPurBJetTags b tag discriminator
-    float pfCombinedInclusiveSecondaryVertexV2BJetTags() const {return jet->pfCombinedInclusiveSecondaryVertexV2BJetTags;}///< pfCombinedInclusiveSecondaryVertexV2BJetTags b tag discriminator
-    float pfCombinedSecondaryVertexSoftLeptonBJetTags() const {return jet->pfCombinedSecondaryVertexSoftLeptonBJetTags;}//< pfCombinedSecondaryVertexSoftLeptonBJetTags b tag discriminator
-    float pfCombinedMVABJetTags() const {return jet->pfCombinedMVABJetTags;}///< pfCombinedMVABJetTags  b tag discriminator
+    float pfCombinedSecondaryVertexV2BJetTags() const {return jet->pfCombinedSecondaryVertexV2BJetTags;}///< pfCombinedSecondaryVertexV2BJetTags b tag discriminator
+    float pfCombinedInclusiveSecondaryVertexV2BJetTags() const {return jet->pfCombinedInclusiveSecondaryVertexV2BJetTags;}//<pfCombinedInclusiveSecondaryVertexV2BJetTags b tag discriminator
+    float pfCombinedMVAV2BJetTags() const {return jet->pfCombinedMVAV2BJetTags;}///< pfCombinedMVABJetTags  b tag discriminator
     float jecFactor_unCorrected() const {return jet->jecFactor_unCorrected;}///< factor applied to jet pt to get uncorrect jet pt
     float userFloat_pileupJetId_fullDiscriminant() const {return jet->userFloat_pileupJetId_fullDiscriminant;}///<  userFloat pileup jet ID
     float numberOfDaughters() const {return jet->numberOfDaughters;}///< Number of Jet daughters

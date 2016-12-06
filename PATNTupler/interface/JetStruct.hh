@@ -20,9 +20,9 @@ namespace ran{
     float pfTrackCountingHighPurBJetTags;///< pfTrackCountingHighPurBJetTags b tag discriminator
     float pfSimpleSecondaryVertexHighEffBJetTags;///< pfSimpleSecondaryVertexHighEffBJetTags b tag discriminator
     float pfSimpleSecondaryVertexHighPurBJetTags;///< pfCombinedSecondaryVertexBJetTags b tag discriminator
+    float pfCombinedSecondaryVertexV2BJetTags;///< pfCombinedSecondaryVertexV2BJetTags b tag discriminator
     float pfCombinedInclusiveSecondaryVertexV2BJetTags;///< pfCombinedInclusiveSecondaryVertexV2BJetTags b tag discriminator
-    float pfCombinedSecondaryVertexSoftLeptonBJetTags;///< pfCombinedSecondaryVertexSoftLeptonBJetTags b tag discriminator
-    float pfCombinedMVABJetTags;///<  pfCombinedMVABJetTags b tag discriminator
+    float pfCombinedMVAV2BJetTags;///<  pfCombinedMVABJetTags b tag discriminator
     float jecFactor_unCorrected;///<factor applied to jet pt to get uncorrect jet pt
     float userFloat_pileupJetId_fullDiscriminant;///< userFloat pileup jet ID
     float numberOfDaughters;///< Number of Jet daughters
@@ -33,7 +33,7 @@ namespace ran{
     float chargedEmEnergyFraction;///<chargedEmEnergyFraction
     float chargedHadronEnergyFraction;///<chargedHadronEnergyFraction
     int partonFlavour;///<  MC parton flavour (sensible values for MC only obviously!) 
-    ClassDef(JetStruct,1)//Struct class definition
+    ClassDef(JetStruct,2)//Struct class definition
   };
 
 }

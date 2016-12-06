@@ -148,7 +148,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       std::vector<std::string> targetTriggerPaths_;
 
       //Ntuple Tree
-      //edm::Service<TFileService> fHistos;
+      edm::Service<TFileService> fHistos;
       TTree* EventDataTree;
       TTree* TriggerPathsTree;
 
@@ -200,8 +200,8 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     //cuts_(iConfig)
 {
 
-  //EventDataTree = fHistos->make<TTree>("EventDataTree", "Event data tree");
-    EventDataTree = new TTree("EventDataTree","EventDataTree");
+    EventDataTree = fHistos->make<TTree>("EventDataTree", "Event data tree");
+    //EventDataTree = new TTree("EventDataTree","EventDataTree");
     //Setting up the links between variables and branches...
     //event_ = 0;	
     //EventDataTree->Branch("event","ran::Event", &event_, 64000, 1); // This line was taken from Jim's tupiliser
@@ -215,8 +215,8 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     //EventDataTree->Branch("recordedTriggers","std::vector<char>", &recordedTriggers_, 64000, 1);
 
     //Seperate tree to store trigger names
-    //TriggerPathsTree = fHistos->make<TTree>("TriggerPathsTree", "Trigger Paths tree");
-    TriggerPathsTree = new TTree("TrigTree","EventDataTree");
+    TriggerPathsTree = fHistos->make<TTree>("TriggerPathsTree", "Trigger Paths tree");
+    //TriggerPathsTree = new TTree("TrigTree","EventDataTree");
     TriggerPathsTree->Branch("triggerPaths", &triggerPaths_);
 
 
@@ -286,7 +286,7 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
      ReadInMets(iEvent);
 
      //Fill Ntuple
-     //EventDataTree->Fill();	
+     EventDataTree->Fill();	
 
      //delete event_;
      delete electronCollection_;
@@ -329,7 +329,7 @@ RALMiniAnalyzer::endJob()
   	std::cout << "   done." << std::endl;
 	
 	
-	//fHistos->cd();
+	fHistos->cd();
 	EventDataTree->Write();
 	TriggerPathsTree->Write();
 
@@ -514,8 +514,6 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
     ithElec.heep_p4 =         heepEle.p4();
     ithElec.heep_gsfP4 =      heepEle.gsfP4();
 
-    cout << "Et is: " << ithElec.et << "\n";
-    cout << "HEEP Et is: " << ithElec.heep_et << "\n";
     //Variables storing the heep::Ele method values - Classification...
     ithElec.heep_classification =  heepEle.classification();
     ithElec.heep_isEcalDriven =    heepEle.isEcalDriven();
@@ -606,15 +604,15 @@ void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent)
       ithJet.userFloat_pileupJetId_fullDiscriminant = iJet.userFloat("pileupJetId:fullDiscriminant");
 
       //Assign the btag discriminators
-      ithJet.pfJetProbabilityBJetTags =  iJet.bDiscriminator("pfJetProbabilityBJetTags");
-      ithJet.pfJetBProbabilityBJetTags =  iJet.bDiscriminator("pfJetBProbabilityBJetTags");
-      ithJet.pfTrackCountingHighEffBJetTags =  iJet.bDiscriminator("pfTrackCountingHighEffBJetTags");   
-      ithJet.pfTrackCountingHighPurBJetTags =  iJet.bDiscriminator("pfTrackCountingHighPurBJetTags");
-      ithJet.pfSimpleSecondaryVertexHighEffBJetTags =  iJet.bDiscriminator("pfSimpleSecondaryVertexHighEffBJetTags");
-      ithJet.pfSimpleSecondaryVertexHighPurBJetTags =  iJet.bDiscriminator("pfSimpleSecondaryVertexHighPurBJetTags");
+      ithJet.pfJetProbabilityBJetTags =  iJet.bDiscriminator("pfJetProbabilityBJetTags");//
+      ithJet.pfJetBProbabilityBJetTags =  iJet.bDiscriminator("pfJetBProbabilityBJetTags");//
+      ithJet.pfTrackCountingHighEffBJetTags =  iJet.bDiscriminator("pfTrackCountingHighEffBJetTags");//   
+      ithJet.pfTrackCountingHighPurBJetTags =  iJet.bDiscriminator("pfTrackCountingHighPurBJetTags");//
+      ithJet.pfSimpleSecondaryVertexHighEffBJetTags =  iJet.bDiscriminator("pfSimpleSecondaryVertexHighEffBJetTags");//
+      ithJet.pfSimpleSecondaryVertexHighPurBJetTags =  iJet.bDiscriminator("pfSimpleSecondaryVertexHighPurBJetTags");//
+      ithJet.pfCombinedSecondaryVertexV2BJetTags =  iJet.bDiscriminator("pfCombinedSecondaryVertexV2BJetTags");//
       ithJet.pfCombinedInclusiveSecondaryVertexV2BJetTags =  iJet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
-      ithJet.pfCombinedSecondaryVertexSoftLeptonBJetTags =  iJet.bDiscriminator("pfCombinedSecondaryVertexSoftLeptonBJetTags");
-      ithJet.pfCombinedMVABJetTags = iJet.bDiscriminator("pfCombinedMVABJetTags");
+      ithJet.pfCombinedMVAV2BJetTags = iJet.bDiscriminator("pfCombinedMVAV2BJetTags");
 
       ithJet.partonFlavour = iJet.partonFlavour();
 
