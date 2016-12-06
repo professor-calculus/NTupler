@@ -14,15 +14,6 @@ namespace ran{
     float mass;/// < mass
     float eta;///< eta 
     float phi;/// < phi
-    float pfJetProbabilityBJetTags;///< pfJetProbabilityBJetTags b tag discriminator
-    float pfJetBProbabilityBJetTags;///< pfJetBProbabilityBJetTags b tag discriminator
-    float pfTrackCountingHighEffBJetTags;///< pfTrackCountingHighEffBJetTags b tag discriminator
-    float pfTrackCountingHighPurBJetTags;///< pfTrackCountingHighPurBJetTags b tag discriminator
-    float pfSimpleSecondaryVertexHighEffBJetTags;///< pfSimpleSecondaryVertexHighEffBJetTags b tag discriminator
-    float pfSimpleSecondaryVertexHighPurBJetTags;///< pfCombinedSecondaryVertexBJetTags b tag discriminator
-    float pfCombinedInclusiveSecondaryVertexV2BJetTags;///< pfCombinedInclusiveSecondaryVertexV2BJetTags b tag discriminator
-    float pfCombinedSecondaryVertexSoftLeptonBJetTags;///< pfCombinedSecondaryVertexSoftLeptonBJetTags b tag discriminator
-    float pfCombinedMVABJetTags;///<  pfCombinedMVABJetTags b tag discriminator    
     float jecFactor_unCorrected;///<factor applied to jet pt to get uncorrect jet pt
     float userFloat_ak8PFJets_CHSPrunedLinks;///< Pruned jets
     float userFloat_ak8PFJets_CHSTrimmedLinks;///< Trimed jets
@@ -35,6 +26,20 @@ namespace ran{
     float neutralEmEnergyFraction;///< neutralEmEnergyFraction
     float chargedEmEnergyFraction;///<chargedEmEnergyFraction
     float chargedHadronEnergyFraction;///<chargedHadronEnergyFraction
+
+    double NjettinessAK8_tau1; ///<  Access the n-subjettiness variables
+    double NjettinessAK8_tau2;///<  Access the n-subjettiness variables
+    double NjettinessAK8_tau3;///<  Access the n-subjettiness variables
+    double CHSsoftdrop_mass;// access to soft drop mass
+    double CHSpruned_mass;// access to pruned mass
+    /*double puppi_pt;
+    double puppi_mass;
+    double puppi_eta;
+    double puppi_phi;
+    double puppi_tau1;
+    double puppi_tau2;
+    double puppi_tau3;*/
+
 
     int partonFlavour;///<  MC parton flavour (sensible values for MC only obviously!) 
     ClassDef(FatJetStruct,1)//Struct class definition

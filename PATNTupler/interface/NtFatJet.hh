@@ -13,15 +13,7 @@ namespace ran{
     float eta() const {return jet->eta;}///<Particle eta
     float phi() const {return jet->phi;}///<Particle phi
     float mass() const {return jet->mass;} ///<Particle mass
-    float pfJetProbabilityBJetTags() const {return jet->pfJetProbabilityBJetTags;}///< jetProbabilityBJetTags b tag discriminator
-    float pfJetBProbabilityBJetTags() const {return jet->pfJetBProbabilityBJetTags;}///< jetBProbabilityBJetTags b tag discriminator
-    float pfTrackCountingHighEffBJetTags() const {return jet->pfTrackCountingHighEffBJetTags;}///< trackCountingHighEffBJetTags b tag discriminator
-    float pfTrackCountingHighPurBJetTags() const {return jet->pfTrackCountingHighPurBJetTags;}///< trackCountingHighPurBJetTags b tag discriminator
-    float pfSimpleSecondaryVertexHighEffBJetTags() const {return jet->pfSimpleSecondaryVertexHighEffBJetTags;}///< simpleSecondaryVertexHighEffBJetTags b tag discriminator
-    float pfSimpleSecondaryVertexHighPurBJetTags() const {return jet->pfSimpleSecondaryVertexHighPurBJetTags;}///< simpleSecondaryVertexHighPurBJetTags b tag discriminator
-    float pfCombinedInclusiveSecondaryVertexV2BJetTags() const {return jet->pfCombinedInclusiveSecondaryVertexV2BJetTags;}///< combinedInclusiveSecondaryVertexBJetTags b tag discriminator
-    float pfCombinedSecondaryVertexSoftLeptonBJetTags() const {return jet->pfCombinedSecondaryVertexSoftLeptonBJetTags;}//< pfCombinedSecondaryVertexSoftLeptonBJetTags b tag discriminator
-    float pfCombinedMVABJetTags() const {return jet->pfCombinedMVABJetTags;}///< pfCombinedMVABJetTags  b tag discriminator
+    
     float jecFactor_unCorrected() const {return jet->jecFactor_unCorrected;}///< factor applied to jet pt to get uncorrect jet pt
     float userFloat_ak8PFJets_CHSPrunedLinks() const {return jet->userFloat_ak8PFJets_CHSPrunedLinks;}///< Pruned jets
     float userFloat_ak8PFJets_CHSTrimmedLinks() const {return jet-> userFloat_ak8PFJets_CHSTrimmedLinks;}///< Trimed jets
@@ -34,6 +26,18 @@ namespace ran{
     float neutralEmEnergyFraction() const {return jet->neutralEmEnergyFraction;}///< neutralEmEnergyFraction
     float chargedEmEnergyFraction() const {return jet->chargedEmEnergyFraction;}///<chargedEmEnergyFraction
     float chargedHadronEnergyFraction() const {return jet->chargedHadronEnergyFraction;}///<chargedHadronEnergyFraction
+    double NjettinessAK8_tau1() const {return jet->NjettinessAK8_tau1;}///<  Access the n-subjettiness variables
+    double NjettinessAK8_tau2() const {return jet->NjettinessAK8_tau2;}///<  Access the n-subjettiness variables
+    double NjettinessAK8_tau3() const {return jet->NjettinessAK8_tau3;}///<  Access the n-subjettiness variables
+    double CHSsoftdrop_mass() const {return jet->CHSsoftdrop_mass;}// access to soft drop mass
+    double CHSpruned_mass() const {return jet->CHSpruned_mass;}// access to pruned mass
+    /*double puppi_pt() const {return jet->puppi_pt;}
+    double puppi_mass() const {return jet->puppi_mass;}
+    double puppi_eta() const {return jet->puppi_eta;}
+    double puppi_phi() const {return jet->puppi_phi;}
+    double puppi_tau1() const {return jet->puppi_tau1;}
+    double puppi_tau2() const {return jet->puppi_tau2;}
+    double puppi_tau3() const {return jet->puppi_tau3;}*/
 
     int partonFlavour() const {return jet->partonFlavour;}///<  MC parton flavour (sensible values for MC only!) 
 
