@@ -23,7 +23,15 @@ namespace ran{
     }
 
     size_t size(){ return triggerPaths_.size();}
-    unsigned int getTrigIndex(const string triggerPath) {return pathToIndexMap_[triggerPath];}//WARNING, if triggerPath doesn't exist it will be added and I don't know what the associated int will be. Need to take care of the situation where the trigger path doesn't exist
+    unsigned int getTrigIndex(const string triggerPath) 
+    {
+      auto failedToFind = pathToIndexMap_.end();
+      if (failedToFind != pathToIndexMap_.find(triggerPath)){//make sure trigger is in map
+	return pathToIndexMap_[triggerPath];
+      } else {
+	throw "Error: Asking for a trigger we diddnn't specify\n";
+      }
+    }
 
   private:
 
