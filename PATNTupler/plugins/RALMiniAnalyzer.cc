@@ -161,7 +161,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       std::vector<ran::FatJetStruct>* fatjetCollection_;
       std::vector<ran::MetStruct>* metCollection_;
       std::vector<string>* triggerPaths_;
-      std::vector<char>* recordedTriggers_;
+      std::vector<unsigned int>* recordedTriggers_;
       bool vBool_;
            
       ran::TriggerPathToIndex* hltTriggers_;
@@ -234,6 +234,7 @@ RALMiniAnalyzer::~RALMiniAnalyzer()
    // do anything here that needs to be done at desctruction time
    // (e.g. close files, deallocate resources etc.)
   delete hltTriggers_;
+  //should delete triggerPaths_;
 }
 
 
@@ -248,9 +249,9 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
    using namespace edm;
    
    //instantiate vector to store trigger pass or fails
-   recordedTriggers_ = new std::vector<char>(hltTriggers_->size(), 0);
+   recordedTriggers_ = new std::vector<unsigned int>(hltTriggers_->size(), 0);
    //Does event pass any of our specified triggers 
-   //bool triggerOfInterest = passedTrigger(iEvent);
+   bool triggerOfInterest = passedTrigger(iEvent);
    //triggerOfInterest = (isMC_) ? isMC_ : passedTrigger(iEvent);//Need to write trigger info for MC but not select events based on it
 
    //for (unsigned int i = 0; i < recordedTriggers_->size(); ++i){
@@ -411,14 +412,18 @@ bool RALMiniAnalyzer::passedTrigger(const edm::Event& iEvent){
   bool trigPass(false);
   for (unsigned int i = 0, n = triggerBits->size(); i < n; ++i) {
     std::string triggerPath =  names.triggerName(i);
-    //std::cout << "TRIGGER IS: " << triggerPath << "\n";
+    //std::cout << "TRIGGER THAT PASSED IS: " << triggerPath << "\n";
+    //if (triggerBits->accept(i)) std::cout << "TRIGGER THAT PASSED IS: " << triggerPath << "and Prescale: " << triggerPrescales->getPrescaleForIndex(i) << "\n";
     for (std::vector<std::string>::const_iterator triggerPath_Iter = targetTriggerPaths_.begin(); 
 	 triggerPath_Iter != targetTriggerPaths_.end(); ++triggerPath_Iter){// loop over the triggers I have specified via the config
       if (triggerBits->accept(i) && (triggerPath.compare(0,triggerPath_Iter->size(),*triggerPath_Iter) == 0)){
       //string compare method compare(pos of first char to be compared, size of string to compare, string to compare )       
-	recordedTriggers_->at(hltTriggers_->getTrigIndex(*triggerPath_Iter)) = 1;//non zero int means passed, zero is failed
+	recordedTriggers_->at(hltTriggers_->getTrigIndex(*triggerPath_Iter)) = triggerPrescales->getPrescaleForIndex(i);//non zero int means passed, zero is failed
 	//std::cout <<"FOUND TRIGGER " << triggerPath << "\n";
+	//std::cout <<"Trigger prsecale: " <<  triggerPrescales->getPrescaleForIndex(i) << "\n";
 	trigPass =  true;
+      } else {//pass specified trigger
+	recordedTriggers_->at(hltTriggers_->getTrigIndex(*triggerPath_Iter)) = 0;
       }
     }
   }
