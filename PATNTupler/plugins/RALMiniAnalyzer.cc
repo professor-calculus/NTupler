@@ -137,8 +137,8 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       edm::EDGetTokenT<pat::JetCollection> jetToken_;
       edm::EDGetTokenT<pat::JetCollection> fatjetToken_;
       edm::EDGetTokenT<pat::METCollection> metToken_;
-      edm::EDGetTokenT<edm::View<reco::GsfElectron> > eleAODToken_;
-      edm::EDGetTokenT<edm::View<reco::GsfElectron> > eleMiniAODToken_;
+  edm::EDGetTokenT<edm::View<reco::GsfElectron> > eleAODToken_;//delete this
+  edm::EDGetTokenT<edm::View<reco::GsfElectron> > eleMiniAODToken_;//delete this
       edm::EDGetTokenT<edm::ValueMap<bool> > vidToken_; //VID is versioned ID, is the standard E/gamma ID producer which we have configured for HEEP
       edm::EDGetTokenT<edm::ValueMap<float> > trkIsolMapToken_;
 

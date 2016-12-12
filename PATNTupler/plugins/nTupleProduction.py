@@ -59,7 +59,7 @@ for idmod in my_id_modules:
 
 #this is our example analysis module reading the results
 process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
-                                       isThisMC = cms.bool(False),
+                                       isThisMC = cms.bool(True),
                                        #mcWeight = cms.double(MCWEIGHT_INSERTEDHERE),
                                        heepId = cms.InputTag("heepId"),
                                        vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
@@ -71,7 +71,7 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        bits = cms.InputTag("TriggerResults","","HLT"),
                                        prescales = cms.InputTag("patTrigger"),
                                        objects = cms.InputTag("selectedPatTrigger"),
-                                       selectedTriggerPaths = cms.vstring("HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW_v","HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_v","HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_v"),#matches triggers that *contain* the stated names, so finish with _v to make sure your trigger name isn't a subset of others
+                                       selectedTriggerPaths = cms.vstring("HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW_v","HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_v","HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_v","HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v2","HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v2"),#matches triggers that *contain* the stated names, so finish with _v to make sure your trigger name isn't a subset of others
                                        elesAOD=cms.InputTag("gedGsfElectrons"),
                                        elesMiniAOD=cms.InputTag("slimmedElectrons"),
                                        trkIsolMap=cms.InputTag("heepIDVarValueMaps","eleTrkPtIso"),
