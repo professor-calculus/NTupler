@@ -32,8 +32,21 @@ using ran::MetStruct;
 using ran::TriggerPathToIndex;
 
 //Functor for ordering leptons by pt
-struct compareLeptonPt{
+struct compareElectronPt{
   bool operator()(std::vector<ran::NtElectron>::const_iterator lhs, std::vector<ran::NtElectron>::const_iterator rhs){
+    return (lhs->pt() > rhs->pt()); //Sort highest pt first
+  }
+};
+
+struct compareMuonPt{
+  bool operator()(const ran::NtMuon* lhs, const ran::NtMuon* rhs){
+    return (lhs->pt() > rhs->pt()); //Sort highest pt first
+  }
+};
+
+template <typename T>
+struct compareParticlePt{
+  bool operator()(const T* lhs, const T* rhs){
     return (lhs->pt() > rhs->pt()); //Sort highest pt first
   }
 };
@@ -207,6 +220,11 @@ int main(int argc, char** argv){
 	      if (!selectedMuonsPos.empty()){
 		if (!selectedMuonsNeg.empty()){
 		  TLorentzVector mu1, mu2, res4v; 
+		  //Sort the muons by pt, highest first! Think they are sorted by default but do it just to be safe
+		  
+		  std::sort(selectedMuonsPos.begin(), selectedMuonsPos.end(), compareParticlePt<ran::NtMuon>());
+                  std::sort(selectedMuonsNeg.begin(), selectedMuonsNeg.end(), compareParticlePt<ran::NtMuon>() );
+		 
 		  mu1.SetPtEtaPhiM( selectedMuonsPos[0]->tuneP_pt() ,  selectedMuonsPos[0]->tuneP_eta(),  selectedMuonsPos[0]->tuneP_phi(), 0.105658);
 		  mu2.SetPtEtaPhiM( selectedMuonsNeg[0]->tuneP_pt() ,  selectedMuonsNeg[0]->tuneP_eta(),  selectedMuonsNeg[0]->tuneP_phi(), 0.105658);
 		  res4v = mu1+ mu2;
