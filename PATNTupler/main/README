@@ -1,0 +1,48 @@
+To run over Ntuples
+
+Requirements:
+#File that contains a list of ntuples. The ntuples must be the absolute location or the location relative to this directory such as
+
+$ cat test.list 
+../plugins/nTuple.root
+../plugins/nTuple_2.root
+../plugins/nTuple_3.root
+
+or 
+
+$ cat test.list 
+/opt/ppd/month/olaiya/CMS/analysis/CMSSW_8_0_12/src/NTupler/NTuplerProducer/plugins/nTuple.root
+/opt/ppd/month/olaiya/CMS/analysis/CMSSW_8_0_12/src/NTupler/NTuplerProducer/plugins/nTuple_2.root
+/opt/ppd/month/olaiya/CMS/analysis/CMSSW_8_0_12/src/NTupler/NTuplerProducer/plugins/nTuple_3.root
+
+
+or for files in dCache
+
+$ cat test.list 
+dcap://dcap.pp.rl.ac.uk:22125//pnfs/pp.rl.ac.uk/data/cms/store/user/olaiya/NTuples/DoubleEG/DoubleEG/DoubleEG_nTuple_PROD/160715_152528/0000/nTuple.root
+dcap://dcap.pp.rl.ac.uk:22125//pnfs/pp.rl.ac.uk/data/cms/store/user/olaiya/NTuples/DoubleEG/DoubleEG/DoubleEG_nTuple_PROD/160715_152528/0000/nTuple_2.root
+dcap://dcap.pp.rl.ac.uk:22125//pnfs/pp.rl.ac.uk/data/cms/store/user/olaiya/NTuples/DoubleEG/DoubleEG/DoubleEG_nTuple_PROD/160715_152528/0000/nTuple_3.root
+
+
+
+#compile code
+
+$gmake -j 8
+
+#Run over files
+./nTupAna mumu.root test.list 
+
+#Where mumu.root is the name of the output file where you want to store your plots
+
+#Edit code in main.cc for analysis
+
+
+#Jobs can also be submitted to the batch machine if there are too many files to run over in one go
+./submitCondorNtupleJobs.py --inputFiles ntuples.list  --jobName Zprime --filesPerJob 50 
+# --inputFiles requires the filename that contains the list of ntuples. --jobName is what you want to call the jobs. The default is EE.--filesPerJob is used to specify how many files per job you want. The files are taken from ntuples.list. --json wants the json file. This is deactivated right now. All ntuples are based on certified data
+#When json option is activated the command would be ./submitCondorNtupleJobs.py --inputFiles ntuples.list  --jobName Zprime --filesPerJob 50 --json goodRuns_246908-260627_13TeV.txt 
+#./submitCondorNtupleJobs.py will prepare the condor jobs in the tmp directory. So you will have to go there to run them. You will find a file in tmp called subCondorJobs_Zprime.sh which will submit the job
+cd ../tmp
+./subCondorJobs_Zprime.sh
+#Check the progress of your jobs with the condor_q command
+condor_q 
