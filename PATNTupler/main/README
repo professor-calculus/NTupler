@@ -46,3 +46,9 @@ cd ../tmp
 ./subCondorJobs_Zprime.sh
 #Check the progress of your jobs with the condor_q command
 condor_q 
+#The output should be returned to the same director
+
+#Can add rootfiles with hadd
+hadd -f -O DoubleMu.root MuMu_0.root MuMu_1.root MuMu_2.root MuMu_3.root
+
+#where MuMu_0.root MuMu_1.root MuMu_2.root MuMu_3.root are the root files you want to add and DoubleMu.root is the name of the file you want to contain the final sum
