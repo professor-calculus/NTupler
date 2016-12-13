@@ -7,17 +7,14 @@ export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
 source $VO_CMS_SW_DIR/cmsset_default.sh
 
 #checkout release
-cmsrel CMSSW_8_0_12/
-CMSSW_8_0_12/src
+cmsrel CMSSW_8_0_24/
+CMSSW_8_0_24/src
 cmsenv
-git clone https://github.com/Sam-Harper/usercode.git SHarper
-cd SHarper/
-git checkout HEEPID80X
-cd ..
+git cms-merge-topic Sam-Harper:HEEPV70VID
 
 #check out NTupler package (you need to have setup ssh keys correctly at CERN)
 git clone ssh://git@gitlab.cern.ch:7999/olaiya/NTupler.git
-
+git checkout git checkout NTuple_MINIAOD_80X_HEEPV70
 #build
 scramv1 b -j 16
 
