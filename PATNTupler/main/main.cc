@@ -86,6 +86,7 @@ int main(int argc, char** argv){
    std::string jsonFile;
    if (argc == 4){
      isMC = false;
+     isMC = isMC;
      jsonFile = string(argv[3]);
      //exit if the json file does not exist
      if (!does_file_exist(jsonFile)){
@@ -115,6 +116,9 @@ int main(int argc, char** argv){
   //TFile f("out.root","new");
   //GoodLumiChecker glc(jsonFile);//object to check if event passed certification
   TH1F mumuMass("mumuMass","mu mu Mass",100,0,200); 
+  TTree *mumuTree = new TTree("evtTree","mumu data");
+  double resMass{0};
+  mumuTree->Branch("resMass",&resMass);
   mumuMass.SetDirectory(&fout);
   for (std::vector<string>::const_iterator fIter = vectorOfFiles.begin();
        fIter != vectorOfFiles.end(); ++fIter){//loop over ntuple files
@@ -183,20 +187,30 @@ int main(int argc, char** argv){
 
 	  for (const ran::NtMuon& muon : ralMuVector){
 	    if (muon.tuneP_exists()){
-	      if (muon.tuneP_pt() > 25.0){
-		if (fabs(muon.tuneP_eta()) < 2.1){
-		  if (muon.tuneP_charge() > 0){
-		    selectedMuonsPos.push_back(&muon);
-		  } else {
-		    selectedMuonsNeg.push_back(&muon);
-		  }
-		}//eta cut
-	      }//pt cut
+	      if (muon.isGlobalMuon() && muon.isTrackerMuon()){
+		if (muon.tuneP_pt() > 25.0){ 
+		  if (muon.numMatchedMuonStns() > 1){
+		    if (muon.globTrk_numberOfValidMuonHits() > 0){
+		      if (muon.globTrk_numberOfValidPixelHits() > 0){
+			if (muon.inTrk_exists()){
+			  if (muon.isolR03_sumPt()/muon.inTrk_pT() < 0.1){
+			    if (fabs(muon.tuneP_eta()) < 2.1){
+			      if (muon.tuneP_charge() > 0){
+				selectedMuonsPos.push_back(&muon);
+			      } else {
+				selectedMuonsNeg.push_back(&muon);
+			      }
+			    }//eta cut
+			  }//isolation cut
+			}//inner track muons
+		      }//valid pixel hits
+		    }//number of valid muon hits
+		  }//number of matched muon stations	      
+		}//pt cut
+	      }//global and tracker muon
 	    }//tune P muons
-	    //std::cout << "muon size: " << ralMuVector->size() << "\n";
-	    //std::cout << "muon pt: "<< (ralMuVector->at(0)).pt() << "\n";
-	  }
-	}	
+	  }//loop ovver muons
+	}//Do we have any muons	
 
 	jetBranch->GetEntry(i); // set tree object for each event i
  
@@ -216,7 +230,7 @@ int main(int argc, char** argv){
 
 	if (!forwardJets.empty()){
 	  if (bCandJets.size() == 1){
-	    if (bCandJets[0]->pfCombinedMVAV2BJetTags() > -0.715){
+	    if (bCandJets[0]->pfCombinedMVAV2BJetTags() > -0.5884){//loose WP 10% mistag rate
 	      if (!selectedMuonsPos.empty()){
 		if (!selectedMuonsNeg.empty()){
 		  TLorentzVector mu1, mu2, res4v; 
@@ -229,19 +243,22 @@ int main(int argc, char** argv){
 		  mu2.SetPtEtaPhiM( selectedMuonsNeg[0]->tuneP_pt() ,  selectedMuonsNeg[0]->tuneP_eta(),  selectedMuonsNeg[0]->tuneP_phi(), 0.105658);
 		  res4v = mu1+ mu2;
 		  double mass = res4v.M();
+		  resMass = mass;
 		  mumuMass.Fill(mass);
+		  mumuTree->Fill();
+		  resMass = resMass;
 		}// at least one negative muon	  
 	      } // at least one postive muon
 	    }//
 	  }//seleted jets
-	}//At least one forward jet       	
-	//}// Certified event?
+	}//At least one forward 
     }//loop over events 
     std::cout << "Closing file: " << *fIter << "\n";
   }//loop over files
 
   fout.cd();
   mumuMass.Write();
+  //evtTree->Write();
   fout.Write();
 
   //graphicsPlease.Run();
