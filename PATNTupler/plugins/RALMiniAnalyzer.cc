@@ -746,6 +746,13 @@ void RALMiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
       aMuon.pfIsoR03_sumNeutHadPtHighThr  =  imuon.pfIsolationR03().sumNeutralHadronEtHighThreshold;
       aMuon.pfIsoR03_sumPhtEtHighThr =  imuon.pfIsolationR03().sumPhotonEtHighThreshold;
       aMuon.pfIsoR03_sumPUPt =  imuon.pfIsolationR03().sumPUPt;
+      aMuon.pfIsoR04_sumChgHadPt  = imuon.pfIsolationR04().sumChargedHadronPt;
+      aMuon.pfIsoR04_chgPartPt = imuon.pfIsolationR04().sumChargedParticlePt;
+      aMuon.pfIsoR04_sumNeutHadPt =  imuon.pfIsolationR04().sumNeutralHadronEt;
+      aMuon.pfIsoR04_sumPhtEt =  imuon.pfIsolationR04().sumPhotonEt;
+      aMuon.pfIsoR04_sumNeutHadPtHighThr  =  imuon.pfIsolationR04().sumNeutralHadronEtHighThreshold;
+      aMuon.pfIsoR04_sumPhtEtHighThr =  imuon.pfIsolationR04().sumPhotonEtHighThreshold;
+      aMuon.pfIsoR04_sumPUPt =  imuon.pfIsolationR04().sumPUPt;
 
       aMuon.isIsolationValid   = imuon.isIsolationValid();
       aMuon.isolR03_sumPt      = imuon.isolationR03().sumPt;
