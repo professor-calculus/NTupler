@@ -60,11 +60,12 @@ for jobList in filesperJobList:
     rootFile = results.jobType_par+"_"+str(jobNum)+".root"
     rootFileToScratch = "/scratch/"+rootFile
     thisDir = os.environ['PWD']
+    baseDir = os.environ['CMSSW_BASE']
 
     cmd = "#!/bin/bash\n"
     cmd += "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch/\n"
     cmd += "source $VO_CMS_SW_DIR/cmsset_default.sh\n"
-    cmd += "cd "+thisDir+"/src/\n"
+    cmd += "cd "+baseDir+"/src/\n"
     cmd += "eval `scramv1 runtime -sh`\n"
     cmd += "cd "+os.environ['PWD']+"\n"
     cmd += "./nTupAna "+rootFileToScratch+" "+lFile+" "+results.json_par+"\n"
