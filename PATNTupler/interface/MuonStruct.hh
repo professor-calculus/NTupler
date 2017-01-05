@@ -26,6 +26,9 @@ namespace ran{
     float pfIsoR03_chgPartPt;///<sum-pt of charged Particles(inludes e/mu) 
     float pfIsoR03_sumNeutHadPt;///<sum pt of neutral hadrons 
     float pfIsoR03_sumPhtEt;///<sum pt of PF photons 
+    float pfIsoR03_sumNeutHadPtHighThr; ///< sum pt of neutral hadrons with a higher threshold
+    float pfIsoR03_sumPhtEtHighThr;///< sum pt of PF photons with a higher threshold
+    float pfIsoR03_sumPUPt;///< sum pt of charged Particles not from PV (for Pu corrections)
     bool isIsolationValid; ///<Is isolation valid    
     float isolR03_sumPt ; ///<
     float isolR03_emEt ; ///<

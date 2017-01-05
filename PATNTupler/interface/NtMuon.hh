@@ -23,7 +23,10 @@ namespace ran{
     float pfIsoR03_sumChgHadPt() const {return muon->pfIsoR03_sumChgHadPt;} ///<sum-pt of charged Hadro
     float pfIsoR03_chgPartPt() const {return muon->pfIsoR03_chgPartPt;}///<sum-pt of charged Particles(inludes e/mu) 
     float pfIsoR03_sumNeutHadPt() const {return muon->pfIsoR03_sumNeutHadPt;}///<sum pt of neutral hadrons 
-    float pfIsoR03_sumPhtEt() const {return muon->pfIsoR03_sumPhtEt;}///<sum pt of PF photons 
+    float pfIsoR03_sumPhtEt() const {return muon->pfIsoR03_sumPhtEt;}///<sum pt of PF photons
+    float pfIsoR03_sumNeutHadPtHighThr() const {return muon->pfIsoR03_sumNeutHadPtHighThr;} ///< sum pt of neutral hadrons with a higher threshold
+    float pfIsoR03_sumPhtEtHighThr() const {return muon-> pfIsoR03_sumPhtEtHighThr;} ///< sum pt of PF photons with a higher threshold
+    float pfIsoR03_sumPUPt() const {return muon->pfIsoR03_sumPUPt;} ///< sum pt of charged Particles not from PV (for Pu corrections) 
     bool isIsolationValid() const {return muon->isIsolationValid;} ///<Is isolation valid 
     float isolR03_sumPt() const {return muon->isolR03_sumPt;}
     float isolR03_emEt() const {return muon->isolR03_emEt;}
