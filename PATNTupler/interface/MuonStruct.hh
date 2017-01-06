@@ -13,6 +13,7 @@ namespace ran{
     virtual ~MuonStruct(){} ///<virtual distructor
     float pt ; ///< pt
     float eta ; ///< eta 
+    float phi;///< phi
     ROOT::Math::XYZTVector p4 ; ///<
     int charge ; ///<
     bool isGlobalMuon ; ///<

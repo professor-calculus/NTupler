@@ -11,6 +11,7 @@ namespace ran{
     NtMuon(const ran::MuonStruct& aMuon) : muon(&aMuon){} ///< Constructor
     float pt() const {return muon->pt;} ///<Particle pt
     float eta() const {return muon->eta;}///<Particle eta
+    float phi() const {return muon->phi;}///<Particle phi
     ROOT::Math::XYZTVector p4() const {return muon->p4;}
     int charge() const {return muon->charge;}
     bool isGlobalMuon() const {return muon->isGlobalMuon;}
