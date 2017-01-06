@@ -26,7 +26,10 @@ namespace ran{
     float jecFactor_unCorrected;///<factor applied to jet pt to get uncorrect jet pt
     float userFloat_pileupJetId_fullDiscriminant;///< userFloat pileup jet ID
     float numberOfDaughters;///< Number of Jet daughters
-    float chargedMultiplicity;///< charged multiplicity
+    int chargedMultiplicity;///< charged multiplicity
+    int neutralMultiplicity;///< neutral multiplicity
+    float muonEnergyFraction;///< muon energy fraction
+    float electronEnergyFraction;///< electron energy fraction
     float neutralHadronEnergyFraction;///< neutralHadronEnergyFraction
     float HFHadronEnergyFraction;///< HFHadronEnergyFraction
     float neutralEmEnergyFraction;///< neutralEmEnergyFraction

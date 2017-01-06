@@ -599,6 +599,9 @@ void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent)
       ithJet.mass = iJet.mass();
       ithJet.numberOfDaughters = iJet.numberOfDaughters();
       ithJet.chargedMultiplicity = iJet.chargedMultiplicity();
+      ithJet.neutralMultiplicity = iJet.neutralMultiplicity();
+      ithJet.muonEnergyFraction = iJet.muonEnergyFraction();
+      ithJet.electronEnergyFraction = iJet.electronEnergyFraction();
       ithJet.neutralHadronEnergyFraction = iJet.neutralHadronEnergyFraction();
       ithJet.HFHadronEnergyFraction = iJet.HFHadronEnergyFraction();
       ithJet.neutralEmEnergyFraction = iJet.neutralEmEnergyFraction();
@@ -641,6 +644,9 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent)
       ithJet.mass = iJet.mass();
       ithJet.numberOfDaughters = iJet.numberOfDaughters();
       ithJet.chargedMultiplicity = iJet.chargedMultiplicity();
+      ithJet.neutralMultiplicity = iJet.neutralMultiplicity();
+      ithJet.muonEnergyFraction = iJet.muonEnergyFraction();
+      ithJet.electronEnergyFraction = iJet.electronEnergyFraction();
       ithJet.neutralHadronEnergyFraction = iJet.neutralHadronEnergyFraction();
       ithJet.HFHadronEnergyFraction = iJet.HFHadronEnergyFraction();
       ithJet.neutralEmEnergyFraction = iJet.neutralEmEnergyFraction();

@@ -25,7 +25,10 @@ namespace ran{
     float jecFactor_unCorrected() const {return jet->jecFactor_unCorrected;}///< factor applied to jet pt to get uncorrect jet pt
     float userFloat_pileupJetId_fullDiscriminant() const {return jet->userFloat_pileupJetId_fullDiscriminant;}///<  userFloat pileup jet ID
     float numberOfDaughters() const {return jet->numberOfDaughters;}///< Number of Jet daughters
-    float chargedMultiplicity() const {return jet->chargedMultiplicity;}///< charged multiplicity
+    int chargedMultiplicity() const {return jet->chargedMultiplicity;}///< charged multiplicity
+    int neutralMultiplicity() const {return jet->neutralMultiplicity;}///< neutral multiplicity
+    float muonEnergyFraction() const {return jet->muonEnergyFraction;}///< muonHadronEnergyFraction
+    float electronEnergyFraction() const {return jet->electronEnergyFraction;}///< electronHadronEnergyFraction
     float neutralHadronEnergyFraction() const {return jet->neutralHadronEnergyFraction;}///< neutralHadronEnergyFraction
     float HFHadronEnergyFraction() const {return jet->HFHadronEnergyFraction;}///< HFHadronEnergyFraction
     float neutralEmEnergyFraction() const {return jet->neutralEmEnergyFraction;}///< neutralEmEnergyFraction

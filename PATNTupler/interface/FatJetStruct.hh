@@ -21,6 +21,9 @@ namespace ran{
     float userFloat_cmsTopTag_PFJets_CHSLinksAK8;///< CMS Top Tagger
     float numberOfDaughters;///< Number of Jet daughters
     float chargedMultiplicity;///< charged multiplicity
+    int neutralMultiplicity;///< neutral multiplicity
+    float muonEnergyFraction;///< muon energy fraction
+    float electronEnergyFraction;///< electron energy fraction
     float neutralHadronEnergyFraction;///< neutralHadronEnergyFraction
     float HFHadronEnergyFraction;///< HFHadronEnergyFraction
     float neutralEmEnergyFraction;///< neutralEmEnergyFraction
