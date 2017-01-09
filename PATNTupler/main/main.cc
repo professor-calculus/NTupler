@@ -229,16 +229,19 @@ int main(int argc, char** argv){
       //implement isolation cut
       for (const ran::NtMuon* stage1Muons : selectedMuonsTwenty){
 	if (stage1Muons->tuneP_pt() > 25.0){ 
-	  float isolR03SumPt = stage1Muons->isolR03_sumPt();
+	  float isolR03SumPt = stage1Muons->isolR03_sumPt(); 
+	  bool goodMuon{true};
 	  for (const ran::NtMuon* stage1Muons_b : selectedMuonsTwenty){
 	    if (stage1Muons != stage1Muons_b){//look at different muons
 	      muonDeltaR = deltaR(stage1Muons->eta(), stage1Muons->globTrk_phi(),stage1Muons_b->eta(), stage1Muons_b->globTrk_phi());
 	      muDeltaRTree->Fill();
+	      if (fabs(muonDeltaR) <  0.02) goodMuon = false; //ignore muons pairs this close together
 	      if (fabs(muonDeltaR) <  0.3){
 		isolR03SumPt = isolR03SumPt - stage1Muons_b->inTrk_pT();
 	      }//deltaR cut
 	    }//not the same muon
 	  }//loop over muons
+	  if (goodMuon){
 	  if ((isolR03SumPt/stage1Muons->inTrk_pT()) < 0.1){
 	    if (stage1Muons->tuneP_charge() > 0){
 	      selectedMuonsPos.push_back(stage1Muons);
@@ -246,6 +249,7 @@ int main(int argc, char** argv){
 	      selectedMuonsNeg.push_back(stage1Muons);
 	    }//charge
 	  }//isolation cut
+	  }//good muon
 	}//pt 25 cut
       }///loop over muons with pt > 20 GeV
 
