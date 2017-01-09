@@ -118,12 +118,18 @@ int main(int argc, char** argv){
   //GoodLumiChecker glc(jsonFile);//object to check if event passed certification
   TH1F mumuMass("mumuMass","mu mu Mass",100,0,200); 
   TTree *mumuTree = new TTree("evtTree","mumu data");
+  TTree *muDeltaRTree = new TTree("muDeltaRTree","deltaR data");
+  TTree *jetMuDeltaRTree = new TTree("jetMuDeltaRTree","deltaR data");
   double resMass{0};
   float posPt{0};
   float negPt{0};
+  float jetMuonDeltaR{0};
+  float muonDeltaR{0};
   mumuTree->Branch("resMass",&resMass);
   mumuTree->Branch("posPt",&posPt);
   mumuTree->Branch("negPt",&negPt);
+  jetMuDeltaRTree->Branch("jetMuonDeltaR",&jetMuonDeltaR);
+  muDeltaRTree->Branch("muonDeltaR",&muonDeltaR);
   mumuMass.SetDirectory(&fout);
   for (std::vector<string>::const_iterator fIter = vectorOfFiles.begin();
        fIter != vectorOfFiles.end(); ++fIter){//loop over ntuple files
@@ -179,55 +185,69 @@ int main(int argc, char** argv){
       evtBranch->GetEntry(i); // set tree object for each event i
       
 
-	//can do the same with muons and jets
-        //Select Muons
-	muonBranch->GetEntry(i); // set tree object eMeEvent for each event i
+      //can do the same with muons and jets
+      //Select Muons
+      muonBranch->GetEntry(i); // set tree object eMeEvent for each event i
 
-	//unique_ptr<std::vector<ran::NtMuon> > ralMuVector(new std::vector<ran::NtMuon>(muonVector->begin(), muonVector->end()));
-        std::vector<ran::NtMuon> ralMuVector(muonVector->begin(), muonVector->end());
+      //unique_ptr<std::vector<ran::NtMuon> > ralMuVector(new std::vector<ran::NtMuon>(muonVector->begin(), muonVector->end()));
+      std::vector<ran::NtMuon> ralMuVector(muonVector->begin(), muonVector->end());
 
-	std::vector<const ran::NtMuon*> selectedMuonsPos;
-	std::vector<const ran::NtMuon*> selectedMuonsNeg;
-        std::vector<const ran::NtMuon*> selectedMuonsTwenty;
-	if(!ralMuVector.empty()){//if it is not empty
+      std::vector<const ran::NtMuon*> selectedMuonsPos;
+      std::vector<const ran::NtMuon*> selectedMuonsNeg;
+      std::vector<const ran::NtMuon*> selectedMuonsTwenty;
+      if(!ralMuVector.empty()){//if it is not empty
 
-	  for (const ran::NtMuon& muon : ralMuVector){
-	    if (muon.tuneP_exists()){
-	      if (muon.isGlobalMuon() && muon.isTrackerMuon()){
-		if (muon.tuneP_pt() > 20.0){ 
-		  if (muon.numMatchedMuonStns() > 1){
-		    if (muon.globTrk_numberOfValidMuonHits() > 0){
-		      if (muon.globTrk_numberOfValidPixelHits() > 0){
-			if (muon.globTrk_normalisedChi2() < 10){
-			  if (muon.inTrk_exists()){
-			    if (muon.isolR03_sumPt()/muon.inTrk_pT() < 0.1){
-			      if (muon.globTrk_dxy() < 0.2){
-				if (muon.globTrk_dz() < 0.5){
-				  if (fabs(muon.tuneP_eta()) < 2.1){
-				    selectedMuonsTwenty.push_back(&muon);
-				    if (muon.tuneP_pt() > 25.0){ 
-				      if (muon.tuneP_charge() > 0){
-					selectedMuonsPos.push_back(&muon);
-				      } else {
-					selectedMuonsNeg.push_back(&muon);
-				      }//charge
-				    }//pt > 25GeV
-				  }//eta cut
-				}//dz cut
-			      }//impact parameter
-			    }//isolation cut			    
-			  }//inner track muons
-			}// chi sqred trk cut
-		      }//valid pixel hits
-		    }//number of valid muon hits
-		  }//number of matched muon stations	      
-		}//pt cut > 20
-	      }//global and tracker muon
-	    }//tune P muons
-	  }//loop ovver muons
-	}//Do we have any muons. Should skip to next event if we don't
+	for (const ran::NtMuon& muon : ralMuVector){
+	  if (muon.tuneP_exists()){
+	    if (muon.isGlobalMuon() && muon.isTrackerMuon()){
+	      if (muon.tuneP_pt() > 20.0){ 
+		if (muon.numMatchedMuonStns() > 1){
+		  if (muon.globTrk_numberOfValidMuonHits() > 0){
+		    if (muon.globTrk_numberOfValidPixelHits() > 0){
+		      if (muon.globTrk_normalisedChi2() < 10){
+			if (muon.inTrk_exists()){
+			  if (muon.globTrk_dxy() < 0.2){
+			    if (muon.globTrk_dz() < 0.5){
+			      if (fabs(muon.tuneP_eta()) < 2.1){
+				selectedMuonsTwenty.push_back(&muon);				    
+			      }//eta cut
+			    }//dz cut
+			  }//impact parameter
+			}//inner track muons
+		      }// chi sqred trk cut
+		    }//valid pixel hits
+		  }//number of valid muon hits
+		}//number of matched muon stations	      
+	      }//pt cut > 20
+	    }//global and tracker muon
+	  }//tune P muons
+	}//loop ovver muons
+      }//Do we have any muons. Should skip to next event if we don't
 
-	if (selectedMuonsPos.size() > 0 && selectedMuonsNeg.size() > 0){ //need at least 2 muons
+      //implement isolation cut
+      for (const ran::NtMuon* stage1Muons : selectedMuonsTwenty){
+	if (stage1Muons->tuneP_pt() > 25.0){ 
+	  float isolR03SumPt = stage1Muons->isolR03_sumPt();
+	  for (const ran::NtMuon* stage1Muons_b : selectedMuonsTwenty){
+	    if (stage1Muons != stage1Muons_b){//look at different muons
+	      muonDeltaR = deltaR(stage1Muons->eta(), stage1Muons->globTrk_phi(),stage1Muons_b->eta(), stage1Muons_b->globTrk_phi());
+	      muDeltaRTree->Fill();
+	      if (fabs(muonDeltaR) <  0.3){
+		isolR03SumPt = isolR03SumPt - stage1Muons_b->inTrk_pT();
+	      }//deltaR cut
+	    }//not the same muon
+	  }//loop over muons
+	  if ((isolR03SumPt/stage1Muons->inTrk_pT()) < 0.1){
+	    if (stage1Muons->tuneP_charge() > 0){
+	      selectedMuonsPos.push_back(stage1Muons);
+	    } else {
+	      selectedMuonsNeg.push_back(stage1Muons);
+	    }//charge
+	  }//isolation cut
+	}//pt 25 cut
+      }///loop over muons with pt > 20 GeV
+
+      if (selectedMuonsPos.size() > 0 && selectedMuonsNeg.size() > 0){ //need at least 2 muons
 	jetBranch->GetEntry(i); // set tree object for each event i
  
 	std::vector<const ran::NtJet*> bCandJets;
@@ -244,7 +264,9 @@ int main(int argc, char** argv){
 		      if (jet.chargedMultiplicity() > 0){
 			//check delta R for all muons
 			for (const ran::NtMuon* ptTwentyMuon : selectedMuonsTwenty){
-			  if (fabs(deltaR(jet.eta(),jet.phi(),ptTwentyMuon->eta(), ptTwentyMuon->globTrk_phi())) < 0.5){//need to use basic phi rather than global trk
+			  jetMuonDeltaR = deltaR(jet.eta(),jet.phi(),ptTwentyMuon->eta(), ptTwentyMuon->globTrk_phi());
+			  jetMuDeltaRTree->Fill();
+			  if (fabs(jetMuonDeltaR) < 0.5){//need to use basic phi rather than global trk
 			    goodJet = false;
 			  }//delta R separation
 			}//loop over muons
