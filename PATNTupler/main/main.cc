@@ -206,13 +206,15 @@ int main(int argc, char** argv){
 		    if (muon.globTrk_numberOfValidPixelHits() > 0){
 		      if (muon.globTrk_normalisedChi2() < 10){
 			if (muon.inTrk_exists()){
-			  if (muon.globTrk_dxy() < 0.2){
-			    if (muon.globTrk_dz() < 0.5){
-			      if (fabs(muon.tuneP_eta()) < 2.1){
-				selectedMuonsTwenty.push_back(&muon);				    
-			      }//eta cut
-			    }//dz cut
-			  }//impact parameter
+			  if (muon.trk_trkrLayersWHits() > 5){
+			    if (muon.globTrk_dxy() < 0.2){
+			      if (muon.globTrk_dz() < 0.5){
+				if (fabs(muon.tuneP_eta()) < 2.1){
+				  selectedMuonsTwenty.push_back(&muon);				    
+				}//eta cut
+			      }//dz cut
+			    }//impact parameter
+			  }//number of hits in the tracker
 			}//inner track muons
 		      }// chi sqred trk cut
 		    }//valid pixel hits
