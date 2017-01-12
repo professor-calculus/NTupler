@@ -117,9 +117,12 @@ int main(int argc, char** argv){
   //TFile f("out.root","new");
   //GoodLumiChecker glc(jsonFile);//object to check if event passed certification
   TH1F mumuMass("mumuMass","mu mu Mass",100,0,200); 
+  TH1F nJets("nJets","num jets",60,0,60); 
   TTree *mumuTree = new TTree("evtTree","mumu data");
   TTree *muDeltaRTree = new TTree("muDeltaRTree","deltaR data");
+  TTree *muDeltaRCutTree = new TTree("muDeltaRCutTree","deltaR data");
   TTree *jetMuDeltaRTree = new TTree("jetMuDeltaRTree","deltaR data");
+  TTree *jetMuDeltaRCutTree = new TTree("jetMuDeltaRCutTree","deltaR data");
   double resMass{0};
   float posPt{0};
   float negPt{0};
@@ -130,6 +133,8 @@ int main(int argc, char** argv){
   mumuTree->Branch("negPt",&negPt);
   jetMuDeltaRTree->Branch("jetMuonDeltaR",&jetMuonDeltaR);
   muDeltaRTree->Branch("muonDeltaR",&muonDeltaR);
+  jetMuDeltaRCutTree->Branch("jetMuonDeltaR",&jetMuonDeltaR);
+  muDeltaRCutTree->Branch("muonDeltaR",&muonDeltaR);
   mumuMass.SetDirectory(&fout);
   for (std::vector<string>::const_iterator fIter = vectorOfFiles.begin();
        fIter != vectorOfFiles.end(); ++fIter){//loop over ntuple files
@@ -185,18 +190,17 @@ int main(int argc, char** argv){
       evtBranch->GetEntry(i); // set tree object for each event i
       
 
-      //can do the same with muons and jets
-      //Select Muons
-      muonBranch->GetEntry(i); // set tree object eMeEvent for each event i
+	//can do the same with muons and jets
+        //Select Muons
+	muonBranch->GetEntry(i); // set tree object eMeEvent for each event i
 
-      //unique_ptr<std::vector<ran::NtMuon> > ralMuVector(new std::vector<ran::NtMuon>(muonVector->begin(), muonVector->end()));
-      std::vector<ran::NtMuon> ralMuVector(muonVector->begin(), muonVector->end());
+	//unique_ptr<std::vector<ran::NtMuon> > ralMuVector(new std::vector<ran::NtMuon>(muonVector->begin(), muonVector->end()));
+        std::vector<ran::NtMuon> ralMuVector(muonVector->begin(), muonVector->end());
 
-      std::vector<const ran::NtMuon*> selectedMuonsPos;
+        std::vector<const ran::NtMuon*> selectedMuonsPos;
       std::vector<const ran::NtMuon*> selectedMuonsNeg;
       std::vector<const ran::NtMuon*> selectedMuonsTwenty;
       if(!ralMuVector.empty()){//if it is not empty
-
 	for (const ran::NtMuon& muon : ralMuVector){
 	  if (muon.tuneP_exists()){
 	    if (muon.isGlobalMuon() && muon.isTrackerMuon()){
@@ -210,7 +214,16 @@ int main(int argc, char** argv){
 			    if (muon.globTrk_dxy() < 0.2){
 			      if (muon.globTrk_dz() < 0.5){
 				if (fabs(muon.tuneP_eta()) < 2.1){
-				  selectedMuonsTwenty.push_back(&muon);				    
+				  if ((muon.isolR03_sumPt()/muon.inTrk_pT()) < 0.1){
+				    selectedMuonsTwenty.push_back(&muon);
+				    /*if (muon.tuneP_pt() > 25.0){ 
+				      if (muon.tuneP_charge() > 0){
+					selectedMuonsPos.push_back(&muon);
+				      } else {
+					selectedMuonsNeg.push_back(&muon);
+				      }//charge	
+				      }*/  //pt 25 cut
+				  }//isolation cut                                  			    
 				}//eta cut
 			      }//dz cut
 			    }//impact parameter
@@ -224,38 +237,50 @@ int main(int argc, char** argv){
 	    }//global and tracker muon
 	  }//tune P muons
 	}//loop ovver muons
-      }//Do we have any muons. Should skip to next event if we don't
+      } else {//Do we have any muons. Should skip to next event if we don't
+	continue;
+      }
 
-      //implement isolation cut
+      //implement deltaR cut
       for (const ran::NtMuon* stage1Muons : selectedMuonsTwenty){
 	if (stage1Muons->tuneP_pt() > 25.0){ 
-	  float isolR03SumPt = stage1Muons->isolR03_sumPt(); 
 	  bool goodMuon{true};
+	  muonDeltaR = 0;
 	  for (const ran::NtMuon* stage1Muons_b : selectedMuonsTwenty){
 	    if (stage1Muons != stage1Muons_b){//look at different muons
 	      muonDeltaR = deltaR(stage1Muons->eta(), stage1Muons->globTrk_phi(),stage1Muons_b->eta(), stage1Muons_b->globTrk_phi());
 	      muDeltaRTree->Fill();
-	      if (fabs(muonDeltaR) <  0.02) goodMuon = false; //ignore muons pairs this close together
-	      if (fabs(muonDeltaR) <  0.3){
-		isolR03SumPt = isolR03SumPt - stage1Muons_b->inTrk_pT();
-	      }//deltaR cut
+	      if (fabs(muonDeltaR) <  0.05) goodMuon = false; //ignore muons pairs this close together
 	    }//not the same muon
 	  }//loop over muons
 	  if (goodMuon){
-	  if ((isolR03SumPt/stage1Muons->inTrk_pT()) < 0.1){
+	    muDeltaRCutTree->Fill();
 	    if (stage1Muons->tuneP_charge() > 0){
 	      selectedMuonsPos.push_back(stage1Muons);
 	    } else {
 	      selectedMuonsNeg.push_back(stage1Muons);
 	    }//charge
-	  }//isolation cut
 	  }//good muon
 	}//pt 25 cut
       }///loop over muons with pt > 20 GeV
+      
 
-      if (selectedMuonsPos.size() > 0 && selectedMuonsNeg.size() > 0){ //need at least 2 muons
-	jetBranch->GetEntry(i); // set tree object for each event i
+      	jetBranch->GetEntry(i); // set tree object for each event i
  
+	/*std::vector<const ran::NtJet*> bCandJets;
+	std::vector<const ran::NtJet*> forwardJets;
+	std::vector<ran::NtJet>  ralJetVector(jetVector->begin(), jetVector->end());
+	for (const ran::NtJet& jet : ralJetVector){
+	  if (jet.pt()> 30.0){
+	    if (fabs(jet.eta()) < 2.4){
+	      bCandJets.push_back(&jet);
+	    }
+	    if ((fabs(jet.eta()) > 2.4) && (fabs(jet.eta()) < 4.7)){
+	      forwardJets.push_back(&jet);
+	    }
+	  }
+	  }*/
+
 	std::vector<const ran::NtJet*> bCandJets;
 	std::vector<const ran::NtJet*> forwardJets;
 	std::vector<ran::NtJet>  ralJetVector(jetVector->begin(), jetVector->end());
@@ -268,34 +293,48 @@ int main(int argc, char** argv){
 		  if (jet.chargedEmEnergyFraction() < 1.0){
 		    if (jet.chargedHadronEnergyFraction() > 0.0){
 		      if (jet.chargedMultiplicity() > 0){
-			//check delta R for all muons
 			for (const ran::NtMuon* ptTwentyMuon : selectedMuonsTwenty){
 			  jetMuonDeltaR = deltaR(jet.eta(),jet.phi(),ptTwentyMuon->eta(), ptTwentyMuon->globTrk_phi());
 			  jetMuDeltaRTree->Fill();
-			  if (fabs(jetMuonDeltaR) < 0.5){//need to use basic phi rather than global trk
+			  if (fabs(jetMuonDeltaR) < 0.5){
 			    goodJet = false;
-			  }//delta R separation
-			}//loop over muons
+			  } else {//delta 
+			    jetMuDeltaRCutTree->Fill();
+			  }
+			}//loop over pt 20 muons
 			if (goodJet){
-			  bCandJets.push_back(&jet);
-			}//Good jet
+			  bCandJets.push_back(&jet);	
+			}		
 		      }//charged multiplicity
 		    }//charged hadron enrgy fraction
 		  }//charged energy fraction
 		}//neutral em nrg fraction
-	      }//nuetral hadron enrgy fraction
+	      }//neutral hadron enrgy fraction
 	    }//eta cut
 	    if ((fabs(jet.eta()) > 2.4) && (fabs(jet.eta()) < 4.7)){
-	      forwardJets.push_back(&jet);
+	      if (jet.neutralHadronEnergyFraction() < 1.0 ){ 
+		if (jet.neutralEmEnergyFraction() < 1.0){
+		  if (jet.chargedEmEnergyFraction() < 1.0){
+		    if (jet.chargedHadronEnergyFraction() > 0.0){
+		      if (jet.chargedMultiplicity() > 0){
+			forwardJets.push_back(&jet);
+		      }//charged multiplicity
+		    }//charged hadron enrgy fraction
+		  }//charged energy fraction
+		}//neutral em nrg fraction
+	      }//neutral hadron enrgy fraction	     
 	    }//eta cut
 	  }//put cut
 	}//loop over jets
+	     
 
 	if (!forwardJets.empty()){
+	  nJets.Fill(bCandJets.size());
 	  if (bCandJets.size() == 1){
-	    if (bCandJets[0]->pfCombinedMVAV2BJetTags() > -0.5884){//loose WP 10% mistag rate
-	      if (!selectedMuonsPos.empty()){// don't need this anymore
-		if (!selectedMuonsNeg.empty()){//don't need this anymore
+	    //if (bCandJets[0]->pfCombinedMVAV2BJetTags() > -0.5884){//loose WP 10% mistag rate
+	    if (bCandJets[0]->pfCombinedMVAV2BJetTags() > 0.9432){//tight WP 0.1%  mistag rate
+	      if (!selectedMuonsPos.empty()){
+		if (!selectedMuonsNeg.empty()){
 		  TLorentzVector mu1, mu2, res4v; 
 		  //Sort the muons by pt, highest first! Think they are sorted by default but do it just to be safe
 		  
@@ -307,8 +346,6 @@ int main(int argc, char** argv){
 		  res4v = mu1+ mu2;
 		  double mass = res4v.M();
 		  resMass = mass;
-		  posPt = selectedMuonsPos[0]->tuneP_pt();
-		  negPt = selectedMuonsNeg[0]->tuneP_pt();
 		  mumuMass.Fill(mass);
 		  mumuTree->Fill();
 		  resMass = resMass;
@@ -317,7 +354,6 @@ int main(int argc, char** argv){
 	    }//
 	  }//seleted jets
 	}//At least one forward 
-	}//At least two muons
     }//loop over events 
     std::cout << "Closing file: " << *fIter << "\n";
   }//loop over files
