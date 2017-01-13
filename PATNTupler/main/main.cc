@@ -251,10 +251,10 @@ int main(int argc, char** argv){
 	      muonDeltaR = deltaR(stage1Muons->eta(), stage1Muons->globTrk_phi(),stage1Muons_b->eta(), stage1Muons_b->globTrk_phi());
 	      muDeltaRTree->Fill();
 	      if (fabs(muonDeltaR) <  0.05) goodMuon = false; //ignore muons pairs this close together
+	      if (fabs(muonDeltaR) >  0.05)  muDeltaRCutTree->Fill();
 	    }//not the same muon
 	  }//loop over muons
 	  if (goodMuon){
-	    muDeltaRCutTree->Fill();
 	    if (stage1Muons->tuneP_charge() > 0){
 	      selectedMuonsPos.push_back(stage1Muons);
 	    } else {
@@ -346,6 +346,8 @@ int main(int argc, char** argv){
 		  res4v = mu1+ mu2;
 		  double mass = res4v.M();
 		  resMass = mass;
+		  negPt =  selectedMuonsNeg[0]->tuneP_pt();
+		  posPt = selectedMuonsPos[0]->tuneP_pt();
 		  mumuMass.Fill(mass);
 		  mumuTree->Fill();
 		  resMass = resMass;
