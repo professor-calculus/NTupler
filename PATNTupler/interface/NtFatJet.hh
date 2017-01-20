@@ -29,11 +29,15 @@ namespace ran{
     float neutralEmEnergyFraction() const {return jet->neutralEmEnergyFraction;}///< neutralEmEnergyFraction
     float chargedEmEnergyFraction() const {return jet->chargedEmEnergyFraction;}///<chargedEmEnergyFraction
     float chargedHadronEnergyFraction() const {return jet->chargedHadronEnergyFraction;}///<chargedHadronEnergyFraction
+
+    float pfBoostedDoubleSecondaryVertexAK8BJetTags() const {return jet->pfBoostedDoubleSecondaryVertexAK8BJetTags;}///< double b tag discrim
+
     double NjettinessAK8_tau1() const {return jet->NjettinessAK8_tau1;}///<  Access the n-subjettiness variables
     double NjettinessAK8_tau2() const {return jet->NjettinessAK8_tau2;}///<  Access the n-subjettiness variables
     double NjettinessAK8_tau3() const {return jet->NjettinessAK8_tau3;}///<  Access the n-subjettiness variables
     double CHSsoftdrop_mass() const {return jet->CHSsoftdrop_mass;}// access to soft drop mass
     double CHSpruned_mass() const {return jet->CHSpruned_mass;}// access to pruned mass
+
     /*double puppi_pt() const {return jet->puppi_pt;}
     double puppi_mass() const {return jet->puppi_mass;}
     double puppi_eta() const {return jet->puppi_eta;}

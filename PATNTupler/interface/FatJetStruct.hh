@@ -29,6 +29,7 @@ namespace ran{
     float neutralEmEnergyFraction;///< neutralEmEnergyFraction
     float chargedEmEnergyFraction;///<chargedEmEnergyFraction
     float chargedHadronEnergyFraction;///<chargedHadronEnergyFraction
+    float pfBoostedDoubleSecondaryVertexAK8BJetTags;///< double b tag discrim
 
     double NjettinessAK8_tau1; ///<  Access the n-subjettiness variables
     double NjettinessAK8_tau2;///<  Access the n-subjettiness variables
@@ -45,7 +46,7 @@ namespace ran{
 
 
     int partonFlavour;///<  MC parton flavour (sensible values for MC only obviously!) 
-    ClassDef(FatJetStruct,1)//Struct class definition
+    ClassDef(FatJetStruct,2)//Struct class definition
   };
 
 }

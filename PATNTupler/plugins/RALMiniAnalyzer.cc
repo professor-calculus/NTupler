@@ -612,6 +612,7 @@ void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent)
       ithJet.userFloat_pileupJetId_fullDiscriminant = iJet.userFloat("pileupJetId:fullDiscriminant");
 
       //Assign the btag discriminators
+      ///cvmfs/cms.cern.ch/slc6_amd64_gcc530/cms/cmssw/CMSSW_8_0_20/src/PhysicsTools/PatAlgos/python/producersLayer1/jetProducer_cfi.py
       ithJet.pfJetProbabilityBJetTags =  iJet.bDiscriminator("pfJetProbabilityBJetTags");//
       ithJet.pfJetBProbabilityBJetTags =  iJet.bDiscriminator("pfJetBProbabilityBJetTags");//
       ithJet.pfTrackCountingHighEffBJetTags =  iJet.bDiscriminator("pfTrackCountingHighEffBJetTags");//   
@@ -661,6 +662,8 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent)
  
       ithJet.CHSsoftdrop_mass = iJet.userFloat("ak8PFJetsCHSSoftDropMass"); // access to soft drop mass
       ithJet.CHSpruned_mass = iJet.userFloat("ak8PFJetsCHSPrunedMass");     // access to pruned mass
+
+      ithJet.pfBoostedDoubleSecondaryVertexAK8BJetTags =  iJet.bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags");// Double b-tag
 
       /*ithJet.puppi_pt = iJet.userFloat("ak8PFJetsPuppiValueMap:pt");
       ithJet.puppi_mass = iJet.userFloat("ak8PFJetsPuppiValueMap:mass");
