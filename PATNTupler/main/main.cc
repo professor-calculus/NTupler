@@ -145,7 +145,7 @@ int main(int argc, char** argv){
     muonBranch->SetAddress(&muonVector);
 
     TBranch* jetBranch = evtTree->GetBranch("fatjetCollection"); //load jet collection
-    jetBranch->SetAddress(&jetVector);
+    jetBranch->SetAddress(&fatjetVector);
 
     //TBranch* fatjetBranch = evtTree->GetBranch("fatjetCollection"); //load jet collection
     //fatjetBranch->SetAddress(&fatjetVector);
@@ -168,16 +168,14 @@ int main(int argc, char** argv){
     //loop over tree
     for (unsigned int i = 0; i < numEvents; ++i){
 
-      //std::cout  << evtObj->runNum << "\t" << evtObj->evtNum << "\t" << evtObj->lumiSec << "\n";
+      std::cout  << "Event info: " << evtObj->runNum << "\t" << evtObj->evtNum << "\t" << evtObj->lumiSec << "\n";
 
       evtBranch->GetEntry(i); // set tree object for each event i
       jetBranch->GetEntry(i); // set tree object for each event i
  
-      std::vector<ran::NtJet>  ralJetVector(jetVector->begin(), jetVector->end());
-      for (const ran::NtJet& jet : ralJetVector){
-
-	//std::cout  << jet.pt() << "\n";
-	   	   
+      std::vector<ran::NtFatJet>  ralJetVector(fatjetVector->begin(), fatjetVector->end());
+      for (const ran::NtFatJet& jet : ralJetVector){
+	std::cout  << jet.pt() << "\t" << jet.et() << "\t" << jet.eta() << "\t" << jet.phi() << "\t" << jet.mass() << "\t" << jet.CHSsoftdrop_mass() << "\t" << jet.CHSpruned_mass() << "\t" << jet.pfBoostedDoubleSecondaryVertexAK8BJetTags() <<"\n";	   	   
       }//loop over jets
 	     
 
