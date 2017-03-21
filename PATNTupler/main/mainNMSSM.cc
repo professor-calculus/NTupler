@@ -143,6 +143,8 @@ private:
 	Double_t treeVar_fatJetB_softDropMass_;
 	Double_t treeVar_fatJetB_prunedMass_;
 
+	Float_t treeVar_ht_;
+
 
 public:
 	FatDoubleBJetPairTree(const std::string& treeName, const std::string& fileName) :
@@ -179,11 +181,12 @@ public:
 		mainAnaTree_->Branch("fatJetA_softDropMass", &treeVar_fatJetA_softDropMass_,   "fatJetA_softDropMass/D");
 		mainAnaTree_->Branch("fatJetB_softDropMass", &treeVar_fatJetB_softDropMass_,   "fatJetB_softDropMass/D");
 
+		mainAnaTree_->Branch("ht", &treeVar_ht_, "ht/F");
 	}
 
 	~FatDoubleBJetPairTree(){}
 
-	void fillTree(const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const ran::EventInfo& evtInfo, bool trigDecision)
+	void fillTree(const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, float ht, bool trigDecision)
 	{
 		// FIXME : Fill in weights with actual values
         treeVar_weight_ = 1.0;
@@ -200,6 +203,7 @@ public:
 		// FIXME : Fill in nVtx with actual values
 		treeVar_nVtx_  = 0;
 
+
 		treeVar_fatJetA_p4_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
 		treeVar_fatJetB_p4_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
 
@@ -214,6 +218,8 @@ public:
 
 		treeVar_fatJetA_softDropMass_ = fatJetA.CHSsoftdrop_mass();
 		treeVar_fatJetB_softDropMass_ = fatJetB.CHSsoftdrop_mass();
+
+		treeVar_ht_ = ht;
 
 		// And finally fill the tree ...
 		mainAnaTree_->Fill();
@@ -360,7 +366,7 @@ int main(int argc, char** argv){
       }
 
       if (fatJetVec.size() >= 2)
-      	doubleBFatJetPairTree.fillTree(fatJetVec.at(0), fatJetVec.at(1), *evtInfo, false);
+      	doubleBFatJetPairTree.fillTree(*evtInfo, fatJetVec.at(0), fatJetVec.at(1), ht, false);
 
       evtIdx++;
     }
