@@ -138,19 +138,33 @@ private:
 	Double_t treeVar_fatJetA_mass_;
 	Double_t treeVar_fatJetA_softDropMass_;
 	Double_t treeVar_fatJetA_prunedMass_;
+	Float_t treeVar_fatJetA_electronEnergyFraction_;
+	Float_t treeVar_fatJetA_muonEnergyFraction_;
+	Float_t treeVar_fatJetA_nSubjettinessTau1_;
+	Float_t treeVar_fatJetA_nSubjettinessTau2_;
 	Double_t treeVar_fatJetB_doubleBtagDiscrim_;
 	Double_t treeVar_fatJetB_mass_;
 	Double_t treeVar_fatJetB_softDropMass_;
 	Double_t treeVar_fatJetB_prunedMass_;
+	Float_t treeVar_fatJetB_electronEnergyFraction_;
+	Float_t treeVar_fatJetB_muonEnergyFraction_;
+	Float_t treeVar_fatJetB_nSubjettinessTau1_;
+	Float_t treeVar_fatJetB_nSubjettinessTau2_;
 
 	Float_t treeVar_ht_;
+
+	UInt_t treeVar_nrSlimJets_;
+	TLorentzVector* treeVar_jetA_p4Ptr_; TLorentzVector treeVar_jetA_p4_;
+	TLorentzVector* treeVar_jetB_p4Ptr_; TLorentzVector treeVar_jetB_p4_;
 
 
 public:
 	FatDoubleBJetPairTree(const std::string& treeName, const std::string& fileName) :
 		TreeHandlerBase(treeName, "Tree of double-b fat jet candidates ("+treeName+")", fileName),
 		treeVar_fatJetA_p4Ptr_( &treeVar_fatJetA_p4_ ),
-		treeVar_fatJetB_p4Ptr_( &treeVar_fatJetB_p4_ )
+		treeVar_fatJetB_p4Ptr_( &treeVar_fatJetB_p4_ ),
+		treeVar_jetA_p4Ptr_( &treeVar_jetA_p4_ ),
+		treeVar_jetB_p4Ptr_( &treeVar_jetB_p4_ )
 	{
 		// Setting up branches for event-level info ...
 		mainAnaTree_->Branch("weight",     &treeVar_weight_,     "weight/D");
@@ -181,12 +195,27 @@ public:
 		mainAnaTree_->Branch("fatJetA_softDropMass", &treeVar_fatJetA_softDropMass_,   "fatJetA_softDropMass/D");
 		mainAnaTree_->Branch("fatJetB_softDropMass", &treeVar_fatJetB_softDropMass_,   "fatJetB_softDropMass/D");
 
+		mainAnaTree_->Branch("fatJetA_electronEnergyFraction", &treeVar_fatJetA_electronEnergyFraction_, "fatJetA_electronEnergyFraction/F");
+		mainAnaTree_->Branch("fatJetB_electronEnergyFraction", &treeVar_fatJetB_electronEnergyFraction_, "fatJetB_electronEnergyFraction/F");
+
+		mainAnaTree_->Branch("fatJetA_muonEnergyFraction", &treeVar_fatJetA_muonEnergyFraction_, "fatJetA_muonEnergyFraction/F");
+		mainAnaTree_->Branch("fatJetB_muonEnergyFraction", &treeVar_fatJetB_muonEnergyFraction_, "fatJetB_muonEnergyFraction/F");
+
+		mainAnaTree_->Branch("fatJetA_nSubjettinessTau1", &treeVar_fatJetA_nSubjettinessTau1_, "fatJetA_nSubjettinessTau1/F");
+		mainAnaTree_->Branch("fatJetA_nSubjettinessTau2", &treeVar_fatJetA_nSubjettinessTau2_, "fatJetA_nSubjettinessTau2/F");
+		mainAnaTree_->Branch("fatJetB_nSubjettinessTau1", &treeVar_fatJetB_nSubjettinessTau1_, "fatJetB_nSubjettinessTau1/F");
+		mainAnaTree_->Branch("fatJetB_nSubjettinessTau2", &treeVar_fatJetB_nSubjettinessTau2_, "fatJetB_nSubjettinessTau2/F");
+
 		mainAnaTree_->Branch("ht", &treeVar_ht_, "ht/F");
+
+		mainAnaTree_->Branch("nrSlimJets", &treeVar_nrSlimJets_, "nrSlimJets/i");
+		mainAnaTree_->Branch("slimJetA_p4", &treeVar_jetA_p4Ptr_);
+		mainAnaTree_->Branch("slimJetB_p4", &treeVar_jetB_p4Ptr_);
 	}
 
 	~FatDoubleBJetPairTree(){}
 
-	void fillTree(const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, float ht, bool trigDecision)
+	void fillTree(const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, float ht, const std::vector<ran::NtJet>& slimJets, bool trigDecision)
 	{
 		// FIXME : Fill in weights with actual values
         treeVar_weight_ = 1.0;
@@ -219,7 +248,28 @@ public:
 		treeVar_fatJetA_softDropMass_ = fatJetA.CHSsoftdrop_mass();
 		treeVar_fatJetB_softDropMass_ = fatJetB.CHSsoftdrop_mass();
 
+		treeVar_fatJetA_nSubjettinessTau1_ = fatJetA.NjettinessAK8_tau1();
+		treeVar_fatJetA_nSubjettinessTau2_ = fatJetA.NjettinessAK8_tau2();
+		treeVar_fatJetB_nSubjettinessTau1_ = fatJetB.NjettinessAK8_tau1();
+		treeVar_fatJetB_nSubjettinessTau2_ = fatJetB.NjettinessAK8_tau2();
+
+		treeVar_fatJetA_electronEnergyFraction_ = fatJetA.electronEnergyFraction();
+		treeVar_fatJetB_electronEnergyFraction_ = fatJetB.electronEnergyFraction();
+
+		treeVar_fatJetA_muonEnergyFraction_ = fatJetA.muonEnergyFraction();
+		treeVar_fatJetB_muonEnergyFraction_ = fatJetB.muonEnergyFraction();
+
 		treeVar_ht_ = ht;
+
+		treeVar_nrSlimJets_ = slimJets.size();
+		if (slimJets.size() > 0)
+			treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
+		else
+			treeVar_jetA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+		if (slimJets.size() > 1)
+			treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
+		else
+			treeVar_jetB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
 
 		// And finally fill the tree ...
 		mainAnaTree_->Fill();
@@ -344,6 +394,7 @@ int main(int argc, char** argv){
       const std::vector<ran::NtMuon> muonVec(muonBranchValue->begin(), muonBranchValue->end());
       const std::vector<ran::NtJet> jetVec(jetBranchValue->begin(), jetBranchValue->end());
       std::vector<ran::NtFatJet> fatJetVec(fatJetBranchValue->begin(), fatJetBranchValue->end());
+      // std::sort(fatJetVec.begin(), fatJetVec.end(), [](const ran::NtFatJet& a, const ran::NtFatJet& b) {return b.pt() < a.pt();} );
       std::sort(fatJetVec.begin(), fatJetVec.end(), [](const ran::NtFatJet& a, const ran::NtFatJet& b) {return b.pfBoostedDoubleSecondaryVertexAK8BJetTags() < a.pfBoostedDoubleSecondaryVertexAK8BJetTags();} );
 
 
@@ -365,8 +416,22 @@ int main(int argc, char** argv){
         // std::cout << "      double b-tag descriminator = " << fatJet.pfBoostedDoubleSecondaryVertexAK8BJetTags() << std::endl;
       }
 
-      if (fatJetVec.size() >= 2)
-      	doubleBFatJetPairTree.fillTree(*evtInfo, fatJetVec.at(0), fatJetVec.at(1), ht, false);
+      if (fatJetVec.size() >= 2) {
+        const ran::NtFatJet& fatJetA = fatJetVec.at(0);
+        const ran::NtFatJet& fatJetB = fatJetVec.at(1);
+
+        std::vector<ran::NtJet> slimJets;
+        for (const ran::NtJet& jet : jetVec) {
+          if (deltaR2(jet.eta(), jet.phi(), fatJetA.eta(), fatJetA.phi()) < (1.4 * 1.4))
+          	continue;
+          else if (deltaR2(jet.eta(), jet.phi(), fatJetB.eta(), fatJetB.phi()) < (1.4 * 1.4))
+          	continue;
+          slimJets.push_back(jet);
+      	}
+        std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
+
+      	doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, slimJets, false);
+      }
 
       evtIdx++;
     }
