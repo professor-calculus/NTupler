@@ -61,6 +61,7 @@ for idmod in my_id_modules:
 process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        isThisMC = cms.bool(True),
                                        #mcWeight = cms.double(MCWEIGHT_INSERTEDHERE),
+                                       containsLHE = cms.bool(True),
                                        lhe = cms.InputTag("externalLHEProducer"),
                                        ignoreTopInLheHtCalculation = cms.bool(True),
                                        heepId = cms.InputTag("heepId"),
