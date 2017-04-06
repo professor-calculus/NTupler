@@ -67,6 +67,10 @@
 #include "SHarper/HEEPAnalyzer/interface/HEEPEleSelector.h"
 #include "SHarper/HEEPAnalyzer/interface/HEEPEvent.h"
 
+//... for accessing generator information (GenEventInfoProduct & LHE)
+#include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
+#include "SimDataFormats/GeneratorProducts/interface/LHEEventProduct.h"
+
 //...for histograms creation
 #include "FWCore/ServiceRegistry/interface/Service.h"
 
@@ -110,6 +114,9 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       ///For reading the event information into the member variables...
       void ReadInEvtInfo(bool, const edm::Event&);
 
+      ///For reading the LHE information, and dumping it into ran::Event class ...
+      void ReadInLheInfo(const edm::Event&);
+
       ///For reading in the electron information, and dumping it into ran::Event class ...
       void ReadInElectrons(const edm::Event&);
   
@@ -130,6 +137,9 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       // ----------member data ---------------------------
 
       bool isMC_;
+      const bool inputContainsLHE_;
+      const bool ignoreTopInLheHtCalculation_;
+      edm::EDGetTokenT<LHEEventProduct> lheToken_;
       edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
       edm::EDGetTokenT<pat::MuonCollection> muonToken_;
       edm::EDGetTokenT<edm::View<reco::GsfElectron> > electronToken_;
@@ -155,6 +165,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       //Variables whose values will be stored as branches...
       //ran::Event* event_;
       ran::EventInfo evtInfo{};
+      float lheHT_;
       std::vector<ran::ElectronStruct>* electronCollection_;
       std::vector<ran::MuonStruct>* muonCollection_;
       std::vector<ran::JetStruct>* jetCollection_;
@@ -163,7 +174,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       std::vector<string>* triggerPaths_;
       std::vector<unsigned int>* recordedTriggers_;
       bool vBool_;
-           
+
       ran::TriggerPathToIndex* hltTriggers_;
 
 };
@@ -182,6 +193,9 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
 RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
    //now do what ever initialization is needed
     isMC_(iConfig.getParameter<bool>("isThisMC")),
+    inputContainsLHE_(iConfig.getParameter<bool>("containsLHE")),
+    ignoreTopInLheHtCalculation_(inputContainsLHE_ ? iConfig.getParameter<bool>("ignoreTopInLheHtCalculation") : false),
+    lheToken_(consumes<LHEEventProduct>(iConfig.getParameter<edm::InputTag>("lhe"))),
     vtxToken_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
     muonToken_(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
     electronToken_(consumes<edm::View<reco::GsfElectron> >(iConfig.getParameter<edm::InputTag>("electrons"))),
@@ -206,6 +220,9 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     //event_ = 0;	
     //EventDataTree->Branch("event","ran::Event", &event_, 64000, 1); // This line was taken from Jim's tupiliser
     EventDataTree->Branch("evtInfo","ran::EventInfo",&evtInfo);
+    if (inputContainsLHE_) {
+      EventDataTree->Branch("lheHT", &lheHT_, "lheHT/F");
+    }
     EventDataTree->Branch("electronCollection","std::vector<ran::ElectronStruct>", &electronCollection_, 64000, 1); 
     EventDataTree->Branch("muonCollection","std::vector<ran::MuonStruct>", &muonCollection_, 64000, 1); 
     EventDataTree->Branch("jetCollection","std::vector<ran::JetStruct>", &jetCollection_, 64000, 1);
@@ -258,6 +275,7 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
    //  std::cout << "Trigger i (int): " << int(recordedTriggers_->at(i)) << " \n";
    //}
 
+
    //if (triggerOfInterest || isMC_){
      electronCollection_ = new std::vector<ran::ElectronStruct>();
      muonCollection_ = new std::vector<ran::MuonStruct>();
@@ -270,6 +288,10 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
      //Reading in the event information...
      ReadInEvtInfo(vBool_, iEvent);     
+
+     // Read in LHE event product (if present)
+     if (inputContainsLHE_)
+       ReadInLheInfo(iEvent);
 
      //Read in muons
      ReadInMuons(iEvent);
@@ -386,9 +408,8 @@ void RALMiniAnalyzer::ResetEventByEventVariables(){
   	evtInfo.runNum = 0;
 	evtInfo.evtNum = 0;
 	evtInfo.lumiSec = 0;
-	
-  	
-	
+
+	lheHT_ = 0.0;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -441,6 +462,47 @@ void RALMiniAnalyzer::ReadInEvtInfo(bool beVerbose, const edm::Event& edmEventOb
       evtInfo.evtNum = edmEventObject.id().event(); 
 
 }
+
+
+void RALMiniAnalyzer::ReadInLheInfo(const edm::Event& iEvent)
+{
+  edm::Handle<LHEEventProduct> lheEventHandle;
+  iEvent.getByToken(lheToken_, lheEventHandle);
+
+  if( !(lheEventHandle.failedToGet()) ){
+
+    float ht = 0.0;
+    const lhef::HEPEUP eventInfo = lheEventHandle->hepeup();
+
+    // Now, loop over the particles in the LHE event ...
+    int numParticles = eventInfo.NUP;
+    for(int idx=0; idx<numParticles; idx++){
+      const int pdgId = eventInfo.IDUP.at(idx);
+      const int status = eventInfo.ISTUP.at(idx);
+      const std::pair<int, int> parents = eventInfo.MOTHUP.at(idx);
+      const int parent1pdgId = parents.first == 0 ? 0 : eventInfo.IDUP.at(parents.first - 1);
+      const int parent2pdgId = parents.second == 0 ? 0 : eventInfo.IDUP.at(parents.second - 1);
+      const double pT = sqrt(eventInfo.PUP.at(idx)[0]*eventInfo.PUP.at(idx)[0] + eventInfo.PUP.at(idx)[1]*eventInfo.PUP.at(idx)[1]);
+
+      // Calculating HT: Scalar sum of pT of ...
+      //   - quarks & gluons from the final state
+      //   - excluding particles that come from decay of top or W - at least for certain ttbar samples
+      // According to https://hypernews.cern.ch/HyperNews/CMS/get/generators/3367/1.html
+      if (status == 1 ) {
+        if (!ignoreTopInLheHtCalculation_)
+          ht += pT;
+        else if (((pdgId > 0 && pdgId < 6) || pdgId == 21) && parent1pdgId != 6 && parent2pdgId != 6 && parent1pdgId != 24 && parent2pdgId != 24
+                 && parent1pdgId != 23 && parent2pdgId != 23 && parent1pdgId != 25 && parent2pdgId != 25)
+          ht += pT;
+      }
+
+    } //END: for idx<numParticles
+    lheHT_ = ht;
+  }
+  else 
+    throw std::runtime_error("Could not read LHE information");
+}
+
 
 void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
 {
