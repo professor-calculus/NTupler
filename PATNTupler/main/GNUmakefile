@@ -43,6 +43,8 @@ nTupAnaNMSSM:     mainNMSSM.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJD
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 nTupAna:	main.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
+investigateEventSelectionCuts:	investigateEventSelectionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 %.o: 	%.cc %.hh
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 ${OBJDIR}/libRalParticle.so:	${OBJDIR}/JetStruct.o  ${OBJDIR}/FatJetStruct.o ${OBJDIR}/ElectronStruct.o ${OBJDIR}/MuonStruct.o ${OBJDIR}/MetStruct.o ${OBJDIR}/ParticleDict.o 
