@@ -27,6 +27,22 @@ using std::ofstream;
 
 
 
+/*
+Compilation:
+within main directory run
+$ gmake -j 8 <executableNameSetInGNUmakefile>
+
+Executing:
+./<executableNameSetInGNUmakefile> <outputRootFilename> <pathToListOfInputFiles> <runInstructions> <lumiJson>
+
+NB:
+runInstructions = "local" (for local runs)
+runInstructions = "batch" (for running on batch systems)
+the lumi json file does not need to be included
+*/
+
+
+
 namespace tsw {
 
 /*!
@@ -284,6 +300,7 @@ public:
 
 
 
+
 //Functor for ordering leptons by pt
 struct compareElectronPt{
 	bool operator()(std::vector<ran::NtElectron>::const_iterator lhs, std::vector<ran::NtElectron>::const_iterator rhs){
@@ -309,49 +326,111 @@ inline bool does_file_exist (const std::string& name) {
 	return (stat (name.c_str(), &buffer) == 0); 
 }
 
+std::string getOutputDirFromOutputFile(std::string outputFile)
+{
+    std::string outputDirectory = outputFile;
+    
+    // strip the output directory from the outputfile path
+    std::string forwardSlash = "/";
+    for (size_t c = outputFile.size()-1; c >= 0; --c){
+        if (outputFile[c] == forwardSlash[0]){
+            outputDirectory = outputFile.substr(0, c+1);
+            break;
+        }
+    }
+    return outputDirectory;
+}
+
+
 
 
 
 int main(int argc, char** argv){
 
-	//OK, parse the command line in an very elementary way`
-	//read in from command line
-	if ( (argc < 3) || (argc > 4) ){
-		std::cout << "Need to provide at least two arguments eg.\n";
-		std::cout << argv[0] << " <output.root> <list of files> <lumi json>\n";
-		return -1;
-	}
+    ///////////////////////////////////////////////////
+	// Set Run Parameters
+    unsigned int outputEvery = 20000;
+    ///////////////////////////////////////////////////
 
-	const std::string outputFilePath = argv[1];
+    // Initial setup from command line inputs /////////
+    if (argc < 4 || argc > 5){
+        std::cout << "Provided wrong number of arguments, the format should be:" << std::endl;
+        std::cout << argv[0] << " <outputRootFilename> <pathToListOfInputFiles> <runInstructionString> <lumiJson>(optional)" << std::endl;
+        std::cout << "Exiting..." << std::endl;
+        return -1;
+    }
 
-	// Does the file containing the list of input files exist?
-	if (!does_file_exist(string(argv[2]))){
-		std::cout << "File "+string(argv[2])+" does not exist\n";
-	    return -1;
-	}
+    char* outputRootFile = argv[1];
 
-	bool isMC(true);
-	std::string jsonFile;
-	if (argc == 4){
-		isMC = false;
-		isMC = isMC;
-		jsonFile = string(argv[3]);
-		//exit if the json file does not exist
-		if (!does_file_exist(jsonFile)){
-			std::cout << "File "+jsonFile+" does not exist\n";
-			return -1;
-		}
-	}
- 
-	// Setup for main analysis - read list of input files
-	tsw::FatDoubleBJetPairTree doubleBFatJetPairTree("doubleBFatJetPairTree", outputFilePath);
+    // Determine whether we are running locally or on batch system
+    bool batchMode;
+    std::string runInstructions(argv[3]);
+    if (runInstructions == "local") batchMode = false;
+    else if (runInstructions == "batch") batchMode = true;
+    else {
+        std::cout << "You have not provided a correct input for the runInstructions" << std::endl;
+        std::cout << "Your options are 'local' or 'batch'" << std::endl;
+        std::cout << "Exiting..." << std::endl;
+        return -1;
+    }
+
+    // Check that the .list file exists
+    std::string listFilename(argv[2]);
+    if (!does_file_exist(listFilename)){
+        std::cout << "File provided containing list of input files,  " + listFilename + "  does not exist" << std::endl;
+        std::cout << "Exiting..." << std::endl;
+        return -1;
+    }
+
+    if (batchMode == false){
+        // Check the directory of the outputRootFile does not yet exist
+        // Then make this directory
+        // Then copy the code used into the same directory (this could be out of sync if you edit after compilation)
+        // Then copy the list of input files used into the same directory
+        std::string outputDirectory = getOutputDirFromOutputFile(outputRootFile);
+        bool makeDir = !(std::system(Form("mkdir %s",outputDirectory.c_str())));
+        if (makeDir == false){
+            std::cout << "The chosen output directory cannot be created, it may already exist or not have a parent" << std::endl;
+            std::cout << "Exiting..." << std::endl;
+            return -1;
+        }
+        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/main/mainNMSSM.cc %s",outputDirectory.c_str()));
+        std::system(Form("cp %s %s",listFilename.c_str(),outputDirectory.c_str()));
+    }
+
+    // Get jsonFile info if it is provided (do so when running on data)
+    bool isMC(true);
+    std::string jsonFile;
+    if (argc == 5){
+        isMC = false;
+        isMC = isMC;
+        jsonFile = string(argv[4]);
+        // exit if the json file does not exist
+        if (!does_file_exist(jsonFile)){
+            std::cout << "Json file,  " + jsonFile + "  does not exist" << std::endl;
+            std::cout << "Exiting..." << std::endl;
+            return -1;
+        }
+    }
+    // GoodLumiChecker glc(jsonFile); //object to check if event passed certification
+
+
+	ifstream totalFileCount(argv[2]);
+	unsigned int numberOfFiles = 0;
+	std::string line;
+	while (getline(totalFileCount, line)) numberOfFiles++;
+
+	// Setup for main analysis - read list of input files 
+	tsw::FatDoubleBJetPairTree doubleBFatJetPairTree("doubleBFatJetPairTree", outputRootFile);
 	std::cout << "Reading file list: " << argv[2] << "\n";
 	ifstream inputFiles(argv[2]);
-
 	size_t evtIdx = 0;
-	string inputFilePath;
+	std::string inputFilePath;
+
+	unsigned int fileCount = 0;
 	while (getline(inputFiles, inputFilePath)){
-		
+
+		fileCount++;
 		// Set up TTreeReader for this input file
 		std::cout << std::endl << " *** NEW INPUT FILE: " << inputFilePath << std::endl;
 		TFile* inputFile = TFile::Open(inputFilePath.c_str());
@@ -462,6 +541,11 @@ int main(int argc, char** argv){
 
 				// doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, *lheHTValue, slimJets, false);
 				doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, lheHT, slimJets, false); 	
+			}
+			// event counter
+            if (outputEvery!=0 ? (evtIdx > 0 && evtIdx % outputEvery == 0) : false){
+				std::cout << "  File " << fileCount << " of " << numberOfFiles;
+				std::cout << ": processing event: " << evtIdx << std::endl;
 			}
 			fileEvtIdx++;
 			evtIdx++;
