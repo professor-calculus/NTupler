@@ -152,6 +152,7 @@ private:
 	Float_t treeVar_fatJetB_nSubjettinessTau2_;
 
 	Float_t treeVar_ht_;
+	Float_t treeVar_lheHT_;
 
 	UInt_t treeVar_nrSlimJets_;
 	TLorentzVector* treeVar_jetA_p4Ptr_; TLorentzVector treeVar_jetA_p4_;
@@ -166,6 +167,7 @@ public:
 		treeVar_jetA_p4Ptr_( &treeVar_jetA_p4_ ),
 		treeVar_jetB_p4Ptr_( &treeVar_jetB_p4_ )
 	{
+std::cout << "debug 2" << std::endl;
 		// Setting up branches for event-level info ...
 		mainAnaTree_->Branch("weight",     &treeVar_weight_,     "weight/D");
 		mainAnaTree_->Branch("genWeight",  &treeVar_genWeight_,  "genWeight/D");
@@ -175,14 +177,14 @@ public:
 		mainAnaTree_->Branch("run",    &treeVar_runNum_,   "run/i");
 		mainAnaTree_->Branch("lumi",   &treeVar_lumiSec_,   "lumi/i");
 		mainAnaTree_->Branch("evtNum", &treeVar_evtNum_,   "evtNum/i");
-
+std::cout << "debug 2p1" << std::endl;
 		mainAnaTree_->Branch("trgDecision", &treeVar_trgDecision_, "trgDecision/O");
 		mainAnaTree_->Branch("nVtx", &treeVar_nVtx_, "nVtx/i");
 
         // Setting up fat jet branches
 		mainAnaTree_->Branch("fatJetA_p4", &treeVar_fatJetA_p4Ptr_);
 		mainAnaTree_->Branch("fatJetB_p4", &treeVar_fatJetB_p4Ptr_);
-
+std::cout << "debug 2p2" << std::endl;
 		mainAnaTree_->Branch("fatJetA_doubleBtagDiscrim", &treeVar_fatJetA_doubleBtagDiscrim_,   "fatJetA_doubleBtagDiscrim/D");
 		mainAnaTree_->Branch("fatJetB_doubleBtagDiscrim", &treeVar_fatJetB_doubleBtagDiscrim_,   "fatJetB_doubleBtagDiscrim/D");
 
@@ -194,7 +196,7 @@ public:
 
 		mainAnaTree_->Branch("fatJetA_softDropMass", &treeVar_fatJetA_softDropMass_,   "fatJetA_softDropMass/D");
 		mainAnaTree_->Branch("fatJetB_softDropMass", &treeVar_fatJetB_softDropMass_,   "fatJetB_softDropMass/D");
-
+std::cout << "debug 2p3" << std::endl;
 		mainAnaTree_->Branch("fatJetA_electronEnergyFraction", &treeVar_fatJetA_electronEnergyFraction_, "fatJetA_electronEnergyFraction/F");
 		mainAnaTree_->Branch("fatJetB_electronEnergyFraction", &treeVar_fatJetB_electronEnergyFraction_, "fatJetB_electronEnergyFraction/F");
 
@@ -205,9 +207,10 @@ public:
 		mainAnaTree_->Branch("fatJetA_nSubjettinessTau2", &treeVar_fatJetA_nSubjettinessTau2_, "fatJetA_nSubjettinessTau2/F");
 		mainAnaTree_->Branch("fatJetB_nSubjettinessTau1", &treeVar_fatJetB_nSubjettinessTau1_, "fatJetB_nSubjettinessTau1/F");
 		mainAnaTree_->Branch("fatJetB_nSubjettinessTau2", &treeVar_fatJetB_nSubjettinessTau2_, "fatJetB_nSubjettinessTau2/F");
-
+std::cout << "debug 3" << std::endl;
 		mainAnaTree_->Branch("ht", &treeVar_ht_, "ht/F");
-
+		mainAnaTree_->Branch("lheHT", &treeVar_lheHT_, "lheHT/F");		
+std::cout << "debug 4" << std::endl;
 		mainAnaTree_->Branch("nrSlimJets", &treeVar_nrSlimJets_, "nrSlimJets/i");
 		mainAnaTree_->Branch("slimJetA_p4", &treeVar_jetA_p4Ptr_);
 		mainAnaTree_->Branch("slimJetB_p4", &treeVar_jetB_p4Ptr_);
@@ -215,7 +218,7 @@ public:
 
 	~FatDoubleBJetPairTree(){}
 
-	void fillTree(const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, float ht, const std::vector<ran::NtJet>& slimJets, bool trigDecision)
+	void fillTree(const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, float ht, float lheHT, const std::vector<ran::NtJet>& slimJets, bool trigDecision)
 	{
 		// FIXME : Fill in weights with actual values
         treeVar_weight_ = 1.0;
@@ -260,6 +263,7 @@ public:
 		treeVar_fatJetB_muonEnergyFraction_ = fatJetB.muonEnergyFraction();
 
 		treeVar_ht_ = ht;
+		treeVar_lheHT_ = lheHT;
 
 		treeVar_nrSlimJets_ = slimJets.size();
 		if (slimJets.size() > 0)
@@ -341,9 +345,10 @@ int main(int argc, char** argv){
 
  
       
-  // Setup for main analysis - read list of input files 
+  // Setup for main analysis - read list of input files
+  std::cout << "debug1 " << std::endl;
   tsw::FatDoubleBJetPairTree doubleBFatJetPairTree("doubleBFatJetPairTree", outputFilePath);
-
+	std::cout << "debugX " << std::endl;
   std::cout << "Reading file list: " << argv[2] << "\n";
   ifstream inputFiles(argv[2]);
 
@@ -383,6 +388,8 @@ int main(int argc, char** argv){
       std::cout << "ERROR setting up reader for jet branch (status = " << jetBranchValue.GetSetupStatus() << ")" << std::endl;
 //      return 1;
     }
+
+    TTreeReaderValue<double> lheHT(treeReader, "lheHT");
 
     // Loop over the events
     while (treeReader.Next()) {
@@ -430,7 +437,7 @@ int main(int argc, char** argv){
       	}
         std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 
-      	doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, slimJets, false);
+      	doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, *lheHT, slimJets, false);
       }
 
       evtIdx++;
