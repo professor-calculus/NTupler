@@ -334,6 +334,7 @@ int main(int argc, char** argv){
 	std::string jsonFile;
 	if (argc == 4){
 		isMC = false;
+		isMC = isMC;
 		jsonFile = string(argv[3]);
 		//exit if the json file does not exist
 		if (!does_file_exist(jsonFile)){
@@ -438,12 +439,19 @@ int main(int argc, char** argv){
 			// 	// std::cout << "      double b-tag descriminator = " << fatJet.pfBoostedDoubleSecondaryVertexAK8BJetTags() << std::endl;
 			// }
 
-			if (fatJetVec.size() >= 2) {
-				const ran::NtFatJet& fatJetA = fatJetVec.at(0);
-				const ran::NtFatJet& fatJetB = fatJetVec.at(1);
+			std::vector<ran::NtFatJet> centralFatJetVec; // get the *central* fatJets
+			for (const ran::NtFatJet& fatJet : fatJetVec) {
+				if (fabs(fatJet.eta()) < 2.4) centralFatJetVec.push_back(fatJet);
+			}			
+
+			if (centralFatJetVec.size() >= 2) {
+				const ran::NtFatJet& fatJetA = centralFatJetVec.at(0);
+				const ran::NtFatJet& fatJetB = centralFatJetVec.at(1);
 
 				std::vector<ran::NtJet> slimJets;
 				for (const ran::NtJet& jet : jetVec) {
+					if (fabs(jet.eta())>3.0)
+						continue;
 					if (deltaR2(jet.eta(), jet.phi(), fatJetA.eta(), fatJetA.phi()) < (1.4 * 1.4))
 						continue;
 					else if (deltaR2(jet.eta(), jet.phi(), fatJetB.eta(), fatJetB.phi()) < (1.4 * 1.4))
@@ -467,5 +475,5 @@ int main(int argc, char** argv){
 	doubleBFatJetPairTree.setEventCounter(evtIdx);
 	doubleBFatJetPairTree.saveToFile();
 
-	//return 0;
+	return 0;
 }
