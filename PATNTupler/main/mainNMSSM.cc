@@ -180,7 +180,7 @@ public:
 		mainAnaTree_->Branch("trgDecision", &treeVar_trgDecision_, "trgDecision/O");
 		mainAnaTree_->Branch("nVtx", &treeVar_nVtx_, "nVtx/i");
 
-        // Setting up fat jet branches
+		// Setting up fat jet branches
 		mainAnaTree_->Branch("fatJetA_p4", &treeVar_fatJetA_p4Ptr_);
 		mainAnaTree_->Branch("fatJetB_p4", &treeVar_fatJetB_p4Ptr_);
 
@@ -220,15 +220,15 @@ public:
 	void fillTree(const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, float ht, float lheHT, const std::vector<ran::NtJet>& slimJets, bool trigDecision)
 	{
 		// FIXME : Fill in weights with actual values
-        treeVar_weight_ = 1.0;
-        treeVar_genWeight_ = 1.0;
-        treeVar_puWeight_ = 1.0;
-//        treeVar_xsecWeight_ = 1.0;
+		treeVar_weight_ = 1.0;
+		treeVar_genWeight_ = 1.0;
+		treeVar_puWeight_ = 1.0;
+		// treeVar_xsecWeight_ = 1.0;
 
 
-        treeVar_runNum_ = evtInfo.runNum;
-        treeVar_lumiSec_ = evtInfo.lumiSec;
-        treeVar_evtNum_ = evtInfo.evtNum;
+		treeVar_runNum_ = evtInfo.runNum;
+		treeVar_lumiSec_ = evtInfo.lumiSec;
+		treeVar_evtNum_ = evtInfo.evtNum;
 
 		treeVar_trgDecision_ = trigDecision;
 		// FIXME : Fill in nVtx with actual values
@@ -286,27 +286,27 @@ public:
 
 //Functor for ordering leptons by pt
 struct compareElectronPt{
-  bool operator()(std::vector<ran::NtElectron>::const_iterator lhs, std::vector<ran::NtElectron>::const_iterator rhs){
-    return (lhs->pt() > rhs->pt()); //Sort highest pt first
-  }
+	bool operator()(std::vector<ran::NtElectron>::const_iterator lhs, std::vector<ran::NtElectron>::const_iterator rhs){
+		return (lhs->pt() > rhs->pt()); //Sort highest pt first
+	}
 };
 
 struct compareMuonPt{
-  bool operator()(const ran::NtMuon* lhs, const ran::NtMuon* rhs){
-    return (lhs->pt() > rhs->pt()); //Sort highest pt first
-  }
+	bool operator()(const ran::NtMuon* lhs, const ran::NtMuon* rhs){
+		return (lhs->pt() > rhs->pt()); //Sort highest pt first
+	}
 };
 
 template <typename T>
 struct compareParticlePt{
-  bool operator()(const T* lhs, const T* rhs){
-    return (lhs->pt() > rhs->pt()); //Sort highest pt first
-  }
+	bool operator()(const T* lhs, const T* rhs){
+		return (lhs->pt() > rhs->pt()); //Sort highest pt first
+	}
 };
 
 inline bool does_file_exist (const std::string& name) {
-  struct stat buffer;   
-  return (stat (name.c_str(), &buffer) == 0); 
+	struct stat buffer;   
+	return (stat (name.c_str(), &buffer) == 0); 
 }
 
 
@@ -314,167 +314,158 @@ inline bool does_file_exist (const std::string& name) {
 
 int main(int argc, char** argv){
 
-  //OK, parse the command line in an very elementary way`
-  //read in from command line
-  if ( (argc < 3) || (argc > 4) ){
-    std::cout << "Need to provide at least two arguments eg.\n";
-    std::cout << argv[0] << " <output.root> <list of files> <lumi json>\n";
-    return -1;
-  }
-
-  const std::string outputFilePath = argv[1];
-
-
-  // Does the file containing the list of input files exist?
-  if (!does_file_exist(string(argv[2]))){
-    std::cout << "File "+string(argv[2])+" does not exist\n";
-    return -1;
-  }
-
-  bool isMC(true);
-  std::string jsonFile;
-  if (argc == 4){
-    isMC = false;
-    isMC = isMC;
-    jsonFile = string(argv[3]);
-    //exit if the json file does not exist
-    if (!does_file_exist(jsonFile)){
-      std::cout << "File "+jsonFile+" does not exist\n";
-      return -1;
-    }
-  }
-
- 
-      
-  // Setup for main analysis - read list of input files
-  tsw::FatDoubleBJetPairTree doubleBFatJetPairTree("doubleBFatJetPairTree", outputFilePath);
-  std::cout << "Reading file list: " << argv[2] << "\n";
-  ifstream inputFiles(argv[2]);
-
-  size_t evtIdx = 0;
-  string inputFilePath;
-  while (getline(inputFiles, inputFilePath))
-  {
-    // Set up TTreeReader for this input file
-    std::cout << std::endl << " *** NEW INPUT FILE: " << inputFilePath << std::endl;
-    TFile* inputFile = TFile::Open(inputFilePath.c_str());
-
-
-    TTreeReader treeReader("demo/EventDataTree", inputFile);
-
-    TTreeReaderValue<ran::EventInfo> evtInfo(treeReader, "evtInfo");
-//     if (evtInfo.GetSetupStatus() < 0) {
-//       std::cout << "ERROR setting up reader for event info branch (status = " << evtInfo.GetSetupStatus() << ")" << std::endl;
-// //      return 1;
-//     }
-    TTreeReaderValue<std::vector<ran::ElectronStruct>> eleBranchValue(treeReader, "electronCollection");
-//     if (eleBranchValue.GetSetupStatus() < 0) {
-//       std::cout << "ERROR setting up reader for electronCollection branch (status = " << eleBranchValue.GetSetupStatus() << ")" << std::endl;
-// //      return 1;
-//     }
-    TTreeReaderValue<std::vector<ran::MuonStruct>> muonBranchValue(treeReader, "muonCollection");
-//     if (muonBranchValue.GetSetupStatus() < 0) {
-//       std::cout << "ERROR setting up reader for muonCollection branch (status = " << muonBranchValue.GetSetupStatus() << ")" << std::endl; 
-// //      return 1;
-//     }
-    TTreeReaderValue<std::vector<ran::FatJetStruct>> fatJetBranchValue(treeReader, "fatjetCollection");
-//     if (fatJetBranchValue.GetSetupStatus() < 0) {
-//       std::cout << "ERROR setting up reader for fat jet branch (status = " << fatJetBranchValue.GetSetupStatus() << ")" << std::endl; 
-// //      return 1;
-//     }
-
-    TTreeReaderValue<std::vector<ran::JetStruct>> jetBranchValue(treeReader, "jetCollection");
-//     if (jetBranchValue.GetSetupStatus() < 0) {
-//       std::cout << "ERROR setting up reader for jet branch (status = " << jetBranchValue.GetSetupStatus() << ")" << std::endl;
-// //      return 1;
-//     }
-
-// Fails if the ntuple doesn't have the lheHT branch
-//     TTreeReaderValue<float> lheHTValue(treeReader, "lheHT");
-// //     if (lheHTValue.GetSetupStatus() < 0) {
-// //       std::cout << "ERROR setting up reader for lheHT branch (status = " << lheHTValue.GetSetupStatus() << ")" << std::endl;
-// // //      return 1;
-// //     }
-
-	TTree * T = (TTree*)inputFile->Get("demo/EventDataTree");
-	float lheHT = -1.0;
-	bool doesNtupleHaveLheHt;
-	T->SetBranchAddress("lheHT", &lheHT);
-    if (T->GetBranch("lheHT")) doesNtupleHaveLheHt = true;
-	else{
-		doesNtupleHaveLheHt = false;
-		std::cout << "NB: no lheHT info in the ntuple, will fill flat tree with default of lheHT = -1" << std::endl;
+	//OK, parse the command line in an very elementary way`
+	//read in from command line
+	if ( (argc < 3) || (argc > 4) ){
+		std::cout << "Need to provide at least two arguments eg.\n";
+		std::cout << argv[0] << " <output.root> <list of files> <lumi json>\n";
+		return -1;
 	}
 
+	const std::string outputFilePath = argv[1];
+
+	// Does the file containing the list of input files exist?
+	if (!does_file_exist(string(argv[2]))){
+		std::cout << "File "+string(argv[2])+" does not exist\n";
+	    return -1;
+	}
+
+	bool isMC(true);
+	std::string jsonFile;
+	if (argc == 4){
+		isMC = false;
+		jsonFile = string(argv[3]);
+		//exit if the json file does not exist
+		if (!does_file_exist(jsonFile)){
+			std::cout << "File "+jsonFile+" does not exist\n";
+			return -1;
+		}
+	}
+ 
+	// Setup for main analysis - read list of input files
+	tsw::FatDoubleBJetPairTree doubleBFatJetPairTree("doubleBFatJetPairTree", outputFilePath);
+	std::cout << "Reading file list: " << argv[2] << "\n";
+	ifstream inputFiles(argv[2]);
+
+	size_t evtIdx = 0;
+	string inputFilePath;
+	while (getline(inputFiles, inputFilePath)){
+		
+		// Set up TTreeReader for this input file
+		std::cout << std::endl << " *** NEW INPUT FILE: " << inputFilePath << std::endl;
+		TFile* inputFile = TFile::Open(inputFilePath.c_str());
+		TTreeReader treeReader("demo/EventDataTree", inputFile);
+
+		TTreeReaderValue<ran::EventInfo> evtInfo(treeReader, "evtInfo");
+		// if (evtInfo.GetSetupStatus() < 0) {
+			// std::cout << "ERROR setting up reader for event info branch (status = " << evtInfo.GetSetupStatus() << ")" << std::endl;
+			// return 1;
+		// }
+		TTreeReaderValue<std::vector<ran::ElectronStruct>> eleBranchValue(treeReader, "electronCollection");
+		// if (eleBranchValue.GetSetupStatus() < 0) {
+			// std::cout << "ERROR setting up reader for electronCollection branch (status = " << eleBranchValue.GetSetupStatus() << ")" << std::endl;
+			// return 1;
+		// }
+		TTreeReaderValue<std::vector<ran::MuonStruct>> muonBranchValue(treeReader, "muonCollection");
+		// if (muonBranchValue.GetSetupStatus() < 0) {
+			// std::cout << "ERROR setting up reader for muonCollection branch (status = " << muonBranchValue.GetSetupStatus() << ")" << std::endl; 
+			// return 1;
+		// }
+		TTreeReaderValue<std::vector<ran::FatJetStruct>> fatJetBranchValue(treeReader, "fatjetCollection");
+		// if (fatJetBranchValue.GetSetupStatus() < 0) {
+			// std::cout << "ERROR setting up reader for fat jet branch (status = " << fatJetBranchValue.GetSetupStatus() << ")" << std::endl; 
+			// return 1;
+		// }
+		TTreeReaderValue<std::vector<ran::JetStruct>> jetBranchValue(treeReader, "jetCollection");
+		// if (jetBranchValue.GetSetupStatus() < 0) {
+			// std::cout << "ERROR setting up reader for jet branch (status = " << jetBranchValue.GetSetupStatus() << ")" << std::endl;
+			// return 1;
+		// }
+
+		// // Fails if the ntuple doesn't have the lheHT branch
+		// TTreeReaderValue<float> lheHTValue(treeReader, "lheHT");
+		// if (lheHTValue.GetSetupStatus() < 0) {
+		// 	std::cout << "ERROR setting up reader for lheHT branch (status = " << lheHTValue.GetSetupStatus() << ")" << std::endl;
+		// 	return 1;
+		// }
+		TTree * T = (TTree*)inputFile->Get("demo/EventDataTree");
+		float lheHT = -1.0;
+		bool doesNtupleHaveLheHt;
+		T->SetBranchAddress("lheHT", &lheHT);
+		if (T->GetBranch("lheHT")) doesNtupleHaveLheHt = true;
+		else{
+			doesNtupleHaveLheHt = false;
+			std::cout << "NB: no lheHT info in the ntuple, will fill flat tree with default of lheHT = -1" << std::endl;
+		}
 
 
-    // Loop over the events
-    while (treeReader.Next()) {
+		// Loop over the events
+		unsigned int fileEvtIdx = 0;
+		while (treeReader.Next()) {
 
-      // std::cout << std::endl << std::endl << "Event " << evtIdx << std::endl;
-      // std::cout << std::endl << "(run " << evtInfo->runNum << ", lumi sec" << evtInfo->lumiSec << ", event no " << evtInfo->evtNum << ")" << std::endl;
+			// std::cout << std::endl << std::endl << "Event " << evtIdx << std::endl;
+			// std::cout << std::endl << "(run " << evtInfo->runNum << ", lumi sec" << evtInfo->lumiSec << ", event no " << evtInfo->evtNum << ")" << std::endl;
 
-      const std::vector<ran::NtElectron> electronVec(eleBranchValue->begin(), eleBranchValue->end());
-      const std::vector<ran::NtMuon> muonVec(muonBranchValue->begin(), muonBranchValue->end());
-      const std::vector<ran::NtJet> jetVec(jetBranchValue->begin(), jetBranchValue->end());
-      std::vector<ran::NtFatJet> fatJetVec(fatJetBranchValue->begin(), fatJetBranchValue->end());
-      // std::sort(fatJetVec.begin(), fatJetVec.end(), [](const ran::NtFatJet& a, const ran::NtFatJet& b) {return b.pt() < a.pt();} );
-      std::sort(fatJetVec.begin(), fatJetVec.end(), [](const ran::NtFatJet& a, const ran::NtFatJet& b) {return b.pfBoostedDoubleSecondaryVertexAK8BJetTags() < a.pfBoostedDoubleSecondaryVertexAK8BJetTags();} );
+			const std::vector<ran::NtElectron> electronVec(eleBranchValue->begin(), eleBranchValue->end());
+			const std::vector<ran::NtMuon> muonVec(muonBranchValue->begin(), muonBranchValue->end());
+			const std::vector<ran::NtJet> jetVec(jetBranchValue->begin(), jetBranchValue->end());
+			std::vector<ran::NtFatJet> fatJetVec(fatJetBranchValue->begin(), fatJetBranchValue->end());
+			// std::sort(fatJetVec.begin(), fatJetVec.end(), [](const ran::NtFatJet& a, const ran::NtFatJet& b) {return b.pt() < a.pt();} );
+			std::sort(fatJetVec.begin(), fatJetVec.end(), [](const ran::NtFatJet& a, const ran::NtFatJet& b) {return b.pfBoostedDoubleSecondaryVertexAK8BJetTags() < a.pfBoostedDoubleSecondaryVertexAK8BJetTags();} );
 
-      if (doesNtupleHaveLheHt) T->GetEntry(evtIdx);
-      // // test the GetEntry method runs on the same events
-      // T->GetEntry(evtIdx);
-      // std::cout << "from the TTreeReader method: "<< *lheHTValue << std::endl;
-      // std::cout << "from the GetEntry method: "<< lheHT << std::endl;
-      // std::cout << std::endl;
+			if (doesNtupleHaveLheHt) T->GetEntry(fileEvtIdx);
+			// // test the GetEntry method runs on the same events
+			// T->GetEntry(fileEvtIdx);
+			// std::cout << "from the TTreeReader method: "<< *lheHTValue << std::endl;
+			// std::cout << "from the GetEntry method: "<< lheHT << std::endl;
+			// std::cout << std::endl;
+			
+			// std::cout << "   " << jetVec.size() << " jets" << std::endl;
+			// HT calculation: Only consider jets with eta < 3.0, pt > 40.0
+			double ht = 0.0;
+			for (const ran::NtJet& jet : jetVec) {
+				// std::cout << "   -> pT=" << jet.pt() << "\tET=" << jet.et() << "\teta=" << jet.eta() << "\tphi=" << jet.phi() << std::endl;
+				// std::cout << "      mass=" << jet.mass() << std::endl;
+				if ( (jet.pt() >= 40.0) && (jet.eta() <= 3.0) )
+				ht += jet.pt();
+			}
+			// std::cout << "   HT = " << ht << std::endl;
 
-      // std::cout << "   " << jetVec.size() << " jets" << std::endl;
-      // HT calculation: Only consider jets with eta < 3.0, pt > 40.0
-      double ht = 0.0;
-      for (const ran::NtJet& jet : jetVec) {
-        // std::cout << "   -> pT=" << jet.pt() << "\tET=" << jet.et() << "\teta=" << jet.eta() << "\tphi=" << jet.phi() << std::endl;
-        // std::cout << "      mass=" << jet.mass() << std::endl;
-        if ( (jet.pt() >= 40.0) && (jet.eta() <= 3.0) )
-          ht += jet.pt();
-      }
-      // std::cout << "   HT = " << ht << std::endl;
+			// std::cout << "   " << fatJetVec.size() << " fat jets" << std::endl;
+			// for (const ran::NtFatJet& fatJet : fatJetVec) {
+			// 	// std::cout << "   -> pT=" << fatJet.pt() << "\tET=" << fatJet.et() << "\teta=" << fatJet.eta() << "\tphi=" << fatJet.phi() << std::endl;
+			// 	// std::cout << "      masses: " << fatJet.mass() << ", " << fatJet.CHSsoftdrop_mass() << ", " << fatJet.CHSpruned_mass() << std::endl;
+			// 	// std::cout << "      double b-tag descriminator = " << fatJet.pfBoostedDoubleSecondaryVertexAK8BJetTags() << std::endl;
+			// }
 
-      // std::cout << "   " << fatJetVec.size() << " fat jets" << std::endl;
-      // for (const ran::NtFatJet& fatJet : fatJetVec) {
-      //   // std::cout << "   -> pT=" << fatJet.pt() << "\tET=" << fatJet.et() << "\teta=" << fatJet.eta() << "\tphi=" << fatJet.phi() << std::endl;
-      //   // std::cout << "      masses: " << fatJet.mass() << ", " << fatJet.CHSsoftdrop_mass() << ", " << fatJet.CHSpruned_mass() << std::endl;
-      //   // std::cout << "      double b-tag descriminator = " << fatJet.pfBoostedDoubleSecondaryVertexAK8BJetTags() << std::endl;
-      // }
+			if (fatJetVec.size() >= 2) {
+				const ran::NtFatJet& fatJetA = fatJetVec.at(0);
+				const ran::NtFatJet& fatJetB = fatJetVec.at(1);
 
-      if (fatJetVec.size() >= 2) {
-        const ran::NtFatJet& fatJetA = fatJetVec.at(0);
-        const ran::NtFatJet& fatJetB = fatJetVec.at(1);
+				std::vector<ran::NtJet> slimJets;
+				for (const ran::NtJet& jet : jetVec) {
+					if (deltaR2(jet.eta(), jet.phi(), fatJetA.eta(), fatJetA.phi()) < (1.4 * 1.4))
+						continue;
+					else if (deltaR2(jet.eta(), jet.phi(), fatJetB.eta(), fatJetB.phi()) < (1.4 * 1.4))
+						continue;
+					slimJets.push_back(jet);
+				}
+				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 
-        std::vector<ran::NtJet> slimJets;
-        for (const ran::NtJet& jet : jetVec) {
-          if (deltaR2(jet.eta(), jet.phi(), fatJetA.eta(), fatJetA.phi()) < (1.4 * 1.4))
-          	continue;
-          else if (deltaR2(jet.eta(), jet.phi(), fatJetB.eta(), fatJetB.phi()) < (1.4 * 1.4))
-          	continue;
-          slimJets.push_back(jet);
-      	}
-        std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
+				// doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, *lheHTValue, slimJets, false);
+				doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, lheHT, slimJets, false); 	
+			}
+			fileEvtIdx++;
+			evtIdx++;
+		}
 
-        // doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, *lheHTValue, slimJets, false);
-      	doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, lheHT, slimJets, false);
-      	
-      }
+		std::cout << "Out of the event loop for file '" << inputFilePath << "'" << std::endl;
+	}
 
-      evtIdx++;
-    }
+	std::cout << "Finished reading all input files now; processed " << evtIdx << " events in total" << std::endl;
 
-    std::cout << "Out of the event loop for file '" << inputFilePath << "'" << std::endl;
-  }
+	doubleBFatJetPairTree.setEventCounter(evtIdx);
+	doubleBFatJetPairTree.saveToFile();
 
-  std::cout << "Finished reading all input files now; processed " << evtIdx << " events in total" << std::endl;
-
-  doubleBFatJetPairTree.setEventCounter(evtIdx);
-  doubleBFatJetPairTree.saveToFile();
-
-  //return 0;
+	//return 0;
 }
