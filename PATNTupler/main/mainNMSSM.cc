@@ -419,7 +419,7 @@ int main(int argc, char** argv){
     }
     // GoodLumiChecker glc(jsonFile); //object to check if event passed certification
 
-
+    // find number of files that we are running over
 	ifstream totalFileCount(argv[2]);
 	unsigned int numberOfFiles = 0;
 	std::string line;
@@ -431,7 +431,6 @@ int main(int argc, char** argv){
 	ifstream inputFiles(argv[2]);
 	size_t evtIdx = 0;
 	std::string inputFilePath;
-
 	unsigned int fileCount = 0;
 	while (getline(inputFiles, inputFilePath)){
 
