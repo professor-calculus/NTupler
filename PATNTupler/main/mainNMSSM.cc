@@ -328,11 +328,11 @@ inline bool does_file_exist (const std::string& name) {
 
 std::string getOutputDirFromOutputFile(std::string outputFile)
 {
-    std::string outputDirectory = outputFile;
+    std::string outputDirectory = "DID_NOT_PROVIDE_OUTPUT_DIR";
     
     // strip the output directory from the outputfile path
     std::string forwardSlash = "/";
-    for (size_t c = outputFile.size()-1; c >= 0; --c){
+    for (size_t c = outputFile.size()-1; c > 0; --c){
         if (outputFile[c] == forwardSlash[0]){
             outputDirectory = outputFile.substr(0, c+1);
             break;
@@ -388,6 +388,11 @@ int main(int argc, char** argv){
         // Then copy the code used into the same directory (this could be out of sync if you edit after compilation)
         // Then copy the list of input files used into the same directory
         std::string outputDirectory = getOutputDirFromOutputFile(outputRootFile);
+        if (outputDirectory == "DID_NOT_PROVIDE_OUTPUT_DIR"){
+			std::cout << "Did not provide a new directory for the output file" << std::endl;
+            std::cout << "Exiting..." << std::endl;
+            return -1;        	
+        }
         bool makeDir = !(std::system(Form("mkdir %s",outputDirectory.c_str())));
         if (makeDir == false){
             std::cout << "The chosen output directory cannot be created, it may already exist or not have a parent" << std::endl;
