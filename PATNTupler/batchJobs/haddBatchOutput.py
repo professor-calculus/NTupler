@@ -9,8 +9,8 @@ import os
 ###########################################################################################################
 ###########################################################################################################
 
-motherDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/output_InvestigateEventSelection/configuration_007/" # has to be the full path
-subDirs = "TT"; # will use dirs that match ls motherDir+subDirs
+motherDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees/" # has to be the full path
+subDirs = ""; # will use dirs that match motherDir+subDirs (subDirs only needs to be a subset of desired output)
 
 ###########################################################################################################
 ###########################################################################################################
