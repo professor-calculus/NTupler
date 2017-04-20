@@ -26,10 +26,10 @@ NGLIBS        += -lMinuit -lHtml -lTreePlayer -lEG
 GLIBS          = $(filter-out -lNew, $(NGLIBS))
 CLIBS       = -L$(CERNLIB) -lpacklib -lmathlib -lkernlib -lpawlib -lg2c -lnsl
 
-OBJDIR		= ../obj
-SRCDIR		= ../src
-INCDIR		= ../interface
-TMPDIR		= ../tmp
+OBJDIR		= ${PWD}/../obj
+SRCDIR		= ${PWD}/../src
+INCDIR		= ${PWD}/../interface
+TMPDIR		= ${PWD}/../tmp
 
 #vpath %.cc ../tmp
 #vpath %.hh ../include
@@ -46,6 +46,7 @@ nTupAna:	main.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiCh
 investigateEventSelectionCuts:	investigateEventSelectionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 %.o: 	%.cc %.hh
+	$(info generic.o target's commands)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 ${OBJDIR}/libRalParticle.so:	${OBJDIR}/JetStruct.o  ${OBJDIR}/FatJetStruct.o ${OBJDIR}/ElectronStruct.o ${OBJDIR}/MuonStruct.o ${OBJDIR}/MetStruct.o ${OBJDIR}/ParticleDict.o 
 	$(LD) $(SOFLAGS) -o $@ $^ $(GLIBS)	
@@ -61,4 +62,3 @@ ${TMPDIR}/ParticleDict.cc:	${INCDIR}/Particles.hh ${INCDIR}/ntpLinkDef.h
 
 clean:
 	rm -rf nTupAna main.o ${OBJDIR}/* ${TMPDIR}/*
-
