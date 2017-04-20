@@ -437,8 +437,9 @@ int main(int argc, char** argv){
 
 		fileCount++;
 		// Set up TTreeReader for this input file
-		std::cout << std::endl << " *** NEW INPUT FILE: " << inputFilePath << std::endl;
+		std::cout << std::endl << " *** NEW INPUT FILE: " << inputFilePath;
 		TFile* inputFile = TFile::Open(inputFilePath.c_str());
+		std::cout << "   [file has been loaded]" << std::endl;
 		TTreeReader treeReader("demo/EventDataTree", inputFile);
 
 		TTreeReaderValue<ran::EventInfo> evtInfo(treeReader, "evtInfo");
@@ -548,7 +549,7 @@ int main(int argc, char** argv){
 				doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, lheHT, slimJets, false); 	
 			}
 			// event counter
-            if (outputEvery!=0 ? (evtIdx > 0 && evtIdx % outputEvery == 0) : false){
+            if (outputEvery!=0 ? (evtIdx % outputEvery == 0) : false){
 				std::cout << "  File " << fileCount << " of " << numberOfFiles;
 				std::cout << ": processing event: " << evtIdx << std::endl;
 			}
