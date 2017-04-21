@@ -3,7 +3,7 @@
 import subprocess
 import os
 import sys
-
+import datetime
 
 # Instructions:
 # 1. Compile the code you wish to run
@@ -24,7 +24,7 @@ inputFileListPath = "/home/ppd/xap79297/CMSSW_8_0_21/src/NTupler/PATNTupler/file
 outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees/mH90p0_mSusy1600p0_ratio0p99_splitting0p1" # has to be the full path
 filesPerJob = 10
 jsonFile = ""
-logDirectory = "/opt/ppd/scratch/xap79297/jobLogs/flatTrees/"
+logDirectoryBase = "/opt/ppd/scratch/xap79297/jobLogs/flatTrees/"
 
 ###########################################################################################################
 ###########################################################################################################
@@ -37,8 +37,15 @@ logDirectory = "/opt/ppd/scratch/xap79297/jobLogs/flatTrees/"
 
 if outputDirectory[-1] == "/":
     outputDirectory = outputDirectory[:-1]
-if logDirectory[-1] == "/":
-    logDirectory = logDirectory[:-1]
+
+dataname = ""
+for iChar in range (len(outputDirectory)-1, 0, -1):
+    if outputDirectory[iChar] == "/":
+        dataname = outputDirectory[iChar+1:]
+        break
+dataname = dataname + "_" + '{:%Y_%m_%d-%H_%M_%S}'.format(datetime.datetime.now())
+logDirectory = os.path.join(logDirectoryBase,dataname)
+
 baseDir = os.environ['CMSSW_BASE']
 if len(baseDir) == 0:
     print "You are not in a CMSSW environment"
