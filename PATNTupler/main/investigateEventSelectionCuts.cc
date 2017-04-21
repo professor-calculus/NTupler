@@ -319,12 +319,12 @@ int main(){
     for (size_t iCut2 = 0; iCut2 < cut2_ak8Dbt.size(); ++iCut2){
         for (size_t iCut3 = 0; iCut3 < cut3_ak8Pt.size(); ++iCut3){
             for (size_t iCut4 = 0; iCut4 < cut4_ht.size(); ++iCut4){        
-                // for (size_t iCut5 = 0; iCut5 < cut5_ak4Pt.size(); ++iCut5){  // NB currently no ak4 info!!!
+                for (size_t iCut5 = 0; iCut5 < cut5_ak4Pt.size(); ++iCut5){
 
                     std::string labelsString = "ak8Dbt_" + cut2_ak8Dbt[iCut2][0] + cut2_ak8Dbt[iCut2][1] + "__";
                     labelsString += "ak8Pt_" + std::to_string(cut3_ak8Pt[iCut3]) + "__";
                     labelsString += "ht_" + std::to_string(cut4_ht[iCut4]) + "__";
-                    // labelsString += "ak4Pt_" + std::to_string(cut5_ak4Pt[iCut5][0]) + "n" + std::to_string(cut5_ak4Pt[iCut5][1]); // NB currently no ak4 info!!!
+                    labelsString += "ak4Pt_" + std::to_string(cut5_ak4Pt[iCut5][0]) + "n" + std::to_string(cut5_ak4Pt[iCut5][1]);
 
                     // std::vector<std::string> histoTagVec = {"fatJetA_prunedMass","fatJetA_softDropMass","fatJetB_prunedMass","fatJetB_softDropMass"};
                     std::vector<std::string> histoTagVec = {"fatJetA_softDropMass"}; // just focus on leading DBT AK8 jet to minimize plots
@@ -405,7 +405,7 @@ int main(){
                     table << "\n";                    
                     // *******************************
                     // *******************************
-                // } // closes loop through cut 5 states  // NB currently no ak4 info!!!
+                } // closes loop through cut 5 states
             } // closes loop through cut 4 states
         } // closes loop through cut 3 states
     } // closes loop through cut 2 states
@@ -445,13 +445,12 @@ void Histograms::CreateHistograms( std::vector<std::vector<std::string>> cut2_ak
     for (size_t iCut2 = 0; iCut2 < cut2_ak8Dbt.size(); ++iCut2){
         for (size_t iCut3 = 0; iCut3 < cut3_ak8Pt.size(); ++iCut3){
             for (size_t iCut4 = 0; iCut4 < cut4_ht.size(); ++iCut4){        
-                // for (size_t iCut5 = 0; iCut5 < cut5_ak4Pt.size(); ++iCut5){  // NB currently no ak4 info!!!
+                for (size_t iCut5 = 0; iCut5 < cut5_ak4Pt.size(); ++iCut5){
 
-                    // NB currently no ak4 info!!!
                     std::string labelsString = "ak8Dbt_" + cut2_ak8Dbt[iCut2][0] + cut2_ak8Dbt[iCut2][1] + "__";
                     labelsString += "ak8Pt_" + std::to_string(cut3_ak8Pt[iCut3]) + "__";
                     labelsString += "ht_" + std::to_string(cut4_ht[iCut4]) + "__";
-                    // labelsString += "ak4Pt_" + std::to_string(cut5_ak4Pt[iCut5][0]) + "n" + std::to_string(cut5_ak4Pt[iCut5][1]);  // NB currently no ak4 info!!!
+                    labelsString += "ak4Pt_" + std::to_string(cut5_ak4Pt[iCut5][0]) + "n" + std::to_string(cut5_ak4Pt[iCut5][1]);
                     // std::cout << labelsString << std::endl;
 
                     // histo names should match branches in the tree (important in the FillHistograms stage)
@@ -475,7 +474,7 @@ void Histograms::CreateHistograms( std::vector<std::vector<std::string>> cut2_ak
                     h_[Form("fatJetB_softDropMass__%s",labelsString.c_str())]->SetLineWidth(2);
                     h_[Form("fatJetB_softDropMass__%s",labelsString.c_str())]->SetLineColor(colour);     
 
-                // } // closes loop through cut 5 states  // NB currently no ak4 info!!!
+                } // closes loop through cut 5 states
             } // closes loop through cut 4 states
         } // closes loop through cut 3 states
     } // closes loop through cut 2 states
@@ -510,12 +509,12 @@ void Histograms::FillHistograms( std::vector<std::vector<std::string>> cut2_ak8D
         for (size_t iCut2 = 0; iCut2 < cut2_ak8Dbt.size(); ++iCut2){
             for (size_t iCut3 = 0; iCut3 < cut3_ak8Pt.size(); ++iCut3){
                 for (size_t iCut4 = 0; iCut4 < cut4_ht.size(); ++iCut4){        
-                    // for (size_t iCut5 = 0; iCut5 < cut5_ak4Pt.size(); ++iCut5){ // NB currently no ak4 info!!!
+                    for (size_t iCut5 = 0; iCut5 < cut5_ak4Pt.size(); ++iCut5){
                             
                         std::string labelsString = "ak8Dbt_" + cut2_ak8Dbt[iCut2][0] + cut2_ak8Dbt[iCut2][1] + "__";
                         labelsString += "ak8Pt_" + std::to_string(cut3_ak8Pt[iCut3]) + "__";
                         labelsString += "ht_" + std::to_string(cut4_ht[iCut4]) + "__";
-                        // labelsString += "ak4Pt_" + std::to_string(cut5_ak4Pt[iCut5][0]) + "n" + std::to_string(cut5_ak4Pt[iCut5][1]); // NB currently no ak4 info!!!
+                        labelsString += "ak4Pt_" + std::to_string(cut5_ak4Pt[iCut5][0]) + "n" + std::to_string(cut5_ak4Pt[iCut5][1]);
 
                         // std::vector<std::string> histoTagVec = {"fatJetA_prunedMass","fatJetA_softDropMass","fatJetB_prunedMass","fatJetB_softDropMass"};
                         std::vector<std::string> histoTagVec = {"fatJetA_softDropMass"};
@@ -525,11 +524,10 @@ void Histograms::FillHistograms( std::vector<std::vector<std::string>> cut2_ak8D
                             
                             // IMPORTANT NOTES
                             // 1. currently no ak4 info in the cuts!!!
-                            // 2. NEED TO HAVE THE CORRECT LHE.HT VARIABLE NAMES FROM THE FLAT TREES, not created yet
                             std::string drawStringA = Form("%s>>h", histoTag.c_str());
                             std::string drawStringB;                             
-                            if (dataInputElement.lheHtCut[0] == 1) drawStringB = Form("%f*(fatJetA_doubleBtagDiscrim>%f && fatJetB_doubleBtagDiscrim>%f && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>%d && lheHT>=%d && lheHT<%d)", eventWeighting, dbtNameToFloat(cut2_ak8Dbt[iCut2][0]), dbtNameToFloat(cut2_ak8Dbt[iCut2][1]), cut3_ak8Pt[iCut3], cut3_ak8Pt[iCut3], cut4_ht[iCut4], dataInputElement.lheHtCut[1], dataInputElement.lheHtCut[2]);
-                            else drawStringB = Form("%f*(fatJetA_doubleBtagDiscrim>%f && fatJetB_doubleBtagDiscrim>%f && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>%d)", eventWeighting, dbtNameToFloat(cut2_ak8Dbt[iCut2][0]), dbtNameToFloat(cut2_ak8Dbt[iCut2][1]), cut3_ak8Pt[iCut3], cut3_ak8Pt[iCut3], cut4_ht[iCut4]); 
+                            if (dataInputElement.lheHtCut[0] == 1) drawStringB = Form("%f*(fatJetA_doubleBtagDiscrim>%f && fatJetB_doubleBtagDiscrim>%f && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d && lheHT>=%d && lheHT<%d)", eventWeighting, dbtNameToFloat(cut2_ak8Dbt[iCut2][0]), dbtNameToFloat(cut2_ak8Dbt[iCut2][1]), cut3_ak8Pt[iCut3], cut3_ak8Pt[iCut3], cut4_ht[iCut4], cut5_ak4Pt[iCut5][0], cut5_ak4Pt[iCut5][1], dataInputElement.lheHtCut[1], dataInputElement.lheHtCut[2]);
+                            else drawStringB = Form("%f*(fatJetA_doubleBtagDiscrim>%f && fatJetB_doubleBtagDiscrim>%f && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d)", eventWeighting, dbtNameToFloat(cut2_ak8Dbt[iCut2][0]), dbtNameToFloat(cut2_ak8Dbt[iCut2][1]), cut3_ak8Pt[iCut3], cut3_ak8Pt[iCut3], cut4_ht[iCut4], cut5_ak4Pt[iCut5][0], cut5_ak4Pt[iCut5][1]); 
                             // std::cout << drawStringA << std::endl;
                             // std::cout << drawStringB << std::endl;
                             std::cout << "Filling for: " << dataInputElement.rootFileName << std::endl;
@@ -541,7 +539,7 @@ void Histograms::FillHistograms( std::vector<std::vector<std::string>> cut2_ak8D
 
                         } // closes loop through histoTagVec
 
-                    // } // closes loop through cut 5 states   // NB currently no ak4 info!!!
+                    } // closes loop through cut 5 states
                 } // closes loop through cut 4 states
             } // closes loop through cut 3 states
         } // closes loop through cut 2 states
