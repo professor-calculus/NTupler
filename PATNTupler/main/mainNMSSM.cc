@@ -281,15 +281,18 @@ public:
 		treeVar_lheHT_ = lheHT;
 
 		treeVar_nrSlimJets_ = slimJets.size();
-		if (slimJets.size() > 0)
+		if (slimJets.size() > 1){
 			treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
-		else
-			treeVar_jetA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
-		if (slimJets.size() > 1)
-			treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
-		else
+			treeVar_jetB_p4_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
+		}
+		else if (slimJets.size() == 1){
+			treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
 			treeVar_jetB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
-
+		}
+		else {
+			treeVar_jetA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_jetB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+		}
 		// And finally fill the tree ...
 		mainAnaTree_->Fill();
 	}
