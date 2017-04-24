@@ -26,25 +26,14 @@ $ root -q -b -l $CMSSW_BASE/src/NTupler/PATNTupler/macros/checkTtbarHtStitching.
 */
 
 
-double getEventWeighting(TFile * f, double crossSection, double integratedLuminosity)
-{
-	TTree * evT = (TTree*)f->Get("eventCountTree");
-    Int_t evTEntries = (Int_t)evT->GetEntries();
-    UInt_t nEvtsRunOverForEntry;
-    evT->SetBranchAddress("nEvtsRunOver", &nEvtsRunOverForEntry);
-    UInt_t nEvtsRunOverTotal = 0;
-    for (Int_t ievT=0; ievT<evTEntries; ++ievT){
-        evT->GetEntry(ievT);
-        nEvtsRunOverTotal += nEvtsRunOverForEntry;
-    }
-    return 1000.0 * crossSection * integratedLuminosity / nEvtsRunOverTotal;
-}
+double getEventWeighting(TFile * f, double crossSection, double integratedLuminosity);
+void htCutPlot(double lheHTCut, double integratedLuminosity, std::string outputDir, TTree * T_INC, TTree * T_HT600to800, TTree * T_HT800to1200, TTree * T_HT1200to2500, TTree * T_HT2500toInf, double weightingINC, double weightingHT600to800, double weightingHT800to1200, double weightingHT1200to2500, double weightingHT2500toInf);
 
 
 void checkTtbarHtStitching(){
 	
 	double integratedLuminosity = 50.0;
-	std::string outputDir = "~";
+	std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/ttbarMcStitching/";
 
 	TFile * fINC = TFile::Open("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_04_22/TTJets_inclusiveHt/flatTree.root");
 	TFile * fHT600to800 = TFile::Open("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_04_22/TTJets_HT600to800/flatTree.root");
@@ -70,16 +59,20 @@ void checkTtbarHtStitching(){
     latex->SetNDC();
     latex->SetTextFont(42);
 
-
+	htCutPlot(600.0, integratedLuminosity, outputDir, T_INC, T_HT600to800, T_HT800to1200, T_HT1200to2500, T_HT2500toInf, weightingINC, weightingHT600to800, weightingHT800to1200, weightingHT1200to2500, weightingHT2500toInf);
+	htCutPlot(650.0, integratedLuminosity, outputDir, T_INC, T_HT600to800, T_HT800to1200, T_HT1200to2500, T_HT2500toInf, weightingINC, weightingHT600to800, weightingHT800to1200, weightingHT1200to2500, weightingHT2500toInf);
+	htCutPlot(700.0, integratedLuminosity, outputDir, T_INC, T_HT600to800, T_HT800to1200, T_HT1200to2500, T_HT2500toInf, weightingINC, weightingHT600to800, weightingHT800to1200, weightingHT1200to2500, weightingHT2500toInf);
+	htCutPlot(750.0, integratedLuminosity, outputDir, T_INC, T_HT600to800, T_HT800to1200, T_HT1200to2500, T_HT2500toInf, weightingINC, weightingHT600to800, weightingHT800to1200, weightingHT1200to2500, weightingHT2500toInf);
+	htCutPlot(800.0, integratedLuminosity, outputDir, T_INC, T_HT600to800, T_HT800to1200, T_HT1200to2500, T_HT2500toInf, weightingINC, weightingHT600to800, weightingHT800to1200, weightingHT1200to2500, weightingHT2500toInf);
 	/////////////////////////////////////////////
 	// PLOT OF LHE HT
 	{
 		TH1F  h = TH1F("h", "", 100, 0, 3000);
-		TH1F * hINC = new TH1F("hINC", ";recalc lhe H_{T} (GeV); events / bin", 100, 0, 3000);
-		TH1F * hLheHT600to800 = new TH1F("hLheHT600to800", ";recalc lhe H_{T} (GeV); events / bin", 100, 0, 3000);
-		TH1F * hLheHT800to1200 = new TH1F("hLheHT800to1200", ";recalc lhe H_{T} (GeV); events / bin", 100, 0, 3000);
-		TH1F * hLheHT1200to2500 = new TH1F("hLheHT1200to2500", ";recalc lhe H_{T} (GeV); events / bin", 100, 0, 3000);
-		TH1F * hLheHT2500toInf = new TH1F("hLheHT2500toInf", ";recalc lhe H_{T} (GeV); events / bin", 100, 0, 3000);
+		TH1F * hINC = new TH1F("hINC", ";LHE H_{T} (GeV); events / bin", 100, 0, 3000);
+		TH1F * hLheHT600to800 = new TH1F("hLheHT600to800", ";LHE H_{T} (GeV); events / bin", 100, 0, 3000);
+		TH1F * hLheHT800to1200 = new TH1F("hLheHT800to1200", ";LHE H_{T} (GeV); events / bin", 100, 0, 3000);
+		TH1F * hLheHT1200to2500 = new TH1F("hLheHT1200to2500", ";LHE H_{T} (GeV); events / bin", 100, 0, 3000);
+		TH1F * hLheHT2500toInf = new TH1F("hLheHT2500toInf", ";LHE H_{T} (GeV); events / bin", 100, 0, 3000);
 		
 		T_INC->Draw("lheHT>>h", Form("%f",weightingINC), "");
 		for (int iBin = 0; iBin < h.GetNbinsX()+2; ++iBin) hINC->AddBinContent(iBin, h.GetBinContent(iBin));
@@ -109,7 +102,7 @@ void checkTtbarHtStitching(){
 		hLheHT1200to2500->SetLineWidth(0);
 		hLheHT1200to2500->SetMarkerSize(2);
 
-		hLheHT2500toInf->SetFillColor(kBlack);
+		hLheHT2500toInf->SetFillColor(kYellow);
 		hLheHT2500toInf->SetLineWidth(0);
 		hLheHT2500toInf->SetMarkerSize(2);
 
@@ -134,10 +127,10 @@ void checkTtbarHtStitching(){
 	    legend1->SetY1NDC(0.57);
 	    legend1->SetY2NDC(0.87);
 	    legend1->AddEntry(hINC, "ttbar_INCLUSIVE", "L");
-	    legend1->AddEntry(hLheHT600to800, "ttbar_lheHT600to800", "f");
-		legend1->AddEntry(hLheHT800to1200, "ttbar_lheHT800to1200", "f");
-		legend1->AddEntry(hLheHT1200to2500, "ttbar_lheHT1200to2500", "f");
-		legend1->AddEntry(hLheHT2500toInf, "ttbar_lheHT2500toInf", "f");
+	    legend1->AddEntry(hLheHT600to800, "ttbar_HT600to800", "f");
+		legend1->AddEntry(hLheHT800to1200, "ttbar_HT800to1200", "f");
+		legend1->AddEntry(hLheHT1200to2500, "ttbar_HT1200to2500", "f");
+		legend1->AddEntry(hLheHT2500toInf, "ttbar_HT2500toInf", "f");
 		legend1->Draw("same");
 
 		// c1->Update();
@@ -192,7 +185,7 @@ void checkTtbarHtStitching(){
 		hHT1200to2500->SetLineWidth(0);
 		hHT1200to2500->SetMarkerSize(2);
 
-		hHT2500toInf->SetFillColor(kBlack);
+		hHT2500toInf->SetFillColor(kYellow);
 		hHT2500toInf->SetLineWidth(0);
 		hHT2500toInf->SetMarkerSize(2);
 
@@ -217,10 +210,10 @@ void checkTtbarHtStitching(){
 	    legend2->SetY1NDC(0.57);
 	    legend2->SetY2NDC(0.87);
 	    legend2->AddEntry(hINCnocut, "ttbar_INCLUSIVE", "L");
-	    legend2->AddEntry(hHT600to800, "ttbar_lheHT600to800", "f");
-		legend2->AddEntry(hHT800to1200, "ttbar_lheHT800to1200", "f");
-		legend2->AddEntry(hHT1200to2500, "ttbar_lheHT1200to2500", "f");
-		legend2->AddEntry(hHT2500toInf, "ttbar_lheHT2500toInf", "f");
+	    legend2->AddEntry(hHT600to800, "ttbar_HT600to800", "f");
+		legend2->AddEntry(hHT800to1200, "ttbar_HT800to1200", "f");
+		legend2->AddEntry(hHT1200to2500, "ttbar_HT1200to2500", "f");
+		legend2->AddEntry(hHT2500toInf, "ttbar_HT2500toInf", "f");
 		legend2->Draw("same");
 
 		c2->SetLogy();
@@ -230,261 +223,112 @@ void checkTtbarHtStitching(){
 	/////////////////////////////////////////////
 	/////////////////////////////////////////////
 
-
-	/////////////////////////////////////////////
-	// PLOT OF HT - lhe ht cut 600
-	{
-		TH1F  h2 = TH1F("h2", "", 100, 0, 4000);
-		TH1F * hINCnocut = new TH1F("hINCnocut", ";H_{T} (Gev); events / bin", 100, 0, 4000);
-		TH1F * hINCwcut = new TH1F("hINCwcut", ";H_{T} (Gev); events / bin", 100, 0, 4000);
-		TH1F * hHT600to800 = new TH1F("hHT600to800", ";H_{T}(GeV); events / bin", 100, 0, 4000);
-		TH1F * hHT800to1200 = new TH1F("hHT800to1200", ";H_{T}(GeV); events / bin", 100, 0, 4000);
-		TH1F * hHT1200to2500 = new TH1F("hHT1200to2500", ";H_{T}(GeV); events / bin", 100, 0, 4000);
-		TH1F * hHT2500toInf = new TH1F("hHT2500toInf", ";H_{T}(GeV); events / bin", 100, 0, 4000);
-		
-		T_INC->Draw("ht>>h2", Form("%f",weightingINC), "");
-		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hINCnocut->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_INC->Draw("ht>>h2", Form("%f*(lheHT<600)",weightingINC), "");
-		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hINCwcut->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_HT600to800->Draw("ht>>h2", Form("%f*(lheHT>600)",weightingHT600to800), "");
-		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hHT600to800->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_HT800to1200->Draw("ht>>h2", Form("%f*(lheHT>600)",weightingHT800to1200), "");
-		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hHT800to1200->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_HT1200to2500->Draw("ht>>h2", Form("%f*(lheHT>600)",weightingHT1200to2500), "");
-		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hHT1200to2500->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_HT2500toInf->Draw("ht>>h2", Form("%f*(lheHT>600)",weightingHT2500toInf), "");
-		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hHT2500toInf->AddBinContent(iBin, h2.GetBinContent(iBin));
-
-		TCanvas* c2 =new TCanvas("c2","c2"); 
-
-		hINCnocut->SetLineColor(kBlue);
-		hINCnocut->Draw();
-
-		hINCwcut->SetFillColor(kCyan);
-		hINCwcut->SetLineWidth(0);
-		hINCwcut->SetMarkerSize(2);
-
-		hHT600to800->SetFillColor(kRed);
-		hHT600to800->SetLineWidth(0);
-		hHT600to800->SetMarkerSize(2);
-
-		hHT800to1200->SetFillColor(kGreen+1);
-		hHT800to1200->SetLineWidth(0);
-		hHT800to1200->SetMarkerSize(2);
-
-		hHT1200to2500->SetFillColor(kMagenta);
-		hHT1200to2500->SetLineWidth(0);
-		hHT1200to2500->SetMarkerSize(2);
-
-		hHT2500toInf->SetFillColor(kBlack);
-		hHT2500toInf->SetLineWidth(0);
-		hHT2500toInf->SetMarkerSize(2);
-
-		THStack * hs2 = new THStack("hs2","");
-		hs2->Add(hHT2500toInf);
-		hs2->Add(hHT1200to2500);
-		hs2->Add(hHT800to1200);
-		hs2->Add(hHT600to800);
-		hs2->Add(hINCwcut);
-		hs2->Draw("same");
-		hINCnocut->Draw("same");
-		gPad->RedrawAxis();
-
-		latex->SetTextAlign(11); // align from left
-		latex->DrawLatex(0.15,0.92,"#bf{CMS} #it{Simulation} W.I.P");
-		latex->SetTextAlign(31); // align from right
-		latex->DrawLatex(0.92,0.92,Form("%.1f fb^{-1} (13 TeV)", integratedLuminosity));
-
-	    TLegend * legend2 = new TLegend();
-	    legend2->SetTextSize(0.021);
-	    legend2->SetX1NDC(0.56);
-	    legend2->SetX2NDC(0.87);
-	    legend2->SetY1NDC(0.57);
-	    legend2->SetY2NDC(0.87);
-	    legend2->AddEntry(hINCnocut, "ttbar_INCLUSIVE", "L");
-	    legend2->AddEntry(hINCwcut, "ttbar_INCLUSIVE (recalc_lheHT < 600)", "f");
-	    legend2->AddEntry(hHT600to800, "ttbar_lheHT600to800 (recalc_lheHT > 600)", "f");
-		legend2->AddEntry(hHT800to1200, "ttbar_lheHT800to1200 (recalc_lheHT > 600)", "f");
-		legend2->AddEntry(hHT1200to2500, "ttbar_lheHT1200to2500 (recalc_lheHT > 600)", "f");
-		legend2->AddEntry(hHT2500toInf, "ttbar_lheHT2500toInf (recalc_lheHT > 600)", "f");
-		legend2->Draw("same");
-
-		c2->SetLogy();
-		c2->SaveAs(Form("%s/ttbar_HT_recalcLheHtCut600.pdf", outputDir.c_str()));
-		c2->Close();
-	}
-	/////////////////////////////////////////////
-	/////////////////////////////////////////////
-
-	/////////////////////////////////////////////
-	// PLOT OF HT - lhe ht cut 800
-	{
-		TH1F  h2 = TH1F("h2", "", 100, 0, 4000);
-		TH1F * hINCnocut = new TH1F("hINCnocut", ";H_{T} (Gev); events / bin", 100, 0, 4000);
-		TH1F * hINCwcut = new TH1F("hINCwcut", ";H_{T} (Gev); events / bin", 100, 0, 4000);
-		TH1F * hHT600to800 = new TH1F("hHT600to800", ";H_{T}(GeV); events / bin", 100, 0, 4000);
-		TH1F * hHT800to1200 = new TH1F("hHT800to1200", ";H_{T}(GeV); events / bin", 100, 0, 4000);
-		TH1F * hHT1200to2500 = new TH1F("hHT1200to2500", ";H_{T}(GeV); events / bin", 100, 0, 4000);
-		TH1F * hHT2500toInf = new TH1F("hHT2500toInf", ";H_{T}(GeV); events / bin", 100, 0, 4000);
-		
-		T_INC->Draw("ht>>h2", Form("%f",weightingINC), "");
-		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hINCnocut->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_INC->Draw("ht>>h2", Form("%f*(lheHT<800)",weightingINC), "");
-		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hINCwcut->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_HT600to800->Draw("ht>>h2", Form("%f*(lheHT>800)",weightingHT600to800), "");
-		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hHT600to800->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_HT800to1200->Draw("ht>>h2", Form("%f*(lheHT>800)",weightingHT800to1200), "");
-		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hHT800to1200->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_HT1200to2500->Draw("ht>>h2", Form("%f*(lheHT>800)",weightingHT1200to2500), "");
-		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hHT1200to2500->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_HT2500toInf->Draw("ht>>h2", Form("%f*(lheHT>800)",weightingHT2500toInf), "");
-		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hHT2500toInf->AddBinContent(iBin, h2.GetBinContent(iBin));
-
-		TCanvas* c2 =new TCanvas("c2","c2"); 
-
-		hINCnocut->SetLineColor(kBlue);
-		hINCnocut->Draw();
-
-		hINCwcut->SetFillColor(kCyan);
-		hINCwcut->SetLineWidth(0);
-		hINCwcut->SetMarkerSize(2);
-
-		hHT600to800->SetFillColor(kRed);
-		hHT600to800->SetLineWidth(0);
-		hHT600to800->SetMarkerSize(2);
-
-		hHT800to1200->SetFillColor(kGreen+1);
-		hHT800to1200->SetLineWidth(0);
-		hHT800to1200->SetMarkerSize(2);
-
-		hHT1200to2500->SetFillColor(kMagenta);
-		hHT1200to2500->SetLineWidth(0);
-		hHT1200to2500->SetMarkerSize(2);
-
-		hHT2500toInf->SetFillColor(kBlack);
-		hHT2500toInf->SetLineWidth(0);
-		hHT2500toInf->SetMarkerSize(2);
-
-		THStack * hs2 = new THStack("hs2","");
-		hs2->Add(hHT2500toInf);
-		hs2->Add(hHT1200to2500);
-		hs2->Add(hHT800to1200);
-		hs2->Add(hHT600to800);
-		hs2->Add(hINCwcut);
-		hs2->Draw("same");
-		hINCnocut->Draw("same");
-		gPad->RedrawAxis();
-
-		latex->SetTextAlign(11); // align from left
-		latex->DrawLatex(0.15,0.92,"#bf{CMS} #it{Simulation} W.I.P");
-		latex->SetTextAlign(31); // align from right
-		latex->DrawLatex(0.92,0.92,Form("%.1f fb^{-1} (13 TeV)", integratedLuminosity));
-
-	    TLegend * legend2 = new TLegend();
-	    legend2->SetTextSize(0.021);
-	    legend2->SetX1NDC(0.56);
-	    legend2->SetX2NDC(0.87);
-	    legend2->SetY1NDC(0.57);
-	    legend2->SetY2NDC(0.87);
-	    legend2->AddEntry(hINCnocut, "ttbar_INCLUSIVE", "L");
-	    legend2->AddEntry(hINCwcut, "ttbar_INCLUSIVE (recalc_lheHT < 800)", "f");
-	    legend2->AddEntry(hHT600to800, "ttbar_lheHT600to800 (recalc_lheHT > 800)", "f");
-		legend2->AddEntry(hHT800to1200, "ttbar_lheHT800to1200 (recalc_lheHT > 800)", "f");
-		legend2->AddEntry(hHT1200to2500, "ttbar_lheHT1200to2500 (recalc_lheHT > 800)", "f");
-		legend2->AddEntry(hHT2500toInf, "ttbar_lheHT2500toInf (recalc_lheHT > 800)", "f");
-		legend2->Draw("same");
-
-		c2->SetLogy();
-		c2->SaveAs(Form("%s/ttbar_HT_recalcLheHtCut800.pdf", outputDir.c_str()));
-		c2->Close();
-	}
-	/////////////////////////////////////////////
-	/////////////////////////////////////////////
+}
 
 
-	/////////////////////////////////////////////
-	// PLOT OF HT - lhe ht cut 1000
-	{
-		TH1F  h2 = TH1F("h2", "", 100, 0, 4000);
-		TH1F * hINCnocut = new TH1F("hINCnocut", ";H_{T} (Gev); events / bin", 100, 0, 4000);
-		TH1F * hINCwcut = new TH1F("hINCwcut", ";H_{T} (Gev); events / bin", 100, 0, 4000);
-		TH1F * hHT600to800 = new TH1F("hHT600to800", ";H_{T}(GeV); events / bin", 100, 0, 4000);
-		TH1F * hHT800to1200 = new TH1F("hHT800to1200", ";H_{T}(GeV); events / bin", 100, 0, 4000);
-		TH1F * hHT1200to2500 = new TH1F("hHT1200to2500", ";H_{T}(GeV); events / bin", 100, 0, 4000);
-		TH1F * hHT2500toInf = new TH1F("hHT2500toInf", ";H_{T}(GeV); events / bin", 100, 0, 4000);
-		
-		T_INC->Draw("ht>>h2", Form("%f",weightingINC), "");
-		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hINCnocut->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_INC->Draw("ht>>h2", Form("%f*(lheHT<1000)",weightingINC), "");
-		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hINCwcut->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_HT600to800->Draw("ht>>h2", Form("%f*(lheHT>1000)",weightingHT600to800), "");
-		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hHT600to800->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_HT800to1200->Draw("ht>>h2", Form("%f*(lheHT>1000)",weightingHT800to1200), "");
-		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hHT800to1200->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_HT1200to2500->Draw("ht>>h2", Form("%f*(lheHT>1000)",weightingHT1200to2500), "");
-		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hHT1200to2500->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_HT2500toInf->Draw("ht>>h2", Form("%f*(lheHT>1000)",weightingHT2500toInf), "");
-		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hHT2500toInf->AddBinContent(iBin, h2.GetBinContent(iBin));
+double getEventWeighting(TFile * f, double crossSection, double integratedLuminosity)
+{
+	TTree * evT = (TTree*)f->Get("eventCountTree");
+    Int_t evTEntries = (Int_t)evT->GetEntries();
+    UInt_t nEvtsRunOverForEntry;
+    evT->SetBranchAddress("nEvtsRunOver", &nEvtsRunOverForEntry);
+    UInt_t nEvtsRunOverTotal = 0;
+    for (Int_t ievT=0; ievT<evTEntries; ++ievT){
+        evT->GetEntry(ievT);
+        nEvtsRunOverTotal += nEvtsRunOverForEntry;
+    }
+    return 1000.0 * crossSection * integratedLuminosity / nEvtsRunOverTotal;
+}
 
-		TCanvas* c2 =new TCanvas("c2","c2"); 
 
-		hINCnocut->SetLineColor(kBlue);
-		hINCnocut->Draw();
+void htCutPlot(double lheHTCut, double integratedLuminosity, std::string outputDir, TTree * T_INC, TTree * T_HT600to800, TTree * T_HT800to1200, TTree * T_HT1200to2500, TTree * T_HT2500toInf, double weightingINC, double weightingHT600to800, double weightingHT800to1200, double weightingHT1200to2500, double weightingHT2500toInf)
+{
+	TLatex * latex = new TLatex();
+    latex->SetNDC();
+    latex->SetTextFont(42);
 
-		hINCwcut->SetFillColor(kCyan);
-		hINCwcut->SetLineWidth(0);
-		hINCwcut->SetMarkerSize(2);
+	TH1F  h2 = TH1F("h2", "", 100, 0, 4000);
+	TH1F * hINCnocut = new TH1F("hINCnocut", ";H_{T} (Gev); events / bin", 100, 0, 4000);
+	TH1F * hINCwcut = new TH1F("hINCwcut", ";H_{T} (Gev); events / bin", 100, 0, 4000);
+	TH1F * hHT600to800 = new TH1F("hHT600to800", ";H_{T}(GeV); events / bin", 100, 0, 4000);
+	TH1F * hHT800to1200 = new TH1F("hHT800to1200", ";H_{T}(GeV); events / bin", 100, 0, 4000);
+	TH1F * hHT1200to2500 = new TH1F("hHT1200to2500", ";H_{T}(GeV); events / bin", 100, 0, 4000);
+	TH1F * hHT2500toInf = new TH1F("hHT2500toInf", ";H_{T}(GeV); events / bin", 100, 0, 4000);
+	
+	T_INC->Draw("ht>>h2", Form("%f",weightingINC), "");
+	for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hINCnocut->AddBinContent(iBin, h2.GetBinContent(iBin));
+	T_INC->Draw("ht>>h2", Form("%f*(lheHT<%f)",weightingINC,lheHTCut), "");
+	for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hINCwcut->AddBinContent(iBin, h2.GetBinContent(iBin));
+	T_HT600to800->Draw("ht>>h2", Form("%f*(lheHT>=%f)",weightingHT600to800,lheHTCut), "");
+	for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hHT600to800->AddBinContent(iBin, h2.GetBinContent(iBin));
+	T_HT800to1200->Draw("ht>>h2", Form("%f*(lheHT>=%f)",weightingHT800to1200,lheHTCut), "");
+	for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hHT800to1200->AddBinContent(iBin, h2.GetBinContent(iBin));
+	T_HT1200to2500->Draw("ht>>h2", Form("%f*(lheHT>=%f)",weightingHT1200to2500,lheHTCut), "");
+	for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hHT1200to2500->AddBinContent(iBin, h2.GetBinContent(iBin));
+	T_HT2500toInf->Draw("ht>>h2", Form("%f*(lheHT>=%f)",weightingHT2500toInf,lheHTCut), "");
+	for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) hHT2500toInf->AddBinContent(iBin, h2.GetBinContent(iBin));
 
-		hHT600to800->SetFillColor(kRed);
-		hHT600to800->SetLineWidth(0);
-		hHT600to800->SetMarkerSize(2);
+	TCanvas* c2 =new TCanvas("c2","c2"); 
 
-		hHT800to1200->SetFillColor(kGreen+1);
-		hHT800to1200->SetLineWidth(0);
-		hHT800to1200->SetMarkerSize(2);
+	hINCnocut->SetLineColor(kBlue);
+	hINCnocut->Draw();
 
-		hHT1200to2500->SetFillColor(kMagenta);
-		hHT1200to2500->SetLineWidth(0);
-		hHT1200to2500->SetMarkerSize(2);
+	hINCwcut->SetFillColor(kCyan);
+	hINCwcut->SetLineWidth(0);
+	hINCwcut->SetMarkerSize(2);
 
-		hHT2500toInf->SetFillColor(kBlack);
-		hHT2500toInf->SetLineWidth(0);
-		hHT2500toInf->SetMarkerSize(2);
+	hHT600to800->SetFillColor(kRed);
+	hHT600to800->SetLineWidth(0);
+	hHT600to800->SetMarkerSize(2);
 
-		THStack * hs2 = new THStack("hs2","");
-		hs2->Add(hHT2500toInf);
-		hs2->Add(hHT1200to2500);
-		hs2->Add(hHT800to1200);
-		hs2->Add(hHT600to800);
-		hs2->Add(hINCwcut);
-		hs2->Draw("same");
-		hINCnocut->Draw("same");
-		gPad->RedrawAxis();
+	hHT800to1200->SetFillColor(kGreen+1);
+	hHT800to1200->SetLineWidth(0);
+	hHT800to1200->SetMarkerSize(2);
 
-		latex->SetTextAlign(11); // align from left
-		latex->DrawLatex(0.15,0.92,"#bf{CMS} #it{Simulation} W.I.P");
-		latex->SetTextAlign(31); // align from right
-		latex->DrawLatex(0.92,0.92,Form("%.1f fb^{-1} (13 TeV)", integratedLuminosity));
+	hHT1200to2500->SetFillColor(kMagenta);
+	hHT1200to2500->SetLineWidth(0);
+	hHT1200to2500->SetMarkerSize(2);
 
-	    TLegend * legend2 = new TLegend();
-	    legend2->SetTextSize(0.021);
-	    legend2->SetX1NDC(0.56);
-	    legend2->SetX2NDC(0.87);
-	    legend2->SetY1NDC(0.57);
-	    legend2->SetY2NDC(0.87);
-	    legend2->AddEntry(hINCnocut, "ttbar_INCLUSIVE", "L");
-	    legend2->AddEntry(hINCwcut, "ttbar_INCLUSIVE (recalc_lheHT < 1000)", "f");
-	    legend2->AddEntry(hHT600to800, "ttbar_lheHT600to800 (recalc_lheHT > 1000)", "f");
-		legend2->AddEntry(hHT800to1200, "ttbar_lheHT800to1200 (recalc_lheHT > 1000)", "f");
-		legend2->AddEntry(hHT1200to2500, "ttbar_lheHT1200to2500 (recalc_lheHT > 1000)", "f");
-		legend2->AddEntry(hHT2500toInf, "ttbar_lheHT2500toInf (recalc_lheHT > 1000)", "f");
-		legend2->Draw("same");
+	hHT2500toInf->SetFillColor(kYellow);
+	hHT2500toInf->SetLineWidth(0);
+	hHT2500toInf->SetMarkerSize(2);
 
-		c2->SetLogy();
-		c2->SaveAs(Form("%s/ttbar_HT_recalcLheHtCut1000.pdf", outputDir.c_str()));
-		c2->Close();
-	}
-	/////////////////////////////////////////////
-	/////////////////////////////////////////////
+	THStack * hs2 = new THStack("hs2","");
+	hs2->Add(hHT2500toInf);
+	hs2->Add(hHT1200to2500);
+	hs2->Add(hHT800to1200);
+	hs2->Add(hHT600to800);
+	hs2->Add(hINCwcut);
+	hs2->Draw("same");
+	hINCnocut->Draw("same");
+	gPad->RedrawAxis();
 
+	latex->SetTextAlign(11); // align from left
+	latex->DrawLatex(0.15,0.92,"#bf{CMS} #it{Simulation} W.I.P");
+	latex->SetTextAlign(31); // align from right
+	latex->DrawLatex(0.92,0.92,Form("%.1f fb^{-1} (13 TeV)", integratedLuminosity));
+
+    TLegend * legend2 = new TLegend();
+    legend2->SetTextSize(0.025);
+    legend2->SetX1NDC(0.56);
+    legend2->SetX2NDC(0.87);
+    legend2->SetY1NDC(0.57);
+    legend2->SetY2NDC(0.87);
+    legend2->AddEntry(hINCnocut, "ttbar_INCLUSIVE", "L");
+    legend2->AddEntry(hINCwcut, Form("ttbar_INCLUSIVE (lheHT < %.0f)",lheHTCut), "f");
+    legend2->AddEntry(hHT600to800, Form("ttbar_HT600to800 (lheHT > %.0f)",lheHTCut), "f");
+	legend2->AddEntry(hHT800to1200, Form("ttbar_HT800to1200 (lheHT > %.0f)",lheHTCut), "f");
+	legend2->AddEntry(hHT1200to2500, Form("ttbar_HT1200to2500 (lheHT > %.0f)",lheHTCut), "f");
+	legend2->AddEntry(hHT2500toInf, Form("ttbar_HT2500toInf (lheHT > %.0f)",lheHTCut), "f");
+	legend2->Draw("same");
+
+	c2->SetLogy();
+	c2->SaveAs(Form("%s/ttbar_HT_LheHtCut%.0f.pdf", outputDir.c_str(), lheHTCut));
+	c2->Close();
+	delete hINCnocut;
+	delete hINCwcut;
+	delete hHT600to800;
+	delete hHT800to1200;
+	delete hHT1200to2500;
+	delete hHT2500toInf;
 }
