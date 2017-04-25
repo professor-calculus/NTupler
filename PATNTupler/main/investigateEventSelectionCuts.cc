@@ -71,15 +71,17 @@ int main(){
 
     // ONE: saving info and lumi
     std::string baseDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_04_22/"; // for the input ROOT files
-    std::string outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/output_InvestigateEventSelectionCuts/mSusy2000_focusOnBTagsV2/"; // where we are going to save the plots
+    std::string outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/output_InvestigateEventSelectionCuts/mSusy2000_iteration2a_varyBTag/"; // where we are going to save the plots
     double integratedLuminosity = 50.0; // the integrated luminosity, in fb^-1 that we scale our plots to
 
 
     // TWO: cut parameter options
-    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Tight","Tight"}, {"Tight","Med"}, {"Tight","Loose"}, {"Med","Med"}, {"Med","Loose"}, {"Loose", "Loose"}}; // "Loose", "Med", or "Tight" (2 elements in sub-vector, 1st for leading)
+    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Tight","Tight"}, {"Tight","Med"}, {"Med","Med"}, {"Med","Loose"}, {"Loose","Loose"}}; // "Loose", "Med", or "Tight" (2 elements in sub-vector, 1st for leading)
+    // std::vector<std::vector<std::string>> cut2_ak8Dbt = {{"Tight","Med"}};
     std::vector<int> cut3_ak8Pt = {300};
-    std::vector<int> cut4_ht = {3000};
-    std::vector<std::vector<int>> cut5_ak4Pt = { {200,200} }; // (2 elements in sub-vector, 1st for leading)
+    std::vector<int> cut4_ht = {1500};
+    // std::vector<std::vector<int>> cut5_ak4Pt = { {100,100}, {200,200}, {300,300}, {400,400}, {500,500} }; // (2 elements in sub-vector, 1st for leading)
+    std::vector<std::vector<int>> cut5_ak4Pt = { {300,300} };
 
 
     // THREE: set the dataInput's to be used (this is a separate object in case you have multiple inputs to a single histogram with different cross sections)
@@ -302,7 +304,7 @@ int main(){
     std::ofstream table;
     table.open(Form("%s/aSignificanceTable_%.0finvFb.csv",outputDirectory.c_str(),integratedLuminosity));
     table << "*SIGNIFICANCE TABLE* significance nDifference (nSignal|nBackground)" << "\n";
-    table << "NB: don't use first 2 bins for counting" << "\n";
+    table << "NB: don't use the first mass bin for counting" << "\n";
     table << "Luminosity = " << integratedLuminosity << "fb^-1," << "\n";
     table << "Backgrounds used:," << "\n";
     for (size_t i = 0; i < backgroundHistograms.size(); ++i) table << backgroundHistograms[i].legend.c_str() << "\n";
@@ -387,14 +389,14 @@ int main(){
                     double nBackgroundObserved = 0.0;
                     for (size_t i = 0; i < backgroundHistograms.size(); ++i){
                         // nBackgroundObserved += backgroundHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetEntries(); // note that this method does not work due to the way the histograms were filled
-                        for (int iBin = 3; iBin < backgroundHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetNbinsX()+2; ++iBin)
+                        for (int iBin = 2; iBin < backgroundHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetNbinsX()+2; ++iBin)
                             nBackgroundObserved += backgroundHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetBinContent(iBin);
                     }
 
                     for (size_t i = 0; i < signalHistograms.size(); ++i){
                         
                         double nSignalObserved = 0.0;
-                        for (int iBin = 3; iBin < signalHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetNbinsX()+2; ++iBin)
+                        for (int iBin = 2; iBin < signalHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetNbinsX()+2; ++iBin)
                             nSignalObserved += signalHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetBinContent(iBin);
 
                         double significance = nSignalObserved / sqrt(nBackgroundObserved);
