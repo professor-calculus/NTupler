@@ -38,15 +38,15 @@ struct dataInput{
 class Histograms{
 public:
     // constructor
-    Histograms(double,std::string,std::vector<struct dataInput>,int,std::vector<std::vector<std::string>>, std::vector<int>, std::vector<int>, std::vector<std::vector<int>>);
+    Histograms(double, std::string, std::vector<struct dataInput>, int, std::vector<std::vector<std::string>>, std::vector<int>, std::vector<std::vector<int>>, std::vector<std::vector<int>>);
     
     std::map<std::string, TH1F*> h_;
     std::string legend;
     int colour;
 
 private:
-    void CreateHistograms(std::vector<std::vector<std::string>>, std::vector<int>, std::vector<int>, std::vector<std::vector<int>>);
-    void FillHistograms(std::vector<std::vector<std::string>>, std::vector<int>, std::vector<int>, std::vector<std::vector<int>>);
+    void CreateHistograms(std::vector<std::vector<std::string>>, std::vector<int>, std::vector<std::vector<int>>, std::vector<std::vector<int>>);
+    void FillHistograms(std::vector<std::vector<std::string>>, std::vector<int>, std::vector<std::vector<int>>, std::vector<std::vector<int>>);
     std::vector<struct dataInput> dataInputVec;
     double luminosity;
     double massMin;
@@ -71,15 +71,15 @@ int main(){
 
     // ONE: saving info and lumi
     std::string baseDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_04_22/"; // for the input ROOT files
-    std::string outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/output_InvestigateEventSelectionCuts/mSusy2000_iteration2a_varyBTag/"; // where we are going to save the plots
+    std::string outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/output_InvestigateEventSelectionCuts/DEMO/"; // where we are going to save the plots
     double integratedLuminosity = 50.0; // the integrated luminosity, in fb^-1 that we scale our plots to
 
 
     // TWO: cut parameter options
-    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Tight","Tight"}, {"Tight","Med"}, {"Med","Med"}, {"Med","Loose"}, {"Loose","Loose"}}; // "Loose", "Med", or "Tight" (2 elements in sub-vector, 1st for leading)
-    // std::vector<std::vector<std::string>> cut2_ak8Dbt = {{"Tight","Med"}};
+    // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Tight","Tight"}, {"Tight","Med"}, {"Med","Med"}, {"Med","Loose"}, {"Loose","Loose"}}; // "Loose", "Med", or "Tight" (2 elements in sub-vector, 1st for leading)
+    std::vector<std::vector<std::string>> cut2_ak8Dbt = {{"Tight","Med"}};
     std::vector<int> cut3_ak8Pt = {300};
-    std::vector<int> cut4_ht = {1500};
+    std::vector<std::vector<int>>cut4_ht = { {1500,2500}, {2500,3500}, {3500,99000} }; // these are HT bins, not just cuts
     // std::vector<std::vector<int>> cut5_ak4Pt = { {100,100}, {200,200}, {300,300}, {400,400}, {500,500} }; // (2 elements in sub-vector, 1st for leading)
     std::vector<std::vector<int>> cut5_ak4Pt = { {300,300} };
 
@@ -231,10 +231,10 @@ int main(){
 
     // FOUR: group the input datasets and create Histograms
     // ---------------------------------- 
-    // class Histograms hSignal_mH30_mSusy800(integratedLuminosity, "mH30_mSusy800", {signal_mH30_mSusy800}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    // class Histograms hSignal_mH50_mSusy800(integratedLuminosity, "mH50_mSusy800", {signal_mH50_mSusy800}, kGreen, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    // class Histograms hSignal_mH70_mSusy800(integratedLuminosity, "mH70_mSusy800", {signal_mH70_mSusy800}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    // class Histograms hSignal_mH90_mSusy800(integratedLuminosity, "mH90_mSusy800", {signal_mH90_mSusy800}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    class Histograms hSignal_mH30_mSusy800(integratedLuminosity, "mH30_mSusy800", {signal_mH30_mSusy800}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    class Histograms hSignal_mH50_mSusy800(integratedLuminosity, "mH50_mSusy800", {signal_mH50_mSusy800}, kGreen, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    class Histograms hSignal_mH70_mSusy800(integratedLuminosity, "mH70_mSusy800", {signal_mH70_mSusy800}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    class Histograms hSignal_mH90_mSusy800(integratedLuminosity, "mH90_mSusy800", {signal_mH90_mSusy800}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // ----------------------------------
     // class Histograms hSignal_mH30_mSusy1200(integratedLuminosity, "mH30_mSusy1200", {signal_mH30_mSusy1200}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // class Histograms hSignal_mH50_mSusy1200(integratedLuminosity, "mH50_mSusy1200", {signal_mH50_mSusy1200}, kGreen, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
@@ -246,10 +246,10 @@ int main(){
     // class Histograms hSignal_mH70_mSusy1600(integratedLuminosity, "mH70_mSusy1600", {signal_mH70_mSusy1600}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // class Histograms hSignal_mH90_mSusy1600(integratedLuminosity, "mH90_mSusy1600", {signal_mH90_mSusy1600}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // ----------------------------------
-    class Histograms hSignal_mH30_mSusy2000(integratedLuminosity, "mH30_mSusy2000", {signal_mH30_mSusy2000}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    class Histograms hSignal_mH50_mSusy2000(integratedLuminosity, "mH50_mSusy2000", {signal_mH50_mSusy2000}, kGreen, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    class Histograms hSignal_mH70_mSusy2000(integratedLuminosity, "mH70_mSusy2000", {signal_mH70_mSusy2000}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    class Histograms hSignal_mH90_mSusy2000(integratedLuminosity, "mH90_mSusy2000", {signal_mH90_mSusy2000}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    // class Histograms hSignal_mH30_mSusy2000(integratedLuminosity, "mH30_mSusy2000", {signal_mH30_mSusy2000}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    // class Histograms hSignal_mH50_mSusy2000(integratedLuminosity, "mH50_mSusy2000", {signal_mH50_mSusy2000}, kGreen, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    // class Histograms hSignal_mH70_mSusy2000(integratedLuminosity, "mH70_mSusy2000", {signal_mH70_mSusy2000}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    // class Histograms hSignal_mH90_mSusy2000(integratedLuminosity, "mH90_mSusy2000", {signal_mH90_mSusy2000}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // ----------------------------------
     class Histograms hTtbar(integratedLuminosity, "ttbar+jets", {TTJets_inclusive, TTJets_ht600to800, TTJets_ht800to1200,TTJets_ht1200to2500,TTJets_ht2500toInf}, PlottingTools::SetColor(1,5), cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     class Histograms hZ(integratedLuminosity, "Z+jets", {ZJetsToQQ_ht600toInf}, PlottingTools::SetColor(2,5), cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
@@ -260,10 +260,10 @@ int main(){
 
     // FIVE: group the Histograms into signal and background
     // std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy800};
-    // std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy800,hSignal_mH50_mSusy800,hSignal_mH70_mSusy800,hSignal_mH90_mSusy800};
+    std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy800,hSignal_mH50_mSusy800,hSignal_mH70_mSusy800,hSignal_mH90_mSusy800};
     // std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy1200,hSignal_mH50_mSusy1200,hSignal_mH70_mSusy1200,hSignal_mH90_mSusy1200}; 
     // std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy1600,hSignal_mH50_mSusy1600,hSignal_mH70_mSusy1600,hSignal_mH90_mSusy1600};
-    std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy2000,hSignal_mH50_mSusy2000,hSignal_mH70_mSusy2000,hSignal_mH90_mSusy2000};
+    // std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy2000,hSignal_mH50_mSusy2000,hSignal_mH70_mSusy2000,hSignal_mH90_mSusy2000};
     // std::vector<class Histograms> signalHistograms = {hSignal_mH70_mSusy800,hSignal_mH70_mSusy1200,hSignal_mH70_mSusy1600,hSignal_mH70_mSusy2000};
     
     std::vector<class Histograms> backgroundHistograms = {hTtbar, hZ, hW, hZZ, hWW}; // the order here is how they will be plotted
@@ -326,7 +326,7 @@ int main(){
 
                     std::string labelsString = "ak8Dbt_" + cut2_ak8Dbt[iCut2][0] + cut2_ak8Dbt[iCut2][1] + "__";
                     labelsString += "ak8Pt_" + std::to_string(cut3_ak8Pt[iCut3]) + "__";
-                    labelsString += "ht_" + std::to_string(cut4_ht[iCut4]) + "__";
+                    labelsString += "ht_" + std::to_string(cut4_ht[iCut4][0]) + "to" + std::to_string(cut4_ht[iCut4][1]) + "__";
                     labelsString += "ak4Pt_" + std::to_string(cut5_ak4Pt[iCut5][0]) + "n" + std::to_string(cut5_ak4Pt[iCut5][1]);
 
                     // std::vector<std::string> histoTagVec = {"fatJetA_prunedMass","fatJetA_softDropMass","fatJetB_prunedMass","fatJetB_softDropMass"};
@@ -421,7 +421,7 @@ return 0;
 
 
 //--------constructor---------//
-Histograms::Histograms(double luminosityD, std::string legendD, std::vector<struct dataInput> dataInputVecD, int colourD, std::vector<std::vector<std::string>> cut2_ak8Dbt, std::vector<int> cut3_ak8Pt, std::vector<int> cut4_ht, std::vector<std::vector<int>> cut5_ak4Pt)
+Histograms::Histograms(double luminosityD, std::string legendD, std::vector<struct dataInput> dataInputVecD, int colourD, std::vector<std::vector<std::string>> cut2_ak8Dbt, std::vector<int> cut3_ak8Pt, std::vector<std::vector<int>> cut4_ht, std::vector<std::vector<int>> cut5_ak4Pt)
 {
     luminosity = luminosityD;
     dataInputVec = dataInputVecD;
@@ -441,7 +441,7 @@ Histograms::Histograms(double luminosityD, std::string legendD, std::vector<stru
 
 //-----------private----------//
 
-void Histograms::CreateHistograms( std::vector<std::vector<std::string>> cut2_ak8Dbt, std::vector<int> cut3_ak8Pt, std::vector<int> cut4_ht, std::vector<std::vector<int>> cut5_ak4Pt)
+void Histograms::CreateHistograms(std::vector<std::vector<std::string>> cut2_ak8Dbt, std::vector<int> cut3_ak8Pt, std::vector<std::vector<int>> cut4_ht, std::vector<std::vector<int>> cut5_ak4Pt)
 {
     double MassPerBin = (massMax - massMin) / numberOfBins; // aim for this value to be an integer
 
@@ -452,7 +452,7 @@ void Histograms::CreateHistograms( std::vector<std::vector<std::string>> cut2_ak
 
                     std::string labelsString = "ak8Dbt_" + cut2_ak8Dbt[iCut2][0] + cut2_ak8Dbt[iCut2][1] + "__";
                     labelsString += "ak8Pt_" + std::to_string(cut3_ak8Pt[iCut3]) + "__";
-                    labelsString += "ht_" + std::to_string(cut4_ht[iCut4]) + "__";
+                    labelsString += "ht_" + std::to_string(cut4_ht[iCut4][0]) + "to" + std::to_string(cut4_ht[iCut4][1]) + "__";
                     labelsString += "ak4Pt_" + std::to_string(cut5_ak4Pt[iCut5][0]) + "n" + std::to_string(cut5_ak4Pt[iCut5][1]);
                     // std::cout << labelsString << std::endl;
 
@@ -486,7 +486,7 @@ void Histograms::CreateHistograms( std::vector<std::vector<std::string>> cut2_ak
 
 
 
-void Histograms::FillHistograms( std::vector<std::vector<std::string>> cut2_ak8Dbt, std::vector<int> cut3_ak8Pt, std::vector<int> cut4_ht, std::vector<std::vector<int>> cut5_ak4Pt)
+void Histograms::FillHistograms(std::vector<std::vector<std::string>> cut2_ak8Dbt, std::vector<int> cut3_ak8Pt, std::vector<std::vector<int>> cut4_ht, std::vector<std::vector<int>> cut5_ak4Pt)
 {
     for (dataInput& dataInputElement : dataInputVec){ // loop through all the dataInput's provided
 
@@ -516,7 +516,7 @@ void Histograms::FillHistograms( std::vector<std::vector<std::string>> cut2_ak8D
                             
                         std::string labelsString = "ak8Dbt_" + cut2_ak8Dbt[iCut2][0] + cut2_ak8Dbt[iCut2][1] + "__";
                         labelsString += "ak8Pt_" + std::to_string(cut3_ak8Pt[iCut3]) + "__";
-                        labelsString += "ht_" + std::to_string(cut4_ht[iCut4]) + "__";
+                        labelsString += "ht_" + std::to_string(cut4_ht[iCut4][0]) + "to" + std::to_string(cut4_ht[iCut4][1]) + "__";
                         labelsString += "ak4Pt_" + std::to_string(cut5_ak4Pt[iCut5][0]) + "n" + std::to_string(cut5_ak4Pt[iCut5][1]);
 
                         // std::vector<std::string> histoTagVec = {"fatJetA_prunedMass","fatJetA_softDropMass","fatJetB_prunedMass","fatJetB_softDropMass"};
@@ -527,8 +527,8 @@ void Histograms::FillHistograms( std::vector<std::vector<std::string>> cut2_ak8D
                             
                             std::string drawStringA = Form("%s>>h", histoTag.c_str());
                             std::string drawStringB;                             
-                            if (dataInputElement.lheHtCut[0] == 1) drawStringB = Form("%f*(fatJetA_doubleBtagDiscrim>%f && fatJetB_doubleBtagDiscrim>%f && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d && lheHT>=%d && lheHT<%d)", eventWeighting, dbtNameToFloat(cut2_ak8Dbt[iCut2][0]), dbtNameToFloat(cut2_ak8Dbt[iCut2][1]), cut3_ak8Pt[iCut3], cut3_ak8Pt[iCut3], cut4_ht[iCut4], cut5_ak4Pt[iCut5][0], cut5_ak4Pt[iCut5][1], dataInputElement.lheHtCut[1], dataInputElement.lheHtCut[2]);
-                            else drawStringB = Form("%f*(fatJetA_doubleBtagDiscrim>%f && fatJetB_doubleBtagDiscrim>%f && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d)", eventWeighting, dbtNameToFloat(cut2_ak8Dbt[iCut2][0]), dbtNameToFloat(cut2_ak8Dbt[iCut2][1]), cut3_ak8Pt[iCut3], cut3_ak8Pt[iCut3], cut4_ht[iCut4], cut5_ak4Pt[iCut5][0], cut5_ak4Pt[iCut5][1]); 
+                            if (dataInputElement.lheHtCut[0] == 1) drawStringB = Form("%f*(fatJetA_doubleBtagDiscrim>%f && fatJetB_doubleBtagDiscrim>%f && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d && lheHT>=%d && lheHT<%d)", eventWeighting, dbtNameToFloat(cut2_ak8Dbt[iCut2][0]), dbtNameToFloat(cut2_ak8Dbt[iCut2][1]), cut3_ak8Pt[iCut3], cut3_ak8Pt[iCut3], cut4_ht[iCut4][0], cut4_ht[iCut4][1], cut5_ak4Pt[iCut5][0], cut5_ak4Pt[iCut5][1], dataInputElement.lheHtCut[1], dataInputElement.lheHtCut[2]);
+                            else drawStringB = Form("%f*(fatJetA_doubleBtagDiscrim>%f && fatJetB_doubleBtagDiscrim>%f && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d)", eventWeighting, dbtNameToFloat(cut2_ak8Dbt[iCut2][0]), dbtNameToFloat(cut2_ak8Dbt[iCut2][1]), cut3_ak8Pt[iCut3], cut3_ak8Pt[iCut3], cut4_ht[iCut4][0], cut4_ht[iCut4][1], cut5_ak4Pt[iCut5][0], cut5_ak4Pt[iCut5][1]); 
                             // std::cout << drawStringA << std::endl;
                             // std::cout << drawStringB << std::endl;
                             std::cout << "Filling for: " << dataInputElement.rootFileName << std::endl;
@@ -551,10 +551,11 @@ void Histograms::FillHistograms( std::vector<std::vector<std::string>> cut2_ak8D
 
 
 
+
 double dbtNameToFloat(std::string dtbString){
 
     double dbtFloat;
-    if (dtbString == "Off") dbtFloat = -1.1;
+    if (dtbString == "Off") dbtFloat = -100.0;
     else if (dtbString == "Loose") dbtFloat = 0.3;
     else if (dtbString == "Med") dbtFloat = 0.6;
     else if (dtbString == "Tight") dbtFloat = 0.9;
@@ -562,6 +563,5 @@ double dbtNameToFloat(std::string dtbString){
         std::cout << "Have not specified all DBT strings correctly\nExiting..." << std::endl;
         exit(EXIT_FAILURE);
     }
-
     return dbtFloat;
 }
