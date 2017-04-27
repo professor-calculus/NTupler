@@ -80,82 +80,82 @@ int main(){
     // ----------------------------------
     struct dataInput signal_mH30_mSusy800;
     signal_mH30_mSusy800.rootFileName = baseDir + "mH30p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH30_mSusy800.crossSection = 4.947 * 0.57 * 0.57; // in pb
+    signal_mH30_mSusy800.crossSection = 6.466 * 0.57 * 0.57; // in pb
     signal_mH30_mSusy800.lheHtCut = {0};
 
     struct dataInput signal_mH50_mSusy800;
     signal_mH50_mSusy800.rootFileName = baseDir + "mH50p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH50_mSusy800.crossSection = 4.947 * 0.57 * 0.57; // in pb
+    signal_mH50_mSusy800.crossSection = 6.466 * 0.57 * 0.57; // in pb
     signal_mH50_mSusy800.lheHtCut = {0};
 
     struct dataInput signal_mH70_mSusy800;
     signal_mH70_mSusy800.rootFileName = baseDir + "mH70p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH70_mSusy800.crossSection = 4.947 * 0.57 * 0.57; // in pb
+    signal_mH70_mSusy800.crossSection = 6.466 * 0.57 * 0.57; // in pb
     signal_mH70_mSusy800.lheHtCut = {0};
 
     struct dataInput signal_mH90_mSusy800;
     signal_mH90_mSusy800.rootFileName = baseDir + "mH90p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH90_mSusy800.crossSection = 4.947 * 0.57 * 0.57; // in pb
+    signal_mH90_mSusy800.crossSection = 6.466 * 0.57 * 0.57; // in pb
     signal_mH90_mSusy800.lheHtCut = {0};
     // ----------------------------------
     struct dataInput signal_mH30_mSusy1200;
     signal_mH30_mSusy1200.rootFileName = baseDir + "mH30p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH30_mSusy1200.crossSection = 0.375 * 0.57 * 0.57; // in pb
+    signal_mH30_mSusy1200.crossSection = 0.494 * 0.57 * 0.57; // in pb
     signal_mH30_mSusy1200.lheHtCut = {0};
 
     struct dataInput signal_mH50_mSusy1200;
     signal_mH50_mSusy1200.rootFileName = baseDir + "mH50p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH50_mSusy1200.crossSection = 0.375 * 0.57 * 0.57; // in pb
+    signal_mH50_mSusy1200.crossSection = 0.494 * 0.57 * 0.57; // in pb
     signal_mH50_mSusy1200.lheHtCut = {0};
 
     struct dataInput signal_mH70_mSusy1200;
     signal_mH70_mSusy1200.rootFileName = baseDir + "mH70p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH70_mSusy1200.crossSection = 0.375 * 0.57 * 0.57; // in pb
+    signal_mH70_mSusy1200.crossSection = 0.494 * 0.57 * 0.57; // in pb
     signal_mH70_mSusy1200.lheHtCut = {0};
 
     struct dataInput signal_mH90_mSusy1200;
     signal_mH90_mSusy1200.rootFileName = baseDir + "mH90p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH90_mSusy1200.crossSection = 0.375 * 0.57 * 0.57; // in pb
+    signal_mH90_mSusy1200.crossSection = 0.494 * 0.57 * 0.57; // in pb
     signal_mH90_mSusy1200.lheHtCut = {0};
     // ----------------------------------
     struct dataInput signal_mH30_mSusy1600;
     signal_mH30_mSusy1600.rootFileName = baseDir + "mH30p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH30_mSusy1600.crossSection = 0.044 * 0.57 * 0.57; // in pb
+    signal_mH30_mSusy1600.crossSection = 0.060 * 0.57 * 0.57; // in pb
     signal_mH30_mSusy1600.lheHtCut = {0};
 
     struct dataInput signal_mH50_mSusy1600;
     signal_mH50_mSusy1600.rootFileName = baseDir + "mH50p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH50_mSusy1600.crossSection = 0.044 * 0.57 * 0.57; // in pb
+    signal_mH50_mSusy1600.crossSection = 0.060 * 0.57 * 0.57; // in pb
     signal_mH50_mSusy1600.lheHtCut = {0};
 
     struct dataInput signal_mH70_mSusy1600;
     signal_mH70_mSusy1600.rootFileName = baseDir + "mH70p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH70_mSusy1600.crossSection = 0.044 * 0.57 * 0.57; // in pb
+    signal_mH70_mSusy1600.crossSection = 0.060 * 0.57 * 0.57; // in pb
     signal_mH70_mSusy1600.lheHtCut = {0};
 
     struct dataInput signal_mH90_mSusy1600;
     signal_mH90_mSusy1600.rootFileName = baseDir + "mH90p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH90_mSusy1600.crossSection = 0.044 * 0.57 * 0.57; // in pb
+    signal_mH90_mSusy1600.crossSection = 0.060 * 0.57 * 0.57; // in pb
     signal_mH90_mSusy1600.lheHtCut = {0};
     // ----------------------------------
     struct dataInput signal_mH30_mSusy2000;
     signal_mH30_mSusy2000.rootFileName = baseDir + "mH30p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH30_mSusy2000.crossSection = 0.006 * 0.57 * 0.57; // in pb
+    signal_mH30_mSusy2000.crossSection = 0.009 * 0.57 * 0.57; // in pb
     signal_mH30_mSusy2000.lheHtCut = {0};
 
     struct dataInput signal_mH50_mSusy2000;
     signal_mH50_mSusy2000.rootFileName = baseDir + "mH50p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH50_mSusy2000.crossSection = 0.006 * 0.57 * 0.57; // in pb
+    signal_mH50_mSusy2000.crossSection = 0.009 * 0.57 * 0.57; // in pb
     signal_mH50_mSusy2000.lheHtCut = {0};
 
     struct dataInput signal_mH70_mSusy2000;
     signal_mH70_mSusy2000.rootFileName = baseDir + "mH70p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH70_mSusy2000.crossSection = 0.006 * 0.57 * 0.57; // in pb
+    signal_mH70_mSusy2000.crossSection = 0.009 * 0.57 * 0.57; // in pb
     signal_mH70_mSusy2000.lheHtCut = {0};
 
     struct dataInput signal_mH90_mSusy2000;
     signal_mH90_mSusy2000.rootFileName = baseDir + "mH90p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH90_mSusy2000.crossSection = 0.006 * 0.57 * 0.57; // in pb
+    signal_mH90_mSusy2000.crossSection = 0.009 * 0.57 * 0.57; // in pb
     signal_mH90_mSusy2000.lheHtCut = {0};
     // ----------------------------------
     // BACKGROUND
