@@ -71,17 +71,18 @@ int main(){
 
     // ONE: saving info and lumi
     std::string baseDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_04_22/"; // for the input ROOT files
-    std::string outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/output_InvestigateEventSelectionCuts/DEMO/"; // where we are going to save the plots
+    std::string outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/output_InvestigateEventSelectionCutsV2/decideCutsVX/"; // where we are going to save the plots
     double integratedLuminosity = 50.0; // the integrated luminosity, in fb^-1 that we scale our plots to
 
 
     // TWO: cut parameter options
     // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Tight","Tight"}, {"Tight","Med"}, {"Med","Med"}, {"Med","Loose"}, {"Loose","Loose"}}; // "Loose", "Med", or "Tight" (2 elements in sub-vector, 1st for leading)
-    std::vector<std::vector<std::string>> cut2_ak8Dbt = {{"Tight","Med"}};
+    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Tight","Med"} };// "Loose", "Med", or "Tight" (2 elements in sub-vector, 1st for leading)
+    // std::vector<int> cut3_ak8Pt = {200, 250, 300, 350, 400};
     std::vector<int> cut3_ak8Pt = {300};
     std::vector<std::vector<int>>cut4_ht = { {1500,2500}, {2500,3500}, {3500,99000} }; // these are HT bins, not just cuts
     // std::vector<std::vector<int>> cut5_ak4Pt = { {100,100}, {200,200}, {300,300}, {400,400}, {500,500} }; // (2 elements in sub-vector, 1st for leading)
-    std::vector<std::vector<int>> cut5_ak4Pt = { {300,300} };
+    std::vector<std::vector<int>> cut5_ak4Pt = { {250,250} }; // (2 elements in sub-vector, 1st for leading)
 
 
     // THREE: set the dataInput's to be used (this is a separate object in case you have multiple inputs to a single histogram with different cross sections)
@@ -231,10 +232,10 @@ int main(){
 
     // FOUR: group the input datasets and create Histograms
     // ---------------------------------- 
-    class Histograms hSignal_mH30_mSusy800(integratedLuminosity, "mH30_mSusy800", {signal_mH30_mSusy800}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    class Histograms hSignal_mH50_mSusy800(integratedLuminosity, "mH50_mSusy800", {signal_mH50_mSusy800}, kGreen, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    class Histograms hSignal_mH70_mSusy800(integratedLuminosity, "mH70_mSusy800", {signal_mH70_mSusy800}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    class Histograms hSignal_mH90_mSusy800(integratedLuminosity, "mH90_mSusy800", {signal_mH90_mSusy800}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    // class Histograms hSignal_mH30_mSusy800(integratedLuminosity, "mH30_mSusy800", {signal_mH30_mSusy800}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    // class Histograms hSignal_mH50_mSusy800(integratedLuminosity, "mH50_mSusy800", {signal_mH50_mSusy800}, kGreen, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    // class Histograms hSignal_mH70_mSusy800(integratedLuminosity, "mH70_mSusy800", {signal_mH70_mSusy800}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    // class Histograms hSignal_mH90_mSusy800(integratedLuminosity, "mH90_mSusy800", {signal_mH90_mSusy800}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // ----------------------------------
     // class Histograms hSignal_mH30_mSusy1200(integratedLuminosity, "mH30_mSusy1200", {signal_mH30_mSusy1200}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // class Histograms hSignal_mH50_mSusy1200(integratedLuminosity, "mH50_mSusy1200", {signal_mH50_mSusy1200}, kGreen, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
@@ -246,10 +247,10 @@ int main(){
     // class Histograms hSignal_mH70_mSusy1600(integratedLuminosity, "mH70_mSusy1600", {signal_mH70_mSusy1600}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // class Histograms hSignal_mH90_mSusy1600(integratedLuminosity, "mH90_mSusy1600", {signal_mH90_mSusy1600}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // ----------------------------------
-    // class Histograms hSignal_mH30_mSusy2000(integratedLuminosity, "mH30_mSusy2000", {signal_mH30_mSusy2000}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    // class Histograms hSignal_mH50_mSusy2000(integratedLuminosity, "mH50_mSusy2000", {signal_mH50_mSusy2000}, kGreen, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    // class Histograms hSignal_mH70_mSusy2000(integratedLuminosity, "mH70_mSusy2000", {signal_mH70_mSusy2000}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    // class Histograms hSignal_mH90_mSusy2000(integratedLuminosity, "mH90_mSusy2000", {signal_mH90_mSusy2000}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    class Histograms hSignal_mH30_mSusy2000(integratedLuminosity, "mH30_mSusy2000", {signal_mH30_mSusy2000}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    class Histograms hSignal_mH50_mSusy2000(integratedLuminosity, "mH50_mSusy2000", {signal_mH50_mSusy2000}, kGreen, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    class Histograms hSignal_mH70_mSusy2000(integratedLuminosity, "mH70_mSusy2000", {signal_mH70_mSusy2000}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    class Histograms hSignal_mH90_mSusy2000(integratedLuminosity, "mH90_mSusy2000", {signal_mH90_mSusy2000}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // ----------------------------------
     class Histograms hTtbar(integratedLuminosity, "ttbar+jets", {TTJets_inclusive, TTJets_ht600to800, TTJets_ht800to1200,TTJets_ht1200to2500,TTJets_ht2500toInf}, PlottingTools::SetColor(1,5), cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     class Histograms hZ(integratedLuminosity, "Z+jets", {ZJetsToQQ_ht600toInf}, PlottingTools::SetColor(2,5), cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
@@ -260,10 +261,10 @@ int main(){
 
     // FIVE: group the Histograms into signal and background
     // std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy800};
-    std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy800,hSignal_mH50_mSusy800,hSignal_mH70_mSusy800,hSignal_mH90_mSusy800};
+    // std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy800,hSignal_mH50_mSusy800,hSignal_mH70_mSusy800,hSignal_mH90_mSusy800};
     // std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy1200,hSignal_mH50_mSusy1200,hSignal_mH70_mSusy1200,hSignal_mH90_mSusy1200}; 
     // std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy1600,hSignal_mH50_mSusy1600,hSignal_mH70_mSusy1600,hSignal_mH90_mSusy1600};
-    // std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy2000,hSignal_mH50_mSusy2000,hSignal_mH70_mSusy2000,hSignal_mH90_mSusy2000};
+    std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy2000,hSignal_mH50_mSusy2000,hSignal_mH70_mSusy2000,hSignal_mH90_mSusy2000};
     // std::vector<class Histograms> signalHistograms = {hSignal_mH70_mSusy800,hSignal_mH70_mSusy1200,hSignal_mH70_mSusy1600,hSignal_mH70_mSusy2000};
     
     std::vector<class Histograms> backgroundHistograms = {hTtbar, hZ, hW, hZZ, hWW}; // the order here is how they will be plotted
@@ -304,7 +305,7 @@ int main(){
     std::ofstream table;
     table.open(Form("%s/aSignificanceTable_%.0finvFb.csv",outputDirectory.c_str(),integratedLuminosity));
     table << "*SIGNIFICANCE TABLE* significance nDifference (nSignal|nBackground)" << "\n";
-    table << "NB: don't use the first mass bin for counting" << "\n";
+    // table << "NB: don't use the first mass bin for counting" << "\n";
     table << "Luminosity = " << integratedLuminosity << "fb^-1," << "\n";
     table << "Backgrounds used:," << "\n";
     for (size_t i = 0; i < backgroundHistograms.size(); ++i) table << backgroundHistograms[i].legend.c_str() << "\n";
@@ -389,14 +390,14 @@ int main(){
                     double nBackgroundObserved = 0.0;
                     for (size_t i = 0; i < backgroundHistograms.size(); ++i){
                         // nBackgroundObserved += backgroundHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetEntries(); // note that this method does not work due to the way the histograms were filled
-                        for (int iBin = 2; iBin < backgroundHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetNbinsX()+2; ++iBin)
+                        for (int iBin = 0; iBin < backgroundHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetNbinsX()+2; ++iBin)
                             nBackgroundObserved += backgroundHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetBinContent(iBin);
                     }
 
                     for (size_t i = 0; i < signalHistograms.size(); ++i){
                         
                         double nSignalObserved = 0.0;
-                        for (int iBin = 2; iBin < signalHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetNbinsX()+2; ++iBin)
+                        for (int iBin = 0; iBin < signalHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetNbinsX()+2; ++iBin)
                             nSignalObserved += signalHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetBinContent(iBin);
 
                         double significance = nSignalObserved / sqrt(nBackgroundObserved);
