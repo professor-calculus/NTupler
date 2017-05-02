@@ -13,6 +13,7 @@
 #include <TString.h>
 #include <TLorentzVector.h> 
 #include <TH1F.h>
+#include <TH2F.h>
 
 
 //RAL PARTICLE HEADERS
@@ -38,21 +39,26 @@ void investigateEventSelectionCuts_individualPlots(){
 	TFile * f_mH50mSusy1600 = TFile::Open("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_04_22/mH50p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root");
 	TFile * f_mH70mSusy1600 = TFile::Open("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_04_22/mH70p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root");
 	TFile * f_mH90mSusy1600 = TFile::Open("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_04_22/mH90p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root");
+	TFile * f_mH70mSusy2000 = TFile::Open("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_04_22/mH70p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root");
 
 	TTree * T_ttbar = (TTree*)f_ttbar->Get("doubleBFatJetPairTree");
 	TTree * T_mH30mSusy1600 = (TTree*)f_mH30mSusy1600->Get("doubleBFatJetPairTree");
 	TTree * T_mH50mSusy1600 = (TTree*)f_mH50mSusy1600->Get("doubleBFatJetPairTree");
 	TTree * T_mH70mSusy1600 = (TTree*)f_mH70mSusy1600->Get("doubleBFatJetPairTree");
 	TTree * T_mH90mSusy1600 = (TTree*)f_mH90mSusy1600->Get("doubleBFatJetPairTree");
+	TTree * T_mH70mSusy2000 = (TTree*)f_mH70mSusy2000->Get("doubleBFatJetPairTree");
 
 	double weighting_ttbar = getEventWeighting(f_ttbar, 831.76, integratedLuminosity);
-	double weighting_signal = getEventWeighting(f_mH70mSusy1600, 0.060, integratedLuminosity);
+	double weighting_signal1600 = getEventWeighting(f_mH70mSusy1600, 0.060, integratedLuminosity);
+	double weighting_signal2000 = getEventWeighting(f_mH70mSusy2000, 0.009, integratedLuminosity);
 
     TStyle * tdrStyle = PlottingTools::TDRStyle();
     tdrStyle->cd();
 	TLatex * latex = new TLatex();
     latex->SetNDC();
     latex->SetTextFont(42);
+
+    std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/investigateEventSelectionCuts_individualPlots.cc %s",outputDir.c_str()));
 
 
 	/////////////////////////////////////////////
@@ -101,32 +107,40 @@ void investigateEventSelectionCuts_individualPlots(){
 	/////////////////////////////////////////////
 	// PLOT SIGNAL MASS
 	{
-		TH1F  h2 = TH1F("h2", "", 50, -8, 200);
-		TH1F * h_mH30mSusy1600_softDrop = new TH1F("h_mH30mSusy1600_softDrop", ";LeadingBDiscFatJet_Mass (GeV); events / bin", 50, -8, 200);
-		TH1F * h_mH50mSusy1600_softDrop = new TH1F("h_mH50mSusy1600_softDrop", ";LeadingBDiscFatJet_Mass (GeV); events / bin", 50, -8, 200);
-		TH1F * h_mH70mSusy1600_softDrop = new TH1F("h_mH70mSusy1600_softDrop", ";LeadingBDiscFatJet_Mass (GeV); events / bin", 50, -8, 200);
-		TH1F * h_mH90mSusy1600_softDrop = new TH1F("h_mH90mSusy1600_softDrop", ";LeadingBDiscFatJet_Mass (GeV); events / bin", 50, -8, 200);
-		TH1F * h_mH30mSusy1600_pruned = new TH1F("h_mH30mSusy1600_pruned", ";LeadingBDiscFatJet_Mass (GeV); events / bin", 50, -8, 200);
-		TH1F * h_mH50mSusy1600_pruned = new TH1F("h_mH50mSusy1600_pruned", ";LeadingBDiscFatJet_Mass (GeV); events / bin", 50, -8, 200);
-		TH1F * h_mH70mSusy1600_pruned = new TH1F("h_mH70mSusy1600_pruned", ";LeadingBDiscFatJet_Mass (GeV); events / bin", 50, -8, 200);
-		TH1F * h_mH90mSusy1600_pruned = new TH1F("h_mH90mSusy1600_pruned", ";LeadingBDiscFatJet_Mass (GeV); events / bin", 50, -8, 200);
+		TH1F  h2 = TH1F("h2", "", 50, -8, 150);
+		TH1F * h_mH30mSusy1600_softDrop = new TH1F("h_mH30mSusy1600_softDrop", ";LeadingBDiscFatJet_Mass (GeV); events / bin", 50, -8, 150);
+		TH1F * h_mH50mSusy1600_softDrop = new TH1F("h_mH50mSusy1600_softDrop", ";LeadingBDiscFatJet_Mass (GeV); events / bin", 50, -8, 150);
+		TH1F * h_mH70mSusy1600_softDrop = new TH1F("h_mH70mSusy1600_softDrop", ";LeadingBDiscFatJet_Mass (GeV); events / bin", 50, -8, 150);
+		TH1F * h_mH90mSusy1600_softDrop = new TH1F("h_mH90mSusy1600_softDrop", ";LeadingBDiscFatJet_Mass (GeV); events / bin", 50, -8, 150);
+		TH1F * h_mH30mSusy1600_pruned = new TH1F("h_mH30mSusy1600_pruned", ";LeadingBDiscFatJet_Mass (GeV); events / bin", 50, -8, 150);
+		TH1F * h_mH50mSusy1600_pruned = new TH1F("h_mH50mSusy1600_pruned", ";LeadingBDiscFatJet_Mass (GeV); events / bin", 50, -8, 150);
+		TH1F * h_mH70mSusy1600_pruned = new TH1F("h_mH70mSusy1600_pruned", ";LeadingBDiscFatJet_Mass (GeV); events / bin", 50, -8, 150);
+		TH1F * h_mH90mSusy1600_pruned = new TH1F("h_mH90mSusy1600_pruned", ";LeadingBDiscFatJet_Mass (GeV); events / bin", 50, -8, 150);
 
-		T_mH30mSusy1600->Draw("fatJetA_softDropMass>>h2", Form("%f*(fatJetA_doubleBtagDiscrim>0.9 && fatJetB_doubleBtagDiscrim>0.6 && fatJetA_p4.Pt()>300 && fatJetB_p4.Pt()>300 && ht>=2500 && slimJetA_p4.Pt()>300 && slimJetB_p4.Pt()>300)",weighting_signal), "");
+		// T_mH30mSusy1600->Draw("fatJetA_softDropMass>>h2", Form("%f*(fatJetA_doubleBtagDiscrim>0.9 && fatJetB_doubleBtagDiscrim>0.6 && fatJetA_p4.Pt()>300 && fatJetB_p4.Pt()>300 && ht>=2500 && slimJetA_p4.Pt()>300 && slimJetB_p4.Pt()>300)",weighting_signal1600), "");
+		T_mH30mSusy1600->Draw("fatJetA_softDropMass>>h2", Form("%f",weighting_signal1600), "");
 		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) h_mH30mSusy1600_softDrop->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_mH50mSusy1600->Draw("fatJetA_softDropMass>>h2", Form("%f*(fatJetA_doubleBtagDiscrim>0.9 && fatJetB_doubleBtagDiscrim>0.6 && fatJetA_p4.Pt()>300 && fatJetB_p4.Pt()>300 && ht>=2500 && slimJetA_p4.Pt()>300 && slimJetB_p4.Pt()>300)",weighting_signal), "");
+		// T_mH50mSusy1600->Draw("fatJetA_softDropMass>>h2", Form("%f*(fatJetA_doubleBtagDiscrim>0.9 && fatJetB_doubleBtagDiscrim>0.6 && fatJetA_p4.Pt()>300 && fatJetB_p4.Pt()>300 && ht>=2500 && slimJetA_p4.Pt()>300 && slimJetB_p4.Pt()>300)",weighting_signal1600), "");
+		T_mH50mSusy1600->Draw("fatJetA_softDropMass>>h2", Form("%f",weighting_signal1600), "");
 		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) h_mH50mSusy1600_softDrop->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_mH70mSusy1600->Draw("fatJetA_softDropMass>>h2", Form("%f*(fatJetA_doubleBtagDiscrim>0.9 && fatJetB_doubleBtagDiscrim>0.6 && fatJetA_p4.Pt()>300 && fatJetB_p4.Pt()>300 && ht>=2500 && slimJetA_p4.Pt()>300 && slimJetB_p4.Pt()>300)",weighting_signal), "");
+		// T_mH70mSusy1600->Draw("fatJetA_softDropMass>>h2", Form("%f*(fatJetA_doubleBtagDiscrim>0.9 && fatJetB_doubleBtagDiscrim>0.6 && fatJetA_p4.Pt()>300 && fatJetB_p4.Pt()>300 && ht>=2500 && slimJetA_p4.Pt()>300 && slimJetB_p4.Pt()>300)",weighting_signal1600), "");
+		T_mH70mSusy1600->Draw("fatJetA_softDropMass>>h2", Form("%f",weighting_signal1600), "");
 		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) h_mH70mSusy1600_softDrop->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_mH90mSusy1600->Draw("fatJetA_softDropMass>>h2", Form("%f*(fatJetA_doubleBtagDiscrim>0.9 && fatJetB_doubleBtagDiscrim>0.6 && fatJetA_p4.Pt()>300 && fatJetB_p4.Pt()>300 && ht>=2500 && slimJetA_p4.Pt()>300 && slimJetB_p4.Pt()>300)",weighting_signal), "");
+		// T_mH90mSusy1600->Draw("fatJetA_softDropMass>>h2", Form("%f*(fatJetA_doubleBtagDiscrim>0.9 && fatJetB_doubleBtagDiscrim>0.6 && fatJetA_p4.Pt()>300 && fatJetB_p4.Pt()>300 && ht>=2500 && slimJetA_p4.Pt()>300 && slimJetB_p4.Pt()>300)",weighting_signal1600), "");
+		T_mH90mSusy1600->Draw("fatJetA_softDropMass>>h2", Form("%f",weighting_signal1600), "");
 		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) h_mH90mSusy1600_softDrop->AddBinContent(iBin, h2.GetBinContent(iBin));
 
-		T_mH30mSusy1600->Draw("fatJetA_prunedMass>>h2", Form("%f*(fatJetA_doubleBtagDiscrim>0.9 && fatJetB_doubleBtagDiscrim>0.6 && fatJetA_p4.Pt()>300 && fatJetB_p4.Pt()>300 && ht>=2500 && slimJetA_p4.Pt()>300 && slimJetB_p4.Pt()>300)",weighting_signal), "");
+		// T_mH30mSusy1600->Draw("fatJetA_prunedMass>>h2", Form("%f*(fatJetA_doubleBtagDiscrim>0.9 && fatJetB_doubleBtagDiscrim>0.6 && fatJetA_p4.Pt()>300 && fatJetB_p4.Pt()>300 && ht>=2500 && slimJetA_p4.Pt()>300 && slimJetB_p4.Pt()>300)",weighting_signal1600), "");
+		T_mH30mSusy1600->Draw("fatJetA_prunedMass>>h2", Form("%f",weighting_signal1600), "");
 		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) h_mH30mSusy1600_pruned->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_mH50mSusy1600->Draw("fatJetA_prunedMass>>h2", Form("%f*(fatJetA_doubleBtagDiscrim>0.9 && fatJetB_doubleBtagDiscrim>0.6 && fatJetA_p4.Pt()>300 && fatJetB_p4.Pt()>300 && ht>=2500 && slimJetA_p4.Pt()>300 && slimJetB_p4.Pt()>300)",weighting_signal), "");
+		// T_mH50mSusy1600->Draw("fatJetA_prunedMass>>h2", Form("%f*(fatJetA_doubleBtagDiscrim>0.9 && fatJetB_doubleBtagDiscrim>0.6 && fatJetA_p4.Pt()>300 && fatJetB_p4.Pt()>300 && ht>=2500 && slimJetA_p4.Pt()>300 && slimJetB_p4.Pt()>300)",weighting_signal1600), "");
+		T_mH50mSusy1600->Draw("fatJetA_prunedMass>>h2", Form("%f",weighting_signal1600), "");
 		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) h_mH50mSusy1600_pruned->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_mH70mSusy1600->Draw("fatJetA_prunedMass>>h2", Form("%f*(fatJetA_doubleBtagDiscrim>0.9 && fatJetB_doubleBtagDiscrim>0.6 && fatJetA_p4.Pt()>300 && fatJetB_p4.Pt()>300 && ht>=2500 && slimJetA_p4.Pt()>300 && slimJetB_p4.Pt()>300)",weighting_signal), "");
+		// T_mH70mSusy1600->Draw("fatJetA_prunedMass>>h2", Form("%f*(fatJetA_doubleBtagDiscrim>0.9 && fatJetB_doubleBtagDiscrim>0.6 && fatJetA_p4.Pt()>300 && fatJetB_p4.Pt()>300 && ht>=2500 && slimJetA_p4.Pt()>300 && slimJetB_p4.Pt()>300)",weighting_signal1600), "");
+		T_mH70mSusy1600->Draw("fatJetA_prunedMass>>h2", Form("%f",weighting_signal1600), "");
 		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) h_mH70mSusy1600_pruned->AddBinContent(iBin, h2.GetBinContent(iBin));
-		T_mH90mSusy1600->Draw("fatJetA_prunedMass>>h2", Form("%f*(fatJetA_doubleBtagDiscrim>0.9 && fatJetB_doubleBtagDiscrim>0.6 && fatJetA_p4.Pt()>300 && fatJetB_p4.Pt()>300 && ht>=2500 && slimJetA_p4.Pt()>300 && slimJetB_p4.Pt()>300)",weighting_signal), "");
+		// T_mH90mSusy1600->Draw("fatJetA_prunedMass>>h2", Form("%f*(fatJetA_doubleBtagDiscrim>0.9 && fatJetB_doubleBtagDiscrim>0.6 && fatJetA_p4.Pt()>300 && fatJetB_p4.Pt()>300 && ht>=2500 && slimJetA_p4.Pt()>300 && slimJetB_p4.Pt()>300)",weighting_signal1600), "");
+		T_mH90mSusy1600->Draw("fatJetA_prunedMass>>h2", Form("%f",weighting_signal1600), "");
 		for (int iBin = 0; iBin < h2.GetNbinsX()+2; ++iBin) h_mH90mSusy1600_pruned->AddBinContent(iBin, h2.GetBinContent(iBin));
 
 		TCanvas* c2 =new TCanvas("c2","c2"); 
@@ -149,19 +163,19 @@ void investigateEventSelectionCuts_individualPlots(){
 		h_mH70mSusy1600_pruned->SetLineWidth(3);
 		h_mH90mSusy1600_pruned->SetLineWidth(3);
 
-		h_mH30mSusy1600_pruned->SetLineStyle(7);
-		h_mH50mSusy1600_pruned->SetLineStyle(7);
-		h_mH70mSusy1600_pruned->SetLineStyle(7);
-		h_mH90mSusy1600_pruned->SetLineStyle(7);
+		h_mH30mSusy1600_pruned->SetLineStyle(2);
+		h_mH50mSusy1600_pruned->SetLineStyle(2);
+		h_mH70mSusy1600_pruned->SetLineStyle(2);
+		h_mH90mSusy1600_pruned->SetLineStyle(2);
 
-		h_mH30mSusy1600_softDrop->Draw();
-		h_mH50mSusy1600_softDrop->Draw("same");
-		h_mH70mSusy1600_softDrop->Draw("same");
-		h_mH90mSusy1600_softDrop->Draw("same");
-		h_mH30mSusy1600_pruned->Draw("same");
+		h_mH30mSusy1600_pruned->Draw();
 		h_mH50mSusy1600_pruned->Draw("same");
 		h_mH70mSusy1600_pruned->Draw("same");
 		h_mH90mSusy1600_pruned->Draw("same");
+		h_mH30mSusy1600_softDrop->Draw("same");
+		h_mH50mSusy1600_softDrop->Draw("same");
+		h_mH70mSusy1600_softDrop->Draw("same");
+		h_mH90mSusy1600_softDrop->Draw("same");
 
 		latex->SetTextAlign(11); // align from left
 		latex->DrawLatex(0.15,0.92,"#bf{CMS} #it{Simulation} W.I.P");
@@ -169,25 +183,76 @@ void investigateEventSelectionCuts_individualPlots(){
 		latex->DrawLatex(0.92,0.92,Form("%.1f fb^{-1} (13 TeV)", integratedLuminosity));
 
 	    TLegend * legend1 = new TLegend();
-	    legend1->SetTextSize(0.05);
-	    legend1->SetX1NDC(0.56);
-	    legend1->SetX2NDC(0.87);
-	    legend1->SetY1NDC(0.67);
-	    legend1->SetY2NDC(0.87);
-	    legend1->AddEntry(h_mH30mSusy1600_softDrop, "m_{H}30m_{susy}1600_SoftDrop", "L");
-	    legend1->AddEntry(h_mH30mSusy1600_pruned, "m_{H}30m_{susy}1600_Pruned", "L");
-	    legend1->AddEntry(h_mH50mSusy1600_softDrop, "m_{H}50m_{susy}1600_SoftDrop", "L");
-	    legend1->AddEntry(h_mH50mSusy1600_pruned, "m_{H}50m_{susy}1600_Pruned", "L");
-	    legend1->AddEntry(h_mH70mSusy1600_softDrop, "m_{H}70m_{susy}1600_SoftDrop", "L");
-	    legend1->AddEntry(h_mH70mSusy1600_pruned, "m_{H}70m_{susy}1600_Pruned", "L");
-	    legend1->AddEntry(h_mH90mSusy1600_softDrop, "m_{H}90m_{susy}1600_SoftDrop", "L");
-	    legend1->AddEntry(h_mH90mSusy1600_pruned, "m_{H}90m_{susy}1600_Pruned", "L");
+	    legend1->SetTextSize(0.035);
+	    legend1->SetX1NDC(0.53);
+	    legend1->SetX2NDC(0.89);
+	    legend1->SetY1NDC(0.61);
+	    legend1->SetY2NDC(0.88);
+	    legend1->AddEntry(h_mH30mSusy1600_pruned, "m_{H}30_m_{susy}1600_Pruned", "L");
+	    legend1->AddEntry(h_mH30mSusy1600_softDrop, "m_{H}30_m_{susy}1600_SoftDrop", "L");
+	    legend1->AddEntry(h_mH50mSusy1600_pruned, "m_{H}50_m_{susy}1600_Pruned", "L");
+	    legend1->AddEntry(h_mH50mSusy1600_softDrop, "m_{H}50_m_{susy}1600_SoftDrop", "L");
+	    legend1->AddEntry(h_mH70mSusy1600_pruned, "m_{H}70_m_{susy}1600_Pruned", "L");
+	    legend1->AddEntry(h_mH70mSusy1600_softDrop, "m_{H}70_m_{susy}1600_SoftDrop", "L");
+	    legend1->AddEntry(h_mH90mSusy1600_pruned, "m_{H}90_m_{susy}1600_Pruned", "L");
+	    legend1->AddEntry(h_mH90mSusy1600_softDrop, "m_{H}90_m_{susy}1600_SoftDrop", "L");
 		legend1->Draw("same");
 
 		c2->SaveAs(Form("%s/signal_massRecoType.pdf", outputDir.c_str()));
 		c2->Close();
 	}
 	/////////////////////////////////////////////
+
+	/////////////////////////////////////////////
+	// PLOT SIGNAL jet pt's
+	{
+		double defaultParam_GetPadRightMargin = tdrStyle->GetPadRightMargin();
+		double defaultParam_GetPadLeftMargin = tdrStyle->GetPadLeftMargin();
+		tdrStyle->SetPadRightMargin(0.15);
+		tdrStyle->SetPadLeftMargin(0.15);
+
+		TH2F * h_mH70mSusy2000_AK8vsAK8 = new TH2F("h_mH70mSusy2000_AK8vsAK8", ";LeadingBDiscFatJet p_{T} (GeV); SecondaryBDiscFatJet p_{T} (GeV)", 300, 0, 3000, 300, 0, 3000);
+		T_mH70mSusy2000->Draw("fatJetA_p4.Pt():fatJetB_p4.Pt()>>h_mH70mSusy2000_AK8vsAK8", Form("%f",weighting_signal2000), "colz");
+		TCanvas* c3 =new TCanvas("c3","c3"); 
+		h_mH70mSusy2000_AK8vsAK8->Draw("colz");
+		latex->SetTextAlign(11); // align from left
+		latex->DrawLatex(0.15,0.92,"#bf{CMS} #it{Simulation} W.I.P");
+		latex->SetTextAlign(31); // align from right
+		latex->DrawLatex(0.92,0.92,Form("%.1f fb^{-1} (13 TeV)", integratedLuminosity));
+		// gPad->SetLogz();
+		c3->SaveAs(Form("%s/signal_AK8vsAK8.pdf", outputDir.c_str()));
+		c3->Close();
+
+		TH2F * h_mH70mSusy2000_AK4vsAK4 = new TH2F("h_mH70mSusy2000_AK4vsAK4", ";SecondaryPtAK4Jet p_{T} (GeV);LeadingPtAK4Jet p_{T} (GeV)", 300, 0, 2500, 300, 0, 2500);
+		T_mH70mSusy2000->Draw("slimJetA_p4.Pt():slimJetB_p4.Pt()>>h_mH70mSusy2000_AK4vsAK4", Form("%f",weighting_signal2000), "colz");
+		TCanvas* c4 =new TCanvas("c4","c4"); 
+		h_mH70mSusy2000_AK4vsAK4->Draw("colz");
+		latex->SetTextAlign(11); // align from left
+		latex->DrawLatex(0.15,0.92,"#bf{CMS} #it{Simulation} W.I.P");
+		latex->SetTextAlign(31); // align from right
+		latex->DrawLatex(0.92,0.92,Form("%.1f fb^{-1} (13 TeV)", integratedLuminosity));
+		gPad->SetLogz();
+		c4->SaveAs(Form("%s/signal_AK4vsAK4.pdf", outputDir.c_str()));
+		c4->Close();
+
+		TH2F * h_mH70mSusy2000_AK8vsAK4 = new TH2F("h_mH70mSusy2000_AK8vsAK4", ";SecondaryPtAK4Jet p_{T} (GeV);SecondaryPtFatJet p_{T} (GeV)", 300, 0, 2500, 300, 0, 2500);
+		T_mH70mSusy2000->Draw("fatJetA_p4.Pt():slimJetB_p4.Pt()>>h_mH70mSusy2000_AK8vsAK4", Form("%f*(fatJetA_p4.Pt() < fatJetB_p4.Pt())",weighting_signal2000), "colz");
+		T_mH70mSusy2000->Draw("fatJetB_p4.Pt():slimJetB_p4.Pt()>>h_mH70mSusy2000_AK8vsAK4", Form("%f*(fatJetB_p4.Pt() < fatJetA_p4.Pt())",weighting_signal2000), "colz");
+		TCanvas* c5 =new TCanvas("c5","c5"); 
+		h_mH70mSusy2000_AK8vsAK4->Draw("colz");
+		latex->SetTextAlign(11); // align from left
+		latex->DrawLatex(0.15,0.92,"#bf{CMS} #it{Simulation} W.I.P");
+		latex->SetTextAlign(31); // align from right
+		latex->DrawLatex(0.92,0.92,Form("%.1f fb^{-1} (13 TeV)", integratedLuminosity));
+		// gPad->SetLogz();
+		c5->SaveAs(Form("%s/signal_AK8vsAK4.pdf", outputDir.c_str()));
+		c5->Close();
+
+		tdrStyle->SetPadRightMargin(defaultParam_GetPadRightMargin);
+		tdrStyle->SetPadRightMargin(defaultParam_GetPadLeftMargin);
+	}
+	/////////////////////////////////////////////
+
 
 } // closes function 'investigateEventSelectionCuts_individualPlots'
 
