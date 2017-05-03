@@ -64,7 +64,7 @@ int main(){
 
     // ONE: saving info and lumi
     std::string baseDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_04_22/"; // for the input ROOT files
-    std::string outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/output_InvestigateEventSelectionCuts/DEMOTABLE/"; // where we are going to save the plots
+    std::string outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/output_InvestigateEventSelectionCutsV2/chosenCutsTable_mH70/"; // where we are going to save the plots
     double integratedLuminosity = 50.0; // the integrated luminosity, in fb^-1 that we scale our plots to
 
 
@@ -250,10 +250,10 @@ int main(){
 
 
     // FIVE: group the Histograms we are going to use for the table
-    // std::vector<class Histograms> histogramsVec = {hSignal_mH30_mSusy800,hSignal_mH50_mSusy800,hSignal_mH70_mSusy800,hSignal_mH90_mSusy800,hTtbar,hZ,hW};
-    // std::vector<class Histograms> histogramsVec = {hSignal_mH30_mSusy1200,hSignal_mH50_mSusy1200,hSignal_mH70_mSusy1200,hSignal_mH90_mSusy1200,hTtbar,hZ,hW};
-    // std::vector<class Histograms> histogramsVec = {hSignal_mH30_mSusy1600,hSignal_mH50_mSusy1600,hSignal_mH70_mSusy1600,hSignal_mH90_mSusy1600,hTtbar,hZ,hW};
-    // std::vector<class Histograms> histogramsVec = {hSignal_mH30_mSusy2000,hSignal_mH50_mSusy2000,hSignal_mH70_mSusy2000,hSignal_mH90_mSusy2000,hTtbar,hZ,hW};
+    // std::vector<class Histograms> histogramsVec = {hSignal_mH30_mSusy800,hSignal_mH50_mSusy800,hSignal_mH70_mSusy800,hSignal_mH90_mSusy800,hTtbar,hZ,hW,hZZ,hWW};
+    // std::vector<class Histograms> histogramsVec = {hSignal_mH30_mSusy1200,hSignal_mH50_mSusy1200,hSignal_mH70_mSusy1200,hSignal_mH90_mSusy1200,hTtbar,hZ,hW,hZZ,hWW};
+    // std::vector<class Histograms> histogramsVec = {hSignal_mH30_mSusy1600,hSignal_mH50_mSusy1600,hSignal_mH70_mSusy1600,hSignal_mH90_mSusy1600,hTtbar,hZ,hW,hZZ,hWW};
+    // std::vector<class Histograms> histogramsVec = {hSignal_mH30_mSusy2000,hSignal_mH50_mSusy2000,hSignal_mH70_mSusy2000,hSignal_mH90_mSusy2000,hTtbar,hZ,hW,hZZ,hWW};
     std::vector<class Histograms> histogramsVec = {hSignal_mH70_mSusy800,hSignal_mH70_mSusy1200,hSignal_mH70_mSusy1600,hSignal_mH70_mSusy2000,hTtbar,hZ,hW,hZZ,hWW};
          
 
