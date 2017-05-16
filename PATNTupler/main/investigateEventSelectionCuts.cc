@@ -71,18 +71,18 @@ int main(){
 
     // ONE: saving info and lumi
     std::string baseDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_04_22/"; // for the input ROOT files
-    std::string outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/output_InvestigateEventSelectionCutsV2/decideCutsVX/"; // where we are going to save the plots
+    std::string outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/output_InvestigateEventSelectionCutsV3/decideCuts_mH70_AK4/"; // where we are going to save the plots
     double integratedLuminosity = 50.0; // the integrated luminosity, in fb^-1 that we scale our plots to
 
 
     // TWO: cut parameter options
-    // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Tight","Tight"}, {"Tight","Med"}, {"Med","Med"}, {"Med","Loose"}, {"Loose","Loose"}}; // "Loose", "Med", or "Tight" (2 elements in sub-vector, 1st for leading)
+    // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Tight","Tight"}, {"Tight","Med"}, {"Med","Med"} }; // "Loose", "Med", or "Tight" (2 elements in sub-vector, 1st for leading)
     std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Tight","Med"} };// "Loose", "Med", or "Tight" (2 elements in sub-vector, 1st for leading)
     // std::vector<int> cut3_ak8Pt = {200, 250, 300, 350, 400};
     std::vector<int> cut3_ak8Pt = {300};
     std::vector<std::vector<int>>cut4_ht = { {1500,2500}, {2500,3500}, {3500,99000} }; // these are HT bins, not just cuts
     // std::vector<std::vector<int>> cut5_ak4Pt = { {100,100}, {200,200}, {300,300}, {400,400}, {500,500} }; // (2 elements in sub-vector, 1st for leading)
-    std::vector<std::vector<int>> cut5_ak4Pt = { {250,250} }; // (2 elements in sub-vector, 1st for leading)
+    std::vector<std::vector<int>> cut5_ak4Pt = { {-100,-100}, {250,-100}, {250,250} }; // (2 elements in sub-vector, 1st for leading)
 
 
     // THREE: set the dataInput's to be used (this is a separate object in case you have multiple inputs to a single histogram with different cross sections)
@@ -90,82 +90,82 @@ int main(){
     // ----------------------------------
     struct dataInput signal_mH30_mSusy800;
     signal_mH30_mSusy800.rootFileName = baseDir + "mH30p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH30_mSusy800.crossSection = 6.466 * 0.57 * 0.57; // in pb
+    signal_mH30_mSusy800.crossSection = 6.466 * 0.85 * 0.85; // in pb
     signal_mH30_mSusy800.lheHtCut = {0};
 
     struct dataInput signal_mH50_mSusy800;
     signal_mH50_mSusy800.rootFileName = baseDir + "mH50p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH50_mSusy800.crossSection = 6.466 * 0.57 * 0.57; // in pb
+    signal_mH50_mSusy800.crossSection = 6.466 * 0.85 * 0.85; // in pb
     signal_mH50_mSusy800.lheHtCut = {0};
 
     struct dataInput signal_mH70_mSusy800;
     signal_mH70_mSusy800.rootFileName = baseDir + "mH70p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH70_mSusy800.crossSection = 6.466 * 0.57 * 0.57; // in pb
+    signal_mH70_mSusy800.crossSection = 6.466 * 0.85 * 0.85; // in pb
     signal_mH70_mSusy800.lheHtCut = {0};
 
     struct dataInput signal_mH90_mSusy800;
     signal_mH90_mSusy800.rootFileName = baseDir + "mH90p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH90_mSusy800.crossSection = 6.466 * 0.57 * 0.57; // in pb
+    signal_mH90_mSusy800.crossSection = 6.466 * 0.85 * 0.85; // in pb
     signal_mH90_mSusy800.lheHtCut = {0};
     // ----------------------------------
     struct dataInput signal_mH30_mSusy1200;
     signal_mH30_mSusy1200.rootFileName = baseDir + "mH30p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH30_mSusy1200.crossSection = 0.494 * 0.57 * 0.57; // in pb
+    signal_mH30_mSusy1200.crossSection = 0.494 * 0.85 * 0.85; // in pb
     signal_mH30_mSusy1200.lheHtCut = {0};
 
     struct dataInput signal_mH50_mSusy1200;
     signal_mH50_mSusy1200.rootFileName = baseDir + "mH50p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH50_mSusy1200.crossSection = 0.494 * 0.57 * 0.57; // in pb
+    signal_mH50_mSusy1200.crossSection = 0.494 * 0.85 * 0.85; // in pb
     signal_mH50_mSusy1200.lheHtCut = {0};
 
     struct dataInput signal_mH70_mSusy1200;
     signal_mH70_mSusy1200.rootFileName = baseDir + "mH70p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH70_mSusy1200.crossSection = 0.494 * 0.57 * 0.57; // in pb
+    signal_mH70_mSusy1200.crossSection = 0.494 * 0.85 * 0.85; // in pb
     signal_mH70_mSusy1200.lheHtCut = {0};
 
     struct dataInput signal_mH90_mSusy1200;
     signal_mH90_mSusy1200.rootFileName = baseDir + "mH90p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH90_mSusy1200.crossSection = 0.494 * 0.57 * 0.57; // in pb
+    signal_mH90_mSusy1200.crossSection = 0.494 * 0.85 * 0.85; // in pb
     signal_mH90_mSusy1200.lheHtCut = {0};
     // ----------------------------------
     struct dataInput signal_mH30_mSusy1600;
     signal_mH30_mSusy1600.rootFileName = baseDir + "mH30p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH30_mSusy1600.crossSection = 0.060 * 0.57 * 0.57; // in pb
+    signal_mH30_mSusy1600.crossSection = 0.060 * 0.85 * 0.85; // in pb
     signal_mH30_mSusy1600.lheHtCut = {0};
 
     struct dataInput signal_mH50_mSusy1600;
     signal_mH50_mSusy1600.rootFileName = baseDir + "mH50p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH50_mSusy1600.crossSection = 0.060 * 0.57 * 0.57; // in pb
+    signal_mH50_mSusy1600.crossSection = 0.060 * 0.85 * 0.85; // in pb
     signal_mH50_mSusy1600.lheHtCut = {0};
 
     struct dataInput signal_mH70_mSusy1600;
     signal_mH70_mSusy1600.rootFileName = baseDir + "mH70p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH70_mSusy1600.crossSection = 0.060 * 0.57 * 0.57; // in pb
+    signal_mH70_mSusy1600.crossSection = 0.060 * 0.85 * 0.85; // in pb
     signal_mH70_mSusy1600.lheHtCut = {0};
 
     struct dataInput signal_mH90_mSusy1600;
     signal_mH90_mSusy1600.rootFileName = baseDir + "mH90p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH90_mSusy1600.crossSection = 0.060 * 0.57 * 0.57; // in pb
+    signal_mH90_mSusy1600.crossSection = 0.060 * 0.85 * 0.85; // in pb
     signal_mH90_mSusy1600.lheHtCut = {0};
     // ----------------------------------
     struct dataInput signal_mH30_mSusy2000;
     signal_mH30_mSusy2000.rootFileName = baseDir + "mH30p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH30_mSusy2000.crossSection = 0.009 * 0.57 * 0.57; // in pb
+    signal_mH30_mSusy2000.crossSection = 0.009 * 0.85 * 0.85; // in pb
     signal_mH30_mSusy2000.lheHtCut = {0};
 
     struct dataInput signal_mH50_mSusy2000;
     signal_mH50_mSusy2000.rootFileName = baseDir + "mH50p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH50_mSusy2000.crossSection = 0.009 * 0.57 * 0.57; // in pb
+    signal_mH50_mSusy2000.crossSection = 0.009 * 0.85 * 0.85; // in pb
     signal_mH50_mSusy2000.lheHtCut = {0};
 
     struct dataInput signal_mH70_mSusy2000;
     signal_mH70_mSusy2000.rootFileName = baseDir + "mH70p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH70_mSusy2000.crossSection = 0.009 * 0.57 * 0.57; // in pb
+    signal_mH70_mSusy2000.crossSection = 0.009 * 0.85 * 0.85; // in pb
     signal_mH70_mSusy2000.lheHtCut = {0};
 
     struct dataInput signal_mH90_mSusy2000;
     signal_mH90_mSusy2000.rootFileName = baseDir + "mH90p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH90_mSusy2000.crossSection = 0.009 * 0.57 * 0.57; // in pb
+    signal_mH90_mSusy2000.crossSection = 0.009 * 0.85 * 0.85; // in pb
     signal_mH90_mSusy2000.lheHtCut = {0};
     // ----------------------------------
     // BACKGROUND
@@ -234,23 +234,23 @@ int main(){
     // ---------------------------------- 
     // class Histograms hSignal_mH30_mSusy800(integratedLuminosity, "mH30_mSusy800", {signal_mH30_mSusy800}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // class Histograms hSignal_mH50_mSusy800(integratedLuminosity, "mH50_mSusy800", {signal_mH50_mSusy800}, kGreen, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    // class Histograms hSignal_mH70_mSusy800(integratedLuminosity, "mH70_mSusy800", {signal_mH70_mSusy800}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    class Histograms hSignal_mH70_mSusy800(integratedLuminosity, "mH70_mSusy800", {signal_mH70_mSusy800}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // class Histograms hSignal_mH90_mSusy800(integratedLuminosity, "mH90_mSusy800", {signal_mH90_mSusy800}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // ----------------------------------
     // class Histograms hSignal_mH30_mSusy1200(integratedLuminosity, "mH30_mSusy1200", {signal_mH30_mSusy1200}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // class Histograms hSignal_mH50_mSusy1200(integratedLuminosity, "mH50_mSusy1200", {signal_mH50_mSusy1200}, kGreen, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    // class Histograms hSignal_mH70_mSusy1200(integratedLuminosity, "mH70_mSusy1200", {signal_mH70_mSusy1200}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    class Histograms hSignal_mH70_mSusy1200(integratedLuminosity, "mH70_mSusy1200", {signal_mH70_mSusy1200}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // class Histograms hSignal_mH90_mSusy1200(integratedLuminosity, "mH90_mSusy1200", {signal_mH90_mSusy1200}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // ----------------------------------
     // class Histograms hSignal_mH30_mSusy1600(integratedLuminosity, "mH30_mSusy1600", {signal_mH30_mSusy1600}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // class Histograms hSignal_mH50_mSusy1600(integratedLuminosity, "mH50_mSusy1600", {signal_mH50_mSusy1600}, kGreen, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    // class Histograms hSignal_mH70_mSusy1600(integratedLuminosity, "mH70_mSusy1600", {signal_mH70_mSusy1600}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    class Histograms hSignal_mH70_mSusy1600(integratedLuminosity, "mH70_mSusy1600", {signal_mH70_mSusy1600}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // class Histograms hSignal_mH90_mSusy1600(integratedLuminosity, "mH90_mSusy1600", {signal_mH90_mSusy1600}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // ----------------------------------
-    class Histograms hSignal_mH30_mSusy2000(integratedLuminosity, "mH30_mSusy2000", {signal_mH30_mSusy2000}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    class Histograms hSignal_mH50_mSusy2000(integratedLuminosity, "mH50_mSusy2000", {signal_mH50_mSusy2000}, kGreen, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    // class Histograms hSignal_mH30_mSusy2000(integratedLuminosity, "mH30_mSusy2000", {signal_mH30_mSusy2000}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    // class Histograms hSignal_mH50_mSusy2000(integratedLuminosity, "mH50_mSusy2000", {signal_mH50_mSusy2000}, kGreen, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     class Histograms hSignal_mH70_mSusy2000(integratedLuminosity, "mH70_mSusy2000", {signal_mH70_mSusy2000}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    class Histograms hSignal_mH90_mSusy2000(integratedLuminosity, "mH90_mSusy2000", {signal_mH90_mSusy2000}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    // class Histograms hSignal_mH90_mSusy2000(integratedLuminosity, "mH90_mSusy2000", {signal_mH90_mSusy2000}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // ----------------------------------
     class Histograms hTtbar(integratedLuminosity, "ttbar+jets", {TTJets_inclusive, TTJets_ht600to800, TTJets_ht800to1200,TTJets_ht1200to2500,TTJets_ht2500toInf}, PlottingTools::SetColor(1,5), cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     class Histograms hZ(integratedLuminosity, "Z+jets", {ZJetsToQQ_ht600toInf}, PlottingTools::SetColor(2,5), cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
@@ -260,12 +260,11 @@ int main(){
       
 
     // FIVE: group the Histograms into signal and background
-    // std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy800};
     // std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy800,hSignal_mH50_mSusy800,hSignal_mH70_mSusy800,hSignal_mH90_mSusy800};
     // std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy1200,hSignal_mH50_mSusy1200,hSignal_mH70_mSusy1200,hSignal_mH90_mSusy1200}; 
     // std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy1600,hSignal_mH50_mSusy1600,hSignal_mH70_mSusy1600,hSignal_mH90_mSusy1600};
-    std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy2000,hSignal_mH50_mSusy2000,hSignal_mH70_mSusy2000,hSignal_mH90_mSusy2000};
-    // std::vector<class Histograms> signalHistograms = {hSignal_mH70_mSusy800,hSignal_mH70_mSusy1200,hSignal_mH70_mSusy1600,hSignal_mH70_mSusy2000};
+    // std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy2000,hSignal_mH50_mSusy2000,hSignal_mH70_mSusy2000,hSignal_mH90_mSusy2000};
+    std::vector<class Histograms> signalHistograms = {hSignal_mH70_mSusy800,hSignal_mH70_mSusy1200,hSignal_mH70_mSusy1600,hSignal_mH70_mSusy2000};
     
     std::vector<class Histograms> backgroundHistograms = {hTtbar, hZ, hW, hZZ, hWW}; // the order here is how they will be plotted
     // std::vector<class Histograms> backgroundHistograms = {hZ, hW}; // the order here is how they will be plotted
