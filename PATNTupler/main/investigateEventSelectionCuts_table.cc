@@ -64,7 +64,7 @@ int main(){
 
     // ONE: saving info and lumi
     std::string baseDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_04_22/"; // for the input ROOT files
-    std::string outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/output_InvestigateEventSelectionCutsV2/chosenCutsTable_mH70/"; // where we are going to save the plots
+    std::string outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/output_InvestigateEventSelectionCutsV3/chosenCutsTable_mH70/"; // where we are going to save the plots
     double integratedLuminosity = 50.0; // the integrated luminosity, in fb^-1 that we scale our plots to
 
 
@@ -72,7 +72,7 @@ int main(){
     std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Tight","Med"}, {"Tight","Med"}, {"Tight","Med"} };
     std::vector<int> cut3_ak8Pt = {300, 300, 300};
     std::vector<std::vector<int>>cut4_ht = { {1500,2500}, {2500,3500}, {3500,99000} }; // these are HT bins, not just cuts
-    std::vector<std::vector<int>> cut5_ak4Pt = { {300,300}, {300,300}, {300,300} };
+    std::vector<std::vector<int>> cut5_ak4Pt = { {250,250}, {250,250}, {250,250} };
     
 
     // THREE: set the dataInput's to be used (this is a separate object in case you have multiple inputs to a single histogram with different cross sections)
@@ -80,89 +80,89 @@ int main(){
     // ----------------------------------
     struct dataInput signal_mH30_mSusy800;
     signal_mH30_mSusy800.rootFileName = baseDir + "mH30p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH30_mSusy800.crossSection = 6.466 * 0.57 * 0.57; // in pb
+    signal_mH30_mSusy800.crossSection = 6.466 * 0.85 * 0.85; // in pb
     signal_mH30_mSusy800.lheHtCut = {0};
 
     struct dataInput signal_mH50_mSusy800;
     signal_mH50_mSusy800.rootFileName = baseDir + "mH50p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH50_mSusy800.crossSection = 6.466 * 0.57 * 0.57; // in pb
+    signal_mH50_mSusy800.crossSection = 6.466 * 0.85 * 0.85; // in pb
     signal_mH50_mSusy800.lheHtCut = {0};
 
     struct dataInput signal_mH70_mSusy800;
     signal_mH70_mSusy800.rootFileName = baseDir + "mH70p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH70_mSusy800.crossSection = 6.466 * 0.57 * 0.57; // in pb
+    signal_mH70_mSusy800.crossSection = 6.466 * 0.85 * 0.85; // in pb
     signal_mH70_mSusy800.lheHtCut = {0};
 
     struct dataInput signal_mH90_mSusy800;
     signal_mH90_mSusy800.rootFileName = baseDir + "mH90p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH90_mSusy800.crossSection = 6.466 * 0.57 * 0.57; // in pb
+    signal_mH90_mSusy800.crossSection = 6.466 * 0.85 * 0.85; // in pb
     signal_mH90_mSusy800.lheHtCut = {0};
     // ----------------------------------
     struct dataInput signal_mH30_mSusy1200;
     signal_mH30_mSusy1200.rootFileName = baseDir + "mH30p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH30_mSusy1200.crossSection = 0.494 * 0.57 * 0.57; // in pb
+    signal_mH30_mSusy1200.crossSection = 0.494 * 0.85 * 0.85; // in pb
     signal_mH30_mSusy1200.lheHtCut = {0};
 
     struct dataInput signal_mH50_mSusy1200;
     signal_mH50_mSusy1200.rootFileName = baseDir + "mH50p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH50_mSusy1200.crossSection = 0.494 * 0.57 * 0.57; // in pb
+    signal_mH50_mSusy1200.crossSection = 0.494 * 0.85 * 0.85; // in pb
     signal_mH50_mSusy1200.lheHtCut = {0};
 
     struct dataInput signal_mH70_mSusy1200;
     signal_mH70_mSusy1200.rootFileName = baseDir + "mH70p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH70_mSusy1200.crossSection = 0.494 * 0.57 * 0.57; // in pb
+    signal_mH70_mSusy1200.crossSection = 0.494 * 0.85 * 0.85; // in pb
     signal_mH70_mSusy1200.lheHtCut = {0};
 
     struct dataInput signal_mH90_mSusy1200;
     signal_mH90_mSusy1200.rootFileName = baseDir + "mH90p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH90_mSusy1200.crossSection = 0.494 * 0.57 * 0.57; // in pb
+    signal_mH90_mSusy1200.crossSection = 0.494 * 0.85 * 0.85; // in pb
     signal_mH90_mSusy1200.lheHtCut = {0};
     // ----------------------------------
     struct dataInput signal_mH30_mSusy1600;
     signal_mH30_mSusy1600.rootFileName = baseDir + "mH30p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH30_mSusy1600.crossSection = 0.060 * 0.57 * 0.57; // in pb
+    signal_mH30_mSusy1600.crossSection = 0.060 * 0.85 * 0.85; // in pb
     signal_mH30_mSusy1600.lheHtCut = {0};
 
     struct dataInput signal_mH50_mSusy1600;
     signal_mH50_mSusy1600.rootFileName = baseDir + "mH50p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH50_mSusy1600.crossSection = 0.060 * 0.57 * 0.57; // in pb
+    signal_mH50_mSusy1600.crossSection = 0.060 * 0.85 * 0.85; // in pb
     signal_mH50_mSusy1600.lheHtCut = {0};
 
     struct dataInput signal_mH70_mSusy1600;
     signal_mH70_mSusy1600.rootFileName = baseDir + "mH70p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH70_mSusy1600.crossSection = 0.060 * 0.57 * 0.57; // in pb
+    signal_mH70_mSusy1600.crossSection = 0.060 * 0.85 * 0.85; // in pb
     signal_mH70_mSusy1600.lheHtCut = {0};
 
     struct dataInput signal_mH90_mSusy1600;
     signal_mH90_mSusy1600.rootFileName = baseDir + "mH90p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH90_mSusy1600.crossSection = 0.060 * 0.57 * 0.57; // in pb
+    signal_mH90_mSusy1600.crossSection = 0.060 * 0.85 * 0.85; // in pb
     signal_mH90_mSusy1600.lheHtCut = {0};
     // ----------------------------------
     struct dataInput signal_mH30_mSusy2000;
     signal_mH30_mSusy2000.rootFileName = baseDir + "mH30p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH30_mSusy2000.crossSection = 0.009 * 0.57 * 0.57; // in pb
+    signal_mH30_mSusy2000.crossSection = 0.009 * 0.85 * 0.85; // in pb
     signal_mH30_mSusy2000.lheHtCut = {0};
 
     struct dataInput signal_mH50_mSusy2000;
     signal_mH50_mSusy2000.rootFileName = baseDir + "mH50p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH50_mSusy2000.crossSection = 0.009 * 0.57 * 0.57; // in pb
+    signal_mH50_mSusy2000.crossSection = 0.009 * 0.85 * 0.85; // in pb
     signal_mH50_mSusy2000.lheHtCut = {0};
 
     struct dataInput signal_mH70_mSusy2000;
     signal_mH70_mSusy2000.rootFileName = baseDir + "mH70p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH70_mSusy2000.crossSection = 0.009 * 0.57 * 0.57; // in pb
+    signal_mH70_mSusy2000.crossSection = 0.009 * 0.85 * 0.85; // in pb
     signal_mH70_mSusy2000.lheHtCut = {0};
 
     struct dataInput signal_mH90_mSusy2000;
     signal_mH90_mSusy2000.rootFileName = baseDir + "mH90p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root";
-    signal_mH90_mSusy2000.crossSection = 0.009 * 0.57 * 0.57; // in pb
+    signal_mH90_mSusy2000.crossSection = 0.009 * 0.85 * 0.85; // in pb
     signal_mH90_mSusy2000.lheHtCut = {0};
     // ----------------------------------
     // BACKGROUND
     struct dataInput TTJets_inclusive;
     TTJets_inclusive.rootFileName = baseDir + "TTJets_inclusiveHt/flatTree.root";
     TTJets_inclusive.crossSection = 831.76; // in pb
-    TTJets_inclusive.lheHtCut = {1, 0, 700};    
+    TTJets_inclusive.lheHtCut = {1, -1, 700}; // NB: if using lheHtCut[1]=-1 this means the initial number of events is predicted from here to avoid double counting    
 
     struct dataInput TTJets_ht600to800;
     TTJets_ht600to800.rootFileName = baseDir + "TTJets_HT600to800/flatTree.root";
@@ -255,7 +255,7 @@ int main(){
     // std::vector<class Histograms> histogramsVec = {hSignal_mH30_mSusy1600,hSignal_mH50_mSusy1600,hSignal_mH70_mSusy1600,hSignal_mH90_mSusy1600,hTtbar,hZ,hW,hZZ,hWW};
     // std::vector<class Histograms> histogramsVec = {hSignal_mH30_mSusy2000,hSignal_mH50_mSusy2000,hSignal_mH70_mSusy2000,hSignal_mH90_mSusy2000,hTtbar,hZ,hW,hZZ,hWW};
     std::vector<class Histograms> histogramsVec = {hSignal_mH70_mSusy800,hSignal_mH70_mSusy1200,hSignal_mH70_mSusy1600,hSignal_mH70_mSusy2000,hTtbar,hZ,hW,hZZ,hWW};
-         
+    // std::vector<class Histograms> histogramsVec = {hTtbar,hWW};             
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -394,6 +394,8 @@ void Histograms::CountEventsAfterCuts(std::vector<std::vector<std::string>> cut2
         TTree * evT = (TTree*)f->Get("eventCountTree");
         Int_t evTEntries = (Int_t)evT->GetEntries();
         
+        TTree * T = (TTree*)f->Get("doubleBFatJetPairTree"); 
+
         UInt_t nEvtsRunOverForEntry;
         evT->SetBranchAddress("nEvtsRunOver",&nEvtsRunOverForEntry);
         UInt_t nEvtsRunOverTotal = 0;
@@ -402,10 +404,17 @@ void Histograms::CountEventsAfterCuts(std::vector<std::vector<std::string>> cut2
         evT->SetBranchAddress("nEvtsPass",&nEvtsPassPerEntry);
         UInt_t nEvtsPassTotal = 0;
         
+        if (dataInputElement.lheHtCut[0] == 1){
+            TH1F h1 = TH1F("h1", "", 1, -100.0, 99000.0);
+            std::string drawString1B = Form("(lheHT>=%d && lheHT<%d)", dataInputElement.lheHtCut[1], dataInputElement.lheHtCut[2]);            
+            T->Draw("ht>>h1", drawString1B.c_str(), "");
+            nEvtsPassTotal += h1.GetEntries();
+        }
+
         for (Int_t ievT=0; ievT<evTEntries; ++ievT){
             evT->GetEntry(ievT);
+            if (dataInputElement.lheHtCut[0] == 0) nEvtsPassTotal += nEvtsPassPerEntry;
             nEvtsRunOverTotal += nEvtsRunOverForEntry;
-            nEvtsPassTotal += nEvtsPassPerEntry;
         }
         
         double eventWeighting = 1000.0 * dataInputElement.crossSection * luminosity / nEvtsRunOverTotal;
@@ -413,10 +422,9 @@ void Histograms::CountEventsAfterCuts(std::vector<std::vector<std::string>> cut2
         // std::cout << eventWeighting << std::endl;
         // std::cout << std::endl;
 
-        weightedNumberEvents_preCuts += nEvtsRunOverTotal * eventWeighting;
+        if (dataInputElement.lheHtCut[0] == 0) weightedNumberEvents_preCuts += nEvtsRunOverTotal * eventWeighting;
+        if (dataInputElement.lheHtCut[0] == 1 && dataInputElement.lheHtCut[1] == -1) weightedNumberEvents_preCuts += nEvtsRunOverTotal * eventWeighting; // only use the inclusive lheHT bin to avoid double counting
         weightedNumberEvents_preSel += nEvtsPassTotal * eventWeighting;
-
-        TTree * T = (TTree*)f->Get("doubleBFatJetPairTree");  
 
         std::vector<std::string> labelsStringUsedSoFar; // so we don't repeat ourselves
         for (size_t iTab = 0; iTab < cut2_ak8Dbt.size(); ++iTab){
