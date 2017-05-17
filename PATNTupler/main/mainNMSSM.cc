@@ -514,7 +514,7 @@ int main(int argc, char** argv){
 			for (const ran::NtJet& jet : jetVec) {
 				// std::cout << "   -> pT=" << jet.pt() << "\tET=" << jet.et() << "\teta=" << jet.eta() << "\tphi=" << jet.phi() << std::endl;
 				// std::cout << "      mass=" << jet.mass() << std::endl;
-				if ( (jet.pt() >= 40.0) && (jet.eta() <= 3.0) )
+				if ( (jet.pt() >= 40.0) && (fabs(jet.eta()) <= 3.0) )
 				ht += jet.pt();
 			}
 			// std::cout << "   HT = " << ht << std::endl;
