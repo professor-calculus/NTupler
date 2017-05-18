@@ -35,8 +35,13 @@ for project in projectsToSubmit:
 	if os.path.isdir(projectPath) and subDirs in project:
 
 		f.write("cd %s\n" % projectPath)
-		# f.write("echo hello\n")
+		# f.write("pwd\n") # for testing
 		f.write("./submitCondorJobs_nTupAnaNMSSM.sh\n")
+		f.write("echo\n")
+		f.write("echo\n")
+		f.write("echo\n")
+		f.write("echo\n")
+		f.write("echo\n")
 
 f.close()
 os.chmod("%s/src/NTupler/PATNTupler/batchJobs/tmpSetoffJobs.sh" % cmsswBase, 0755)
