@@ -9,7 +9,7 @@ import os
 ###########################################################################################################
 ###########################################################################################################
 
-motherDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees/" # has to be the full path
+motherDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/" # has to be the full path
 subDirs = ""; # will use dirs that match <motherDir>/<subDirs*> (subDirs only needs to be a subset of desired directory)
 
 ###########################################################################################################

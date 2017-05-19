@@ -20,9 +20,9 @@ import datetime
 
 executable = "nTupAnaNMSSM" # wrt 'main' directory
 code = "mainNMSSM.cc" # wrt 'main' directory
-inputFileListPath = "/home/ppd/xap79297/CMSSW_8_0_21/src/NTupler/PATNTupler/fileLists/mH90p0_mSusy1600p0_ratio0p99_splitting0p1.list"
-outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees/mH90p0_mSusy1600p0_ratio0p99_splitting0p1" # has to be the full path
-filesPerJob = 10
+inputFileListPath = "/home/ppd/xap79297/CMSSW_8_0_21/src/NTupler/PATNTupler/fileLists/TTJets_HT-2500toInf_v2.list"
+outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT2500toInf" # has to be the full path
+filesPerJob = 2
 jsonFile = ""
 logDirectoryBase = "/opt/ppd/scratch/xap79297/jobLogs/flatTrees/"
 

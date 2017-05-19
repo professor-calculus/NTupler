@@ -5,7 +5,7 @@ config = config()
 # EDIT the following
 # uniqueName, config.Data.inputDataset, config.Data.unitsPerJob, (config.Data.outLFNDirBase)
 
-uniqueName = 'SAMPLE_CMSSWXYZ_COMMITHASH' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+uniqueName = 'TTPowhegNloPart1_CMSSW8021_c7d7e7d7' # name for this ntuple production (include commit hash so it is unique and can be traced) 
 config.General.requestName = uniqueName # name of the crab job project (eg on dashboard)
 config.General.workArea = 'crab_projects' # name of directory where crab project info is stored
 config.General.transferOutputs = True
