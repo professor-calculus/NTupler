@@ -1,3 +1,17 @@
+//STL HEADERS
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <memory>
+#include <fstream>
+#include <sys/stat.h>
+
+//ROOT HEADERS
+#include <TFile.h>
+#include <TTree.h>
+#include <TH1F.h>
+
+//RAL PARTICLE HEADERS
 #include "../interface/PlotEntry.hh"
 
 
@@ -5,9 +19,9 @@
 PlotEntry::PlotEntry(const std::string plotEntryNameDummy, const TH1F& hTemplate, const std::string& variableToPlotDummy) :
 	plotEntryName(plotEntryNameDummy),
 	luminosity(0.0),
-	variableToPlot(variableToPlotDummy)
+	variableToPlot(variableToPlotDummy),
 	hNull(hTemplate),
-	numberOfEventsBeforeCuts(0.0),
+	numberOfEventsBeforeCuts(0.0)
 {
 	Int_t nBins = hTemplate.GetNbinsX();
 	hTotal = new TH1F("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBins, hTemplate.GetBinLowEdge(1), hTemplate.GetBinLowEdge(nBins+1));
@@ -16,9 +30,9 @@ PlotEntry::PlotEntry(const std::string plotEntryNameDummy, const TH1F& hTemplate
 PlotEntry::PlotEntry(const std::string plotEntryNameDummy, const TH1F& hTemplate, const std::string& variableToPlotDummy, const double& luminosityDummy) :
 	plotEntryName(plotEntryNameDummy),
 	luminosity(luminosityDummy),
-	variableToPlot(variableToPlotDummy)
+	variableToPlot(variableToPlotDummy),
 	hNull(hTemplate),
-	numberOfEventsBeforeCuts(0.0),
+	numberOfEventsBeforeCuts(0.0)
 {
 	Int_t nBins = hTemplate.GetNbinsX();
 	hTotal = new TH1F("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBins, hTemplate.GetBinLowEdge(1), hTemplate.GetBinLowEdge(nBins+1));
@@ -33,7 +47,6 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
     Int_t evTEntries = (Int_t)evT->GetEntries();
 	UInt_t nEvtsRunOverForInputEntry;
 	evT->SetBranchAddress("nEvtsRunOver",&nEvtsRunOverForInputEntry);        
-    UInt_t nEvtsRunOverForInputTotal = 0;
     for (Int_t ievT=0; ievT<evTEntries; ++ievT){
         evT->GetEntry(ievT);
         numberOfEventsBeforeCuts += nEvtsRunOverForInputEntry;

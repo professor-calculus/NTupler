@@ -1,7 +1,6 @@
 #ifndef PLOTENTRY_HH
 #define PLOTENTRY_HH
 
-
 class PlotEntry{
 
 public:
