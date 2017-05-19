@@ -59,8 +59,9 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 	std::string drawStringB = Form("%s", selectionCut.c_str());
     std::cout << "Filling for TTree: " << flatTreeAddress << std::endl;
 	std::cout << "Variable used: " << variableToPlot << std::endl;
-	std::cout << "Cut applied: " << drawStringB << std::endl;
-	std::cout << "NB: no event weighting" << std::endl;
+	if (!selectionCut.empty()) std::cout << "Cut applied: " << drawStringB << std::endl;
+	else std::cout << "NB: no cut applied" << std::endl;
+	std::cout << "NB: no event weighting (for data)" << std::endl;
 	T->Draw(drawStringA.c_str(), drawStringB.c_str(), "");
 	for (int iBin = 0; iBin < hContainer.GetNbinsX()+2; ++iBin) hTotal->AddBinContent(iBin, hContainer.GetBinContent(iBin));
 	std::cout << std::endl;
@@ -85,10 +86,13 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 	TH1F hContainer = hNull; // make a copy of the empty histogram to fill with TTreeDraw
 	hContainer.SetName("hContainer");
 	std::string drawStringA = Form("%s>>hContainer", variableToPlot.c_str());
-	std::string drawStringB = Form("%f*(%s)", eventWeighting, selectionCut.c_str());
+	std::string drawStringB;
+	if (!selectionCut.empty()) drawStringB = Form("%f*(%s)", eventWeighting, selectionCut.c_str());
+	else drawStringB = Form("%f", eventWeighting);
     std::cout << "Filling for TTree: " << flatTreeAddress << std::endl;
 	std::cout << "Variable used: " << variableToPlot << std::endl;
-	std::cout << "Event Weighting * Cut applied: " << drawStringB << std::endl;
+	if (!selectionCut.empty()) std::cout << "Event Weighting * Cut applied: " << drawStringB << std::endl;
+	else std::cout << "Event Weighting: " << drawStringB << "\nNB: no cut applied." << std::endl;
 	T->Draw(drawStringA.c_str(), drawStringB.c_str(), "");
 	for (int iBin = 0; iBin < hContainer.GetNbinsX()+2; ++iBin)	hTotal->AddBinContent(iBin, hContainer.GetBinContent(iBin));
 	std::cout << std::endl;
