@@ -71,7 +71,7 @@ int main(){
 
     // ONE: saving info and lumi
     std::string baseDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/"; // for the input ROOT files
-    std::string outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/output_InvestigateEventSelectionCutsV3/decideCuts_mH70_AK4/"; // where we are going to save the plots
+    std::string outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/output_InvestigateEventSelectionCutsV4/mH70/"; // where we are going to save the plots
     double integratedLuminosity = 50.0; // the integrated luminosity, in fb^-1 that we scale our plots to
 
 
@@ -82,7 +82,7 @@ int main(){
     std::vector<int> cut3_ak8Pt = {300};
     std::vector<std::vector<int>>cut4_ht = { {1500,2500}, {2500,3500}, {3500,99000} }; // these are HT bins, not just cuts
     // std::vector<std::vector<int>> cut5_ak4Pt = { {100,100}, {200,200}, {300,300}, {400,400}, {500,500} }; // (2 elements in sub-vector, 1st for leading)
-    std::vector<std::vector<int>> cut5_ak4Pt = { {-100,-100}, {250,-100}, {250,250} }; // (2 elements in sub-vector, 1st for leading)
+    std::vector<std::vector<int>> cut5_ak4Pt = { {250,250} }; // (2 elements in sub-vector, 1st for leading)
 
 
     // THREE: set the dataInput's to be used (this is a separate object in case you have multiple inputs to a single histogram with different cross sections)
