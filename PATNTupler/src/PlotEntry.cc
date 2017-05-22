@@ -16,7 +16,7 @@
 
 
 //--------constructor---------//
-PlotEntry::PlotEntry(const std::string plotEntryNameDummy, const TH1F& hTemplate, const std::string& variableToPlotDummy) :
+PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1F& hTemplate, const std::string& variableToPlotDummy) :
 	plotEntryName(plotEntryNameDummy),
 	luminosity(0.0),
 	variableToPlot(variableToPlotDummy),
@@ -27,7 +27,7 @@ PlotEntry::PlotEntry(const std::string plotEntryNameDummy, const TH1F& hTemplate
 	hTotal = new TH1F("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBins, hTemplate.GetBinLowEdge(1), hTemplate.GetBinLowEdge(nBins+1));
 }
 
-PlotEntry::PlotEntry(const std::string plotEntryNameDummy, const TH1F& hTemplate, const std::string& variableToPlotDummy, const double& luminosityDummy) :
+PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1F& hTemplate, const std::string& variableToPlotDummy, const double& luminosityDummy) :
 	plotEntryName(plotEntryNameDummy),
 	luminosity(luminosityDummy),
 	variableToPlot(variableToPlotDummy),
