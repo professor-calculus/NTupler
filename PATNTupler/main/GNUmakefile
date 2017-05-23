@@ -47,8 +47,8 @@ investigateEventSelectionCuts:	investigateEventSelectionCuts.o ${OBJDIR}/NtpRead
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 investigateEventSelectionCuts_table:	investigateEventSelectionCuts_table.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
-testNewObjects:	testNewObjects.o ${SRCDIR}/PlotEntry.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
-	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
+exampleOfHowToUsePlottingClasses: exampleOfHowToUsePlottingClasses.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/Plotter.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 %.o: 	%.cc %.hh
 	$(info generic.o target's commands)
 	$(CXX) $(CXXFLAGS) -c $< -o $@

@@ -42,37 +42,38 @@ int main(){
 	// constructor:
 	// the first argument defines the 'name' of the PlotEntry object (eg used in legends)
 	// NB: for data the last argument can be omitted as an event weighting is not needed
-	PlotEntry mH30_mSusy1200 = PlotEntry("mH30_mSusy1200", hTemplate, varToPlot.c_str(), luminosity);
+	PlotEntry mH30_mSusy2000 = PlotEntry("mH30_mSusy2000", hTemplate, varToPlot.c_str(), luminosity);
 	
 	// adding an input
 	// the first argument is the path to the flatTree
 	// the last argument is the sample XS (pb), this should be omitted for data to avoid calculating a weighting
 	// info about what is happening will be printed when the command is executed
-	mH30_mSusy1200.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH30p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
+	mH30_mSusy2000.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH30p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
 	
 	// access to members of PlotEntry
 	std::cout << "Examples of how to access PlotEntry members:" << std::endl;
-	std::cout << "Get the histo and extract info (nbinsX) " << mH30_mSusy1200.GetHistogram()->GetNBinsX() <<std::endl; // can get the histogram then do normal histogram commands
-	std::cout << "Number of events before cuts " << mH30_mSusy1200.GetNumberOfEventsBeforeCuts() << std::endl; // useful for cut flow tables
-	std::cout << "Number of events after cuts " << mH30_mSusy1200.GetNumberOfEventsAfterCuts() << std::endl; // useful for cut flow tables
-	std::cout << "Name of PlotEntry object " << mH30_mSusy1200.GetPlotEntryName() << std::endl;
+	std::cout << "Get the histo and extract info (nbinsX) " << mH30_mSusy2000.GetHistogram()->GetNbinsX() <<std::endl; // can get the histogram then do normal histogram commands
+	std::cout << "Get the xaxis title " << mH30_mSusy2000.GetHistogram()->GetXaxis()->GetTitle() << std::endl; // IMPORTANT - this includes changing the histogram!
+	std::cout << "Number of events before cuts " << mH30_mSusy2000.GetNumberOfEventsBeforeCuts() << std::endl; // useful for cut flow tables
+	std::cout << "Number of events after cuts " << mH30_mSusy2000.GetNumberOfEventsAfterCuts() << std::endl; // useful for cut flow tables
+	std::cout << "Name of PlotEntry object " << mH30_mSusy2000.GetPlotEntryName() << std::endl;
 	std::cout << std::endl;
 
 	// when all entries added, put the PlotEntry object into the vector
-	histoIndi.push_back(mH30_mSusy1200);
+	histoIndi.push_back(mH30_mSusy2000);
 
 	// below: just doing the same again and adding to the histoIndi object
-	PlotEntry mH50_mSusy1200 = PlotEntry("mH50_mSusy1200", hTemplate, varToPlot.c_str(), luminosity);
-	mH50_mSusy1200.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH50p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
-	histoIndi.push_back(mH50_mSusy1200);
+	PlotEntry mH50_mSusy2000 = PlotEntry("mH50_mSusy2000", hTemplate, varToPlot.c_str(), luminosity);
+	mH50_mSusy2000.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH50p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
+	histoIndi.push_back(mH50_mSusy2000);
 
-	PlotEntry mH70_mSusy1200 = PlotEntry("mH70_mSusy1200", hTemplate, varToPlot.c_str(), luminosity);
-	mH70_mSusy1200.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH70p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
-	histoIndi.push_back(mH70_mSusy1200);
+	PlotEntry mH70_mSusy2000 = PlotEntry("mH70_mSusy2000", hTemplate, varToPlot.c_str(), luminosity);
+	mH70_mSusy2000.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH70p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
+	histoIndi.push_back(mH70_mSusy2000);
 
-	PlotEntry mH90_mSusy1200 = PlotEntry("mH90_mSusy1200", hTemplate, varToPlot.c_str(), luminosity);
-	mH90_mSusy1200.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH90p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
-	histoIndi.push_back(mH90_mSusy1200);
+	PlotEntry mH90_mSusy2000 = PlotEntry("mH90_mSusy2000", hTemplate, varToPlot.c_str(), luminosity);
+	mH90_mSusy2000.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH90p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
+	histoIndi.push_back(mH90_mSusy2000);
 
 	// adding an input: further info
 	// multiple inputs can be defined, the results are added together
@@ -99,21 +100,42 @@ int main(){
 	// EXAMPLE 1: individual plots and stacked plots
 	// constructor
 	Plotter plot_ex1 = Plotter(histoIndi, histoStack);
-	
+	// NB: can also add legend by passing it a TLegend* template as the argument
+	// x1, x2, y1, y2
+	plot_ex1.AddLegend(0.6, 0.8, 0.6, 0.8, 0.05); // the last value is the textSize, if no arg given 0.04 is used
+	plot_ex1.AddLatex(luminosity, "#it{AdditionalTag}"); // the last value is the tag after 'cms', if no arg given simulation WIP is used
+	plot_ex1.GetTStyle()->SetOptDate(1); // you can ask for the TStyle object and change things if desired
+	plot_ex1.Save("out_ex1.pdf"); // to save the plot
 
-	// plot.AddLegend(0.6, 0.8, 0.6, 0.8);
-	plot.AddLegend(0.6, 0.8, 0.6, 0.8, 0.8);
-	// plot.AddLatex(333.333, "yippe");
-	plot.AddLatex(333.333);
-	plot.GetTStyle()->SetOptDate(1);
-	plot.Save("out.pdf");
+	// COPY TEST - expect the same result 
+	std::cout << "COPY TEST" << std::endl;
+	Plotter plot_ex1_copy = Plotter(histoIndi, histoStack);
+	// NB: can also add legend by passing it a TLegend* template as the argument
+	// x1, x2, y1, y2
+	plot_ex1_copy.AddLegend(0.6, 0.8, 0.6, 0.8, 0.05); // the last value is the textSize, if no arg given 0.04 is used
+	plot_ex1_copy.AddLatex(luminosity, "#it{AdditionalTag}"); // the last value is the tag after 'cms', if no arg given simulation WIP is used
+	plot_ex1_copy.GetTStyle()->SetOptDate(1); // you can ask for the TStyle object and change things if desired
+	plot_ex1_copy.Save("out_ex1_copy.pdf"); // to save the plot
 
+	std::cout << "Example of how to plot individual histos only" << std::endl;
+	// EXAMPLE 2: individual plots only
+	// constructor, only using one argument 
+	Plotter plot_ex2 = Plotter(histoIndi);
+	TLegend * legDummy = new TLegend(0.6, 0.6, 0.8, 0.8); //NB, follows x1,y1,x2,y2 (different convention to me!)
+	plot_ex2.AddLegend(legDummy); // use a legend template
+	plot_ex2.AddLatex(luminosity); // no second arg given, will use default
+	plot_ex2.Save("out_ex2.pdf"); // to save the plot
 
+	std::cout << "Example of how to plot stacked histos only" << std::endl;
+	// EXAMPLE 3: stacked plots only
+	// constructor, have to give an empty first arguement
+	Plotter plot_ex3 = Plotter(histoEmpty, histoStack);
+	TLegend * legDummy2 = new TLegend(0.1, 0.6, 0.8, 0.8); // note the use of a different legend, this is because they are passed as pointers!
+	plot_ex3.AddLegend(legDummy2);
+	plot_ex3.AddLatex(luminosity, "#it{AdditionalTag}");
+	plot_ex3.Save("out_ex3.pdf"); // to save the plot
 
-	// Plotter plot = Plotter(histoEmpty);
-
-	// LOOP THROUGH CUT SPACE, maybe need extension for ttbar and stuff
-	// MAKE PLOT_ENTRY OBJECTS AND DO PLOT, SAVE
+	// NB: will get warning/error messages if you only supply empty vector inputs (it will not seg fault, he says)
 
 	return 0;
 }
