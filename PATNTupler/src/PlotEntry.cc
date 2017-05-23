@@ -98,10 +98,10 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 	std::cout << std::endl;
 }
 
-
-//-----------private----------//
 std::string PlotEntry::GetPlotEntryName() const {return plotEntryName;}
+
 TH1F* PlotEntry::GetHistogram() const {return hTotal;}
+
 double PlotEntry::GetNumberOfEventsBeforeCuts() const {return numberOfEventsBeforeCuts;}
 
 double PlotEntry::GetNumberOfEventsAfterCuts() const
@@ -110,3 +110,8 @@ double PlotEntry::GetNumberOfEventsAfterCuts() const
 	for (int iBin = 0; iBin < hTotal->GetNbinsX()+2; ++iBin) numberOfEventsAfterCuts += hTotal->GetBinContent(iBin);
 	return numberOfEventsAfterCuts;
 }
+
+// double PlotEntry::GetLuminosity() const {return luminosity;}
+
+
+//-----------private----------//

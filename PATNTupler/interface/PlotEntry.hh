@@ -14,6 +14,7 @@ public:
 	TH1F* GetHistogram() const;
 	double GetNumberOfEventsBeforeCuts() const;
 	double GetNumberOfEventsAfterCuts() const;
+	// double GetLuminosity() const;
 
 private:
 	std::string plotEntryName;
