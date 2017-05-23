@@ -36,7 +36,7 @@ int main(){
 	// the following block defines objects used in PlotEntry::PlotEntry and PlotEntry::AddInput
 	TH1F hTemplate("hTemplate", "insert_title;insert_xaxis;insert_yaxis", 50, 0, 150); // a histogram template for a given PlotEntry object, it will use the same credentials
 	std::string varToPlot = "fatJetA_softDropMass"; // a flatTree variable name for a PlotEntry object to draw (NB: 2d plots are not currently enabled)
-	std::string cutToApply = "ht>2000"; // a cut for the PlotEntry object to apply when cutting 
+	std::string cutToApply = "fatJetA_doubleBtagDiscrim>0.9 && fatJetB_doubleBtagDiscrim>0.6 && fatJetA_p4.Pt()>300.0 && fatJetB_p4.Pt()>300.0 && ht>=1500.0 && ht<2500.0 && slimJetA_p4.Pt()>250.0 && slimJetB_p4.Pt()>250.0"; // a cut for the PlotEntry object to apply when cutting 
 	double luminosity = 50.0; // the luminosity, in fb^-1, for a PlotEntry object to use in weighting plots (for MC samples)
 
 	// constructor:
@@ -77,12 +77,16 @@ int main(){
 
 	// adding an input: further info
 	// multiple inputs can be defined, the results are added together
+	// NOTE the 'false' argument stops the AddInput incrementing PlotEntry::numberOfEventsBeforeCuts variable (used to prevent double counting when stitching samples together)
 	PlotEntry ttbar = PlotEntry("ttbar+jets", hTemplate, varToPlot.c_str(), luminosity);
-	ttbar.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_inclusiveHt/flatTree.root", Form("%s && lheHT<700",cutToApply.c_str()), 831.76);
-	ttbar.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT600to800/flatTree.root", Form("%s && lheHT>=700",cutToApply.c_str()), 2.6665344485);
-	ttbar.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT800to1200/flatTree.root", Form("%s && lheHT>=700",cutToApply.c_str()), 1.0980821984);
-	ttbar.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT1200to2500/flatTree.root", Form("%s && lheHT>=700",cutToApply.c_str()), 0.1987479092);
-	ttbar.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT2500toInf/flatTree.root", Form("%s && lheHT>=700",cutToApply.c_str()), 0.002368412585);
+	ttbar.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_inclusiveHt/flatTree.root", Form("%s && lheHT<700.0",cutToApply.c_str()), 831.76);
+	ttbar.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT600to800/flatTree.root", Form("%s && lheHT>=700.0",cutToApply.c_str()), 2.6665344485, false);
+	ttbar.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT800to1200/flatTree.root", Form("%s && lheHT>=700.0",cutToApply.c_str()), 1.0980821984, false);
+	ttbar.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT1200to2500/flatTree.root", Form("%s && lheHT>=700.0",cutToApply.c_str()), 0.1987479092, false);
+	ttbar.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT2500toInf/flatTree.root", Form("%s && lheHT>=700.0",cutToApply.c_str()), 0.002368412585, false);
+	std::cout << "num_ttbar before cuts " << ttbar.GetNumberOfEventsBeforeCuts() << std::endl;
+	std::cout << "num_ttbar after cuts " << ttbar.GetNumberOfEventsAfterCuts() << std::endl;
+	std::cout << std::endl;
 	histoStack.push_back(ttbar);
 
 	PlotEntry ZJets = PlotEntry("Z+jets", hTemplate, varToPlot.c_str(), luminosity);
@@ -93,6 +97,13 @@ int main(){
 	WJets.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/WJetsToQQ_HT600toInf/flatTree.root", cutToApply.c_str(), 95.14);
 	histoStack.push_back(WJets);
 
+	// won't include in plots, but just to double check the event counting
+	PlotEntry WWJets = PlotEntry("WW+jets", hTemplate, varToPlot.c_str(), luminosity);
+	WWJets.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/WWTo4Q/flatTree.root", cutToApply.c_str(), 51.723);
+	WWJets.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/WWTo1L1Nu2Q/flatTree.root", cutToApply.c_str(), 49.997); // note that no longer providing the 'false' argument as we want PlotEntry::numberOfEventsBeforeCuts to be summed
+	std::cout << "num_WW before cuts " << WWJets.GetNumberOfEventsBeforeCuts() << std::endl;
+	std::cout << "num_WW after cuts " << WWJets.GetNumberOfEventsAfterCuts() << std::endl;
+	std::cout << std::endl;	
 
 	// okay, now how to handle these objects with the plotter class
 
