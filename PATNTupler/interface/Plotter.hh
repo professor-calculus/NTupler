@@ -9,8 +9,8 @@ public:
 	Plotter(std::vector<PlotEntry>, std::vector<PlotEntry>);
 	
 	void AddLegend(TLegend*);
-	void AddLegend(const double&, const double&, const double&, const double&, const double&);
-	void AddLatex(const double&, const std::string&);
+	void AddLegend(const double&, const double&, const double&, const double&, const double& = 0.04);
+	void AddLatex(const double&, const std::string& = "#it{Simulation} W.I.P");
 	TStyle * GetTStyle(); // get it, to edit it
 	void Save(const std::string&);
 

@@ -32,9 +32,16 @@ tdrStyle(TDRStyle())
 	if (histoIndiDummy.empty()) std::cout << "Plotter WARNING: no plot entries handed to plotter!" << std::endl;
 	else histoIndi = histoIndiDummy;
 
+	std::vector<PlotEntry> histoStackEmpty;
+	histoStack = histoStackEmpty;
+
 	for (size_t iIndi = 0; iIndi != histoIndi.size(); ++iIndi){
 		histoIndi[iIndi].GetHistogram()->SetLineColor(SetColor_stark(iIndi));
 		histoIndi[iIndi].GetHistogram()->SetLineWidth(2);
+		histoIndi[iIndi].GetHistogram()->GetXaxis()->SetTitleSize(0.06); // can't get this to work via tstyle
+		histoIndi[iIndi].GetHistogram()->GetXaxis()->SetLabelSize(0.04);
+		histoIndi[iIndi].GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+		histoIndi[iIndi].GetHistogram()->GetYaxis()->SetLabelSize(0.04);
 	}
 }
 
@@ -55,11 +62,19 @@ tdrStyle(TDRStyle())
 	for (size_t iIndi = 0; iIndi != histoIndi.size(); ++iIndi){
 		histoIndi[iIndi].GetHistogram()->SetLineColor(SetColor_stark(iIndi));
 		histoIndi[iIndi].GetHistogram()->SetLineWidth(2);
+		histoIndi[iIndi].GetHistogram()->GetXaxis()->SetTitleSize(0.06); // can't get this to work via tstyle
+		histoIndi[iIndi].GetHistogram()->GetXaxis()->SetLabelSize(0.04);
+		histoIndi[iIndi].GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+		histoIndi[iIndi].GetHistogram()->GetYaxis()->SetLabelSize(0.04);
 	}
 
 	for (size_t iStack = 0; iStack != histoStack.size(); ++iStack){
 		histoStack[iStack].GetHistogram()->SetFillColor(SetColor_mellow(iStack, histoStack.size()));	
 		histoStack[iStack].GetHistogram()->SetLineWidth(0.0);
+		histoStack[iStack].GetHistogram()->GetXaxis()->SetTitleSize(0.06); // can't get this to work via tstyle
+		histoStack[iStack].GetHistogram()->GetXaxis()->SetLabelSize(0.04);
+		histoStack[iStack].GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+		histoStack[iStack].GetHistogram()->GetYaxis()->SetLabelSize(0.04);
 	}
 }
 
@@ -68,10 +83,17 @@ tdrStyle(TDRStyle())
 void Plotter::AddLegend(TLegend * legDummy)
 {
 	leg = legDummy;
+	leg->SetBorderSize(0);
+	for (std::vector<PlotEntry>::const_iterator iStack = histoStack.begin(); iStack != histoStack.end(); ++iStack)
+		leg->AddEntry(iStack->GetHistogram(), iStack->GetPlotEntryName().c_str(), "f");
+
+	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
+		leg->AddEntry(iIndi->GetHistogram(), iIndi->GetPlotEntryName().c_str(), "L");	
+
 	return;
 }
 
-void Plotter::AddLegend(const double& x1, const double& x2, const double& y1, const double& y2, const double& textSize = 0.04)
+void Plotter::AddLegend(const double& x1, const double& x2, const double& y1, const double& y2, const double& textSize)
 {
 	leg = new TLegend();
     leg->SetX1NDC(x1);
@@ -90,7 +112,7 @@ void Plotter::AddLegend(const double& x1, const double& x2, const double& y1, co
 }
 
 
-void Plotter::AddLatex(const double& lumiValueDummy, const std::string& lhsStringAfterCMSDummy = "#it{Simulation} W.I.P")
+void Plotter::AddLatex(const double& lumiValueDummy, const std::string& lhsStringAfterCMSDummy)
 {
 	addLatex = true;
 	lumiValue = lumiValueDummy;
@@ -113,16 +135,20 @@ void Plotter::Save(const std::string& saveName){
 	tdrStyle->cd();
 	TCanvas * c = new TCanvas("c","c");
 
-	THStack * hs = new THStack("hs","");
+	std::string hsTitles = ""; // can't set them later w/o a seg fault
+	if (!histoStack.empty()) hsTitles = Form("%s;%s;%s", histoStack[0].GetHistogram()->GetTitle(), histoStack[0].GetHistogram()->GetXaxis()->GetTitle(), histoStack[0].GetHistogram()->GetYaxis()->GetTitle());
+	THStack * hs = new THStack("hs", hsTitles.c_str());
 	for (std::vector<PlotEntry>::const_iterator iStack = histoStack.begin(); iStack != histoStack.end(); ++iStack)
 		hs->Add(iStack->GetHistogram());
 
+	double initialMax = 0.0;
 	double max = 0.0;
 	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
 		if (iIndi->GetHistogram()->GetMaximum() > max) max = iIndi->GetHistogram()->GetMaximum();
-	if (hs->GetMaximum() > max) max = hs->GetMaximum();
-
+	if (!histoStack.empty() && hs->GetMaximum() > max) max = hs->GetMaximum();
+	
 	if (!histoIndi.empty() && !histoStack.empty()){
+		initialMax = histoIndi[0].GetHistogram()->GetMaximum();
 		histoIndi[0].GetHistogram()->SetMaximum(1.05 * max);
 		histoIndi[0].GetHistogram()->Draw();
 		hs->Draw("same");
@@ -130,18 +156,25 @@ void Plotter::Save(const std::string& saveName){
 			iIndi->GetHistogram()->Draw("same");
 	}
 	else if (!histoIndi.empty() && histoStack.empty()){
+		initialMax = histoIndi[0].GetHistogram()->GetMaximum();
 		histoIndi[0].GetHistogram()->SetMaximum(1.05 * max);
 		for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
 			iIndi->GetHistogram()->Draw("same");
 	}
 	else if (histoIndi.empty() && !histoStack.empty()){
-		hs->SetMaximum(1.05 * max);
-		hs->Draw();
+		initialMax = histoStack[0].GetHistogram()->GetMaximum();
+		histoStack[0].GetHistogram()->SetMaximum(1.05 * max);
+		histoStack[0].GetHistogram()->Draw();
+		hs->Draw("same");
 	}
 	if (addLatex) DrawLatex();
 	if (leg != NULL) leg->Draw("same");
 	gPad->RedrawAxis();
 	c->SaveAs(saveName.c_str());
+	c->Close();
+	// reset the max values of histograms that we altered
+	if (!histoIndi.empty()) histoIndi[0].GetHistogram()->SetMaximum(initialMax);
+	else histoStack[0].GetHistogram()->SetMaximum(initialMax);
 	return;
 }
 
@@ -184,13 +217,9 @@ int Plotter::SetColor_stark(const int& index)
 {
 	if (index==0) return kRed;
 	if (index==1) return kBlue;
-	if (index==2) return kGreen;
-	if (index==3) return kPink;
-	if (index==4) return kBlack;
-	if (index==5) return kMagenta;
-	if (index==6) return kRed;
-	if (index==7) return kRed;
-	if (index==8) return kRed;
+	if (index==2) return kGreen+1;
+	if (index==3) return kMagenta;
+	if (index==4) return kCyan;
 	else return kBlack;
 }
 
@@ -305,8 +334,7 @@ TStyle * Plotter::TDRStyle()
 	tdrStyle->SetTitleColor(1, "XYZ");
 	tdrStyle->SetTitleFont(42, "XYZ");
 	tdrStyle->SetTitleSize(0.06, "XYZ");
-	// tdrStyle->SetTitleXSize(Float_t size = 0.02); // Another way to set the size?
-	// tdrStyle->SetTitleYSize(Float_t size = 0.02);
+	// tdrStyle->SetTitleXSize(0.06); // Another way to set the size?
 	tdrStyle->SetTitleXOffset(0.95);//EDITFROM 0.9
 	tdrStyle->SetTitleYOffset(1.25);
 	// tdrStyle->SetTitleOffset(1.1, "Y"); // Another way to set the Offset
@@ -316,7 +344,7 @@ TStyle * Plotter::TDRStyle()
 	tdrStyle->SetLabelFont(42, "XYZ");
 	tdrStyle->SetLabelOffset(0.007, "XYZ");
 	// tdrStyle->SetLabelSize(0.05, "XYZ");
-	tdrStyle->SetLabelSize(0.06, "XYZ");
+	tdrStyle->SetLabelSize(0.04, "XYZ");
 
 	// For the axis:
 	tdrStyle->SetAxisColor(1, "XYZ");
