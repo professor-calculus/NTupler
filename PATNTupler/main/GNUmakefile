@@ -49,6 +49,8 @@ investigateEventSelectionCuts_table:	investigateEventSelectionCuts_table.o ${OBJ
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
 exampleOfHowToUsePlottingClasses: exampleOfHowToUsePlottingClasses.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/Plotter.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
+plotting_compareTtbarShape: plotting_compareTtbarShape.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/Plotter.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 %.o: 	%.cc %.hh
 	$(info generic.o target's commands)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
