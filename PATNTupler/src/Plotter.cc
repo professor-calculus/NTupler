@@ -157,6 +157,7 @@ void Plotter::Save(const std::string& saveName){
 	if (!histoIndi.empty() && !histoStack.empty()){
 		initialMax = histoIndi[0].GetHistogram()->GetMaximum();
 		histoIndi[0].GetHistogram()->SetMaximum(1.05 * max);
+		histoIndi[0].GetHistogram()->SetMinimum(0);
 		histoIndi[0].GetHistogram()->Draw();
 		hs->Draw("same");
 		for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
@@ -165,12 +166,14 @@ void Plotter::Save(const std::string& saveName){
 	else if (!histoIndi.empty() && histoStack.empty()){
 		initialMax = histoIndi[0].GetHistogram()->GetMaximum();
 		histoIndi[0].GetHistogram()->SetMaximum(1.05 * max);
+		histoIndi[0].GetHistogram()->SetMinimum(0);
 		for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
 			iIndi->GetHistogram()->Draw("same");
 	}
 	else if (histoIndi.empty() && !histoStack.empty()){
 		initialMax = histoStack[0].GetHistogram()->GetMaximum();
 		histoStack[0].GetHistogram()->SetMaximum(1.05 * max);
+		histoStack[0].GetHistogram()->SetMinimum(0);
 		histoStack[0].GetHistogram()->Draw();
 		hs->Draw("same");
 	}
