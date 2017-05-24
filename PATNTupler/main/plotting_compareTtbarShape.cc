@@ -79,9 +79,8 @@ int main(){
     } // closes loop through cut 2 states
 
 	Plotter plot = Plotter(setOfTtbar);
-	plot.AddLegend(0.6, 0.8, 0.6, 0.8); // the last value is the textSize, if no arg given 0.04 is used
-	plot.AddLatex(50.0, "#it{Simulation}"); // the last value is the tag after 'cms', if no arg given simulation WIP is used
-	plot.Save(outputFile.c_str()); // to save the plot
-
+	plot.AddLegend(0.6, 0.8, 0.6, 0.8);
+	plot.AddLatex();
+	plot.Save(outputFile.c_str());
 	return 0;
 }
