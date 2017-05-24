@@ -62,18 +62,18 @@ tdrStyle(TDRStyle())
 	for (size_t iIndi = 0; iIndi != histoIndi.size(); ++iIndi){
 		histoIndi[iIndi].GetHistogram()->SetLineColor(SetColor_stark(iIndi));
 		histoIndi[iIndi].GetHistogram()->SetLineWidth(2);
-		histoIndi[iIndi].GetHistogram()->GetXaxis()->SetTitleSize(0.06); // can't get this to work via tstyle
+		histoIndi[iIndi].GetHistogram()->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
 		histoIndi[iIndi].GetHistogram()->GetXaxis()->SetLabelSize(0.04);
-		histoIndi[iIndi].GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+		histoIndi[iIndi].GetHistogram()->GetYaxis()->SetTitleSize(0.05);
 		histoIndi[iIndi].GetHistogram()->GetYaxis()->SetLabelSize(0.04);
 	}
 
 	for (size_t iStack = 0; iStack != histoStack.size(); ++iStack){
 		histoStack[iStack].GetHistogram()->SetFillColor(SetColor_mellow(iStack, histoStack.size()));	
 		histoStack[iStack].GetHistogram()->SetLineWidth(0.0);
-		histoStack[iStack].GetHistogram()->GetXaxis()->SetTitleSize(0.06); // can't get this to work via tstyle
+		histoStack[iStack].GetHistogram()->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
 		histoStack[iStack].GetHistogram()->GetXaxis()->SetLabelSize(0.04);
-		histoStack[iStack].GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+		histoStack[iStack].GetHistogram()->GetYaxis()->SetTitleSize(0.05);
 		histoStack[iStack].GetHistogram()->GetYaxis()->SetLabelSize(0.04);
 	}
 }
