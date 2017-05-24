@@ -26,7 +26,6 @@
 Plotter::Plotter(std::vector<PlotEntry> histoIndiDummy) :
 leg(0),
 addLatex(false),
-lumiValue(0.0),
 tdrStyle(TDRStyle())
 {
 	if (histoIndiDummy.empty()) std::cout << "Plotter WARNING: no plot entries handed to plotter!" << std::endl;
@@ -48,7 +47,6 @@ tdrStyle(TDRStyle())
 Plotter::Plotter(std::vector<PlotEntry> histoIndiDummy, std::vector<PlotEntry> histoStackDummy) :
 leg(0),
 addLatex(false),
-lumiValue(0.0),
 tdrStyle(TDRStyle())
 {
 	if (histoIndiDummy.empty()) std::cout << "Plotter Message: first constructor argument std::vector<PlotEntry> is empty" << std::endl;
@@ -115,7 +113,16 @@ void Plotter::AddLegend(const double& x1, const double& x2, const double& y1, co
 void Plotter::AddLatex(const double& lumiValueDummy, const std::string& lhsStringAfterCMSDummy)
 {
 	addLatex = true;
-	lumiValue = lumiValueDummy;
+	lumiLabel = Form("%.1f fb^{-1} (13 TeV)", lumiValueDummy);
+	lhsStringAfterCMS = lhsStringAfterCMSDummy;
+
+	return;
+}
+
+void Plotter::AddLatex(const std::string& lhsStringAfterCMSDummy)
+{
+	addLatex = true;
+	lumiLabel = "(13 TeV)";
 	lhsStringAfterCMS = lhsStringAfterCMSDummy;
 
 	return;
@@ -190,7 +197,7 @@ void Plotter::DrawLatex()
     latex->DrawLatex(0.15,0.92,Form("#bf{CMS} %s", lhsStringAfterCMS.c_str()));
 
     latex->SetTextAlign(31); // align from right
-	latex->DrawLatex(0.92,0.92,Form("%.1f fb^{-1} (13 TeV)", lumiValue));
+	latex->DrawLatex(0.92,0.92,lumiLabel.c_str());
 
 	return;
 }

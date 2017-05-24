@@ -11,6 +11,7 @@ public:
 	void AddLegend(TLegend*);
 	void AddLegend(const double&, const double&, const double&, const double&, const double& = 0.04);
 	void AddLatex(const double&, const std::string& = "#it{Simulation} W.I.P");
+	void AddLatex(const std::string& = "#it{Simulation} W.I.P");
 	TStyle * GetTStyle(); // get it, to edit it
 	void Save(const std::string&);
 
@@ -19,7 +20,7 @@ private:
 	std::vector<PlotEntry> histoStack;	
 	TLegend * leg;
 	bool addLatex;
-	double lumiValue;
+	std::string lumiLabel;
 	std::string lhsStringAfterCMS;
 	void DrawLatex();	
 	int SetColor_mellow(const int&, const int&);
