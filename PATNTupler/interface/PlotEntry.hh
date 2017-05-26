@@ -15,7 +15,7 @@ public:
 	double GetNumberOfEventsBeforeCuts() const;
 	double GetNumberOfEventsAfterCuts() const;
 	// double GetLuminosity() const;
-
+	void NormalisePlot();
 private:
 	std::string plotEntryName;
 	double luminosity;

@@ -113,5 +113,11 @@ double PlotEntry::GetNumberOfEventsAfterCuts() const
 
 // double PlotEntry::GetLuminosity() const {return luminosity;}
 
+void PlotEntry::NormalisePlot()
+{
+	double numberOfEventsAfterCuts = 0.0;
+	for (int iBin = 0; iBin < hTotal->GetNbinsX()+2; ++iBin) numberOfEventsAfterCuts += hTotal->GetBinContent(iBin);
+	hTotal->Scale(1/numberOfEventsAfterCuts);
+}
 
 //-----------private----------//
