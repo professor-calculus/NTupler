@@ -389,14 +389,14 @@ int main(){
                     double nBackgroundObserved = 0.0;
                     for (size_t i = 0; i < backgroundHistograms.size(); ++i){
                         // nBackgroundObserved += backgroundHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetEntries(); // note that this method does not work due to the way the histograms were filled
-                        for (int iBin = 0; iBin < backgroundHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetNbinsX()+2; ++iBin)
+                        for (int iBin = 0; iBin < backgroundHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetNbinsX()+1; ++iBin)
                             nBackgroundObserved += backgroundHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetBinContent(iBin);
                     }
 
                     for (size_t i = 0; i < signalHistograms.size(); ++i){
                         
                         double nSignalObserved = 0.0;
-                        for (int iBin = 0; iBin < signalHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetNbinsX()+2; ++iBin)
+                        for (int iBin = 0; iBin < signalHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetNbinsX()+1; ++iBin)
                             nSignalObserved += signalHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetBinContent(iBin);
 
                         double significance = nSignalObserved / sqrt(nBackgroundObserved);
@@ -536,7 +536,7 @@ void Histograms::FillHistograms(std::vector<std::vector<std::string>> cut2_ak8Db
                             std::cout << std::endl;
 
                             T->Draw(drawStringA.c_str(), drawStringB.c_str(), "");
-                            for (int iBin = 0; iBin < h.GetNbinsX()+2; ++iBin) h_[Form("%s__%s", histoTag.c_str(), labelsString.c_str())]->AddBinContent(iBin, h.GetBinContent(iBin));
+                            for (int iBin = 0; iBin < h.GetNbinsX()+1; ++iBin) h_[Form("%s__%s", histoTag.c_str(), labelsString.c_str())]->AddBinContent(iBin, h.GetBinContent(iBin));
 
                         } // closes loop through histoTagVec
 
