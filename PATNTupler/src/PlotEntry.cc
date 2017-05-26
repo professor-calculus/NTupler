@@ -63,7 +63,7 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 	else std::cout << "NB: no cut applied" << std::endl;
 	std::cout << "NB: no event weighting (for data)" << std::endl;
 	T->Draw(drawStringA.c_str(), drawStringB.c_str(), "");
-	for (int iBin = 0; iBin < hContainer.GetNbinsX()+2; ++iBin) hTotal->AddBinContent(iBin, hContainer.GetBinContent(iBin));
+	for (int iBin = 0; iBin < hContainer.GetNbinsX()+1; ++iBin) hTotal->AddBinContent(iBin, hContainer.GetBinContent(iBin));
 	std::cout << std::endl;
 }
 
@@ -94,7 +94,7 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 	if (!selectionCut.empty()) std::cout << "Event Weighting * Cut applied: " << drawStringB << std::endl;
 	else std::cout << "Event Weighting: " << drawStringB << "\nNB: no cut applied." << std::endl;
 	T->Draw(drawStringA.c_str(), drawStringB.c_str(), "");
-	for (int iBin = 0; iBin < hContainer.GetNbinsX()+2; ++iBin)	hTotal->AddBinContent(iBin, hContainer.GetBinContent(iBin));
+	for (int iBin = 0; iBin < hContainer.GetNbinsX()+1; ++iBin)	hTotal->AddBinContent(iBin, hContainer.GetBinContent(iBin));
 	std::cout << std::endl;
 }
 
@@ -107,7 +107,7 @@ double PlotEntry::GetNumberOfEventsBeforeCuts() const {return numberOfEventsBefo
 double PlotEntry::GetNumberOfEventsAfterCuts() const
 {
 	double numberOfEventsAfterCuts = 0.0;
-	for (int iBin = 0; iBin < hTotal->GetNbinsX()+2; ++iBin) numberOfEventsAfterCuts += hTotal->GetBinContent(iBin);
+	for (int iBin = 0; iBin < hTotal->GetNbinsX()+1; ++iBin) numberOfEventsAfterCuts += hTotal->GetBinContent(iBin);
 	return numberOfEventsAfterCuts;
 }
 
@@ -116,7 +116,7 @@ double PlotEntry::GetNumberOfEventsAfterCuts() const
 void PlotEntry::NormalisePlot()
 {
 	double numberOfEventsAfterCuts = 0.0;
-	for (int iBin = 0; iBin < hTotal->GetNbinsX()+2; ++iBin) numberOfEventsAfterCuts += hTotal->GetBinContent(iBin);
+	for (int iBin = 0; iBin < hTotal->GetNbinsX()+1; ++iBin) numberOfEventsAfterCuts += hTotal->GetBinContent(iBin);
 	hTotal->Scale(1/numberOfEventsAfterCuts);
 }
 
