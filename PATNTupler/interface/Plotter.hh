@@ -13,6 +13,7 @@ public:
 	void AddLatex(const double&, const std::string& = "#it{Simulation} W.I.P");
 	void AddLatex(const std::string& = "#it{Simulation} W.I.P");
 	TStyle * GetTStyle(); // get it, to edit it
+	void SetLogY();
 	void Save(const std::string&);
 
 private:
@@ -22,6 +23,7 @@ private:
 	bool addLatex;
 	std::string lumiLabel;
 	std::string lhsStringAfterCMS;
+	bool useLogY;
 	void DrawLatex();	
 	int SetColor_mellow(const int&, const int&);
 	int SetColor_stark(const int&);
