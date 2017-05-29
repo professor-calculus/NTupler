@@ -229,6 +229,10 @@ int main(){
     WWTo1L1Nu2Q.crossSection = 49.997; // in pb 
     WWTo1L1Nu2Q.lheHtCut = {0};
 
+    struct dataInput TTJets_NLO;
+    TTJets_NLO.rootFileName = baseDir + "TTJets_NLO/flatTree.root";
+    TTJets_NLO.crossSection = 831.76; // in pb 
+    TTJets_NLO.lheHtCut = {0};
 
     // FOUR: group the input datasets and create Histograms
     // ---------------------------------- 
@@ -257,7 +261,7 @@ int main(){
     class Histograms hW(integratedLuminosity, "W+jets", {WJetsToQQ_ht600toInf}, PlottingTools::SetColor(3,5), cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     class Histograms hZZ(integratedLuminosity, "ZZ+jets", {ZZTo4Q, ZZTo2L2Q, ZZTo2Q2Nu}, PlottingTools::SetColor(4,5), cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     class Histograms hWW(integratedLuminosity, "WW+jets", {WWTo4Q, WWTo1L1Nu2Q}, PlottingTools::SetColor(5,5), cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-      
+    // class Histograms hTtbarNLO(integratedLuminosity, "ttbar NLO", {TTJets_NLO}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
 
     // FIVE: group the Histograms into signal and background
     // std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy800,hSignal_mH50_mSusy800,hSignal_mH70_mSusy800,hSignal_mH90_mSusy800};
@@ -265,10 +269,10 @@ int main(){
     // std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy1600,hSignal_mH50_mSusy1600,hSignal_mH70_mSusy1600,hSignal_mH90_mSusy1600};
     // std::vector<class Histograms> signalHistograms = {hSignal_mH30_mSusy2000,hSignal_mH50_mSusy2000,hSignal_mH70_mSusy2000,hSignal_mH90_mSusy2000};
     std::vector<class Histograms> signalHistograms = {hSignal_mH70_mSusy800,hSignal_mH70_mSusy1200,hSignal_mH70_mSusy1600,hSignal_mH70_mSusy2000};
+    // std::vector<class Histograms> signalHistograms = {hTtbar,hTtbarNLO};
     
     std::vector<class Histograms> backgroundHistograms = {hTtbar, hZ, hW, hZZ, hWW}; // the order here is how they will be plotted
-    // std::vector<class Histograms> backgroundHistograms = {hZ, hW}; // the order here is how they will be plotted
-
+    // std::vector<class Histograms> backgroundHistograms;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -389,14 +393,14 @@ int main(){
                     double nBackgroundObserved = 0.0;
                     for (size_t i = 0; i < backgroundHistograms.size(); ++i){
                         // nBackgroundObserved += backgroundHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetEntries(); // note that this method does not work due to the way the histograms were filled
-                        for (int iBin = 0; iBin < backgroundHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetNbinsX()+1; ++iBin)
+                        for (int iBin = 0; iBin < backgroundHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetNbinsX()+2; ++iBin)
                             nBackgroundObserved += backgroundHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetBinContent(iBin);
                     }
 
                     for (size_t i = 0; i < signalHistograms.size(); ++i){
                         
                         double nSignalObserved = 0.0;
-                        for (int iBin = 0; iBin < signalHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetNbinsX()+1; ++iBin)
+                        for (int iBin = 0; iBin < signalHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetNbinsX()+2; ++iBin)
                             nSignalObserved += signalHistograms[i].h_[Form("fatJetA_softDropMass__%s",labelsString.c_str())]->GetBinContent(iBin);
 
                         double significance = nSignalObserved / sqrt(nBackgroundObserved);
@@ -536,7 +540,7 @@ void Histograms::FillHistograms(std::vector<std::vector<std::string>> cut2_ak8Db
                             std::cout << std::endl;
 
                             T->Draw(drawStringA.c_str(), drawStringB.c_str(), "");
-                            for (int iBin = 0; iBin < h.GetNbinsX()+1; ++iBin) h_[Form("%s__%s", histoTag.c_str(), labelsString.c_str())]->AddBinContent(iBin, h.GetBinContent(iBin));
+                            for (int iBin = 0; iBin < h.GetNbinsX()+2; ++iBin) h_[Form("%s__%s", histoTag.c_str(), labelsString.c_str())]->AddBinContent(iBin, h.GetBinContent(iBin));
 
                         } // closes loop through histoTagVec
 
