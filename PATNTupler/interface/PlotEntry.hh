@@ -15,6 +15,7 @@ public:
 	double GetNumberOfEventsBeforeCuts() const;
 	double GetNumberOfEventsAfterCuts() const;
 	// double GetLuminosity() const;
+	std::vector<double> GetStatErrorSquaredVector() const;
 	void NormalisePlot();
 private:
 	std::string plotEntryName;
