@@ -26,6 +26,7 @@
 Plotter::Plotter(std::vector<PlotEntry> histoIndiDummy) :
 leg(0),
 addLatex(false),
+useLogY(false),
 tdrStyle(TDRStyle())
 {
 	if (histoIndiDummy.empty()) std::cout << "Plotter WARNING: no plot entries handed to plotter!" << std::endl;
@@ -47,6 +48,7 @@ tdrStyle(TDRStyle())
 Plotter::Plotter(std::vector<PlotEntry> histoIndiDummy, std::vector<PlotEntry> histoStackDummy) :
 leg(0),
 addLatex(false),
+useLogY(false),
 tdrStyle(TDRStyle())
 {
 	if (histoIndiDummy.empty()) std::cout << "Plotter Message: first constructor argument std::vector<PlotEntry> is empty" << std::endl;
@@ -132,6 +134,12 @@ void Plotter::AddLatex(const std::string& lhsStringAfterCMSDummy)
 TStyle * Plotter::GetTStyle() {return tdrStyle;} // get it, to edit it
 
 
+void Plotter::SetLogY(){
+	useLogY = true;
+	return;
+}
+
+
 void Plotter::Save(const std::string& saveName){
 
 	if (histoStack.empty() && histoIndi.empty()){
@@ -141,6 +149,7 @@ void Plotter::Save(const std::string& saveName){
 
 	tdrStyle->cd();
 	TCanvas * c = new TCanvas("c","c");
+	if (useLogY) gPad->SetLogy();
 
 	std::string hsTitles = ""; // can't set them later w/o a seg fault
 	if (!histoStack.empty()) hsTitles = Form("%s;%s;%s", histoStack[0].GetHistogram()->GetTitle(), histoStack[0].GetHistogram()->GetXaxis()->GetTitle(), histoStack[0].GetHistogram()->GetYaxis()->GetTitle());
@@ -156,8 +165,11 @@ void Plotter::Save(const std::string& saveName){
 	
 	if (!histoIndi.empty() && !histoStack.empty()){
 		initialMax = histoIndi[0].GetHistogram()->GetMaximum();
-		histoIndi[0].GetHistogram()->SetMaximum(1.05 * max);
-		histoIndi[0].GetHistogram()->SetMinimum(0);
+		if (useLogY == false){
+			histoIndi[0].GetHistogram()->SetMaximum(1.05 * max);
+			histoIndi[0].GetHistogram()->SetMinimum(0);
+		}
+		else histoIndi[0].GetHistogram()->SetMaximum(2.00 * max);
 		histoIndi[0].GetHistogram()->Draw();
 		hs->Draw("same");
 		for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
@@ -165,15 +177,21 @@ void Plotter::Save(const std::string& saveName){
 	}
 	else if (!histoIndi.empty() && histoStack.empty()){
 		initialMax = histoIndi[0].GetHistogram()->GetMaximum();
-		histoIndi[0].GetHistogram()->SetMaximum(1.05 * max);
-		histoIndi[0].GetHistogram()->SetMinimum(0);
+		if (useLogY == false){
+			histoIndi[0].GetHistogram()->SetMaximum(1.05 * max);
+			histoIndi[0].GetHistogram()->SetMinimum(0);
+		}
+		else histoIndi[0].GetHistogram()->SetMaximum(2.00 * max);
 		for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
 			iIndi->GetHistogram()->Draw("same");
 	}
 	else if (histoIndi.empty() && !histoStack.empty()){
 		initialMax = histoStack[0].GetHistogram()->GetMaximum();
-		histoStack[0].GetHistogram()->SetMaximum(1.05 * max);
-		histoStack[0].GetHistogram()->SetMinimum(0);
+		if (useLogY == false){
+			histoIndi[0].GetHistogram()->SetMaximum(1.05 * max);
+			histoIndi[0].GetHistogram()->SetMinimum(0);
+		}
+		else histoIndi[0].GetHistogram()->SetMaximum(2.00 * max);
 		histoStack[0].GetHistogram()->Draw();
 		hs->Draw("same");
 	}
