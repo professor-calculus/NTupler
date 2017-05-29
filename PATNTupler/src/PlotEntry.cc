@@ -132,6 +132,7 @@ void PlotEntry::NormalisePlot()
 	double numberOfEventsAfterCuts = 0.0;
 	for (int iBin = 0; iBin < hTotal->GetNbinsX()+2; ++iBin) numberOfEventsAfterCuts += hTotal->GetBinContent(iBin);
 	hTotal->Scale(1/numberOfEventsAfterCuts);
+	for (size_t iBin = 0; iBin < statErrorSquared.size(); ++iBin) statErrorSquared[iBin] = statErrorSquared[iBin] / (numberOfEventsAfterCuts * numberOfEventsAfterCuts);
 }
 
 //-----------private----------//
