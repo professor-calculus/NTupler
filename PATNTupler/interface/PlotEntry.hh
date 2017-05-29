@@ -23,6 +23,7 @@ private:
 	TH1F hNull;
 	TH1F* hTotal;
 	double numberOfEventsBeforeCuts;
+	std::vector<double> statErrorSquared;
 };
 
 #endif

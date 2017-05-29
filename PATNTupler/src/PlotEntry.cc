@@ -25,6 +25,8 @@ PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1F& hTemplat
 {
 	Int_t nBins = hTemplate.GetNbinsX();
 	hTotal = new TH1F("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBins, hTemplate.GetBinLowEdge(1), hTemplate.GetBinLowEdge(nBins+1));
+	std::vector<double> dummyStatError(nBins+2, 0.0);
+	statErrorSquared = dummyStatError;
 }
 
 PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1F& hTemplate, const std::string& variableToPlotDummy, const double& luminosityDummy) :
@@ -36,6 +38,8 @@ PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1F& hTemplat
 {
 	Int_t nBins = hTemplate.GetNbinsX();
 	hTotal = new TH1F("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBins, hTemplate.GetBinLowEdge(1), hTemplate.GetBinLowEdge(nBins+1));
+	std::vector<double> dummyStatError(nBins+2, 0.0);
+	statErrorSquared = dummyStatError;
 }
 
 
@@ -63,7 +67,10 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 	else std::cout << "NB: no cut applied" << std::endl;
 	std::cout << "NB: no event weighting (for data)" << std::endl;
 	T->Draw(drawStringA.c_str(), drawStringB.c_str(), "");
-	for (int iBin = 0; iBin < hContainer.GetNbinsX()+2; ++iBin) hTotal->AddBinContent(iBin, hContainer.GetBinContent(iBin));
+	for (int iBin = 0; iBin < hContainer.GetNbinsX()+2; ++iBin){
+		hTotal->AddBinContent(iBin, hContainer.GetBinContent(iBin));
+		statErrorSquared[iBin] += hContainer.GetBinContent(iBin);
+	}
 	std::cout << std::endl;
 }
 
@@ -94,7 +101,10 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 	if (!selectionCut.empty()) std::cout << "Event Weighting * Cut applied: " << drawStringB << std::endl;
 	else std::cout << "Event Weighting: " << drawStringB << "\nNB: no cut applied." << std::endl;
 	T->Draw(drawStringA.c_str(), drawStringB.c_str(), "");
-	for (int iBin = 0; iBin < hContainer.GetNbinsX()+2; ++iBin)	hTotal->AddBinContent(iBin, hContainer.GetBinContent(iBin));
+	for (int iBin = 0; iBin < hContainer.GetNbinsX()+2; ++iBin){
+		hTotal->AddBinContent(iBin, hContainer.GetBinContent(iBin));
+		statErrorSquared[iBin] += hContainer.GetBinContent(iBin) * eventWeighting;
+	}
 	std::cout << std::endl;
 }
 
