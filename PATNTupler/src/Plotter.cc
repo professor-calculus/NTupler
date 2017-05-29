@@ -27,6 +27,7 @@ Plotter::Plotter(std::vector<PlotEntry> histoIndiDummy) :
 leg(0),
 addLatex(false),
 useLogY(false),
+plotWithErrors(false),
 tdrStyle(TDRStyle())
 {
 	if (histoIndiDummy.empty()) std::cout << "Plotter WARNING: no plot entries handed to plotter!" << std::endl;
@@ -49,6 +50,7 @@ Plotter::Plotter(std::vector<PlotEntry> histoIndiDummy, std::vector<PlotEntry> h
 leg(0),
 addLatex(false),
 useLogY(false),
+plotWithErrors(false),
 tdrStyle(TDRStyle())
 {
 	if (histoIndiDummy.empty()) std::cout << "Plotter Message: first constructor argument std::vector<PlotEntry> is empty" << std::endl;
@@ -140,6 +142,28 @@ void Plotter::SetLogY(){
 }
 
 
+void Plotter::SetErrors(){
+
+	// THIS FUNCTION NEEDS EXPANDING - to encapsulate styles more - maybe will require an argument(s)
+	plotWithErrors = true;
+	
+	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi){
+		
+		iIndi->GetHistogram()->SetMarkerStyle(21);
+		iIndi->GetHistogram()->SetMarkerSize(0.1);
+		for (int iBin = 0; iBin < iIndi->GetHistogram()->GetNbinsX()+2; ++iBin){
+			iIndi->GetHistogram()->SetBinError(iBin, sqrt(iIndi->GetStatErrorSquaredVector()[iBin]));
+		}
+	}
+
+	for (std::vector<PlotEntry>::const_iterator iStack = histoStack.begin(); iStack != histoStack.end(); ++iStack){
+		for (int iBin = 0; iBin < iStack->GetHistogram()->GetNbinsX()+2; ++iBin){
+			iStack->GetHistogram()->SetBinError(iBin, sqrt(iStack->GetStatErrorSquaredVector()[iBin]));
+		}
+	}
+}
+
+
 void Plotter::Save(const std::string& saveName){
 
 	if (histoStack.empty() && histoIndi.empty()){
@@ -173,7 +197,8 @@ void Plotter::Save(const std::string& saveName){
 		histoIndi[0].GetHistogram()->Draw();
 		hs->Draw("same");
 		for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
-			iIndi->GetHistogram()->Draw("same");
+			if (plotWithErrors == false) iIndi->GetHistogram()->Draw("same");
+			else iIndi->GetHistogram()->Draw("same P");
 	}
 	else if (!histoIndi.empty() && histoStack.empty()){
 		initialMax = histoIndi[0].GetHistogram()->GetMaximum();
@@ -183,7 +208,8 @@ void Plotter::Save(const std::string& saveName){
 		}
 		else histoIndi[0].GetHistogram()->SetMaximum(2.00 * max);
 		for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
-			iIndi->GetHistogram()->Draw("same");
+			if (plotWithErrors == false) iIndi->GetHistogram()->Draw("same");
+			else iIndi->GetHistogram()->Draw("same P");
 	}
 	else if (histoIndi.empty() && !histoStack.empty()){
 		initialMax = histoStack[0].GetHistogram()->GetMaximum();
@@ -295,11 +321,10 @@ TStyle * Plotter::TDRStyle()
 	// tdrStyle->SetLegoInnerR(Float_t rad = 0.5);
 	// tdrStyle->SetNumberContours(Int_t number = 20);
 
-	tdrStyle->SetEndErrorSize(2);
-	//  tdrStyle->SetErrorMarker(20);
-	tdrStyle->SetErrorX(0.);
-
-	tdrStyle->SetMarkerStyle(20);
+	// tdrStyle->SetEndErrorSize(2);
+	// tdrStyle->SetErrorMarker(20);
+	// tdrStyle->SetErrorX(0.);
+	// tdrStyle->SetMarkerStyle(20);
 
 	//For the legend
 	tdrStyle->SetLegendBorderSize(0);
