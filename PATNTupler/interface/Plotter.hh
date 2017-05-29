@@ -14,6 +14,7 @@ public:
 	void AddLatex(const std::string& = "#it{Simulation} W.I.P");
 	TStyle * GetTStyle(); // get it, to edit it
 	void SetLogY();
+	void SetErrors();
 	void Save(const std::string&);
 
 private:
@@ -24,6 +25,7 @@ private:
 	std::string lumiLabel;
 	std::string lhsStringAfterCMS;
 	bool useLogY;
+	bool plotWithErrors;
 	void DrawLatex();	
 	int SetColor_mellow(const int&, const int&);
 	int SetColor_stark(const int&);
