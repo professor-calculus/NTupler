@@ -150,7 +150,7 @@ void Plotter::SetErrors(){
 	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi){
 		
 		iIndi->GetHistogram()->SetMarkerStyle(21);
-		iIndi->GetHistogram()->SetMarkerSize(0.1);
+		iIndi->GetHistogram()->SetMarkerSize(0.2);
 		for (int iBin = 0; iBin < iIndi->GetHistogram()->GetNbinsX()+2; ++iBin){
 			iIndi->GetHistogram()->SetBinError(iBin, sqrt(iIndi->GetStatErrorSquaredVector()[iBin]));
 		}
