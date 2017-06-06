@@ -181,19 +181,43 @@ void Plotter::Save(const std::string& saveName){
 	for (std::vector<PlotEntry>::const_iterator iStack = histoStack.begin(); iStack != histoStack.end(); ++iStack)
 		hs->Add(iStack->GetHistogram());
 
-	double initialMax = 0.0;
+	// find max and min (don't want zero values for min, the plot won't work properly)
+	// NB this currently might not do logY minimums correctly for stacks
 	double max = 0.0;
-	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
-		if (iIndi->GetHistogram()->GetMaximum() > max) max = iIndi->GetHistogram()->GetMaximum();
+	double min = 0.0; // for logY plots
+	bool setMin = false;
+	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi){
+		if (iIndi->GetHistogram()->GetMaximum() > max || iIndi == histoIndi.begin()) max = iIndi->GetHistogram()->GetMaximum();
+		
+		double histoMinNonZero = 0.0; // lowest non zero value of the histogram
+		bool setHistoMinNonZero = false;
+		for (int i=1; i != iIndi->GetHistogram()->GetNbinsX()+1; ++i)
+			if (iIndi->GetHistogram()->GetBinContent(i) != 0 && (iIndi->GetHistogram()->GetBinContent(i) < histoMinNonZero || setHistoMinNonZero == false) ){
+				histoMinNonZero = iIndi->GetHistogram()->GetBinContent(i);
+				setHistoMinNonZero = true;
+			}
+		if (setHistoMinNonZero == true && (histoMinNonZero < min || setMin == false)){
+			min = histoMinNonZero;
+			setMin = true;
+		}
+	}
 	if (!histoStack.empty() && hs->GetMaximum() > max) max = hs->GetMaximum();
-	
+	if (!histoStack.empty() && hs->GetMinimum() < min) min = hs->GetMinimum();	
+
+	// set histo max and min and draw
+	double initialMax = 0.0; // use to reset the histo max and min to what it initially was
+	double initialMin = 0.0;
 	if (!histoIndi.empty() && !histoStack.empty()){
 		initialMax = histoIndi[0].GetHistogram()->GetMaximum();
+		initialMin = histoIndi[0].GetHistogram()->GetMinimum();
 		if (useLogY == false){
 			histoIndi[0].GetHistogram()->SetMaximum(1.05 * max);
 			histoIndi[0].GetHistogram()->SetMinimum(0);
 		}
-		else histoIndi[0].GetHistogram()->SetMaximum(2.00 * max);
+		else{
+			histoIndi[0].GetHistogram()->SetMaximum(2.00 * max);
+			histoIndi[0].GetHistogram()->SetMinimum(0.50 * min);
+		}
 		histoIndi[0].GetHistogram()->Draw();
 		hs->Draw("same");
 		for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
@@ -202,22 +226,30 @@ void Plotter::Save(const std::string& saveName){
 	}
 	else if (!histoIndi.empty() && histoStack.empty()){
 		initialMax = histoIndi[0].GetHistogram()->GetMaximum();
+		initialMin = histoIndi[0].GetHistogram()->GetMinimum();
 		if (useLogY == false){
 			histoIndi[0].GetHistogram()->SetMaximum(1.05 * max);
 			histoIndi[0].GetHistogram()->SetMinimum(0);
 		}
-		else histoIndi[0].GetHistogram()->SetMaximum(2.00 * max);
+		else{
+			histoIndi[0].GetHistogram()->SetMaximum(2.00 * max);
+			histoIndi[0].GetHistogram()->SetMinimum(0.50 * min);
+		}
 		for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
 			if (plotWithErrors == false) iIndi->GetHistogram()->Draw("same");
 			else iIndi->GetHistogram()->Draw("same P");
 	}
 	else if (histoIndi.empty() && !histoStack.empty()){
 		initialMax = histoStack[0].GetHistogram()->GetMaximum();
+		initialMin = histoStack[0].GetHistogram()->GetMinimum();
 		if (useLogY == false){
-			histoIndi[0].GetHistogram()->SetMaximum(1.05 * max);
-			histoIndi[0].GetHistogram()->SetMinimum(0);
+			histoStack[0].GetHistogram()->SetMaximum(1.05 * max);
+			histoStack[0].GetHistogram()->SetMinimum(0);
 		}
-		else histoIndi[0].GetHistogram()->SetMaximum(2.00 * max);
+		else{
+			histoStack[0].GetHistogram()->SetMaximum(2.00 * max);
+			histoStack[0].GetHistogram()->SetMinimum(0.50 * min);
+		}
 		histoStack[0].GetHistogram()->Draw();
 		hs->Draw("same");
 	}
@@ -227,8 +259,14 @@ void Plotter::Save(const std::string& saveName){
 	c->SaveAs(saveName.c_str());
 	c->Close();
 	// reset the max values of histograms that we altered
-	if (!histoIndi.empty()) histoIndi[0].GetHistogram()->SetMaximum(initialMax);
-	else histoStack[0].GetHistogram()->SetMaximum(initialMax);
+	if (!histoIndi.empty()){
+		histoIndi[0].GetHistogram()->SetMaximum(initialMax);
+		histoIndi[0].GetHistogram()->SetMinimum(initialMin);
+	}
+	else {
+		histoStack[0].GetHistogram()->SetMaximum(initialMax);
+		histoStack[0].GetHistogram()->SetMinimum(initialMin);
+	}
 	return;
 }
 
