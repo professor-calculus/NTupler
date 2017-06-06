@@ -123,9 +123,7 @@ double PlotEntry::GetNumberOfEventsAfterCuts() const
 
 // double PlotEntry::GetLuminosity() const {return luminosity;}
 
-
 std::vector<double> PlotEntry::GetStatErrorSquaredVector() const {return statErrorSquared;}
-
 
 void PlotEntry::NormalisePlot()
 {
