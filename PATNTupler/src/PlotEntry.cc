@@ -16,6 +16,21 @@
 
 
 //--------constructor---------//
+PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, PlotEntry numeratorPlotEntry, PlotEntry denominatorPlotEntry) : // this constructor divides two existing PlotEntry histograms to make a new one
+	plotEntryName(plotEntryNameDummy),
+	luminosity(-1.0),
+	numberOfEventsBeforeCuts(-1.0)
+{
+	Int_t nBins = numeratorPlotEntry.GetHistogram()->GetNbinsX();
+	hTotal = new TH1F("hTotal", Form("%s;%s;%s", numeratorPlotEntry.GetHistogram()->GetTitle(), numeratorPlotEntry.GetHistogram()->GetXaxis()->GetTitle(), numeratorPlotEntry.GetHistogram()->GetYaxis()->GetTitle()), nBins, numeratorPlotEntry.GetHistogram()->GetXaxis()->GetXbins()->GetArray());
+	hTotal->Divide(numeratorPlotEntry.GetHistogram(),denominatorPlotEntry.GetHistogram());
+	for (int iBin = 0; iBin < nBins+2; ++iBin){
+		double statErrorSquaredForBin = pow(hTotal->GetBinContent(iBin),2);
+		statErrorSquaredForBin *= ( numeratorPlotEntry.GetStatErrorSquaredVector()[iBin]/pow(numeratorPlotEntry.GetNumberOfEventsAfterCuts(),2) + denominatorPlotEntry.GetStatErrorSquaredVector()[iBin]/pow(denominatorPlotEntry.GetNumberOfEventsAfterCuts(),2) );
+		statErrorSquared.push_back(statErrorSquaredForBin);
+	}
+}
+
 PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1F& hTemplate, const std::string& variableToPlotDummy) :
 	plotEntryName(plotEntryNameDummy),
 	luminosity(0.0),
@@ -24,7 +39,7 @@ PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1F& hTemplat
 	numberOfEventsBeforeCuts(0.0)
 {
 	Int_t nBins = hTemplate.GetNbinsX();
-	hTotal = new TH1F("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBins, hTemplate.GetBinLowEdge(1), hTemplate.GetBinLowEdge(nBins+1));
+	hTotal = new TH1F("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBins, hTemplate.GetXaxis()->GetXbins()->GetArray());
 	std::vector<double> dummyStatError(nBins+2, 0.0);
 	statErrorSquared = dummyStatError;
 }
@@ -37,7 +52,7 @@ PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1F& hTemplat
 	numberOfEventsBeforeCuts(0.0)
 {
 	Int_t nBins = hTemplate.GetNbinsX();
-	hTotal = new TH1F("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBins, hTemplate.GetBinLowEdge(1), hTemplate.GetBinLowEdge(nBins+1));
+	hTotal = new TH1F("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBins, hTemplate.GetXaxis()->GetXbins()->GetArray());
 	std::vector<double> dummyStatError(nBins+2, 0.0);
 	statErrorSquared = dummyStatError;
 }
