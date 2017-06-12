@@ -187,8 +187,16 @@ void Plotter::Save(const std::string& saveName){
 	double min = 0.0; // for logY plots
 	bool setMin = false;
 	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi){
-		if (iIndi->GetHistogram()->GetMaximum() > max || iIndi == histoIndi.begin()) max = iIndi->GetHistogram()->GetMaximum();
 		
+		if (plotWithErrors == false){
+			if (iIndi->GetHistogram()->GetMaximum() > max || iIndi == histoIndi.begin()) max = iIndi->GetHistogram()->GetMaximum();
+		}
+		else{
+			for (int i=1; i != iIndi->GetHistogram()->GetNbinsX()+1; ++i){
+				if (iIndi->GetHistogram()->GetBinContent(i) + sqrt(iIndi->GetStatErrorSquaredVector()[i]) > max || (iIndi == histoIndi.begin() && i==1) ) max = iIndi->GetHistogram()->GetBinContent(i) + sqrt(iIndi->GetStatErrorSquaredVector()[i]);
+			}
+		}
+
 		double histoMinNonZero = 0.0; // lowest non zero value of the histogram
 		bool setHistoMinNonZero = false;
 		for (int i=1; i != iIndi->GetHistogram()->GetNbinsX()+1; ++i)
