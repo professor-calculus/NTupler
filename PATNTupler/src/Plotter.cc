@@ -145,12 +145,14 @@ void Plotter::SetLogY(){
 void Plotter::SetErrors(){
 
 	// THIS FUNCTION NEEDS EXPANDING - to encapsulate styles more - maybe will require an argument(s)
+	// currently don't know what it will do to the Stack
 	plotWithErrors = true;
 	
 	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi){
 		
 		iIndi->GetHistogram()->SetMarkerStyle(21);
 		iIndi->GetHistogram()->SetMarkerSize(0.2);
+		iIndi->GetHistogram()->SetLineWidth(3);
 		for (int iBin = 0; iBin < iIndi->GetHistogram()->GetNbinsX()+2; ++iBin){
 			iIndi->GetHistogram()->SetBinError(iBin, sqrt(iIndi->GetStatErrorSquaredVector()[iBin]));
 		}
@@ -211,6 +213,7 @@ void Plotter::Save(const std::string& saveName){
 	}
 	if (!histoStack.empty() && hs->GetMaximum() > max) max = hs->GetMaximum();
 	if (!histoStack.empty() && hs->GetMinimum() < min) min = hs->GetMinimum();	
+	if (useLogY == true && min == 0) min = max / 1000; // it cannot be zero, the division by 1000 is arbitary!!
 
 	// set histo max and min and draw
 	double initialMax = 0.0; // use to reset the histo max and min to what it initially was
@@ -303,6 +306,7 @@ int Plotter::SetColor_mellow(const int& position, const int& maxColors)
 	double colorIndex;
 	int colour = 1;
 	double fraction = (double)(position)/(double)(maxColors);
+	// double fraction = (double)(maxColors) - (double)(position)/(double)(maxColors) - 1.0;
 	if( position > maxColors || position < 0 || maxColors < 0 ) colour = 1;
 	else
 	{
@@ -318,8 +322,9 @@ int Plotter::SetColor_stark(const int& index)
 	if (index==0) return kRed;
 	if (index==1) return kBlue;
 	if (index==2) return kGreen+1;
-	if (index==3) return kMagenta;
-	if (index==4) return kCyan;
+	if (index==3) return kOrange+1;
+	if (index==4) return kMagenta;
+	if (index==5) return kCyan;
 	else return kBlack;
 }
 
