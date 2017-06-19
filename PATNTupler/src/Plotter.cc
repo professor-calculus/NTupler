@@ -323,8 +323,8 @@ int Plotter::SetColor_stark(const int& index)
 	if (index==1) return kBlue;
 	if (index==2) return kGreen+1;
 	if (index==3) return kOrange+1;
-	if (index==4) return kMagenta;
-	if (index==5) return kCyan;
+	if (index==4) return kMagenta-4;
+	if (index==5) return kCyan+1;
 	else return kBlack;
 }
 
