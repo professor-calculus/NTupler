@@ -11,6 +11,7 @@ namespace DoubleBTagWPs{
 	    else if (dtbString == "Loose") dbtDouble = 0.3;
 	    else if (dtbString == "Med") dbtDouble = 0.6;
 	    else if (dtbString == "Tight") dbtDouble = 0.9;
+	    else if (dtbString == "Max") dbtDouble = 100.0;
 	    else{
 	        std::cout << "Have not specified the DBT string correctly\nExiting..." << std::endl;
 	        exit(EXIT_FAILURE);
