@@ -27,7 +27,7 @@ PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, PlotEntry numeratorP
 	hTotal->Divide(numeratorPlotEntry.GetHistogram(),denominatorPlotEntry.GetHistogram());
 	for (int iBin = 0; iBin < nBins+2; ++iBin){
 		double statErrorSquaredForBin = pow(hTotal->GetBinContent(iBin),2);
-		statErrorSquaredForBin *= ( numeratorPlotEntry.GetStatErrorSquaredVector()[iBin]/pow(numeratorPlotEntry.GetNumberOfEventsAfterCuts(),2) + denominatorPlotEntry.GetStatErrorSquaredVector()[iBin]/pow(denominatorPlotEntry.GetNumberOfEventsAfterCuts(),2) );
+		statErrorSquaredForBin *= ( (numeratorPlotEntry.GetStatErrorSquaredVector()[iBin])/(pow(numeratorPlotEntry.GetHistogram()->GetBinContent(iBin),2)) + (denominatorPlotEntry.GetStatErrorSquaredVector()[iBin])/(pow(denominatorPlotEntry.GetHistogram()->GetBinContent(iBin),2)) );
 		statErrorSquared.push_back(statErrorSquaredForBin);
 	}
 }
