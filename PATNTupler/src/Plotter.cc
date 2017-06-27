@@ -11,6 +11,7 @@
 #include <TFile.h>
 #include <TTree.h>
 #include <TH1F.h>
+#include <TH2F.h>
 #include <TStyle.h>
 #include <TLegend.h>
 #include <TLatex.h>
@@ -19,6 +20,7 @@
 
 //RAL PARTICLE HEADERS
 #include "../interface/PlotEntry.hh"
+#include "../interface/PlotEntry2D.hh"
 #include "../interface/Plotter.hh"
 
 
@@ -27,6 +29,7 @@ Plotter::Plotter(std::vector<PlotEntry> histoIndiDummy) :
 leg(0),
 addLatex(false),
 useLogY(false),
+useLogZ(false),
 plotWithErrors(false),
 tdrStyle(TDRStyle())
 {
@@ -50,6 +53,7 @@ Plotter::Plotter(std::vector<PlotEntry> histoIndiDummy, std::vector<PlotEntry> h
 leg(0),
 addLatex(false),
 useLogY(false),
+useLogZ(false),
 plotWithErrors(false),
 tdrStyle(TDRStyle())
 {
@@ -80,6 +84,24 @@ tdrStyle(TDRStyle())
 	}
 }
 
+Plotter::Plotter(std::vector<PlotEntry2D> dummyHistos2D) :
+leg(0),
+addLatex(false),
+useLogY(false),
+useLogZ(false),
+plotWithErrors(false),
+tdrStyle(TDRStyle())
+{
+	if (dummyHistos2D.empty()) std::cout << "Plotter Message: constructor argument std::vector<PlotEntry2D> is empty" << std::endl;
+	else histos2D = dummyHistos2D;
+
+	for (size_t iHistos2D = 0; iHistos2D != histos2D.size(); ++iHistos2D){
+		histos2D[iHistos2D].GetHistogram()->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
+		histos2D[iHistos2D].GetHistogram()->GetXaxis()->SetLabelSize(0.04);
+		histos2D[iHistos2D].GetHistogram()->GetYaxis()->SetTitleSize(0.05);
+		histos2D[iHistos2D].GetHistogram()->GetYaxis()->SetLabelSize(0.04);
+	}
+}
 
 //-----------public-----------//
 void Plotter::AddLegend(TLegend * legDummy)
@@ -138,6 +160,12 @@ TStyle * Plotter::GetTStyle() {return tdrStyle;} // get it, to edit it
 
 void Plotter::SetLogY(){
 	useLogY = true;
+	return;
+}
+
+
+void Plotter::SetLogZ(){
+	useLogZ = true;
 	return;
 }
 
@@ -278,6 +306,39 @@ void Plotter::Save(const std::string& saveName){
 		histoStack[0].GetHistogram()->SetMaximum(initialMax);
 		histoStack[0].GetHistogram()->SetMinimum(initialMin);
 	}
+	return;
+}
+
+
+void Plotter::Save2D(const std::string& saveName){
+
+	if (histos2D.empty()){
+		std::cout << "Plotter::Save @@@ Exiting without saving... no 2D histos @@@" << std::endl;
+		return;
+	}
+
+	tdrStyle->cd();
+	double default_PadRightMargin = tdrStyle->GetPadRightMargin();
+	double default_PadLeftMargin = tdrStyle->GetPadLeftMargin();
+	// std::cout << default_PadLeftMargin << " " << default_PadRightMargin << std::endl;
+	tdrStyle->SetPadRightMargin(0.11);
+	tdrStyle->SetPadLeftMargin(0.11);
+
+	TCanvas * c = new TCanvas("c","c");
+	if (useLogZ) gPad->SetLogz();
+
+	for (std::vector<PlotEntry2D>::const_iterator iHistos2D = histos2D.begin(); iHistos2D != histos2D.end(); ++iHistos2D){
+		iHistos2D->GetHistogram()->SetEntries(1);
+		iHistos2D->GetHistogram()->Draw("colz");
+	}
+
+	if (addLatex) DrawLatex();
+	c->SaveAs(saveName.c_str());
+	c->Close();
+	
+	tdrStyle->SetPadRightMargin(default_PadRightMargin);
+	tdrStyle->SetPadRightMargin(default_PadLeftMargin);
+
 	return;
 }
 
