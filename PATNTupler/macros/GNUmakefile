@@ -55,6 +55,8 @@ plotting_compareDifferentSamples: plotting_compareDifferentSamples.o ${SRCDIR}/P
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 plotting_compareDifferentCuts_invBTagSpecial: plotting_compareDifferentCuts_invBTagSpecial.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/Plotter.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
+plotting_2dMassDistributionsAndCount: plotting_2dMassDistributionsAndCount.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${SRCDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 
 %.o: 	%.cc %.hh
 	$(info generic.o target's commands)
@@ -80,3 +82,4 @@ clean:
 	rm -rf plotting_compareDifferentCuts plotting_compareDifferentCuts.o ${OBJDIR}/* ${TMPDIR}/*
 	rm -rf plotting_compareDifferentSamples plotting_compareDifferentSamples.o ${OBJDIR}/* ${TMPDIR}/*
 	rm -rf plotting_compareDifferentCuts_invBTagSpecial plotting_compareDifferentCuts_invBTagSpecial.o ${OBJDIR}/* ${TMPDIR}/*
+	rm -rf plotting_2dMassDistributionsAndCount plotting_2dMassDistributionsAndCount.o ${OBJDIR}/* ${TMPDIR}/*
