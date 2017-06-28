@@ -98,7 +98,7 @@ tdrStyle(TDRStyle())
 	for (size_t iHistos2D = 0; iHistos2D != histos2D.size(); ++iHistos2D){
 		histos2D[iHistos2D].GetHistogram()->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
 		histos2D[iHistos2D].GetHistogram()->GetXaxis()->SetLabelSize(0.04);
-		histos2D[iHistos2D].GetHistogram()->GetYaxis()->SetTitleSize(0.05);
+		histos2D[iHistos2D].GetHistogram()->GetYaxis()->SetTitleSize(0.04);
 		histos2D[iHistos2D].GetHistogram()->GetYaxis()->SetLabelSize(0.04);
 	}
 }
@@ -306,6 +306,7 @@ void Plotter::Save(const std::string& saveName){
 		histoStack[0].GetHistogram()->SetMaximum(initialMax);
 		histoStack[0].GetHistogram()->SetMinimum(initialMin);
 	}
+	std::cout << std::endl;
 	return;
 }
 
@@ -338,7 +339,7 @@ void Plotter::Save2D(const std::string& saveName){
 	
 	tdrStyle->SetPadRightMargin(default_PadRightMargin);
 	tdrStyle->SetPadRightMargin(default_PadLeftMargin);
-
+	std::cout << std::endl;
 	return;
 }
 
