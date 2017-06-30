@@ -100,7 +100,7 @@ void MassRegionCuts::make_OnS_cuts()
 
 	O_Cuts = "((fatJetB_softDropMass >= " + upperSignalLine + Form(" && fatJetA_softDropMass>=%f)", VHK_bandSize);
 	O_Cuts += " || (fatJetB_softDropMass < " + lowerSignalLine + Form(" && fatJetB_softDropMass>=%f)", VHK_bandSize);
-	O_Cuts += Form(" || (fatJetB_softDropMass > %s))", finalDiagnolSegmentLine.c_str());
+	O_Cuts += Form(" || (fatJetB_softDropMass > %s && fatJetA_softDropMass>=%f && fatJetB_softDropMass>=%f))", finalDiagnolSegmentLine.c_str(), VHK_bandSize, VHK_bandSize);
 
 	return;
 }
