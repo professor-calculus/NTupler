@@ -331,6 +331,7 @@ void Plotter::Save2D(const std::string& saveName){
 	for (std::vector<PlotEntry2D>::const_iterator iHistos2D = histos2D.begin(); iHistos2D != histos2D.end(); ++iHistos2D){
 		iHistos2D->GetHistogram()->SetEntries(1);
 		iHistos2D->GetHistogram()->Draw("colz, same");
+		// iHistos2D->GetHistogram()->Draw("colz, same, text");
 	}
 
 	if (addLatex) DrawLatex();
