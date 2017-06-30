@@ -26,7 +26,7 @@ SN_Nodes(SN_NodesDummy)
 	make_V_Cuts();
 	make_H_Cuts();
 	make_K_Cuts();
-	make_OnS_cuts();
+	make_OnSnUnD_cuts();
 }
 
 
@@ -37,6 +37,8 @@ std::string MassRegionCuts::Get_H_Cuts() const {return H_Cuts;}
 std::string MassRegionCuts::Get_K_Cuts() const {return K_Cuts;}
 std::string MassRegionCuts::Get_O_Cuts() const {return O_Cuts;}
 std::vector<std::string> MassRegionCuts::Get_S_Cuts() const {return S_Cuts;}
+std::vector<std::string> MassRegionCuts::Get_U_Cuts() const {return U_Cuts;}
+std::vector<std::string> MassRegionCuts::Get_D_Cuts() const {return D_Cuts;}
 std::vector<std::string> MassRegionCuts::GetAllCuts() const
 {
 	std::vector<std::string> allCuts;
@@ -45,6 +47,8 @@ std::vector<std::string> MassRegionCuts::GetAllCuts() const
 	allCuts.push_back(K_Cuts);
 	allCuts.push_back(O_Cuts);
 	for (size_t i=0; i!=S_Cuts.size(); ++i) allCuts.push_back(S_Cuts[i]);
+	for (size_t i=0; i!=U_Cuts.size(); ++i) allCuts.push_back(U_Cuts[i]);
+	for (size_t i=0; i!=D_Cuts.size(); ++i) allCuts.push_back(D_Cuts[i]);
 	return allCuts;
 }
 
@@ -73,11 +77,11 @@ void MassRegionCuts::make_K_Cuts()
 	return;
 }
 
-void MassRegionCuts::make_OnS_cuts()
+void MassRegionCuts::make_OnSnUnD_cuts()
 {
+	// S cuts
 	double gradientUpperSignalLine = (SMAX_Node1 - S1_Node) / (SMAX_Node2 - VHK_bandSize);
 	double gradientLowerSignalLine = 1 / gradientUpperSignalLine;
-
 	std::string upperSignalLine = Form("(%f * (fatJetA_softDropMass - %f) + %f)", gradientUpperSignalLine, VHK_bandSize, S1_Node);
 	std::string lowerSignalLine = Form("(%f * (fatJetA_softDropMass - %f) + %f)", gradientLowerSignalLine, S1_Node, VHK_bandSize);
 
@@ -95,12 +99,53 @@ void MassRegionCuts::make_OnS_cuts()
 	}
 	std::string finalDiagnolSegmentLine = Form("(-1 * (fatJetA_softDropMass - %f) + %f)", SMAX_Node1, SMAX_Node2);
 	additionalSignalRegionCuts[SN_Nodes.size()] += Form(" && fatJetB_softDropMass < %s", finalDiagnolSegmentLine.c_str());
-
 	S_Cuts = additionalSignalRegionCuts;
 
+	// O cuts
 	O_Cuts = "((fatJetB_softDropMass >= " + upperSignalLine + Form(" && fatJetA_softDropMass>=%f)", VHK_bandSize);
 	O_Cuts += " || (fatJetB_softDropMass < " + lowerSignalLine + Form(" && fatJetB_softDropMass>=%f)", VHK_bandSize);
 	O_Cuts += Form(" || (fatJetB_softDropMass > %s && fatJetA_softDropMass>=%f && fatJetB_softDropMass>=%f))", finalDiagnolSegmentLine.c_str(), VHK_bandSize, VHK_bandSize);
+
+	// U cuts
+	double upperBand_x1 = VHK_bandSize - 0.5 * (S1_Node - VHK_bandSize);
+	double upperBand_y1 = S1_Node + 0.5 * (S1_Node - VHK_bandSize);
+	double upperBand_x2 = SMAX_Node2 - 0.5 * (SMAX_Node1 - SMAX_Node2);
+	double upperBand_y2 = SMAX_Node1 + 0.5 * (SMAX_Node1 - SMAX_Node2);
+	double gradientUpperBand = (upperBand_y2 - upperBand_y1) / (upperBand_x2 - upperBand_x1);
+	std::string upperBandLine = Form("(%f * (fatJetA_softDropMass - %f) + %f)", gradientUpperBand, upperBand_x1, upperBand_y1);
+	
+	std::string upperBandBaseLineCuts = "fatJetB_softDropMass < " + upperBandLine;
+	upperBandBaseLineCuts += " && fatJetB_softDropMass >= " + upperSignalLine;
+
+	std::vector<std::string> additionalUpperBandCuts(SN_Nodes.size()+1, upperBandBaseLineCuts);
+	additionalUpperBandCuts[0] += Form(" && fatJetB_softDropMass>= (-1 * (fatJetA_softDropMass - %f) + %f)", upperBand_x1, upperBand_y1);
+	for (size_t i=0; i!=SN_Nodes.size(); ++i){
+
+		double correspondingYValue = yValue(SN_Nodes[i], gradientLowerSignalLine, S1_Node, VHK_bandSize);
+		std::string diagnolSegmentLine = Form("(-1 * (fatJetA_softDropMass - %f) + %f)", SN_Nodes[i], correspondingYValue);
+		additionalUpperBandCuts[i] += Form(" && fatJetB_softDropMass < %s", diagnolSegmentLine.c_str());
+		additionalUpperBandCuts[i+1] += Form(" && fatJetB_softDropMass >= %s", diagnolSegmentLine.c_str());
+	}
+	additionalUpperBandCuts[SN_Nodes.size()] += Form(" && fatJetB_softDropMass < %s", finalDiagnolSegmentLine.c_str());
+	U_Cuts = additionalUpperBandCuts;
+
+	// D cuts
+	std::string lowerBandLine = Form("(%f * (fatJetA_softDropMass - %f) + %f)", 1/gradientUpperBand, upperBand_y1, upperBand_x1);
+
+	std::string lowerBandBaseLineCuts = "fatJetB_softDropMass >= " + lowerBandLine;
+	lowerBandBaseLineCuts +=  " && fatJetB_softDropMass < " + lowerSignalLine;
+
+	std::vector<std::string> additionalLowerBandCuts(SN_Nodes.size()+1, lowerBandBaseLineCuts);
+	additionalLowerBandCuts[0] += Form(" && fatJetB_softDropMass>= (-1 * (fatJetA_softDropMass - %f) + %f)", upperBand_x1, upperBand_y1);
+	for (size_t i=0; i!=SN_Nodes.size(); ++i){
+
+		double correspondingYValue = yValue(SN_Nodes[i], gradientLowerSignalLine, S1_Node, VHK_bandSize);
+		std::string diagnolSegmentLine = Form("(-1 * (fatJetA_softDropMass - %f) + %f)", SN_Nodes[i], correspondingYValue);
+		additionalLowerBandCuts[i] += Form(" && fatJetB_softDropMass < %s", diagnolSegmentLine.c_str());
+		additionalLowerBandCuts[i+1] += Form(" && fatJetB_softDropMass >= %s", diagnolSegmentLine.c_str());
+	}
+	additionalLowerBandCuts[SN_Nodes.size()] += Form(" && fatJetB_softDropMass < %s", finalDiagnolSegmentLine.c_str());
+	D_Cuts = additionalLowerBandCuts;
 
 	return;
 }

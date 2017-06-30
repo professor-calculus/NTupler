@@ -13,6 +13,8 @@ public:
     std::string Get_K_Cuts() const;
     std::string Get_O_Cuts() const;
     std::vector<std::string> Get_S_Cuts() const;
+    std::vector<std::string> Get_U_Cuts() const;
+    std::vector<std::string> Get_D_Cuts() const;
     std::vector<std::string> GetAllCuts() const;
 private:
 	std::string MassRegionCutName; // name to identify the set of mass cuts
@@ -26,11 +28,13 @@ private:
 	std::string K_Cuts;
 	std::string O_Cuts;
 	std::vector<std::string> S_Cuts;
+	std::vector<std::string> U_Cuts;
+	std::vector<std::string> D_Cuts;
 	double yValue(const double&, const double&, const double&, const double&) const;
 	void make_V_Cuts();
 	void make_H_Cuts();
 	void make_K_Cuts();
-	void make_OnS_cuts();
+	void make_OnSnUnD_cuts();
 };
 
 #endif
