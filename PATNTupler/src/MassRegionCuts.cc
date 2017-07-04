@@ -32,6 +32,11 @@ SN_Nodes(SN_NodesDummy)
 
 //-----------public-----------//
 std::string MassRegionCuts::GetName() const {return MassRegionCutName;}
+double MassRegionCuts::Get_VHK_bandSize() const {return VHK_bandSize;}
+double MassRegionCuts::Get_S1_Node() const {return S1_Node;}
+double MassRegionCuts::Get_SMAX_Node1() const {return SMAX_Node1;}
+double MassRegionCuts::Get_SMAX_Node2() const {return SMAX_Node2;}
+std::vector<double> MassRegionCuts::Get_SN_Nodes() const {return SN_Nodes;}
 std::string MassRegionCuts::Get_V_Cuts() const {return V_Cuts;}
 std::string MassRegionCuts::Get_H_Cuts() const {return H_Cuts;}
 std::string MassRegionCuts::Get_K_Cuts() const {return K_Cuts;}

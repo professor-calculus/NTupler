@@ -8,6 +8,11 @@ public:
     MassRegionCuts(const std::string&, const double&, const double&, const double&, const double&, const std::vector<double>&);
 
     std::string GetName() const;
+    double Get_VHK_bandSize() const;
+    double Get_S1_Node() const;
+    double Get_SMAX_Node1() const;
+    double Get_SMAX_Node2() const;
+    std::vector<double> Get_SN_Nodes() const;
     std::string Get_V_Cuts() const;
     std::string Get_H_Cuts() const;
     std::string Get_K_Cuts() const;
