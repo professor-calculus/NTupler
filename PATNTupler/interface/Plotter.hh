@@ -1,5 +1,6 @@
 #ifndef PLOTTER_HH
 #define PLOTTER_HH
+#include "../interface/MassRegionCuts.hh"
 
 class Plotter{
 
@@ -19,6 +20,7 @@ public:
 	void SetErrors();
 	void Save(const std::string&);
 	void Save2D(const std::string&);
+	void Save2D(const std::string&, const MassRegionCuts&);
 
 private:
 	std::vector<PlotEntry> histoIndi;
