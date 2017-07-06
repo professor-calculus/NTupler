@@ -43,15 +43,16 @@ investigateEventSelectionCuts:	investigateEventSelectionCuts.o ${OBJDIR}/NtpRead
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 investigateEventSelectionCuts_table:	investigateEventSelectionCuts_table.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
-plotting_exampleOfHowToUsePlottingClasses: plotting_exampleOfHowToUsePlottingClasses.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/Plotter.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
-	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
-plotting_exampleOfHowToUse2DPlottingClasses: plotting_exampleOfHowToUse2DPlottingClasses.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
-	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
-plotting_ABCD: plotting_ABCD.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${SRCDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+
+# plotting_exampleOfHowToUsePlottingClasses: plotting_exampleOfHowToUsePlottingClasses.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/Plotter.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+# 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
+# plotting_exampleOfHowToUse2DPlottingClasses: plotting_exampleOfHowToUse2DPlottingClasses.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+# 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
+plotting_dbtRatio: plotting_dbtRatio.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${SRCDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 plotting_compareDifferentSamples: plotting_compareDifferentSamples.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${SRCDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
-plotting_compareDifferentCuts_invBTagSpecial: plotting_compareDifferentCuts_invBTagSpecial.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${SRCDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+plotting_compareDifferentCuts: plotting_compareDifferentCuts.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${SRCDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 plotting_2dMassDistributionsAndCount: plotting_2dMassDistributionsAndCount.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${SRCDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
@@ -76,8 +77,7 @@ clean:
 	rm -rf investigateEventSelectionCuts_table investigateEventSelectionCuts_table.o ${OBJDIR}/* ${TMPDIR}/*
 	rm -rf plotting_exampleOfHowToUsePlottingClasses plotting_exampleOfHowToUsePlottingClasses.o ${OBJDIR}/* ${TMPDIR}/*
 	rm -rf plotting_exampleOfHowToUse2DPlottingClasses plotting_exampleOfHowToUse2DPlottingClasses.o ${OBJDIR}/* ${TMPDIR}/*
-	rm -rf plotting_ABCD plotting_ABCD.o ${OBJDIR}/* ${TMPDIR}/*
-	rm -rf plotting_compareDifferentCuts plotting_compareDifferentCuts.o ${OBJDIR}/* ${TMPDIR}/*
+	rm -rf plotting_ratio plotting_dbtRatio.o ${OBJDIR}/* ${TMPDIR}/*
 	rm -rf plotting_compareDifferentSamples plotting_compareDifferentSamples.o ${OBJDIR}/* ${TMPDIR}/*
-	rm -rf plotting_compareDifferentCuts_invBTagSpecial plotting_compareDifferentCuts_invBTagSpecial.o ${OBJDIR}/* ${TMPDIR}/*
+	rm -rf plotting_compareDifferentCuts plotting_compareDifferentCuts.o ${OBJDIR}/* ${TMPDIR}/*
 	rm -rf plotting_2dMassDistributionsAndCount plotting_2dMassDistributionsAndCount.o ${OBJDIR}/* ${TMPDIR}/*
