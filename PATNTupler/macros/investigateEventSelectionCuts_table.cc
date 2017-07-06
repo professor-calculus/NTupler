@@ -64,7 +64,7 @@ int main(){
 
     // ONE: saving info and lumi
     std::string baseDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/"; // for the input ROOT files
-    std::string outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/compareDifferentTtSamples/chosenCutsTable/"; // where we are going to save the plots
+    std::string outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_06_22/testQCD/mSusy1600_table/"; // where we are going to save the plots
     double integratedLuminosity = 50.0; // the integrated luminosity, in fb^-1 that we scale our plots to
 
 
@@ -223,7 +223,26 @@ int main(){
     TTJets_NLO.rootFileName = baseDir + "TTJets_NLO/flatTree.root";
     TTJets_NLO.crossSection = 831.76; // in pb 
     TTJets_NLO.lheHtCut = {0};
+    
+    struct dataInput QCD_ht700to1000;
+    QCD_ht700to1000.rootFileName = baseDir + "QCD_HT700to1000/flatTree.root";
+    QCD_ht700to1000.crossSection = 6802; // in pb
+    QCD_ht700to1000.lheHtCut = {0};
 
+    struct dataInput QCD_ht1000to1500;
+    QCD_ht1000to1500.rootFileName = baseDir + "QCD_HT1000to1500/flatTree.root";
+    QCD_ht1000to1500.crossSection = 1206; // in pb
+    QCD_ht1000to1500.lheHtCut = {0};
+
+    struct dataInput QCD_ht1500to2000;
+    QCD_ht1500to2000.rootFileName = baseDir + "QCD_HT1500to2000/flatTree.root";
+    QCD_ht1500to2000.crossSection = 120.4; // in pb
+    QCD_ht1500to2000.lheHtCut = {0};
+
+    struct dataInput QCD_ht2000toInf;
+    QCD_ht2000toInf.rootFileName = baseDir + "QCD_HT2000toInf/flatTree.root";
+    QCD_ht2000toInf.crossSection = 25.25; // in pb
+    QCD_ht2000toInf.lheHtCut = {0};
     // FOUR: group the input datasets and create Histograms
     // ---------------------------------- 
     // class Histograms hSignal_mH30_mSusy800(integratedLuminosity, "mH30_mSusy800", {signal_mH30_mSusy800}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
@@ -236,10 +255,10 @@ int main(){
     // class Histograms hSignal_mH70_mSusy1200(integratedLuminosity, "mH70_mSusy1200", {signal_mH70_mSusy1200}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // class Histograms hSignal_mH90_mSusy1200(integratedLuminosity, "mH90_mSusy1200", {signal_mH90_mSusy1200}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // ----------------------------------
-    // class Histograms hSignal_mH30_mSusy1600(integratedLuminosity, "mH30_mSusy1600", {signal_mH30_mSusy1600}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    // class Histograms hSignal_mH50_mSusy1600(integratedLuminosity, "mH50_mSusy1600", {signal_mH50_mSusy1600}, kGreen, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    // class Histograms hSignal_mH70_mSusy1600(integratedLuminosity, "mH70_mSusy1600", {signal_mH70_mSusy1600}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    // class Histograms hSignal_mH90_mSusy1600(integratedLuminosity, "mH90_mSusy1600", {signal_mH90_mSusy1600}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    class Histograms hSignal_mH30_mSusy1600(integratedLuminosity, "mH30_mSusy1600", {signal_mH30_mSusy1600}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    class Histograms hSignal_mH50_mSusy1600(integratedLuminosity, "mH50_mSusy1600", {signal_mH50_mSusy1600}, kGreen, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    class Histograms hSignal_mH70_mSusy1600(integratedLuminosity, "mH70_mSusy1600", {signal_mH70_mSusy1600}, kMagenta, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    class Histograms hSignal_mH90_mSusy1600(integratedLuminosity, "mH90_mSusy1600", {signal_mH90_mSusy1600}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // ----------------------------------
     // class Histograms hSignal_mH30_mSusy2000(integratedLuminosity, "mH30_mSusy2000", {signal_mH30_mSusy2000}, kRed, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // class Histograms hSignal_mH50_mSusy2000(integratedLuminosity, "mH50_mSusy2000", {signal_mH50_mSusy2000}, kGreen, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
@@ -247,19 +266,21 @@ int main(){
     // class Histograms hSignal_mH90_mSusy2000(integratedLuminosity, "mH90_mSusy2000", {signal_mH90_mSusy2000}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // ----------------------------------
     class Histograms hTtbar(integratedLuminosity, "ttbar LO", {TTJets_inclusive, TTJets_ht600to800, TTJets_ht800to1200,TTJets_ht1200to2500,TTJets_ht2500toInf}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    // class Histograms hZ(integratedLuminosity, "Z+jets", {ZJetsToQQ_ht600toInf}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    // class Histograms hW(integratedLuminosity, "W+jets", {WJetsToQQ_ht600toInf}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    class Histograms hZ(integratedLuminosity, "Z+jets", {ZJetsToQQ_ht600toInf}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    class Histograms hW(integratedLuminosity, "W+jets", {WJetsToQQ_ht600toInf}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // class Histograms hZZ(integratedLuminosity, "ZZ+jets", {ZZTo4Q, ZZTo2L2Q, ZZTo2Q2Nu}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
     // class Histograms hWW(integratedLuminosity, "WW+jets", {WWTo4Q, WWTo1L1Nu2Q}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-    class Histograms hTtbarNLO(integratedLuminosity, "ttbar NLO", {TTJets_NLO}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
-
+    // class Histograms hTtbarNLO(integratedLuminosity, "ttbar NLO", {TTJets_NLO}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    class Histograms hQCD(integratedLuminosity, "QCD", {QCD_ht700to1000,QCD_ht1000to1500,QCD_ht1500to2000,QCD_ht2000toInf}, kBlack, cut2_ak8Dbt, cut3_ak8Pt, cut4_ht, cut5_ak4Pt);
+    
     // FIVE: group the Histograms we are going to use for the table
     // std::vector<class Histograms> histogramsVec = {hSignal_mH30_mSusy800,hSignal_mH50_mSusy800,hSignal_mH70_mSusy800,hSignal_mH90_mSusy800,hTtbar,hZ,hW,hZZ,hWW};
     // std::vector<class Histograms> histogramsVec = {hSignal_mH30_mSusy1200,hSignal_mH50_mSusy1200,hSignal_mH70_mSusy1200,hSignal_mH90_mSusy1200,hTtbar,hZ,hW,hZZ,hWW};
     // std::vector<class Histograms> histogramsVec = {hSignal_mH30_mSusy1600,hSignal_mH50_mSusy1600,hSignal_mH70_mSusy1600,hSignal_mH90_mSusy1600,hTtbar,hZ,hW,hZZ,hWW};
     // std::vector<class Histograms> histogramsVec = {hSignal_mH30_mSusy2000,hSignal_mH50_mSusy2000,hSignal_mH70_mSusy2000,hSignal_mH90_mSusy2000,hTtbar,hZ,hW,hZZ,hWW};
     // std::vector<class Histograms> histogramsVec = {hSignal_mH70_mSusy800,hSignal_mH70_mSusy1200,hSignal_mH70_mSusy1600,hSignal_mH70_mSusy2000,hTtbar,hZ,hW,hZZ,hWW};
-    std::vector<class Histograms> histogramsVec = {hTtbar,hTtbarNLO};             
+    
+    std::vector<class Histograms> histogramsVec = {hSignal_mH30_mSusy1600,hSignal_mH50_mSusy1600,hSignal_mH70_mSusy1600,hSignal_mH90_mSusy1600,hTtbar,hZ,hW,hQCD};
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -294,7 +315,7 @@ int main(){
         std::cout << "desired output directory, " << outputDirectory << " already exists\nExiting..." << std::endl;
         return 1;
     }
-    std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/main/investigateEventSelectionCuts_table.cc %s",outputDirectory.c_str()));
+    std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/investigateEventSelectionCuts_table.cc %s",outputDirectory.c_str()));
 
     for (size_t iTab = 0; iTab < cut3_ak8Pt.size(); ++iTab){
 
