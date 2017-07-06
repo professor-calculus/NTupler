@@ -23,11 +23,13 @@
 #include "PlotEntry.hh"
 #include "Plotter.hh"
 #include "DoubleBTagWPs.h"
+#include "TimeStamp.h"
 
 int main(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     // ONE: save info
     std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_06_13/compareTtbarSamples/massOnlyDifferentCuts/"; // where we are going to save the output plots (should include the samples name, and any important features)
@@ -86,6 +88,8 @@ int main(){
     std::string dirExistCommand = "test -e " + outputDir;
     std::string makeDirCommand = "mkdir -p " + outputDir;
     if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
+    std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_compareDifferentSamples.cc %s/%s__plotting_compareDifferentSamples.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+
 
     for (size_t iCut2 = 0; iCut2 < cut2_ak8Dbt.size(); ++iCut2){
         for (size_t iCut3 = 0; iCut3 < cut3_ak8Pt.size(); ++iCut3){

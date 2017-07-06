@@ -21,16 +21,19 @@
 
 //RAL PARTICLE HEADERS
 #include "PlotEntry.hh"
+#include "PlotEntry2D.hh"
 #include "Plotter.hh"
 #include "DoubleBTagWPs.h"
+#include "TimeStamp.h"
 
 int main(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_06_13/invDBT_ttbarAndSignal/mSusy1600/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_06_22/qcdShape_invertBTag/fullCutsHt1500to2500v2/"; // where we are going to save the output plots (should include the samples name + binning maybe)
 
 
     // TWO: set of cut params for the plot (will loop through the combinations)
@@ -40,8 +43,7 @@ int main(){
     // std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
     // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Tight","Max","Med","Max"}, {"Off","Tight","Off","Med"}, {"Off","Tight","Loose","Med"}, {"Loose","Tight","Off","Med"}, {"Loose","Tight","Loose","Med"}, {"Med","Tight","Off","Med"}, {"Med","Tight","Loose","Med"} }; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max --> "Off", "Loose", "Med", "Tight", "Max"
-    // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Tight","Max","Med","Max"}, {"Off","Tight","Loose","Med"}, {"Loose","Tight","Loose","Med"}, {"Med","Tight","Loose","Med"}, {"Loose","Med","Loose","Med"} }; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max --> "Off", "Loose", "Med", "Tight", "Max"
-    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Tight","Off","Med"} }; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max --> "Off", "Loose", "Med", "Tight", "Max"
+    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Tight","Max","Med","Max"}, {"Tight","Max","Off","Med"}, {"Off","Tight","Off","Med"}, {"Off","Loose","Off","Loose"} }; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max --> "Off", "Loose", "Med", "Tight", "Max"
     std::vector<int> cut3_ak8Pt = {300};
     std::vector<std::vector<int>> cut4_ht = { {1500,2500} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
     std::vector<std::vector<int>> cut5_ak4Pt = { {250,250} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
@@ -64,6 +66,7 @@ int main(){
     std::string dirExistCommand = "test -e " + outputDir;
     std::string makeDirCommand = "mkdir -p " + outputDir;
     if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
+    std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_compareDifferentCuts_invBTagSpecial.cc %s/%s__plotting_compareDifferentCuts_invBTagSpecial.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
 
     std::vector<PlotEntry> plotEntryVec;
     std::vector<PlotEntry> plotEntryVecBackground;
@@ -96,23 +99,29 @@ int main(){
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
                     // FOUR: sample info
-                    // PlotEntry plotElement = PlotEntry(legendName.c_str(), hTemplate, varToPlot.c_str(), luminosity); // note that the luminosity value doesn't matter as we will normalise later
-                    PlotEntry plotElement = PlotEntry("ttbar+jets", hTemplate, varToPlot.c_str(), luminosity); // note that the luminosity value doesn't matter as we will normalise later
+                    PlotEntry plotElement = PlotEntry(legendName.c_str(), hTemplate, varToPlot.c_str(), luminosity); // note that the luminosity value doesn't matter IF we will normalise later
+                    // PlotEntry plotElement = PlotEntry("ttbar+jets", hTemplate, varToPlot.c_str(), luminosity); // OPTIONAL: can manually set the legendName
 
-                    plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_inclusiveHt/flatTree.root", Form("%s && lheHT<700.0",cutToApply.c_str()), 831.76);
-                    plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT600to800/flatTree.root", Form("%s && lheHT>=700.0",cutToApply.c_str()), 2.6665344485, false);
-                    plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT800to1200/flatTree.root", Form("%s && lheHT>=700.0",cutToApply.c_str()), 1.0980821984, false);
-                    plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT1200to2500/flatTree.root", Form("%s && lheHT>=700.0",cutToApply.c_str()), 0.1987479092, false);
-                    plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT2500toInf/flatTree.root", Form("%s && lheHT>=700.0",cutToApply.c_str()), 0.002368412585, false);
+                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_inclusiveHt/flatTree.root", Form("%s && lheHT<700.0",cutToApply.c_str()), 831.76);
+                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT600to800/flatTree.root", Form("%s && lheHT>=700.0",cutToApply.c_str()), 2.6665344485, false);
+                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT800to1200/flatTree.root", Form("%s && lheHT>=700.0",cutToApply.c_str()), 1.0980821984, false);
+                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT1200to2500/flatTree.root", Form("%s && lheHT>=700.0",cutToApply.c_str()), 0.1987479092, false);
+                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT2500toInf/flatTree.root", Form("%s && lheHT>=700.0",cutToApply.c_str()), 0.002368412585, false);
 
-                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT600to800/flatTree.root", cutToApply.c_str(), 2.6665344485, false);
-                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT800to1200/flatTree.root", cutToApply.c_str(), 1.0980821984, false);
-                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT1200to2500/flatTree.root", cutToApply.c_str(), 0.1987479092, false);
-                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT2500toInf/flatTree.root", cutToApply.c_str(), 0.002368412585, false);
+                    // USE FOR SHAPE ONLY - not for counting number of events
+                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT600to800/flatTree.root", cutToApply.c_str(), 2.6665344485);
+                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT800to1200/flatTree.root", cutToApply.c_str(), 1.0980821984);
+                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT1200to2500/flatTree.root", cutToApply.c_str(), 0.1987479092);
+                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT2500toInf/flatTree.root", cutToApply.c_str(), 0.002368412585);
 
-                    // plotElement.NormalisePlot();
-                    // plotEntryVec.push_back(plotElement);
-                    plotEntryVecBackground.push_back(plotElement);
+                    plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/QCD_HT700to1000/flatTree.root", cutToApply.c_str(), 6802);
+                    plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/QCD_HT1000to1500/flatTree.root", cutToApply.c_str(), 1206);
+                    plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/QCD_HT1500to2000/flatTree.root", cutToApply.c_str(), 120.4);
+                    plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/QCD_HT2000toInf/flatTree.root", cutToApply.c_str(), 25.25);
+
+                    plotElement.NormalisePlot();
+                    plotEntryVec.push_back(plotElement);
+                    // plotEntryVecBackground.push_back(plotElement); // if creating a background sample
 
                     // PlotEntry mH30_mSusy800 = PlotEntry("mH30_mSusy800", hTemplate, varToPlot.c_str(), luminosity);
                     // mH30_mSusy800.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH30p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 6.466*0.85*0.85);
@@ -154,25 +163,25 @@ int main(){
                     // // mH90_mSusy1200.NormalisePlot();
                     // plotEntryVec.push_back(mH90_mSusy1200);
 
-                    PlotEntry mH30_mSusy1600 = PlotEntry("mH30_mSusy1600", hTemplate, varToPlot.c_str(), luminosity);
-                    mH30_mSusy1600.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH30p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.060*0.85*0.85);
+                    // PlotEntry mH30_mSusy1600 = PlotEntry("mH30_mSusy1600", hTemplate, varToPlot.c_str(), luminosity);
+                    // mH30_mSusy1600.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH30p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.060*0.85*0.85);
                     // mH30_mSusy1600.NormalisePlot();
-                    plotEntryVec.push_back(mH30_mSusy1600);
+                    // plotEntryVec.push_back(mH30_mSusy1600);
 
-                    PlotEntry mH50_mSusy1600 = PlotEntry("mH50_mSusy1600", hTemplate, varToPlot.c_str(), luminosity);
-                    mH50_mSusy1600.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH50p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.060*0.85*0.85);
+                    // PlotEntry mH50_mSusy1600 = PlotEntry("mH50_mSusy1600", hTemplate, varToPlot.c_str(), luminosity);
+                    // mH50_mSusy1600.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH50p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.060*0.85*0.85);
                     // mH50_mSusy1600.NormalisePlot();
-                    plotEntryVec.push_back(mH50_mSusy1600);
+                    // plotEntryVec.push_back(mH50_mSusy1600);
 
-                    PlotEntry mH70_mSusy1600 = PlotEntry("mH70_mSusy1600", hTemplate, varToPlot.c_str(), luminosity);
-                    mH70_mSusy1600.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH70p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.060*0.85*0.85);
+                    // PlotEntry mH70_mSusy1600 = PlotEntry("mH70_mSusy1600", hTemplate, varToPlot.c_str(), luminosity);
+                    // mH70_mSusy1600.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH70p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.060*0.85*0.85);
                     // mH70_mSusy1600.NormalisePlot();
-                    plotEntryVec.push_back(mH70_mSusy1600);
+                    // plotEntryVec.push_back(mH70_mSusy1600);
 
-                    PlotEntry mH90_mSusy1600 = PlotEntry("mH90_mSusy1600", hTemplate, varToPlot.c_str(), luminosity);
-                    mH90_mSusy1600.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH90p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.060*0.85*0.85);
+                    // PlotEntry mH90_mSusy1600 = PlotEntry("mH90_mSusy1600", hTemplate, varToPlot.c_str(), luminosity);
+                    // mH90_mSusy1600.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH90p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.060*0.85*0.85);
                     // mH90_mSusy1600.NormalisePlot();
-                    plotEntryVec.push_back(mH90_mSusy1600);
+                    // plotEntryVec.push_back(mH90_mSusy1600);
 
                     // PlotEntry mH30_mSusy2000 = PlotEntry("mH30_mSusy2000", hTemplate, varToPlot.c_str(), luminosity);
                     // mH30_mSusy2000.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH30p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
@@ -204,15 +213,17 @@ int main(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     // FIVE: plot aesthetics
-    // Plotter plot = Plotter(plotEntryVec);
-    Plotter plot = Plotter(plotEntryVec,plotEntryVecBackground);
+    Plotter plot = Plotter(plotEntryVec); // if doing signal OR background
+    // Plotter plot = Plotter(plotEntryVec,plotEntryVecBackground); // if doing signal AND background
     // plot.AddLegend(0.45, 0.88, 0.77, 0.87); // top right (extra wide 2)
     // plot.AddLegend(0.45, 0.88, 0.70, 0.87); // top right (extra wide 4)
-    plot.AddLegend(0.65, 0.88, 0.70, 0.87); // top right (wide 4)
-    // plot.AddLegend(0.45, 0.88, 0.62, 0.87); // top right (extra wide 6)
-    // plot.AddLatex();
-    plot.AddLatex(luminosity);
-    // plot.SetErrors();
+    plot.AddLegend(0.45, 0.88, 0.62, 0.87); // top right (extra wide 6)
+    // plot.AddLegend(0.65, 0.88, 0.77, 0.87); // top right (wide 2)
+    // plot.AddLegend(0.65, 0.88, 0.70, 0.87); // top right (wide 4)
+    // plot.AddLegend(0.65, 0.88, 0.62, 0.87); // top right (wide 6)
+    plot.AddLatex();
+    // plot.AddLatex(luminosity);
+    plot.SetErrors();
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -226,6 +237,7 @@ int main(){
         else saveName += Form("_ht%dto%d",cut4_ht[0][0],cut4_ht[0][1]);
     if (cut5_ak4Pt.size()>1) saveName += "_ak4ptVary";
     else saveName += Form("_ak4pt%dn%d", cut5_ak4Pt[0][0], cut5_ak4Pt[0][1]);
+    // saveName = ""; // OPTIONAL: can manually create the saveName
     std::string outputFile = outputDir + "/" + saveName + ".pdf";
 
 	plot.Save(outputFile.c_str());
