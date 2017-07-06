@@ -47,14 +47,36 @@ std::vector<std::string> MassRegionCuts::Get_D_Cuts() const {return D_Cuts;}
 std::vector<std::string> MassRegionCuts::GetAllCuts() const
 {
 	std::vector<std::string> allCuts;
-	allCuts.push_back(V_Cuts);
-	allCuts.push_back(H_Cuts);
-	allCuts.push_back(K_Cuts);
-	allCuts.push_back(O_Cuts);
+	// allCuts.push_back(V_Cuts);
+	// allCuts.push_back(H_Cuts);
+	// allCuts.push_back(K_Cuts);
+	// allCuts.push_back(O_Cuts);
 	for (size_t i=0; i!=S_Cuts.size(); ++i) allCuts.push_back(S_Cuts[i]);
 	for (size_t i=0; i!=U_Cuts.size(); ++i) allCuts.push_back(U_Cuts[i]);
 	for (size_t i=0; i!=D_Cuts.size(); ++i) allCuts.push_back(D_Cuts[i]);
 	return allCuts;
+}
+
+double MassRegionCuts::Get_S1ScaleFactor() const
+{
+	if (SN_Nodes.empty()){
+		std::cout << "Error: Cannot provide valid S1ScaleFactor as SN_Nodes is empty" << std::endl;
+		return -999.99;
+	}
+
+	double gradientUpperSignalLine = (SMAX_Node1 - S1_Node) / (SMAX_Node2 - VHK_bandSize);
+	double gradientLowerSignalLine = 1 / gradientUpperSignalLine;
+	double correspondingYValue = yValue(SN_Nodes[0], gradientLowerSignalLine, S1_Node, VHK_bandSize);
+	double lengthS1DiagnolTop = sqrt(2) * (SN_Nodes[0] - correspondingYValue);
+
+	double S1TopCentre = 0.5 * (SN_Nodes[0] - correspondingYValue) + correspondingYValue;
+	double S1BottomCentre = 0.5 * (S1_Node - VHK_bandSize) + VHK_bandSize;
+	double depth = sqrt(2) * (S1TopCentre - S1BottomCentre);
+
+	double area_triangle = 0.5 * (S1_Node - VHK_bandSize) * (S1_Node - VHK_bandSize);
+	double area_regular = 0.5 * ( sqrt(2) * (S1_Node - VHK_bandSize) + lengthS1DiagnolTop ) * depth;
+
+	return (area_triangle + area_regular) / area_regular;
 }
 
 

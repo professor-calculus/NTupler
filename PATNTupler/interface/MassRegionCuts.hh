@@ -21,6 +21,7 @@ public:
     std::vector<std::string> Get_U_Cuts() const;
     std::vector<std::string> Get_D_Cuts() const;
     std::vector<std::string> GetAllCuts() const;
+    double Get_S1ScaleFactor() const;
 private:
 	std::string MassRegionCutName; // name to identify the set of mass cuts
 	double VHK_bandSize; // this number defines the Vertical and Horizontal band regions
