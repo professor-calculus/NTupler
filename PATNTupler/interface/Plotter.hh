@@ -1,5 +1,8 @@
 #ifndef PLOTTER_HH
 #define PLOTTER_HH
+
+#include "../interface/PlotEntry.hh"
+#include "../interface/PlotEntry2D.hh"
 #include "../interface/MassRegionCuts.hh"
 
 class Plotter{
