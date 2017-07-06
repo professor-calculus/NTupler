@@ -47,13 +47,11 @@ plotting_exampleOfHowToUsePlottingClasses: plotting_exampleOfHowToUsePlottingCla
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 plotting_exampleOfHowToUse2DPlottingClasses: plotting_exampleOfHowToUse2DPlottingClasses.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
-plotting_ABCD: plotting_ABCD.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/Plotter.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+plotting_ABCD: plotting_ABCD.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${SRCDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
-plotting_compareDifferentCuts: plotting_compareDifferentCuts.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/Plotter.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+plotting_compareDifferentSamples: plotting_compareDifferentSamples.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${SRCDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
-plotting_compareDifferentSamples: plotting_compareDifferentSamples.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/Plotter.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
-	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
-plotting_compareDifferentCuts_invBTagSpecial: plotting_compareDifferentCuts_invBTagSpecial.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/Plotter.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+plotting_compareDifferentCuts_invBTagSpecial: plotting_compareDifferentCuts_invBTagSpecial.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${SRCDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 plotting_2dMassDistributionsAndCount: plotting_2dMassDistributionsAndCount.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${SRCDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
