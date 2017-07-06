@@ -77,7 +77,7 @@ clean:
 	rm -rf investigateEventSelectionCuts_table investigateEventSelectionCuts_table.o ${OBJDIR}/* ${TMPDIR}/*
 	rm -rf plotting_exampleOfHowToUsePlottingClasses plotting_exampleOfHowToUsePlottingClasses.o ${OBJDIR}/* ${TMPDIR}/*
 	rm -rf plotting_exampleOfHowToUse2DPlottingClasses plotting_exampleOfHowToUse2DPlottingClasses.o ${OBJDIR}/* ${TMPDIR}/*
-	rm -rf plotting_ratio plotting_dbtRatio.o ${OBJDIR}/* ${TMPDIR}/*
+	rm -rf plotting_dbtRatio plotting_dbtRatio.o ${OBJDIR}/* ${TMPDIR}/*
 	rm -rf plotting_compareDifferentSamples plotting_compareDifferentSamples.o ${OBJDIR}/* ${TMPDIR}/*
 	rm -rf plotting_compareDifferentCuts plotting_compareDifferentCuts.o ${OBJDIR}/* ${TMPDIR}/*
 	rm -rf plotting_2dMassDistributionsAndCount plotting_2dMassDistributionsAndCount.o ${OBJDIR}/* ${TMPDIR}/*
