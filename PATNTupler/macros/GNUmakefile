@@ -28,6 +28,7 @@ CLIBS       = -L$(CERNLIB) -lpacklib -lmathlib -lkernlib -lpawlib -lg2c -lnsl
 
 OBJDIR		= ${PWD}/../obj
 SRCDIR		= ${PWD}/../src
+SRCMACDIR	= ${PWD}/../src_macros
 INCDIR		= ${PWD}/../interface
 TMPDIR		= ${PWD}/../tmp
 
@@ -44,17 +45,17 @@ investigateEventSelectionCuts:	investigateEventSelectionCuts.o ${OBJDIR}/NtpRead
 investigateEventSelectionCuts_table:	investigateEventSelectionCuts_table.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
 
-# plotting_exampleOfHowToUsePlottingClasses: plotting_exampleOfHowToUsePlottingClasses.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/Plotter.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+# plotting_exampleOfHowToUsePlottingClasses: plotting_exampleOfHowToUsePlottingClasses.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/Plotter.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 # 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
-# plotting_exampleOfHowToUse2DPlottingClasses: plotting_exampleOfHowToUse2DPlottingClasses.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+# plotting_exampleOfHowToUse2DPlottingClasses: plotting_exampleOfHowToUse2DPlottingClasses.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 # 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
-plotting_dbtRatio: plotting_dbtRatio.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${SRCDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+plotting_dbtRatio: plotting_dbtRatio.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
-plotting_compareDifferentSamples: plotting_compareDifferentSamples.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${SRCDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+plotting_compareDifferentSamples: plotting_compareDifferentSamples.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
-plotting_compareDifferentCuts: plotting_compareDifferentCuts.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${SRCDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+plotting_compareDifferentCuts: plotting_compareDifferentCuts.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
-plotting_2dMassDistributionsAndCount: plotting_2dMassDistributionsAndCount.o ${SRCDIR}/PlotEntry.o ${SRCDIR}/PlotEntry2D.o ${SRCDIR}/Plotter.o ${SRCDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+plotting_2dMassDistributionsAndCount: plotting_2dMassDistributionsAndCount.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 
 %.o: 	%.cc %.hh
