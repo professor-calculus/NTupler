@@ -25,9 +25,10 @@
 #include "MassRegionCuts.hh"
 #include "DoubleBTagWPs.h"
 #include "TimeStamp.h"
+#include "MacrosOnCondor.h"
 
 // PLOT 2D MASS DISTRIBUTIONS IN CERTAIN REGIONS AND COUNT EVENTS
-int main(){
+int main(int argc, char** argv){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,7 +36,7 @@ int main(){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_05/testingMacros/testing_2dMassDistributionsAndCount/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_05/testingMacrosCondor/testing_2dMassDistributionsAndCount_run05/"; // where we are going to save the output plots (should include the samples name + binning maybe)
 
 
 
@@ -76,11 +77,43 @@ int main(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    std::string dirExistCommand = "test -e " + outputDir;
-    std::string makeDirCommand = "mkdir -p " + outputDir;
-    if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
-    std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_2dMassDistributionsAndCount.cc %s/%s__plotting_2dMassDistributionsAndCount.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+    if (argc != 2){
+        std::cout << "Haven't provided valid argument, the format should be:" << std::endl;
+        std::cout << argv[0] << " <runInstructionString>" << std::endl;
+        std::cout << "runInstructionString = 'local' or 'batch'" << std::endl;
+        std::cout << "Exiting..." << std::endl;
+        return -1;
+    }
+    
+    std::string runInstructionString(argv[1]);
+    
+    if (runInstructionString == "local"){
+        std::string dirExistCommand = "test -e " + outputDir;
+        std::string makeDirCommand = "mkdir -p " + outputDir;
+        if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
+        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_2dMassDistributionsAndCount.cc %s/%s__plotting_2dMassDistributionsAndCount.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+    }
+    else if (runInstructionString == "batch"){
+        std::string dirExistCommand = "test -e " + outputDir;
+        std::string makeDirCommand = "mkdir -p " + outputDir;
+        if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
+        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_2dMassDistributionsAndCount.cc %s/%s__plotting_2dMassDistributionsAndCount.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+        MacrosOnCondor::SubmitJob(outputDir.c_str(), "plotting_2dMassDistributionsAndCount", "/opt/ppd/scratch/xap79297/jobLogs/macros/");
+        return 0;
+    }
+    else if (runInstructionString == "batchRUN"){
+        outputDir = ".";
+    }
+    else{
+        std::cout << "Haven't provided valid argument, the format should be:" << std::endl;
+        std::cout << argv[0] << " <runInstructionString>" << std::endl;
+        std::cout << "runInstructionString = 'local' or 'batch'" << std::endl;
+        std::cout << "Exiting..." << std::endl;
+        return -1;
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     std::string cutToApplyBase = Form("fatJetA_doubleBtagDiscrim>=%f && fatJetA_doubleBtagDiscrim<%f && fatJetB_doubleBtagDiscrim>=%f && fatJetB_doubleBtagDiscrim<%f && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d", DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[0]), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[1]), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[2]), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[3]), cut3_ak8Pt, cut3_ak8Pt, cut4_ht[0], cut4_ht[1], cut5_ak4Pt[0], cut5_ak4Pt[1]);
 

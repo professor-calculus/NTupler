@@ -24,6 +24,7 @@
 #include "Plotter.hh"
 #include "DoubleBTagWPs.h"
 #include "TimeStamp.h"
+#include "MacrosOnCondor.h"
 
 // COMPARE VARIABLES FROM DIFFERENT DATASETS AS YOU LOOP THROUGH CUTS
 int main(){
@@ -85,11 +86,43 @@ int main(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
-    std::string dirExistCommand = "test -e " + outputDir;
-    std::string makeDirCommand = "mkdir -p " + outputDir;
-    if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
-    std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_compareDifferentSamples.cc %s/%s__plotting_compareDifferentSamples.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
-
+    if (argc != 2){
+        std::cout << "Haven't provided valid argument, the format should be:" << std::endl;
+        std::cout << argv[0] << " <runInstructionString>" << std::endl;
+        std::cout << "runInstructionString = 'local' or 'batch'" << std::endl;
+        std::cout << "Exiting..." << std::endl;
+        return -1;
+    }
+    
+    std::string runInstructionString(argv[1]);
+    
+    if (runInstructionString == "local"){
+        std::string dirExistCommand = "test -e " + outputDir;
+        std::string makeDirCommand = "mkdir -p " + outputDir;
+        if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
+        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_2dMassDistributionsAndCount.cc %s/%s__plotting_2dMassDistributionsAndCount.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+    }
+    else if (runInstructionString == "batch"){
+        std::string dirExistCommand = "test -e " + outputDir;
+        std::string makeDirCommand = "mkdir -p " + outputDir;
+        if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
+        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_2dMassDistributionsAndCount.cc %s/%s__plotting_2dMassDistributionsAndCount.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+        MacrosOnCondor::SubmitJob(outputDir.c_str(), "plotting_2dMassDistributionsAndCount", "/opt/ppd/scratch/xap79297/jobLogs/macros/");
+        return 0;
+    }
+    else if (runInstructionString == "batchRUN"){
+        outputDir = ".";
+    }
+    else{
+        std::cout << "Haven't provided valid argument, the format should be:" << std::endl;
+        std::cout << argv[0] << " <runInstructionString>" << std::endl;
+        std::cout << "runInstructionString = 'local' or 'batch'" << std::endl;
+        std::cout << "Exiting..." << std::endl;
+        return -1;
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     for (size_t iCut2 = 0; iCut2 < cut2_ak8Dbt.size(); ++iCut2){
         for (size_t iCut3 = 0; iCut3 < cut3_ak8Pt.size(); ++iCut3){
