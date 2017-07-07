@@ -27,7 +27,7 @@
 #include "MacrosOnCondor.h"
 
 // COMPARE A SET OF DIFFERENT CUTS ON A CHOSEN DATA SET VARIABLE
-int main(){
+int main(int argc, char** argv){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,14 +82,14 @@ int main(){
         std::string dirExistCommand = "test -e " + outputDir;
         std::string makeDirCommand = "mkdir -p " + outputDir;
         if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
-        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_2dMassDistributionsAndCount.cc %s/%s__plotting_2dMassDistributionsAndCount.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_compareDifferentCuts.cc %s/%s__plotting_compareDifferentCuts.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
     }
     else if (runInstructionString == "batch"){
         std::string dirExistCommand = "test -e " + outputDir;
         std::string makeDirCommand = "mkdir -p " + outputDir;
         if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
-        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_2dMassDistributionsAndCount.cc %s/%s__plotting_2dMassDistributionsAndCount.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
-        MacrosOnCondor::SubmitJob(outputDir.c_str(), "plotting_2dMassDistributionsAndCount", "/opt/ppd/scratch/xap79297/jobLogs/macros/");
+        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_compareDifferentCuts.cc %s/%s__plotting_compareDifferentCuts.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+        MacrosOnCondor::SubmitJob(outputDir.c_str(), "plotting_compareDifferentCuts", "/opt/ppd/scratch/xap79297/jobLogs/macros/");
         return 0;
     }
     else if (runInstructionString == "batchRUN"){

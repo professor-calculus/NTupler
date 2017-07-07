@@ -27,7 +27,7 @@
 #include "MacrosOnCondor.h"
 
 // CREATE RATIOS FOR DIFFERENT 2*DBT SPACE
-int main(){
+int main(int argc, char** argv){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,14 +76,14 @@ int main(){
         std::string dirExistCommand = "test -e " + outputDir;
         std::string makeDirCommand = "mkdir -p " + outputDir;
         if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
-        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_2dMassDistributionsAndCount.cc %s/%s__plotting_2dMassDistributionsAndCount.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_dbtRatio.cc %s/%s__plotting_dbtRatio.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
     }
     else if (runInstructionString == "batch"){
         std::string dirExistCommand = "test -e " + outputDir;
         std::string makeDirCommand = "mkdir -p " + outputDir;
         if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
-        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_2dMassDistributionsAndCount.cc %s/%s__plotting_2dMassDistributionsAndCount.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
-        MacrosOnCondor::SubmitJob(outputDir.c_str(), "plotting_2dMassDistributionsAndCount", "/opt/ppd/scratch/xap79297/jobLogs/macros/");
+        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_dbtRatio.cc %s/%s__plotting_dbtRatio.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+        MacrosOnCondor::SubmitJob(outputDir.c_str(), "plotting_dbtRatio", "/opt/ppd/scratch/xap79297/jobLogs/macros/");
         return 0;
     }
     else if (runInstructionString == "batchRUN"){
