@@ -23,9 +23,9 @@ subDirs = ""; # will use dirs that match <motherDir>/<subDirs> (subDirs only nee
 cmsswBase = os.popen("echo $CMSSW_BASE", "r").readline()
 cmsswBase = cmsswBase.rstrip()
 
-f = open("%s/src/NTupler/PATNTupler/batchJobs/tmpSetoffJobs.sh" % cmsswBase, 'w')
+f = open("%s/src/NTupler/PATNTupler/tmp/tmpSetoffJobs.sh" % cmsswBase, 'w')
 f.write("#!/bin/bash\n")
-f.write("# RUN WITH > source $CMSSW_BASE/src/NTupler/PATNTupler/batchJobs/tmpSetoffJobs.sh\n")
+f.write("# RUN WITH > source $CMSSW_BASE/src/NTupler/PATNTupler/tmp/tmpSetoffJobs.sh\n")
 
 projectsToSubmit = os.popen("ls %s" % motherDir, "r").readlines()
 for project in projectsToSubmit:
@@ -44,5 +44,6 @@ for project in projectsToSubmit:
 		f.write("echo\n")
 
 f.close()
-os.chmod("%s/src/NTupler/PATNTupler/batchJobs/tmpSetoffJobs.sh" % cmsswBase, 0755)
-os.system("%s/src/NTupler/PATNTupler/batchJobs/tmpSetoffJobs.sh" % cmsswBase)
+os.chmod("%s/src/NTupler/PATNTupler/tmp/tmpSetoffJobs.sh" % cmsswBase, 0755)
+os.system("%s/src/NTupler/PATNTupler/tmp/tmpSetoffJobs.sh" % cmsswBase)
+os.system("rm %s/src/NTupler/PATNTupler/tmp/tmpSetoffJobs.sh" % cmsswBase)
