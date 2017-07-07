@@ -42,20 +42,20 @@ int main(int argc, char** argv){
     // TWO: set of cut params, each combination = new plot
     // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Max","Off","Max"} }; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max (options--> "Off", "Loose", "Med", "Tight", "Max")
     // std::vector<int> cut3_ak8Pt = {-1};
-    std::vector<std::vector<int>> cut4_ht = { {-1,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
-    std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
+    // std::vector<std::vector<int>> cut4_ht = { {-1,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
+    // std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
-    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Tight","Off","Med"} }; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max (options--> "Off", "Loose", "Med", "Tight", "Max")
-    std::vector<int> cut3_ak8Pt = {300,400};
-    // std::vector<std::vector<int>> cut4_ht = { {1500,2500}, {2500,3500}, {3500,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
-    // std::vector<std::vector<int>> cut5_ak4Pt = { {250,250} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
+    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Tight","Max","Med","Max"} }; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max (options--> "Off", "Loose", "Med", "Tight", "Max")
+    std::vector<int> cut3_ak8Pt = {300};
+    std::vector<std::vector<int>> cut4_ht = { {1500,2500}, {2500,3500}, {3500,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
+    std::vector<std::vector<int>> cut5_ak4Pt = { {250,250} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
 
 
     // THREE: plot histogram settings
     double luminosity = 50.0; // note that this value doesn't matter IF you normalise later
     std::string varToPlot = "fatJetA_softDropMass";    
-    TH1F hTemplate("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);a.u.", 50, 0, 200);
+    TH1F hTemplate("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);events / 4 GeV", 50, 0, 200);
 
 
 
@@ -184,7 +184,7 @@ int main(int argc, char** argv){
 
                     // FIVE: plot aesthetics
                     Plotter plot = Plotter(plotEntrySignalVec, plotEntryBackgroundVec);
-                    plot.AddLegend(0.65, 0.88, 0.47, 0.87); // top right (wide 8)
+                    plot.AddLegend(0.55, 0.88, 0.47, 0.87); // top right (extra wide 8)
                     plot.AddLatex(luminosity);
 
 
