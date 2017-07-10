@@ -188,11 +188,11 @@ void Plotter::SetErrors(){
 		}
 	}
 
-	for (std::vector<PlotEntry>::const_iterator iStack = histoStack.begin(); iStack != histoStack.end(); ++iStack){
-		for (int iBin = 0; iBin < iStack->GetHistogram()->GetNbinsX()+2; ++iBin){
-			iStack->GetHistogram()->SetBinError(iBin, sqrt(iStack->GetStatErrorSquaredVector()[iBin]));
-		}
-	}
+	// for (std::vector<PlotEntry>::const_iterator iStack = histoStack.begin(); iStack != histoStack.end(); ++iStack){
+	// 	for (int iBin = 0; iBin < iStack->GetHistogram()->GetNbinsX()+2; ++iBin){
+	// 		iStack->GetHistogram()->SetBinError(iBin, sqrt(iStack->GetStatErrorSquaredVector()[iBin]));
+	// 	}
+	// }
 }
 
 
@@ -242,8 +242,8 @@ void Plotter::Save(const std::string& saveName){
 		}
 	}
 	if (!histoStack.empty() && hs->GetMaximum() > max) max = hs->GetMaximum();
-	if (!histoStack.empty() && hs->GetMinimum() < min) min = hs->GetMinimum();	
-	if (useLogY == true && min == 0) min = max / 1000; // it cannot be zero, the division by 1000 is arbitary!!
+	if (!histoStack.empty() && hs->GetMinimum() != 0 && hs->GetMinimum() < min) min = hs->GetMinimum();	
+	else if (useLogY == true && histoIndi.empty()) min = max / 1000; // it cannot be zero, the division by 1000 is arbitary!! LOOK OUT
 
 	// set histo max and min and draw
 	double initialMax = 0.0; // use to reset the histo max and min to what it initially was
