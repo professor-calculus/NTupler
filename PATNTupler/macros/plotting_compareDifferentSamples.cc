@@ -7,17 +7,7 @@
 #include <sys/stat.h>
 
 //ROOT HEADERS
-#include <TFile.h>
-#include <TTree.h>
-#include <TString.h>
-#include <TLorentzVector.h> 
-#include <TH1F.h>
-#include <TH2F.h>
-#include <TLatex.h>
-#include <TCanvas.h>
-#include <TLegend.h>
-#include <TStyle.h>
-#include <THStack.h>
+#include <TH1D.h>
 
 //RAL PARTICLE HEADERS
 #include "PlotEntry.hh"

@@ -7,27 +7,16 @@
 #include <sys/stat.h>
 
 //ROOT HEADERS
-#include <TFile.h>
-#include <TTree.h>
-#include <TString.h>
-#include <TLorentzVector.h> 
-#include <TH1F.h>
-#include <TH2F.h>
-#include <TLatex.h>
-#include <TCanvas.h>
-#include <TLegend.h>
-#include <TStyle.h>
-#include <THStack.h>
+#include <TH2D.h>
 
 //RAL PARTICLE HEADERS
-#include "PlotEntry.hh"
 #include "PlotEntry2D.hh"
 #include "Plotter.hh"
 #include "DoubleBTagWPs.h"
 
 int main(){
 
-    TH2F hTemplate = TH2F("hTemplate", ";dummy x-axis;dummy y-axis", 400, 0, 200, 400, 0, 200); // can't do the vector binning for 2d
+    TH2D hTemplate = TH2D("hTemplate", ";dummy x-axis;dummy y-axis", 400, 0, 200, 400, 0, 200); // can't do the vector binning for 2d
     std::string varToPlot = "fatJetB_softDropMass:fatJetA_softDropMass"; // 2d object to plot: <Y_Axis Variable>:<X_AxisVariable> (it will warn you if this is not a legit string)
     double luminosity = 50.0;
 

@@ -7,17 +7,7 @@
 #include <sys/stat.h>
 
 //ROOT HEADERS
-#include <TFile.h>
-#include <TTree.h>
-#include <TString.h>
-#include <TLorentzVector.h> 
-#include <TH1F.h>
-#include <TH2F.h>
-#include <TLatex.h>
-#include <TCanvas.h>
-#include <TLegend.h>
-#include <TStyle.h>
-#include <THStack.h>
+#include <TH2D.h>
 
 //RAL PARTICLE HEADERS
 #include "PlotEntry2D.hh"
@@ -36,7 +26,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_05/testingMacrosCondor/testing_2dMassDistributionsAndCount_run05/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_05/testingMacrosCondor/testing_2dMassDistributionsAndCount_run06/"; // where we are going to save the output plots (should include the samples name + binning maybe)
 
 
 
@@ -68,7 +58,7 @@ int main(int argc, char** argv){
 
 
     // FOUR: set up the histogram template
-    TH2F hTemplate = TH2F("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);SecondaryBDiscFatJet_SoftDrop_Mass (GeV)", 400, 0, 200, 400, 0, 200);
+    TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);SecondaryBDiscFatJet_SoftDrop_Mass (GeV)", 400, 0, 200, 400, 0, 200);
     std::string varToPlot = "fatJetB_softDropMass:fatJetA_softDropMass";
     double luminosity = 50.0;
 

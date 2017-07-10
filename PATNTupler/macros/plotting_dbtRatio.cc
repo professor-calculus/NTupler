@@ -7,17 +7,7 @@
 #include <sys/stat.h>
 
 //ROOT HEADERS
-#include <TFile.h>
-#include <TTree.h>
-#include <TString.h>
-#include <TLorentzVector.h> 
-#include <TH1F.h>
-#include <TH2F.h>
-#include <TLatex.h>
-#include <TCanvas.h>
-#include <TLegend.h>
-#include <TStyle.h>
-#include <THStack.h>
+#include <TH1D.h>
 
 //RAL PARTICLE HEADERS
 #include "PlotEntry.hh"
@@ -52,10 +42,10 @@ int main(int argc, char** argv){
     // THREE: set up the histogram template 
     std::string varToPlot = "fatJetA_softDropMass";
     // std::vector<double> abcdMassSet = {0.0, 10.0, 30.0, 60.0, 90.0, 200.0};
-    // TH1F hTemplate = TH1F("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);DBT Pass / inv DBT", abcdMassSet.size()-1, &(abcdMassSet)[0]);
-    // TH1F hTemplate = TH1F("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);DBT Pass / inv DBT", 50, 0, 200);
-    // TH1F hTemplate = TH1F("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);DBT Pass / inv DBT", 25, 0, 200);
-    TH1F hTemplate = TH1F("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);DBT Pass / inv DBT", 10, 0, 200);
+    // TH1D hTemplate = TH1D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);DBT Pass / inv DBT", abcdMassSet.size()-1, &(abcdMassSet)[0]);
+    // TH1D hTemplate = TH1D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);DBT Pass / inv DBT", 50, 0, 200);
+    // TH1D hTemplate = TH1D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);DBT Pass / inv DBT", 25, 0, 200);
+    TH1D hTemplate = TH1D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);DBT Pass / inv DBT", 10, 0, 200);
 
 
 

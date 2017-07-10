@@ -7,17 +7,7 @@
 #include <sys/stat.h>
 
 //ROOT HEADERS
-#include <TFile.h>
-#include <TTree.h>
-#include <TString.h>
-#include <TLorentzVector.h> 
-#include <TH1F.h>
-#include <TH2F.h>
-#include <TLatex.h>
-#include <TCanvas.h>
-#include <TLegend.h>
-#include <TStyle.h>
-#include <THStack.h>
+#include <TH1D.h>
 
 //RAL PARTICLE HEADERS
 #include "PlotEntry.hh"
@@ -34,7 +24,7 @@ int main(){
 	std::vector<PlotEntry> histoEmpty; // this is an example of an empty version
 
 	// the following block defines objects used in PlotEntry::PlotEntry and PlotEntry::AddInput
-	TH1F hTemplate("hTemplate", "insert_title;insert_xaxis;insert_yaxis", 50, 0, 150); // a histogram template for a given PlotEntry object, it will use the same credentials
+	TH1D hTemplate("hTemplate", "insert_title;insert_xaxis;insert_yaxis", 50, 0, 150); // a histogram template for a given PlotEntry object, it will use the same credentials
 	std::string varToPlot = "fatJetA_softDropMass"; // a flatTree variable name for a PlotEntry object to draw (NB: 2d plots are not currently enabled)
 	std::string cutToApply = "fatJetA_doubleBtagDiscrim>0.9 && fatJetB_doubleBtagDiscrim>0.6 && fatJetA_p4.Pt()>300.0 && fatJetB_p4.Pt()>300.0 && ht>=1500.0 && ht<2500.0 && slimJetA_p4.Pt()>250.0 && slimJetB_p4.Pt()>250.0"; // a cut for the PlotEntry object to apply when cutting 
 	double luminosity = 50.0; // the luminosity, in fb^-1, for a PlotEntry object to use in weighting plots (for MC samples)

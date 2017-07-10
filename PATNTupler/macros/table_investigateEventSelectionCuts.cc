@@ -7,17 +7,7 @@
 #include <sys/stat.h>
 
 //ROOT HEADERS
-#include <TFile.h>
-#include <TTree.h>
-#include <TString.h>
-#include <TLorentzVector.h> 
-#include <TH1F.h>
-#include <TH2F.h>
-#include <TLatex.h>
-#include <TCanvas.h>
-#include <TLegend.h>
-#include <TStyle.h>
-#include <THStack.h>
+#include <TH1D.h>
 
 //RAL PARTICLE HEADERS
 #include "PlotEntry.hh"
@@ -73,14 +63,14 @@ int main(int argc, char** argv){
         std::string dirExistCommand = "test -e " + outputDir;
         std::string makeDirCommand = "mkdir -p " + outputDir;
         if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
-        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_investigateEventSelectionCuts.cc %s/%s__plotting_investigateEventSelectionCuts.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/table_investigateEventSelectionCuts.cc %s/%s__table_investigateEventSelectionCuts.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
     }
     else if (runInstructionString == "batch"){
         std::string dirExistCommand = "test -e " + outputDir;
         std::string makeDirCommand = "mkdir -p " + outputDir;
         if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
-        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/plotting_investigateEventSelectionCuts.cc %s/%s__plotting_investigateEventSelectionCuts.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
-        MacrosOnCondor::SubmitJob(outputDir.c_str(), "plotting_investigateEventSelectionCuts", "/opt/ppd/scratch/xap79297/jobLogs/macros/");
+        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/table_investigateEventSelectionCuts.cc %s/%s__table_investigateEventSelectionCuts.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+        MacrosOnCondor::SubmitJob(outputDir.c_str(), "table_investigateEventSelectionCuts", "/opt/ppd/scratch/xap79297/jobLogs/macros/");
         return 0;
     }
     else if (runInstructionString == "batchRUN"){
@@ -116,7 +106,8 @@ int main(int argc, char** argv){
             std::vector<PlotEntry> givenCutObject; // single cut stage, for all samples
 
 
-            // USER INPUT
+
+            // FOUR: SAMPLE INFO
             givenCutObject.push_back( PlotEntry("mH30_mSusy800", hTemplate, varToPlot.c_str(), luminosity) );
             givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH30p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.009*0.85*0.85);
         
@@ -127,8 +118,6 @@ int main(int argc, char** argv){
 
             cutFlowObject.push_back(givenCutObject);
         }
-
-
 
         // create the cut flow table
         std::ofstream table;
@@ -160,7 +149,7 @@ int main(int argc, char** argv){
             holdValueVec[i] = cutFlowObject[0][i].GetNumberOfEventsAfterCuts();
         }
 
-        table << "\nAK8DBT " << cut2_ak8Dbt[iTab][0].c_str() << cut2_ak8Dbt[iTab][1].c_str() << ":,";
+        table << "\nAK8DBT " << cut2_ak8Dbt[iTab][0].c_str() << cut2_ak8Dbt[iTab][1].c_str() << "&" << cut2_ak8Dbt[iTab][2].c_str() << cut2_ak8Dbt[iTab][3].c_str() << ":,";
         for (size_t i = 0; i < cutFlowObject[0].size(); ++i){
             table << cutFlowObject[1][i].GetNumberOfEventsAfterCuts() << ",";
             if (cutFlowObject[1][i].GetNumberOfEventsAfterCuts() < 0.00000001) table << "0,,";

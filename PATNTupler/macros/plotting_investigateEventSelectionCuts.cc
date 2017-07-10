@@ -7,17 +7,7 @@
 #include <sys/stat.h>
 
 //ROOT HEADERS
-#include <TFile.h>
-#include <TTree.h>
-#include <TString.h>
-#include <TLorentzVector.h> 
-#include <TH1F.h>
-#include <TH2F.h>
-#include <TLatex.h>
-#include <TCanvas.h>
-#include <TLegend.h>
-#include <TStyle.h>
-#include <THStack.h>
+#include <TH1D.h>
 
 //RAL PARTICLE HEADERS
 #include "PlotEntry.hh"
@@ -26,7 +16,7 @@
 #include "TimeStamp.h"
 #include "MacrosOnCondor.h"
 
-// COMPARE VARIABLES FROM DIFFERENT DATASETS AS YOU LOOP THROUGH CUTS
+// COMPARE SIGNAL AND BACKGROUND FOR DIFFERENT CUTS
 int main(int argc, char** argv){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +45,7 @@ int main(int argc, char** argv){
     // THREE: plot histogram settings
     double luminosity = 50.0; // note that this value doesn't matter IF you normalise later
     std::string varToPlot = "fatJetA_softDropMass";    
-    TH1F hTemplate("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);events / 4 GeV", 50, 0, 200);
+    TH1D hTemplate("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);events / 4 GeV", 50, 0, 200);
 
 
 
@@ -150,7 +140,6 @@ int main(int argc, char** argv){
                     PlotEntry mH90_mSusy2000 = PlotEntry("mH90_mSusy2000", hTemplate, varToPlot.c_str(), luminosity);
                     mH90_mSusy2000.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH90p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
                     plotEntrySignalVec.push_back(mH90_mSusy2000);
-
 
                     PlotEntry QCD = PlotEntry("QCD", hTemplate, varToPlot.c_str(), luminosity);
                     QCD.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/QCD_HT700to1000/flatTree.root", cutToApply.c_str(), 6802);

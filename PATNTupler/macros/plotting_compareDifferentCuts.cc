@@ -7,17 +7,7 @@
 #include <sys/stat.h>
 
 //ROOT HEADERS
-#include <TFile.h>
-#include <TTree.h>
-#include <TString.h>
-#include <TLorentzVector.h> 
-#include <TH1F.h>
-#include <TH2F.h>
-#include <TLatex.h>
-#include <TCanvas.h>
-#include <TLegend.h>
-#include <TStyle.h>
-#include <THStack.h>
+#include <TH1D.h>
 
 //RAL PARTICLE HEADERS
 #include "PlotEntry.hh"
@@ -58,10 +48,10 @@ int main(int argc, char** argv){
     std::string varToPlot = "fatJetA_softDropMass";
     // std::string varToPlot = "fatJetB_softDropMass";
 
-    // TH1F hTemplate("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);a.u.", 50, 0, 200);
-    TH1F hTemplate("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);events / bin", 50, 0, 200);
-    // TH1F hTemplate("hTemplate", ";SecondaryBDiscFatJet_SoftDrop_Mass (GeV);events / bin", 50, 0, 200);
-    // TH1F hTemplate("hTemplate", ";SecondaryBDiscFatJet_SoftDrop_Mass (GeV);a.u.", 50, 0, 200);
+    // TH1D hTemplate("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);a.u.", 50, 0, 200);
+    TH1D hTemplate("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);events / bin", 50, 0, 200);
+    // TH1D hTemplate("hTemplate", ";SecondaryBDiscFatJet_SoftDrop_Mass (GeV);events / bin", 50, 0, 200);
+    // TH1D hTemplate("hTemplate", ";SecondaryBDiscFatJet_SoftDrop_Mass (GeV);a.u.", 50, 0, 200);
 
 
 
