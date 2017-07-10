@@ -9,7 +9,7 @@
 //ROOT HEADERS
 #include <TFile.h>
 #include <TTree.h>
-#include <TH1F.h>
+#include <TH1D.h>
 
 //RAL PARTICLE HEADERS
 #include "../interface/PlotEntry.hh"
@@ -22,8 +22,8 @@ PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, PlotEntry numeratorP
 	numberOfEventsBeforeCuts(-1.0)
 {
 	Int_t nBins = numeratorPlotEntry.GetHistogram()->GetNbinsX();
-	if (numeratorPlotEntry.GetHistogram()->GetXaxis()->GetXbins()->GetArray() == NULL) hTotal = new TH1F("hTotal", Form("%s;%s;%s", numeratorPlotEntry.GetHistogram()->GetTitle(), numeratorPlotEntry.GetHistogram()->GetXaxis()->GetTitle(), numeratorPlotEntry.GetHistogram()->GetYaxis()->GetTitle()), nBins, numeratorPlotEntry.GetHistogram()->GetBinLowEdge(1), numeratorPlotEntry.GetHistogram()->GetBinLowEdge(nBins+1));
-	else hTotal = new TH1F("hTotal", Form("%s;%s;%s", numeratorPlotEntry.GetHistogram()->GetTitle(), numeratorPlotEntry.GetHistogram()->GetXaxis()->GetTitle(), numeratorPlotEntry.GetHistogram()->GetYaxis()->GetTitle()), nBins, numeratorPlotEntry.GetHistogram()->GetXaxis()->GetXbins()->GetArray());
+	if (numeratorPlotEntry.GetHistogram()->GetXaxis()->GetXbins()->GetArray() == NULL) hTotal = new TH1D("hTotal", Form("%s;%s;%s", numeratorPlotEntry.GetHistogram()->GetTitle(), numeratorPlotEntry.GetHistogram()->GetXaxis()->GetTitle(), numeratorPlotEntry.GetHistogram()->GetYaxis()->GetTitle()), nBins, numeratorPlotEntry.GetHistogram()->GetBinLowEdge(1), numeratorPlotEntry.GetHistogram()->GetBinLowEdge(nBins+1));
+	else hTotal = new TH1D("hTotal", Form("%s;%s;%s", numeratorPlotEntry.GetHistogram()->GetTitle(), numeratorPlotEntry.GetHistogram()->GetXaxis()->GetTitle(), numeratorPlotEntry.GetHistogram()->GetYaxis()->GetTitle()), nBins, numeratorPlotEntry.GetHistogram()->GetXaxis()->GetXbins()->GetArray());
 	hTotal->Divide(numeratorPlotEntry.GetHistogram(),denominatorPlotEntry.GetHistogram());
 	for (int iBin = 0; iBin < nBins+2; ++iBin){
 		double statErrorSquaredForBin = pow(hTotal->GetBinContent(iBin),2);
@@ -32,7 +32,7 @@ PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, PlotEntry numeratorP
 	}
 }
 
-PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1F& hTemplate, const std::string& variableToPlotDummy) :
+PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1D& hTemplate, const std::string& variableToPlotDummy) :
 	plotEntryName(plotEntryNameDummy),
 	luminosity(0.0),
 	variableToPlot(variableToPlotDummy),
@@ -40,13 +40,13 @@ PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1F& hTemplat
 	numberOfEventsBeforeCuts(0.0)
 {
 	Int_t nBins = hTemplate.GetNbinsX();
-	if (hTemplate.GetXaxis()->GetXbins()->GetArray() == NULL) hTotal = new TH1F("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBins, hTemplate.GetBinLowEdge(1), hTemplate.GetBinLowEdge(nBins+1));
-	else hTotal = new TH1F("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBins, hTemplate.GetXaxis()->GetXbins()->GetArray());
+	if (hTemplate.GetXaxis()->GetXbins()->GetArray() == NULL) hTotal = new TH1D("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBins, hTemplate.GetBinLowEdge(1), hTemplate.GetBinLowEdge(nBins+1));
+	else hTotal = new TH1D("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBins, hTemplate.GetXaxis()->GetXbins()->GetArray());
 	std::vector<double> dummyStatError(nBins+2, 0.0);
 	statErrorSquared = dummyStatError;
 }
 
-PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1F& hTemplate, const std::string& variableToPlotDummy, const double& luminosityDummy) :
+PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1D& hTemplate, const std::string& variableToPlotDummy, const double& luminosityDummy) :
 	plotEntryName(plotEntryNameDummy),
 	luminosity(luminosityDummy),
 	variableToPlot(variableToPlotDummy),
@@ -54,8 +54,8 @@ PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1F& hTemplat
 	numberOfEventsBeforeCuts(0.0)
 {
 	Int_t nBins = hTemplate.GetNbinsX();
-	if (hTemplate.GetXaxis()->GetXbins()->GetArray() == NULL) hTotal = new TH1F("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBins, hTemplate.GetBinLowEdge(1), hTemplate.GetBinLowEdge(nBins+1));
-	else hTotal = new TH1F("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBins, hTemplate.GetXaxis()->GetXbins()->GetArray());
+	if (hTemplate.GetXaxis()->GetXbins()->GetArray() == NULL) hTotal = new TH1D("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBins, hTemplate.GetBinLowEdge(1), hTemplate.GetBinLowEdge(nBins+1));
+	else hTotal = new TH1D("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBins, hTemplate.GetXaxis()->GetXbins()->GetArray());
 	std::vector<double> dummyStatError(nBins+2, 0.0);
 	statErrorSquared = dummyStatError;
 }
@@ -75,7 +75,7 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
     }
 
 	TTree * T = (TTree*)f->Get("doubleBFatJetPairTree");
-	TH1F hContainer = hNull; // make a copy of the empty histogram to fill with TTreeDraw
+	TH1D hContainer = hNull; // make a copy of the empty histogram to fill with TTreeDraw
 	hContainer.SetName("hContainer");
 	std::string drawStringA = Form("%s>>hContainer", variableToPlot.c_str());
 	std::string drawStringB = Form("%s", selectionCut.c_str());
@@ -108,12 +108,12 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
     double eventWeighting = 1000.0 * crossSection * luminosity / nEvtsRunOverForInputTotal;
 
 	TTree * T = (TTree*)f->Get("doubleBFatJetPairTree");
-	TH1F hContainer = hNull; // make a copy of the empty histogram to fill with TTreeDraw
+	TH1D hContainer = hNull; // make a copy of the empty histogram to fill with TTreeDraw
 	hContainer.SetName("hContainer");
 	std::string drawStringA = Form("%s>>hContainer", variableToPlot.c_str());
 	std::string drawStringB;
-	if (!selectionCut.empty()) drawStringB = Form("%f*(%s)", eventWeighting, selectionCut.c_str());
-	else drawStringB = Form("%f", eventWeighting);
+	if (!selectionCut.empty()) drawStringB = Form("%.15f*(%s)", eventWeighting, selectionCut.c_str());
+	else drawStringB = Form("%.15f", eventWeighting);
     std::cout << "Filling for TTree: " << flatTreeAddress << std::endl;
 	std::cout << "Variable used: " << variableToPlot << std::endl;
 	if (!selectionCut.empty()) std::cout << "Event Weighting * Cut applied: " << drawStringB << std::endl;
@@ -128,7 +128,7 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 
 std::string PlotEntry::GetPlotEntryName() const {return plotEntryName;}
 
-TH1F* PlotEntry::GetHistogram() const {return hTotal;}
+TH1D* PlotEntry::GetHistogram() const {return hTotal;}
 
 double PlotEntry::GetNumberOfEventsBeforeCuts() const {return numberOfEventsBeforeCuts;}
 

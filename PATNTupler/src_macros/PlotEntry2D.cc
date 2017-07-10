@@ -9,18 +9,15 @@
 //ROOT HEADERS
 #include <TFile.h>
 #include <TTree.h>
-#include <TH2F.h>
+#include <TH2D.h>
 #include <TCanvas.h> //HACK
 
 //RAL PARTICLE HEADERS
 #include "../interface/PlotEntry2D.hh"
 
 
-// total error squared object... but not for each bin!!!
-
-
 //--------constructor---------//
-PlotEntry2D::PlotEntry2D(const std::string& plotEntryNameDummy, const TH2F& hTemplate, const std::string& variablesToPlotDummy) :
+PlotEntry2D::PlotEntry2D(const std::string& plotEntryNameDummy, const TH2D& hTemplate, const std::string& variablesToPlotDummy) :
 	plotEntryName(plotEntryNameDummy),
 	luminosity(0.0),
 	variablesToPlot(variablesToPlotDummy),
@@ -30,10 +27,10 @@ PlotEntry2D::PlotEntry2D(const std::string& plotEntryNameDummy, const TH2F& hTem
 {
 	Int_t nBinsX = hTemplate.GetNbinsX();
 	Int_t nBinsY = hTemplate.GetNbinsY();
-	hTotal = new TH2F("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBinsX, hTemplate.GetXaxis()->GetBinLowEdge(1), hTemplate.GetXaxis()->GetBinLowEdge(nBinsX+1), nBinsY, hTemplate.GetYaxis()->GetBinLowEdge(1), hTemplate.GetYaxis()->GetBinLowEdge(nBinsY+1));
+	hTotal = new TH2D("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBinsX, hTemplate.GetXaxis()->GetBinLowEdge(1), hTemplate.GetXaxis()->GetBinLowEdge(nBinsX+1), nBinsY, hTemplate.GetYaxis()->GetBinLowEdge(1), hTemplate.GetYaxis()->GetBinLowEdge(nBinsY+1));
 }
 
-PlotEntry2D::PlotEntry2D(const std::string& plotEntryNameDummy, const TH2F& hTemplate, const std::string& variablesToPlotDummy, const double& luminosityDummy) :
+PlotEntry2D::PlotEntry2D(const std::string& plotEntryNameDummy, const TH2D& hTemplate, const std::string& variablesToPlotDummy, const double& luminosityDummy) :
 	plotEntryName(plotEntryNameDummy),
 	luminosity(luminosityDummy),
 	variablesToPlot(variablesToPlotDummy),
@@ -43,7 +40,7 @@ PlotEntry2D::PlotEntry2D(const std::string& plotEntryNameDummy, const TH2F& hTem
 {
 	Int_t nBinsX = hTemplate.GetNbinsX();
 	Int_t nBinsY = hTemplate.GetNbinsY();
-	hTotal = new TH2F("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBinsX, hTemplate.GetXaxis()->GetBinLowEdge(1), hTemplate.GetXaxis()->GetBinLowEdge(nBinsX+1), nBinsY, hTemplate.GetYaxis()->GetBinLowEdge(1), hTemplate.GetYaxis()->GetBinLowEdge(nBinsY+1));
+	hTotal = new TH2D("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBinsX, hTemplate.GetXaxis()->GetBinLowEdge(1), hTemplate.GetXaxis()->GetBinLowEdge(nBinsX+1), nBinsY, hTemplate.GetYaxis()->GetBinLowEdge(1), hTemplate.GetYaxis()->GetBinLowEdge(nBinsY+1));
 }
 
 
@@ -61,7 +58,7 @@ void PlotEntry2D::AddInput(const std::string& flatTreeAddress, const std::string
     }
 
 	TTree * T = (TTree*)f->Get("doubleBFatJetPairTree");
-	TH2F hContainer = hNull; // make a copy of the empty histogram to fill with TTreeDraw
+	TH2D hContainer = hNull; // make a copy of the empty histogram to fill with TTreeDraw
 	hContainer.SetName("hContainer");
 	std::string drawStringA = Form("%s>>hContainer", variablesToPlot.c_str());
 	std::string drawStringB = Form("%s", selectionCut.c_str());
@@ -97,12 +94,12 @@ void PlotEntry2D::AddInput(const std::string& flatTreeAddress, const std::string
     double eventWeighting = 1000.0 * crossSection * luminosity / nEvtsRunOverForInputTotal;
 
 	TTree * T = (TTree*)f->Get("doubleBFatJetPairTree");
-	TH2F hContainer = hNull; // make a copy of the empty histogram to fill with TTreeDraw
+	TH2D hContainer = hNull; // make a copy of the empty histogram to fill with TTreeDraw
 	hContainer.SetName("hContainer");
 	std::string drawStringA = Form("%s>>hContainer", variablesToPlot.c_str());
 	std::string drawStringB;
-	if (!selectionCut.empty()) drawStringB = Form("%f*(%s)", eventWeighting, selectionCut.c_str());
-	else drawStringB = Form("%f", eventWeighting);
+	if (!selectionCut.empty()) drawStringB = Form("%.15f*(%s)", eventWeighting, selectionCut.c_str());
+	else drawStringB = Form("%.15f", eventWeighting);
     std::cout << "Filling for TTree: " << flatTreeAddress << std::endl;
 	std::cout << "Variables used: " << variablesToPlot << std::endl;
 	if (!selectionCut.empty()) std::cout << "Event Weighting * Cut applied: " << drawStringB << std::endl;
@@ -120,7 +117,7 @@ void PlotEntry2D::AddInput(const std::string& flatTreeAddress, const std::string
 
 std::string PlotEntry2D::GetPlotEntryName() const {return plotEntryName;}
 
-TH2F * PlotEntry2D::GetHistogram() const {return hTotal;}
+TH2D * PlotEntry2D::GetHistogram() const {return hTotal;}
 
 double PlotEntry2D::GetNumberOfEventsBeforeCuts() const {return numberOfEventsBeforeCuts;}
 
