@@ -8,7 +8,7 @@ import datetime
 # Instructions:
 # 1. Compile the code you wish to run
 # 2. Set the USER INPUTS for this script
-# 3. Run this script $ ./submitCondorNtupleJobs_VJ.py or $ python $CMSSW_BASE/src/NTupler/PATNTupler/main/submitCondorNtupleJobs_VJ.py
+# 3. Run this script $ python submitCondorNtupleJobs_VJ.py or $ python $CMSSW_BASE/src/NTupler/PATNTupler/main/submitCondorNtupleJobs_VJ.py
 # 4. cd into the outputDirectory/tmp and run the condor job (can use batchJobs/setoffJobs.py)
 
 
@@ -20,9 +20,9 @@ import datetime
 
 executable = "nTupAnaNMSSM" # wrt 'main' directory
 code = "mainNMSSM.cc" # wrt 'main' directory
-inputFileListPath = "/opt/ppd/scratch/xap79297/CMSSW_8_0_21/src/NTupler/PATNTupler/fileLists/QCD_HT700to1000.list"
-outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/QCD_HT700to1000" # has to be the full path
-filesPerJob = 5
+inputFileListPath = "/opt/ppd/scratch/xap79297/CMSSW_8_0_21/src/NTupler/PATNTupler/fileLists/8_0_2X_dbtV4/TTJets_NLO.list"
+outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_10_CMSSW_8_0_2X_dbtV4/TTJets_NLO" # has to be the full path
+filesPerJob = 10
 jsonFile = ""
 logDirectoryBase = "/opt/ppd/scratch/xap79297/jobLogs/flatTrees/"
 
