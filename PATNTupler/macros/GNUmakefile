@@ -44,6 +44,8 @@ TMPDIR		= ${PWD}/../tmp
 # 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 # plotting_exampleOfHowToUse2DPlottingClasses: plotting_exampleOfHowToUse2DPlottingClasses.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 # 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
+plotting_checkTtbarHtStitching: plotting_checkTtbarHtStitching.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 plotting_dbtRatio: plotting_dbtRatio.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 plotting_compareDifferentSamples: plotting_compareDifferentSamples.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
@@ -73,10 +75,7 @@ ${TMPDIR}/ParticleDict.cc:	${INCDIR}/Particles.hh ${INCDIR}/ntpLinkDef.h
 	rootcint -f $@ -c $< ${INCDIR}/ntpLinkDef.h
 
 clean:
-	rm -rf investigateEventSelectionCuts investigateEventSelectionCuts.o ${OBJDIR}/* ${TMPDIR}/*
-	rm -rf investigateEventSelectionCuts_table investigateEventSelectionCuts_table.o ${OBJDIR}/* ${TMPDIR}/*
-	rm -rf plotting_exampleOfHowToUsePlottingClasses plotting_exampleOfHowToUsePlottingClasses.o ${OBJDIR}/* ${TMPDIR}/*
-	rm -rf plotting_exampleOfHowToUse2DPlottingClasses plotting_exampleOfHowToUse2DPlottingClasses.o ${OBJDIR}/* ${TMPDIR}/*
+	rm -rf plotting_checkTtbarHtStitching plotting_checkTtbarHtStitching.o ${OBJDIR}/* ${TMPDIR}/*
 	rm -rf plotting_dbtRatio plotting_dbtRatio.o ${OBJDIR}/* ${TMPDIR}/*
 	rm -rf plotting_compareDifferentSamples plotting_compareDifferentSamples.o ${OBJDIR}/* ${TMPDIR}/*
 	rm -rf plotting_compareDifferentCuts plotting_compareDifferentCuts.o ${OBJDIR}/* ${TMPDIR}/*
