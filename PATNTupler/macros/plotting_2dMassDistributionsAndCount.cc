@@ -7,7 +7,10 @@
 #include <sys/stat.h>
 
 //ROOT HEADERS
+#include <TH1D.h>
 #include <TH2D.h>
+#include <TStyle.h>
+#include <TLegend.h>
 
 //RAL PARTICLE HEADERS
 #include "PlotEntry2D.hh"
@@ -26,7 +29,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_05/testingMacrosCondor/testing_2dMassDistributionsAndCount_run06/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_05/testingMacrosCondor/testing_2dMassDistributionsAndCount_run07/"; // where we are going to save the output plots (should include the samples name + binning maybe)
 
 
 
@@ -58,9 +61,11 @@ int main(int argc, char** argv){
 
 
     // FOUR: set up the histogram template
-    TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);SecondaryBDiscFatJet_SoftDrop_Mass (GeV)", 400, 0, 200, 400, 0, 200);
-    std::string varToPlot = "fatJetB_softDropMass:fatJetA_softDropMass";
     double luminosity = 50.0;
+
+    TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);SecondaryBDiscFatJet_SoftDrop_Mass (GeV)", 400, 0, 200, 400, 0, 200);
+    std::string varXAxis = "fatJetA_softDropMass";
+    std::string varYAxis = "fatJetB_softDropMass";
 
 
 
@@ -104,7 +109,8 @@ int main(int argc, char** argv){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    std::string varToPlot = varYAxis + ":" + varXAxis;
+    std::string varToPlotSaveName = varYAxis + "VS" + varXAxis;
     std::string cutToApplyBase = Form("fatJetA_doubleBtagDiscrim>=%f && fatJetA_doubleBtagDiscrim<%f && fatJetB_doubleBtagDiscrim>=%f && fatJetB_doubleBtagDiscrim<%f && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d", DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[0]), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[1]), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[2]), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[3]), cut3_ak8Pt, cut3_ak8Pt, cut4_ht[0], cut4_ht[1], cut5_ak4Pt[0], cut5_ak4Pt[1]);
 
     // Create the table of info
@@ -133,7 +139,7 @@ int main(int argc, char** argv){
         if (iMassRegion != MassCutsObject.GetAllCuts().size()) cutToApply = cutToApplyBase + " && " + MassCutsObject.GetAllCuts()[iMassRegion];
         else cutToApply = cutToApplyBase;
         PlotEntry2D plotEntry = PlotEntry2D("plotEntry", hTemplate, varToPlot.c_str(), luminosity);
-        std::string saveName = "fatJet2dDist_" + MassCutsObject.GetName();
+        std::string saveName = varToPlotSaveName + "_" + MassCutsObject.GetName();
         std::string cutType;
         if (iMassRegion == MassCutsObject.GetAllCuts().size()) cutType = "ALL";
         else if (iMassRegion < MassCutsObject.Get_S_Cuts().size() ) cutType = "Scut" + std::to_string(iMassRegion+1);
