@@ -8,6 +8,9 @@
 
 //ROOT HEADERS
 #include <TH1D.h>
+#include <TH2D.h>
+#include <TStyle.h>
+#include <TLegend.h>
 
 //RAL PARTICLE HEADERS
 #include "PlotEntry.hh"
@@ -54,7 +57,7 @@ int main(int argc, char** argv){
     // std::string varToPlot = "fatJetA_p4.Pt()";
     // std::string varToPlot = "fatJetB_p4.Pt()";
     
-    TH1F hTemplate("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);a.u.", 50, 0, 200);
+    TH1D hTemplate("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);a.u.", 50, 0, 200);
     // TH1F hTemplate("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);events/bin", 50, 0, 200);
     // TH1F hTemplate("hTemplate", ";SecondaryBDiscFatJet_SoftDrop_Mass (GeV);a.u.", 50, 0, 200);
     // TH1F hTemplate("hTemplate", ";SecondaryBDiscFatJet_SoftDrop_Mass (GeV);events/bin", 50, 0, 200);

@@ -8,6 +8,9 @@
 
 //ROOT HEADERS
 #include <TH1D.h>
+#include <TH2D.h>
+#include <TStyle.h>
+#include <TLegend.h>
 
 //RAL PARTICLE HEADERS
 #include "PlotEntry.hh"
