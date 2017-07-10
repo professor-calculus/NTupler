@@ -28,16 +28,16 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_05/testingMacros/testing_lheHTSTitch2/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_05/testingMacros/testing_lheHTSTitch3/"; // where we are going to save the output plots (should include the samples name + binning maybe)
 
 
 
     // TWO: plot histogram settings
     double luminosity = 50.0; // note that this value doesn't matter IF you normalise later    
-    // std::string varToPlot = "ht";
-    // TH1D hTemplate("hTemplate", ";H_{T} (GeV);events / bin", 100, 0, 4000);
-    std::string varToPlot = "lheHT";
-    TH1D hTemplate("hTemplate", ";LHE H_{T} (GeV);events / bin", 100, 0, 4000);
+    std::string varToPlot = "ht";
+    TH1D hTemplate("hTemplate", ";H_{T} (GeV);events / bin", 100, 0, 4000);
+    // std::string varToPlot = "lheHT";
+    // TH1D hTemplate("hTemplate", ";LHE H_{T} (GeV);events / bin", 100, 0, 4000);
 
 
 
@@ -82,7 +82,7 @@ int main(int argc, char** argv){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    for (double lheHT = 700.0; lheHT < 900.1; lheHT = lheHT + 100.0){
+    for (double lheHT = 0.0; lheHT < 900.1; lheHT = lheHT + 100.0){
 
         std::vector<PlotEntry> plotEntryVec;
         std::vector<PlotEntry> plotEntryStack;
@@ -118,9 +118,10 @@ int main(int argc, char** argv){
 
         // FIVE: plot aesthetics
         Plotter plot = Plotter(plotEntryVec, plotEntryStack);
-        plot.AddLegend(0.55, 0.88, 0.62, 0.87); // top right (wide 6)
+        plot.AddLegend(0.50, 0.88, 0.62, 0.87); // top right (wide 6)
         plot.AddLatex(luminosity);
         plot.SetLogY();
+        plot.SetErrors();
         std::string outputFile = outputDir + "/ttbar_" + varToPlot + "_lheHtCut" + Form("%.0f", lheHT) + ".pdf"; 
         plot.Save(outputFile.c_str());
 
