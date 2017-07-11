@@ -138,4 +138,15 @@ double PlotEntry2D::GetNumberOfEventsAfterCutsStatError() const
 	return sqrt(numberOfEventsAfterCuts_StatErrorSquared);
 }
 
+void PlotEntry2D::NormalisePlot()
+{
+	double numberOfEventsAfterCuts = 0.0;
+	for (int iBin = 0; iBin < hTotal->GetNbinsX()+2; ++iBin){
+		for (int jBin = 0; jBin < hTotal->GetNbinsY()+2; ++jBin){
+			numberOfEventsAfterCuts += hTotal->GetBinContent(iBin,jBin);
+		}	
+	}
+	hTotal->Scale(1/numberOfEventsAfterCuts);
+}
+
 //-----------private----------//
