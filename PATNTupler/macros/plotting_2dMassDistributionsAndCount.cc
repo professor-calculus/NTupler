@@ -29,22 +29,23 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_05/testingMacrosCondor/testing_2dMassDistributionsAndCount_run07/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_10/testingNewFunctionality/normalise2d/mH90_mSusy2000/"; // where we are going to save the output plots (should include the samples name + binning maybe)
 
 
 
     // TWO: set the cut params.
     // std::vector<std::string> cut2_ak8Dbt = {"Tight","Max","Med","Max"}; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max --> "Off", "Loose", "Med", "Tight", "Max"
-    std::vector<std::string> cut2_ak8Dbt = {"Off","Med","Off","Med"}; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max --> "Off", "Loose", "Med", "Tight", "Max"
+    // std::vector<std::string> cut2_ak8Dbt = {"Tight","Max","Loose","Max"}; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max --> "Off", "Loose", "Med", "Tight", "Max"
+    // std::vector<std::string> cut2_ak8Dbt = {"Off","Med","Off","Med"}; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max --> "Off", "Loose", "Med", "Tight", "Max"
     // std::vector<std::string> cut2_ak8Dbt = {"Off","Loose","Off","Loose"}; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max --> "Off", "Loose", "Med", "Tight", "Max"
-    // std::vector<std::string> cut2_ak8Dbt = {"Off","Max","Off","Max"}; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max --> "Off", "Loose", "Med", "Tight", "Max"
-    int cut3_ak8Pt = 300;
-    // int cut3_ak8Pt = -1;
-    std::vector<int> cut4_ht = {1500,2500}; // HT BIN
+    std::vector<std::string> cut2_ak8Dbt = {"Off","Max","Off","Max"}; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max --> "Off", "Loose", "Med", "Tight", "Max"
+    // int cut3_ak8Pt = 300;
+    int cut3_ak8Pt = -1;
+    // std::vector<int> cut4_ht = {1500,2500}; // HT BIN
     // std::vector<int> cut4_ht = {2500,3500}; // HT BIN
     // std::vector<int> cut4_ht = {3500,13000}; // HT BIN
     // std::vector<int> cut4_ht = {1500,13000}; // HT BIN
-    // std::vector<int> cut4_ht = {-1,13000}; // HT BIN
+    std::vector<int> cut4_ht = {-1,13000}; // HT BIN
     // std::vector<int> cut5_ak4Pt = {250,250}; // 1st element for leading pt, 2nd element for secondary pt
     std::vector<int> cut5_ak4Pt = {-1,-1}; // 1st element for leading pt, 2nd element for secondary pt
 
@@ -66,6 +67,10 @@ int main(int argc, char** argv){
     TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);SecondaryBDiscFatJet_SoftDrop_Mass (GeV)", 400, 0, 200, 400, 0, 200);
     std::string varXAxis = "fatJetA_softDropMass";
     std::string varYAxis = "fatJetB_softDropMass";
+
+    // TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_Pruned_Mass (GeV);SecondaryBDiscFatJet_Pruned_Mass (GeV)", 400, 0, 200, 400, 0, 200);
+    // std::string varXAxis = "fatJetA_prunedMass";
+    // std::string varYAxis = "fatJetB_prunedMass";
 
 
 
@@ -186,7 +191,7 @@ int main(int argc, char** argv){
             // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/QCD_HT1500to2000/flatTree.root", cutToApply.c_str(), 120.4);
             // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/QCD_HT2000toInf/flatTree.root", cutToApply.c_str(), 25.25);
 
-            plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/ZJetsToQQ_HT600toInf/flatTree.root", cutToApply.c_str(), 5.67);
+            // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/ZJetsToQQ_HT600toInf/flatTree.root", cutToApply.c_str(), 5.67);
             
             // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/WJetsToQQ_HT600toInf/flatTree.root", cutToApply.c_str(), 95.14);
 
@@ -195,7 +200,7 @@ int main(int argc, char** argv){
             // SIX: plot & table aesthetics
             Plotter plot = Plotter({plotEntry});
             plot.AddLatex(luminosity);
-            // plot.SetLogZ();
+            plot.SetLogZ();
             table << cutType << "," << plotEntry.GetNumberOfEventsAfterCuts() << "," << plotEntry.GetNumberOfEventsAfterCutsStatError() << "\n";
             // plot.Save2D(outputFile.c_str()); // no extra lines
             plot.Save2D(outputFile.c_str(), MassCutsObject); // with extra lines
@@ -206,4 +211,4 @@ int main(int argc, char** argv){
     } // closes loop through different mass configurations
     table.close();
     return 0;
-}
+} 

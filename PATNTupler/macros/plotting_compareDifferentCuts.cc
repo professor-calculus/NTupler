@@ -28,7 +28,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_05/testingMacros/testing_compareDifferentCuts/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_10/plotting_compareDiffCuts/softDropMass1d/QCD_ht1500to2500_ak8pt300_v1/"; // where we are going to save the output plots (should include the samples name + binning maybe)
 
 
 
@@ -36,12 +36,12 @@ int main(int argc, char** argv){
     // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Max","Off","Max"} }; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max (options--> "Off", "Loose", "Med", "Tight", "Max")
     // std::vector<int> cut3_ak8Pt = {-1};
     // std::vector<std::vector<int>> cut4_ht = { {-1,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
-    // std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
+    std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
-    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Tight","Max","Med","Max"}, {"Tight","Max","Off","Med"}, {"Off","Tight","Off","Med"}, {"Off","Loose","Off","Loose"} }; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max (options--> "Off", "Loose", "Med", "Tight", "Max")
+    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Med","Max","Med","Max"}, {"Off","Loose","Off","Loose"} }; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max (options--> "Off", "Loose", "Med", "Tight", "Max")
     std::vector<int> cut3_ak8Pt = {300};
     std::vector<std::vector<int>> cut4_ht = { {1500,2500} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
-    std::vector<std::vector<int>> cut5_ak4Pt = { {250,250} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
+    // std::vector<std::vector<int>> cut5_ak4Pt = { {250,250} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
 
 
@@ -51,10 +51,10 @@ int main(int argc, char** argv){
     std::string varToPlot = "fatJetA_softDropMass";
     // std::string varToPlot = "fatJetB_softDropMass";
 
-    // TH1D hTemplate("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);a.u.", 50, 0, 200);
-    TH1D hTemplate("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);events / bin", 50, 0, 200);
-    // TH1D hTemplate("hTemplate", ";SecondaryBDiscFatJet_SoftDrop_Mass (GeV);events / bin", 50, 0, 200);
+    TH1D hTemplate("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);a.u.", 50, 0, 200);
+    // TH1D hTemplate("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);events / bin", 50, 0, 200);
     // TH1D hTemplate("hTemplate", ";SecondaryBDiscFatJet_SoftDrop_Mass (GeV);a.u.", 50, 0, 200);
+    // TH1D hTemplate("hTemplate", ";SecondaryBDiscFatJet_SoftDrop_Mass (GeV);events / bin", 50, 0, 200);
 
 
 
@@ -169,8 +169,8 @@ int main(int argc, char** argv){
     // plot.AddLegend(0.65, 0.88, 0.77, 0.87); // top right (wide 2)
     // plot.AddLegend(0.65, 0.88, 0.70, 0.87); // top right (wide 4)
     // plot.AddLegend(0.65, 0.88, 0.62, 0.87); // top right (wide 6)
-    // plot.AddLegend(0.45, 0.88, 0.77, 0.87); // top right (extra wide 2)
-    plot.AddLegend(0.45, 0.88, 0.70, 0.87); // top right (extra wide 4)
+    plot.AddLegend(0.45, 0.88, 0.77, 0.87); // top right (extra wide 2)
+    // plot.AddLegend(0.45, 0.88, 0.70, 0.87); // top right (extra wide 4)
     // plot.AddLegend(0.45, 0.88, 0.62, 0.87); // top right (extra wide 6)
     plot.AddLatex(); // if you HAVE normalised
     // plot.AddLatex(luminosity); // if you HAVE NOT normalised

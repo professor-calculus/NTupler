@@ -19,7 +19,7 @@
 #include "TimeStamp.h"
 #include "MacrosOnCondor.h"
 
-// 2D SCATTER. NORMALISE AND SUBTRACT (A - B) OR DIVIDE (A / B)
+// 2D SCATTER. A-B, A/B, (A-B)/B
 int main(int argc, char** argv){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,21 +28,22 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_10/plotting_QCDShapeVariations/preSel_ht1500to2500/ak4ptVariation/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_10/plotting_QCDShapeVariations/QCD_ht1500to2500_ak8PT300/dbtVariationV1_bin_40_0_150/"; // where we are going to save the output plots (should include the samples name, and any important features)
 
 
 
-    // TWO: set of cut params, element1 = A, element2 = B
-    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Max","Off","Max"}, {"Off","Max","Off","Max"} }; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max (options--> "Off", "Loose", "Med", "Tight", "Max")
-    std::vector<int> cut3_ak8Pt = {-1, -1};
+    // TWO: set of cut params, element1 = A (the one with more events), element2 = B
+    // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Max","Off","Max"}, {"Off","Max","Off","Max"} }; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max (options--> "Off", "Loose", "Med", "Tight", "Max")
+    // std::vector<int> cut3_ak8Pt = {-1, -1};
     // std::vector<std::vector<int>> cut4_ht = { {-1,13000}, {-1,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
-    // std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1}, {-1,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
+    std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1}, {-1,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
-    // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Loose","Off","Loose"}, {"Med","Max","Med","Max"} }; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max (options--> "Off", "Loose", "Med", "Tight", "Max")
-    // std::vector<int> cut3_ak8Pt = {-1, 300};
-    // std::vector<std::vector<int>> cut4_ht = { {1500,2500}, {2500,3500}, {3500,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
+    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Loose","Off","Loose"}, {"Med","Max","Med","Max"} }; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max (options--> "Off", "Loose", "Med", "Tight", "Max")
+    // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Loose","Off","Loose"}, {"Tight","Max","Tight","Max"} }; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max (options--> "Off", "Loose", "Med", "Tight", "Max")
+    std::vector<int> cut3_ak8Pt = {300, 300};
     std::vector<std::vector<int>> cut4_ht = { {1500,2500}, {1500,2500} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
-    std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1}, {250,250} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
+    // std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1}, {250,250} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
+    // std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1}, {250,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
 
 
@@ -53,7 +54,8 @@ int main(int argc, char** argv){
     // TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);SecondaryBDiscFatJet_SoftDrop_Mass (GeV)", 200, 0, 200, 200, 0, 200);
     // TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);SecondaryBDiscFatJet_SoftDrop_Mass (GeV)", 100, 0, 200, 100, 0, 200);
     // TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);SecondaryBDiscFatJet_SoftDrop_Mass (GeV)", 50, 0, 200, 50, 0, 200);
-    TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);SecondaryBDiscFatJet_SoftDrop_Mass (GeV)", 25, 0, 200, 25, 0, 200);
+    // TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);SecondaryBDiscFatJet_SoftDrop_Mass (GeV)", 25, 0, 200, 25, 0, 200);
+    TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);SecondaryBDiscFatJet_SoftDrop_Mass (GeV)", 40, 0, 150, 40, 0, 150);
     std::string varXAxis = "fatJetA_softDropMass";
     std::string varYAxis = "fatJetB_softDropMass";
 
@@ -118,7 +120,6 @@ int main(int argc, char** argv){
         plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/QCD_HT1000to1500/flatTree.root", cutToApply.c_str(), 1206);
         plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/QCD_HT1500to2000/flatTree.root", cutToApply.c_str(), 120.4);
         plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/QCD_HT2000toInf/flatTree.root", cutToApply.c_str(), 25.25);
-        plot2d.NormalisePlot();
         plotEntryVec.push_back(plot2d);
 
 
@@ -135,20 +136,36 @@ int main(int argc, char** argv){
     if (cut5_ak4Pt[0] == cut5_ak4Pt[1]) saveName += Form("_ak4ptConst%dn%d", cut5_ak4Pt[0][0], cut5_ak4Pt[0][1]);
     else saveName += Form("_ak4ptVaryA%dn%dB%dn%d", cut5_ak4Pt[0][0], cut5_ak4Pt[0][1], cut5_ak4Pt[1][0], cut5_ak4Pt[1][1]);
 
-    plotEntryVec[0].GetHistogram()->Add(plotEntryVec[1].GetHistogram(), -1);
-    std::string saveName2 = "AminusB__" + saveName;
-    Plotter plot2 = Plotter({plotEntryVec[0]});
-    plot2.AddLatex();
-    std::string outputFile2 = outputDir + "/" + saveName2 + ".pdf";
-    plot2.Save2D(outputFile2.c_str());
-    plotEntryVec[0].GetHistogram()->Add(plotEntryVec[1].GetHistogram()); // undo the change that you have done
-
     plotEntryVec[0].GetHistogram()->Divide(plotEntryVec[1].GetHistogram());
     std::string saveName1 = "AoverB__" + saveName;
     Plotter plot1 = Plotter({plotEntryVec[0]});
     plot1.AddLatex();
+    // plot1.SetLogZ();
     std::string outputFile1 = outputDir + "/" + saveName1 + ".pdf";
     plot1.Save2D(outputFile1.c_str());
+    plotEntryVec[0].GetHistogram()->Multiply(plotEntryVec[1].GetHistogram()); // get histo back to normal
+
+    TH2D * histoCloneNormal = (TH2D*)plotEntryVec[0].GetHistogram()->Clone();
+    plotEntryVec[0].GetHistogram()->Add(plotEntryVec[1].GetHistogram(), -1);
+    TH2D * histoCloneMinus = (TH2D*)plotEntryVec[0].GetHistogram()->Clone();
+    plotEntryVec[0].GetHistogram()->Add(plotEntryVec[1].GetHistogram()); // get histo back to normal
+    plotEntryVec[0].GetHistogram()->Divide(histoCloneMinus, histoCloneNormal);
+    std::string saveName3 = "AminusBoverA__" + saveName;
+    Plotter plot3 = Plotter({plotEntryVec[0]});
+    plot3.AddLatex();
+    // plot3.SetLogZ();
+    std::string outputFile3 = outputDir + "/" + saveName3 + ".pdf";
+    plot3.Save2D(outputFile3.c_str());
+
+    // plotEntryVec[0].NormalisePlot();
+    // plotEntryVec[1].NormalisePlot();
+    // plotEntryVec[0].GetHistogram()->Add(plotEntryVec[1].GetHistogram(), -1);
+    // std::string saveName2 = "normAminusnormB__" + saveName;
+    // Plotter plot2 = Plotter({plotEntryVec[0]});
+    // plot2.AddLatex();
+    // plot2.SetLogZ();
+    // std::string outputFile2 = outputDir + "/" + saveName2 + ".pdf";
+    // plot2.Save2D(outputFile2.c_str());
 
 	return 0;
 }
