@@ -547,8 +547,12 @@ int main(int argc, char** argv){
 				}
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 
-				// doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, *lheHTValue, slimJets, false);
-				doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, lheHT, slimJets, false); 	
+				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, lheHT, slimJets, false);
+				else doubleBFatJetPairTree.fillTree(*evtInfo, fatJetB, fatJetA, ht, lheHT, slimJets, false);
+
+				// Fat Jets ordered by DBT discriminator score
+				// doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, lheHT, slimJets, false);
 			}
 			// event counter
             if (outputEvery!=0 ? (evtIdx % outputEvery == 0) : false){
