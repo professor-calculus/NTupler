@@ -28,59 +28,81 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_10/plotting_compare2D/softDropMassVsDBT/QCD_preSelHt1500to2500v2/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_14/EventSelection/mSusy2000p0/HTbin_3500plus/attempt01_varyDBT/EXTRA_PLOTS/"; // where we are going to save the output plots (should include the samples name, and any important features)
 
 
 
     // TWO: set of cut params, each combination = new plot
-    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Max","Off","Max"} }; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max (options--> "Off", "Loose", "Med", "Tight", "Max")
-    std::vector<int> cut3_ak8Pt = {-1};
+    // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Max","Off","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    // std::vector<int> cut3_ak8Pt = {-1};
     // std::vector<std::vector<int>> cut4_ht = { {-1,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
-    std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
+    // std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
-    // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Tight","Max","Med","Max"} }; // 4 elements in sub-vector: 1st for leading DBT min, 2nd for leading DBT max, 3rd for secondary DBT min, 4th for secondary DBT max (options--> "Off", "Loose", "Med", "Tight", "Max")
-    // std::vector<int> cut3_ak8Pt = {300};
+    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Med2","Max","Med2","Max"}, {"Tight","Max","Tight","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    std::vector<int> cut3_ak8Pt = {300};
     // std::vector<std::vector<int>> cut4_ht = { {1500,2500}, {2500,3500}, {3500,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
-    std::vector<std::vector<int>> cut4_ht = { {1500,2500} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
-    // std::vector<std::vector<int>> cut5_ak4Pt = { {250,250} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
+    std::vector<std::vector<int>> cut4_ht = { {3500,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
+    std::vector<std::vector<int>> cut5_ak4Pt = { {250,250} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
 
 
     // THREE: histogram settings
     double luminosity = 50.0;
     
-    // TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);SecondaryBDiscFatJet_SoftDrop_Mass (GeV)", 400, 0, 200, 400, 0, 200);
-    // TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);SecondaryBDiscFatJet_SoftDrop_Mass (GeV)", 200, 0, 200, 200, 0, 200);
-    // TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);SecondaryBDiscFatJet_SoftDrop_Mass (GeV)", 100, 0, 200, 100, 0, 200);
-    // TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);SecondaryBDiscFatJet_SoftDrop_Mass (GeV)", 50, 0, 200, 50, 0, 200);
-    // TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);SecondaryBDiscFatJet_SoftDrop_Mass (GeV)", 25, 0, 200, 25, 0, 200);
-    // std::string varXAxis = "fatJetA_softDropMass";
-    // std::string varYAxis = "fatJetB_softDropMass";
-
-    // TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_Pruned_Mass (GeV);SecondaryBDiscFatJet_Pruned_Mass (GeV)", 400, 0, 200, 400, 0, 200);
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA_prunedMass (GeV);fatJetB_prunedMass (GeV)", 400, 0, 200, 400, 0, 200);
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA_prunedMass (GeV);fatJetB_prunedMass (GeV)", 50, 0, 200, 50, 0, 200);
     // std::string varXAxis = "fatJetA_prunedMass";
     // std::string varYAxis = "fatJetB_prunedMass";
 
-    // TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet DBT_Score;SecondaryBDiscFatJet DBT_Score", 400, -1, 1, 400, -1, 1);
+    TH2D hTemplate = TH2D("hTemplate", ";fatJetA_SoftDrop_Mass (GeV);fatJetB_SoftDrop_Mass (GeV)", 400, 0, 200, 400, 0, 200);
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA_SoftDrop_Mass (GeV);fatJetB_SoftDrop_Mass (GeV)", 50, 0, 200, 50, 0, 200);
+    std::string varXAxis = "fatJetA_softDropMass";
+    std::string varYAxis = "fatJetB_softDropMass";
+
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA DBT_Score;fatJetB DBT_Score", 400, -1, 1, 400, -1, 1);
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA DBT_Score;fatJetB DBT_Score", 50, -1, 1, 50, -1, 1);
     // std::string varXAxis = "fatJetA_doubleBtagDiscrim";
     // std::string varYAxis = "fatJetB_doubleBtagDiscrim";
     
-    // TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);LeadingBDiscFatJet DBT_Score", 400, 0, 200, 400, -1, 1);
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA p_{T} (GeV);fatJetA DBT_Score", 400, 0, 1000, 400, -1, 1);
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA p_{T} (GeV);fatJetA DBT_Score", 400, 0, 2000, 400, -1, 1);
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA p_{T} (GeV);fatJetA DBT_Score", 50, 0, 2000, 50, -1, 1);
+    // std::string varXAxis = "fatJetA_p4.Pt()";
+    // std::string varYAxis = "fatJetA_doubleBtagDiscrim";
+
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA_SoftDrop_Mass (GeV);fatJetA DBT_Score", 400, 0, 200, 400, -1, 1);
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA_SoftDrop_Mass (GeV);fatJetA DBT_Score", 50, 0, 200, 50, -1, 1);
     // std::string varXAxis = "fatJetA_softDropMass";
     // std::string varYAxis = "fatJetA_doubleBtagDiscrim";
 
-    TH2D hTemplate = TH2D("hTemplate", ";LeadingBDiscFatJet_SoftDrop_Mass (GeV);LeadingBDiscFatJet DBT_Score", 50, 0, 200, 50, -1, 1);
-    std::string varXAxis = "fatJetA_softDropMass";
-    std::string varYAxis = "fatJetA_doubleBtagDiscrim";
-
-    // TH2D hTemplate = TH2D("hTemplate", ";SecondaryBDiscFatJet_SoftDrop_Mass (GeV);SecondaryBDiscFatJet DBT_Score", 400, 0, 200, 400, -1, 1);
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetB_SoftDrop_Mass (GeV);fatJetB DBT_Score", 400, 0, 200, 400, -1, 1);
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetB_SoftDrop_Mass (GeV);fatJetB DBT_Score", 50, 0, 200, 50, -1, 1);
     // std::string varXAxis = "fatJetB_softDropMass";
     // std::string varYAxis = "fatJetB_doubleBtagDiscrim";
 
-    // TH2D hTemplate = TH2D("hTemplate", ";SecondaryBDiscFatJet_SoftDrop_Mass (GeV);SecondaryBDiscFatJet DBT_Score", 50, 0, 200, 50, -1, 1);
-    // std::string varXAxis = "fatJetB_softDropMass";
-    // std::string varYAxis = "fatJetB_doubleBtagDiscrim";
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA p_{T} (GeV);fatJetB p_{T} (GeV)", 400, 0, 1000, 400, 0, 1000);
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA p_{T} (GeV);fatJetB p_{T} (GeV)", 400, 0, 2000, 400, 0, 2000);
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA p_{T} (GeV);fatJetB p_{T} (GeV)", 50, 0, 2000, 50, 0, 2000);
+    // std::string varXAxis = "fatJetA_p4.Pt()";
+    // std::string varYAxis = "fatJetB_p4.Pt()";
 
+    // TH2D hTemplate = TH2D("hTemplate", ";LeadingPtAK4Jet p_{T} (GeV);SecondaryPtAK4Jet p_{T} (GeV)", 400, 0, 1000, 400, 0, 1000);
+    // TH2D hTemplate = TH2D("hTemplate", ";LeadingPtAK4Jet p_{T} (GeV);SecondaryPtAK4Jet p_{T} (GeV)", 400, 0, 2000, 400, 0, 2000);
+    // TH2D hTemplate = TH2D("hTemplate", ";LeadingPtAK4Jet p_{T} (GeV);SecondaryPtAK4Jet p_{T} (GeV)", 50, 0, 2000, 50, 0, 2000);
+    // std::string varXAxis = "slimJetA_p4.Pt()";
+    // std::string varYAxis = "slimJetB_p4.Pt()";
+
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA p_{T} (GeV);SecondaryPtAK4Jet p_{T} (GeV)", 400, 0, 1000, 400, 0, 1000);
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA p_{T} (GeV);SecondaryPtAK4Jet p_{T} (GeV)", 400, 0, 2000, 400, 0, 2000);
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA p_{T} (GeV);SecondaryPtAK4Jet p_{T} (GeV)", 50, 0, 2000, 50, 0, 2000);
+    // std::string varXAxis = "fatJetA_p4.Pt()";
+    // std::string varYAxis = "slimJetB_p4.Pt()";
+
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetB p_{T} (GeV);SecondaryPtAK4Jet p_{T} (GeV)", 400, 0, 1000, 400, 0, 1000);
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetB p_{T} (GeV);SecondaryPtAK4Jet p_{T} (GeV)", 400, 0, 2000, 400, 0, 2000);
+    // TH2D hTemplate = TH2D("hTemplate", ";fatJetB p_{T} (GeV);SecondaryPtAK4Jet p_{T} (GeV)", 50, 0, 2000, 50, 0, 2000);
+    // std::string varXAxis = "fatJetB_p4.Pt()";
+    // std::string varYAxis = "slimJetB_p4.Pt()";
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,61 +156,20 @@ int main(int argc, char** argv){
 
       
                     // FOUR: samples to use
-                    // PlotEntry2D plot2d = PlotEntry2D("ttbar LO", hTemplate, varToPlot.c_str(), luminosity);
-                    // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_inclusiveHt/flatTree.root", Form("%s && lheHT<700.0",cutToApply.c_str()), 831.76);
-                    // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT600to800/flatTree.root", Form("%s && lheHT>=700.0",cutToApply.c_str()), 2.6665344485, false);
-                    // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT800to1200/flatTree.root", Form("%s && lheHT>=700.0",cutToApply.c_str()), 1.0980821984, false);
-                    // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT1200to2500/flatTree.root", Form("%s && lheHT>=700.0",cutToApply.c_str()), 0.1987479092, false);
-                    // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_HT2500toInf/flatTree.root", Form("%s && lheHT>=700.0",cutToApply.c_str()), 0.002368412585, false);
-
-                    // PlotEntry2D plot2d = PlotEntry2D("ttbar NLO", hTemplate, varToPlot.c_str(), luminosity);
-                    // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/TTJets_NLO/flatTree.root", cutToApply.c_str(), 831.76);
-
                     PlotEntry2D plot2d = PlotEntry2D("QCD", hTemplate, varToPlot.c_str(), luminosity);
-                    plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/QCD_HT700to1000/flatTree.root", cutToApply.c_str(), 6802);
-                    plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/QCD_HT1000to1500/flatTree.root", cutToApply.c_str(), 1206);
-                    plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/QCD_HT1500to2000/flatTree.root", cutToApply.c_str(), 120.4);
-                    plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/QCD_HT2000toInf/flatTree.root", cutToApply.c_str(), 25.25);
-
-                    // PlotEntry2D plot2d = PlotEntry2D("Z+Jets", hTemplate, varToPlot.c_str(), luminosity);
-                    // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/ZJetsToQQ_HT600toInf/flatTree.root", cutToApply.c_str(), 5.67);
-
-                    // PlotEntry2D plot2d = PlotEntry2D("W+Jets", hTemplate, varToPlot.c_str(), luminosity);
-                    // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/WJetsToQQ_HT600toInf/flatTree.root", cutToApply.c_str(), 95.14);
-
-                    // PlotEntry2D plot2d = PlotEntry2D("mH30_mSusy800", hTemplate, varToPlot.c_str(), luminosity);
-                    // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH30p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 6.466*0.85*0.85);
-
-                    // PlotEntry2D plot2d = PlotEntry2D("mH50_mSusy800", hTemplate, varToPlot.c_str(), luminosity);
-                    // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH50p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 6.466*0.85*0.85);
-
-                    // PlotEntry2D plot2d = PlotEntry2D("mH70_mSusy800", hTemplate, varToPlot.c_str(), luminosity);
-                    // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH70p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 6.466*0.85*0.85);
-
-                    // PlotEntry2D plot2d = PlotEntry2D("mH90_mSusy800", hTemplate, varToPlot.c_str(), luminosity);
-                    // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH90p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 6.466*0.85*0.85);
-
-                    // PlotEntry2D plot2d = PlotEntry2D("mH30_mSusy2000", hTemplate, varToPlot.c_str(), luminosity);
-                    // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH30p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
-
-                    // PlotEntry2D plot2d = PlotEntry2D("mH50_mSusy2000", hTemplate, varToPlot.c_str(), luminosity);
-                    // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH50p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
+                    plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT700to1000/flatTree.root", cutToApply.c_str(), 6802);
+                    plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT1000to1500/flatTree.root", cutToApply.c_str(), 1206);
+                    plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT1500to2000/flatTree.root", cutToApply.c_str(), 120.4);
+                    plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT2000toInf/flatTree.root", cutToApply.c_str(), 25.25);
 
                     // PlotEntry2D plot2d = PlotEntry2D("mH70_mSusy2000", hTemplate, varToPlot.c_str(), luminosity);
-                    // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH70p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
-
-                    // PlotEntry2D plot2d = PlotEntry2D("mH90_mSusy2000", hTemplate, varToPlot.c_str(), luminosity);
-                    // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/mH90p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
+                    // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/mH70p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
 
 
 
                     // FIVE: plot aesthetics
                     Plotter plot = Plotter({plot2d});
                     plot.AddLatex(luminosity);
-                    plot.SetLogZ(); // toggle ON or OFF
-
-
-
                     std::string saveName = varToPlotSaveName;
                     saveName += "__dbt" + cut2_ak8Dbt[iCut2][0] + cut2_ak8Dbt[iCut2][1] + "And" + cut2_ak8Dbt[iCut2][2] + cut2_ak8Dbt[iCut2][3];
                     saveName += Form("_ak8pt%d", cut3_ak8Pt[iCut3]);
@@ -199,6 +180,11 @@ int main(int argc, char** argv){
                     // saveName = "MANUAL_SAVE_NAME"; // OPTIONAL: can manually overwrite the automatic savename
                     std::string outputFile = outputDir + "/" + saveName + ".pdf";
                     plot.Save2D(outputFile.c_str());
+                    plot.SetLogZ(); // toggle ON or OFF
+                    outputFile = outputDir + "/" + saveName + "_logZ.pdf";
+                    plot.Save2D(outputFile.c_str());
+
+
 
                 } // closes loop through cut 5 states
             } // closes loop through cut 4 states

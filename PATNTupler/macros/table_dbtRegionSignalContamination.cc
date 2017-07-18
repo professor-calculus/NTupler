@@ -41,7 +41,7 @@ int main(int argc, char** argv){
     // std::vector<std::vector<int>> cut4_ht = { {1500,2500}, {2500,3500}, {3500,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
     std::vector<std::vector<int>> cut5_ak4Pt = { {250,250} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
-    std::vector<std::vector<std::string>> cut2_ak8Dbt;
+    std::vector<std::vector<std::string>> cut2_ak8Dbt; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     cut2_ak8Dbt.push_back({"Off","Max","Off","Max"}); // this should always be ALL DBT space
     cut2_ak8Dbt.push_back({"Med2","Max","Med2","Max"});
     cut2_ak8Dbt.push_back({"Off","Loose","Off","Loose"});
