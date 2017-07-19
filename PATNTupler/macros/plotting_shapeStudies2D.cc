@@ -125,12 +125,12 @@ int main(int argc, char** argv){
     
     } // closes loop through iCut
 
-    double VHK_bandSize = 15.0;
-    double S1_Node = 32.5;
+    double S1_Node1 = 32.5;
+    double S1_Node2 = 15.0;
     double SMAX_Node1 = 117.0;
     double SMAX_Node2 = 78.0;
     std::vector<double> SN_Nodes = {};
-    MassRegionCuts MassCutsObject = MassRegionCuts("MassCutsV02nosegments", VHK_bandSize, S1_Node, SMAX_Node1, SMAX_Node2, SN_Nodes);    
+    MassRegionCuts MassCutsObject = MassRegionCuts("MassCutsV02nosegments", S1_Node1, S1_Node2, SMAX_Node1, SMAX_Node2, SN_Nodes);    
 
     std::string saveName = varToPlotSaveName;
     if (cut2_ak8Dbt[0] == cut2_ak8Dbt[1]) saveName += "__dbtConst" + cut2_ak8Dbt[0][0] + cut2_ak8Dbt[0][1] + "And" + cut2_ak8Dbt[0][2] + cut2_ak8Dbt[0][3];

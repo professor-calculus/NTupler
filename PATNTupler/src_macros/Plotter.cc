@@ -378,70 +378,52 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 	// **************************
 	c->Update();
 	
-	double VHK_bandSize = MassCutsObject.Get_VHK_bandSize();
-	double S1_Node = MassCutsObject.Get_S1_Node();
+	double S1_Node1 = MassCutsObject.Get_S1_Node1();
+	double S1_Node2 = MassCutsObject.Get_S1_Node2();
 	double SMAX_Node1 = MassCutsObject.Get_SMAX_Node1();
 	double SMAX_Node2 = MassCutsObject.Get_SMAX_Node2();
 	std::vector<double> SN_Nodes = MassCutsObject.Get_SN_Nodes();
 
-	// flat horizontal line at the bottom of signal region 1
-	TLine *line_flatBottomS1 = new TLine(VHK_bandSize, VHK_bandSize, S1_Node, VHK_bandSize); // xmin, ymin, xmax, ymax
-	line_flatBottomS1->SetLineStyle(2);
-	line_flatBottomS1->SetLineWidth(3);
-	line_flatBottomS1->Draw();
-
-	// vertical line at the left of signal region 1
-	TLine *line_vertLeftS1 = new TLine(VHK_bandSize, VHK_bandSize, VHK_bandSize, S1_Node); // xmin, ymin, xmax, ymax
-	line_vertLeftS1->SetLineStyle(2);
-	line_vertLeftS1->SetLineWidth(3);
-	line_vertLeftS1->Draw();
-
-	double gradientUpperSignalLine = (SMAX_Node1 - S1_Node) / (SMAX_Node2 - VHK_bandSize);
+	double gradientUpperSignalLine = (SMAX_Node1 - S1_Node1) / (SMAX_Node2 - S1_Node2);
 	double gradientLowerSignalLine = 1 / gradientUpperSignalLine;
-	double upperBand_x1 = VHK_bandSize - 0.5 * (S1_Node - VHK_bandSize);
-	double upperBand_y1 = S1_Node + 0.5 * (S1_Node - VHK_bandSize);
+	double upperBand_x1 = S1_Node2 - 0.5 * (S1_Node1 - S1_Node2);
+	double upperBand_y1 = S1_Node1 + 0.5 * (S1_Node1 - S1_Node2);
 	double upperBand_x2 = SMAX_Node2 - 0.5 * (SMAX_Node1 - SMAX_Node2);
 	double upperBand_y2 = SMAX_Node1 + 0.5 * (SMAX_Node1 - SMAX_Node2);
 	double gradientUpperBand = (upperBand_y2 - upperBand_y1) / (upperBand_x2 - upperBand_x1);
 	double gradientDownerBand = 1 / gradientUpperBand;
 
 	// bottom diagnol line for signal regions
-	TLine *line_signalBottom = new TLine(S1_Node, VHK_bandSize, SMAX_Node1, SMAX_Node2); // xmin, ymin, xmax, ymax
-	// TLine *line_signalBottom = new TLine(S1_Node, VHK_bandSize, upperBand_y2, upperBand_x2); // HACK
+	TLine *line_signalBottom = new TLine(S1_Node1, S1_Node2, SMAX_Node1, SMAX_Node2); // xmin, ymin, xmax, ymax
 	line_signalBottom->SetLineStyle(2);
 	line_signalBottom->SetLineWidth(3);
 	line_signalBottom->Draw();
 
 	// top diagnol line for signal regions
-	TLine *line_signalTop = new TLine(VHK_bandSize, S1_Node, SMAX_Node2, SMAX_Node1); // xmin, ymin, xmax, ymax
-	// TLine *line_signalTop = new TLine(VHK_bandSize, S1_Node, upperBand_x2, upperBand_y2); // HACK
+	TLine *line_signalTop = new TLine(S1_Node2, S1_Node1, SMAX_Node2, SMAX_Node1); // xmin, ymin, xmax, ymax
 	line_signalTop->SetLineStyle(2);
 	line_signalTop->SetLineWidth(3);
 	line_signalTop->Draw();
 
-	// caps the top of signal region and U,D wings
+	// caps the topRight segment of final signal region and U,D wings
 	TLine *line_signalSegmentTop = new TLine(upperBand_x2, upperBand_y2, upperBand_y2, upperBand_x2); // xmin, ymin, xmax, ymax
 	line_signalSegmentTop->SetLineStyle(2);
 	line_signalSegmentTop->SetLineWidth(3);
 	line_signalSegmentTop->Draw();
 
-	TLine *line_downerBottomLeft = new TLine(upperBand_y1, upperBand_x1, S1_Node, VHK_bandSize); // xmin, ymin, xmax, ymax
+	// caps the bottomLeft segment of first signal region and U,D wings
+	TLine *line_downerBottomLeft = new TLine(upperBand_y1, upperBand_x1, upperBand_x1, upperBand_y1); // xmin, ymin, xmax, ymax
 	line_downerBottomLeft->SetLineStyle(2);
 	line_downerBottomLeft->SetLineWidth(3);
 	line_downerBottomLeft->Draw();
 
-	TLine *line_upperBottomLeft = new TLine(upperBand_x1, upperBand_y1, VHK_bandSize, S1_Node); // xmin, ymin, xmax, ymax
-	line_upperBottomLeft->SetLineStyle(2);
-	line_upperBottomLeft->SetLineWidth(3);
-	line_upperBottomLeft->Draw();
-
-	// top of upper band
+	// top line of upper band
 	TLine *line_upperBand = new TLine(upperBand_x1, upperBand_y1, upperBand_x2, upperBand_y2);
 	line_upperBand->SetLineStyle(2);
 	line_upperBand->SetLineWidth(3);
 	line_upperBand->Draw();
 
-	// bottom of downer band
+	// bottom line of downer band
 	TLine *line_downBand = new TLine(upperBand_y1, upperBand_x1, upperBand_y2, upperBand_x2);
 	line_downBand->SetLineStyle(2);
 	line_downBand->SetLineWidth(3);
@@ -450,7 +432,7 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 	// does the segments...
 	for (size_t i=0; i!=SN_Nodes.size(); ++i){
 		
-		double yValueSignalLower = gradientLowerSignalLine * (SN_Nodes[i] - S1_Node) + VHK_bandSize;
+		double yValueSignalLower = gradientLowerSignalLine * (SN_Nodes[i] - S1_Node1) + S1_Node2;
 		double xValueDownerLower = (yValueSignalLower - upperBand_x1 + gradientDownerBand * upperBand_y1 + SN_Nodes[i]) / (gradientDownerBand + 1);
 		double yValueDownerLower = gradientDownerBand * (xValueDownerLower - upperBand_y1) + upperBand_x1;
 
