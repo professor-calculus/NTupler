@@ -393,6 +393,21 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 	double gradientUpperBand = (upperBand_y2 - upperBand_y1) / (upperBand_x2 - upperBand_x1);
 	double gradientDownerBand = 1 / gradientUpperBand;
 
+	// work out the coords for upper corner of upper segement 1
+	double yValue_S1UpperLeft = SN_Nodes[0];
+	// double xValue_S1UpperLeft = yValue(SN_Nodes[0], gradientLowerSignalLine, S1_Node1, S1_Node2);
+	double xValue_S1UpperLeft = gradientLowerSignalLine * (SN_Nodes[0] - S1_Node1) + S1_Node2;
+	double upperBand_x1U = xValue_S1UpperLeft - 0.5 * (yValue_S1UpperLeft - xValue_S1UpperLeft);
+	double upperBand_y1U = yValue_S1UpperLeft + 0.5 * (yValue_S1UpperLeft - xValue_S1UpperLeft);
+	TLine *line_U1Cap = new TLine(S1_Node2, S1_Node1, upperBand_x1U, upperBand_y1U); // xmin, ymin, xmax, ymax
+	line_U1Cap->SetLineStyle(2);
+	line_U1Cap->SetLineWidth(3);
+	line_U1Cap->Draw();
+	TLine *line_D1Cap = new TLine(S1_Node1, S1_Node2, upperBand_y1U, upperBand_x1U); // xmin, ymin, xmax, ymax
+	line_D1Cap->SetLineStyle(2);
+	line_D1Cap->SetLineWidth(3);
+	line_D1Cap->Draw();	
+
 	// bottom diagnol line for signal regions
 	TLine *line_signalBottom = new TLine(S1_Node1, S1_Node2, SMAX_Node1, SMAX_Node2); // xmin, ymin, xmax, ymax
 	line_signalBottom->SetLineStyle(2);
@@ -412,19 +427,19 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 	line_signalSegmentTop->Draw();
 
 	// caps the bottomLeft segment of first signal region and U,D wings
-	TLine *line_downerBottomLeft = new TLine(upperBand_y1, upperBand_x1, upperBand_x1, upperBand_y1); // xmin, ymin, xmax, ymax
+	TLine *line_downerBottomLeft = new TLine(S1_Node1, S1_Node2, S1_Node2, S1_Node1); // xmin, ymin, xmax, ymax
 	line_downerBottomLeft->SetLineStyle(2);
 	line_downerBottomLeft->SetLineWidth(3);
 	line_downerBottomLeft->Draw();
 
 	// top line of upper band
-	TLine *line_upperBand = new TLine(upperBand_x1, upperBand_y1, upperBand_x2, upperBand_y2);
+	TLine *line_upperBand = new TLine(upperBand_x1U, upperBand_y1U, upperBand_x2, upperBand_y2);
 	line_upperBand->SetLineStyle(2);
 	line_upperBand->SetLineWidth(3);
 	line_upperBand->Draw();
 
 	// bottom line of downer band
-	TLine *line_downBand = new TLine(upperBand_y1, upperBand_x1, upperBand_y2, upperBand_x2);
+	TLine *line_downBand = new TLine(upperBand_y1U, upperBand_x1U, upperBand_y2, upperBand_x2);
 	line_downBand->SetLineStyle(2);
 	line_downBand->SetLineWidth(3);
 	line_downBand->Draw();

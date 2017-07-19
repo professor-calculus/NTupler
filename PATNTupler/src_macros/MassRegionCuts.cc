@@ -90,8 +90,21 @@ void MassRegionCuts::make_cuts()
 	std::string upperBandBaseLineCuts = "fatJetB_softDropMass < " + upperBandLine;
 	upperBandBaseLineCuts += " && fatJetB_softDropMass >= " + upperSignalLine;
 
+	// work out the coords for upper corner of upper segement 1
+	double yValue_S1UpperLeft = SN_Nodes[0];
+	double xValue_S1UpperLeft = yValue(SN_Nodes[0], gradientLowerSignalLine, S1_Node1, S1_Node2);
+	double upperBand_x1U = xValue_S1UpperLeft - 0.5 * (yValue_S1UpperLeft - xValue_S1UpperLeft);
+	double upperBand_y1U = yValue_S1UpperLeft + 0.5 * (yValue_S1UpperLeft - xValue_S1UpperLeft);
+	double gradientUpperSegment1LowerBound = (S1_Node1 - upperBand_y1U) / (S1_Node2 - upperBand_x1U);
+
 	std::vector<std::string> additionalUpperBandCuts(SN_Nodes.size()+1, upperBandBaseLineCuts);
-	additionalUpperBandCuts[0] += Form(" && fatJetB_softDropMass>= (-1 * (fatJetA_softDropMass - %f) + %f)", upperBand_x1, upperBand_y1);
+	if (gradientUpperSegment1LowerBound > 0) additionalUpperBandCuts[0] += Form(" && fatJetB_softDropMass< (%f * (fatJetA_softDropMass - %f) + %f)", gradientUpperSegment1LowerBound, S1_Node2, S1_Node1);
+	else if (gradientUpperSegment1LowerBound < 0) additionalUpperBandCuts[0] += Form(" && fatJetB_softDropMass>= (%f * (fatJetA_softDropMass - %f) + %f)", gradientUpperSegment1LowerBound, S1_Node2, S1_Node1);
+	else{
+		std::cout << "WARNING: gradient of U1 lower bounding segment is undefined, setting at 999999.0" << std::endl;
+		gradientUpperSignalLine = 999999.0;
+		additionalUpperBandCuts[0] += Form(" && fatJetB_softDropMass< (%f * (fatJetA_softDropMass - %f) + %f)", gradientUpperSegment1LowerBound, S1_Node2, S1_Node1);
+	}
 	for (size_t i=0; i!=SN_Nodes.size(); ++i){
 
 		double correspondingYValue = yValue(SN_Nodes[i], gradientLowerSignalLine, S1_Node1, S1_Node2);
@@ -108,8 +121,10 @@ void MassRegionCuts::make_cuts()
 	std::string lowerBandBaseLineCuts = "fatJetB_softDropMass >= " + lowerBandLine;
 	lowerBandBaseLineCuts +=  " && fatJetB_softDropMass < " + lowerSignalLine;
 
+	double gradientDownerSegment1LowerBound = 1 / gradientUpperSegment1LowerBound;
+
 	std::vector<std::string> additionalLowerBandCuts(SN_Nodes.size()+1, lowerBandBaseLineCuts);
-	additionalLowerBandCuts[0] += Form(" && fatJetB_softDropMass>= (-1 * (fatJetA_softDropMass - %f) + %f)", upperBand_x1, upperBand_y1);
+	additionalLowerBandCuts[0] += Form(" && fatJetB_softDropMass>= (%f * (fatJetA_softDropMass - %f) + %f)", gradientDownerSegment1LowerBound, S1_Node1, S1_Node2);
 	for (size_t i=0; i!=SN_Nodes.size(); ++i){
 
 		double correspondingYValue = yValue(SN_Nodes[i], gradientLowerSignalLine, S1_Node1, S1_Node2);
