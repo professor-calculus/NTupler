@@ -64,6 +64,8 @@ plotting_shapeStudies2D: plotting_shapeStudies2D.o ${SRCMACDIR}/PlotEntry.o ${SR
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 table_dbtRegionSignalContamination: table_dbtRegionSignalContamination.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
+histos_v1: histos_v1.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
 
 %.o: 	%.cc %.hh
 	$(info generic.o target's commands)
@@ -91,3 +93,4 @@ clean:
 	rm -rf table_investigateEventSelectionCuts table_investigateEventSelectionCuts.o ${OBJDIR}/* ${TMPDIR}/*
 	rm -rf plotting_shapeStudies2D plotting_shapeStudies2D.o ${OBJDIR}/* ${TMPDIR}/*
 	rm -rf table_dbtRegionSignalContamination table_dbtRegionSignalContamination.o ${OBJDIR}/* ${TMPDIR}/*
+	rm -rf histos_v1 histos_v1.o ${OBJDIR}/* ${TMPDIR}/*
