@@ -56,6 +56,11 @@ double MassRegionCuts::yValue(const double& xValue, const double& gradient, cons
 
 void MassRegionCuts::make_cuts()
 {
+	if (SN_Nodes.empty()){
+		std::cout << "cannot make mass_cuts with an empty SN_Nodes object. Soz..." << std::endl;
+		return;
+	}
+
 	// S cuts
 	double gradientUpperSignalLine = (SMAX_Node1 - S1_Node1) / (SMAX_Node2 - S1_Node2);
 	double gradientLowerSignalLine = 1 / gradientUpperSignalLine;
