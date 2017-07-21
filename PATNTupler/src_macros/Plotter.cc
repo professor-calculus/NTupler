@@ -77,7 +77,7 @@ tdrStyle(TDRStyle())
 	}
 
 	for (size_t iStack = 0; iStack != histoStack.size(); ++iStack){
-		histoStack[iStack].GetHistogram()->SetFillColor(SetColor_mellow(iStack, histoStack.size()));	
+		histoStack[iStack].GetHistogram()->SetFillColor(SetColor_mellow(iStack+2, histoStack.size()));	
 		histoStack[iStack].GetHistogram()->SetLineWidth(0.0);
 		histoStack[iStack].GetHistogram()->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
 		histoStack[iStack].GetHistogram()->GetXaxis()->SetLabelSize(0.04);
@@ -104,6 +104,59 @@ tdrStyle(TDRStyle())
 		histos2D[iHistos2D].GetHistogram()->GetYaxis()->SetLabelSize(0.04);
 	}
 }
+
+Plotter::Plotter(std::vector<TH1D*> th1IndiDummy) :
+leg(0),
+addLatex(false),
+useLogY(false),
+useLogZ(false),
+plotWithErrors(false),
+tdrStyle(TDRStyle())
+{
+	if (th1IndiDummy.empty()) std::cout << "Plotter Message: no histograms handed to plotter!" << std::endl;
+	else th1Indi = th1IndiDummy;
+
+	for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I){
+		th1Indi[iTh1I]->SetLineColor(SetColor_stark(iTh1I));
+		th1Indi[iTh1I]->SetLineWidth(2);
+		th1Indi[iTh1I]->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
+		th1Indi[iTh1I]->GetXaxis()->SetLabelSize(0.04);
+		th1Indi[iTh1I]->GetYaxis()->SetTitleSize(0.04);
+		th1Indi[iTh1I]->GetYaxis()->SetLabelSize(0.04);
+	}
+}
+
+Plotter::Plotter(std::vector<TH1D*> th1IndiDummy, std::vector<TH1D*> th1StackDummy) :
+leg(0),
+addLatex(false),
+useLogY(false),
+useLogZ(false),
+plotWithErrors(false),
+tdrStyle(TDRStyle())
+{
+	if (th1IndiDummy.empty()) std::cout << "Plotter Message: first constructor argument std::vector<TH1D*> is empty" << std::endl;
+	else th1Indi = th1IndiDummy;
+	if (th1StackDummy.empty()) std::cout << "Plotter Message: first constructor argument std::vector<TH1D*> is empty" << std::endl;
+	else th1Stack = th1StackDummy;
+
+	for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I){
+		th1Indi[iTh1I]->SetLineColor(SetColor_stark(iTh1I));
+		th1Indi[iTh1I]->SetLineWidth(2);
+		th1Indi[iTh1I]->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
+		th1Indi[iTh1I]->GetXaxis()->SetLabelSize(0.04);
+		th1Indi[iTh1I]->GetYaxis()->SetTitleSize(0.04);
+		th1Indi[iTh1I]->GetYaxis()->SetLabelSize(0.04);
+	}
+	for (size_t iTh1S = 0; iTh1S != th1Stack.size(); ++iTh1S){
+		th1Stack[iTh1S]->SetFillColor(SetColor_mellow(iTh1S+2, th1Stack.size()));
+		th1Stack[iTh1S]->SetLineWidth(0.0);
+		th1Stack[iTh1S]->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
+		th1Stack[iTh1S]->GetXaxis()->SetLabelSize(0.04);
+		th1Stack[iTh1S]->GetYaxis()->SetTitleSize(0.04);
+		th1Stack[iTh1S]->GetYaxis()->SetLabelSize(0.04);
+	}
+}
+
 
 //-----------public-----------//
 void Plotter::AddLegend(TLegend * legDummy)
@@ -137,6 +190,25 @@ void Plotter::AddLegend(const double& x1, const double& x2, const double& y1, co
 	return;
 }
 
+void Plotter::AddLegend(const std::vector<std::string>& legendNames, const double& x1, const double& x2, const double& y1, const double& y2, const double& textSize)
+{
+	if (legendNames.size() != (th1Indi.size() + th1Stack.size()) ){
+		std::cout << "The legend you provided does not have the correct number of strings to match th1Indi+th1Stack" << std::endl;
+		return;
+	}
+	leg = new TLegend();
+    leg->SetX1NDC(x1);
+    leg->SetX2NDC(x2);
+	leg->SetY1NDC(y1);
+    leg->SetY2NDC(y2);
+	leg->SetTextSize(textSize);
+	leg->SetBorderSize(0);
+	for (size_t i = 0; i < legendNames.size(); ++i){
+		if (i < th1Indi.size()) leg->AddEntry(th1Indi[i], legendNames[i].c_str(), "L");
+		else leg->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
+	}
+	return;
+}
 
 void Plotter::AddLatex(const double& lumiValueDummy, const std::string& lhsStringAfterCMSDummy)
 {
@@ -193,6 +265,13 @@ void Plotter::SetErrors(){
 	// 		iStack->GetHistogram()->SetBinError(iBin, sqrt(iStack->GetStatErrorSquaredVector()[iBin]));
 	// 	}
 	// }
+
+	for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I){
+		
+		th1Indi[iTh1I]->SetMarkerStyle(21);
+		th1Indi[iTh1I]->SetMarkerSize(0.2);
+		th1Indi[iTh1I]->SetLineWidth(3);
+	}
 }
 
 
@@ -307,6 +386,145 @@ void Plotter::Save(const std::string& saveName){
 	else {
 		histoStack[0].GetHistogram()->SetMaximum(initialMax);
 		histoStack[0].GetHistogram()->SetMinimum(initialMin);
+	}
+	std::cout << std::endl;
+	return;
+}
+
+
+void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::string> htBins){
+
+	if (th1Indi.empty() && th1Stack.empty()){
+		std::cout << "Plotter::Save @@@ Exiting without saving... no histos @@@" << std::endl;
+		return;
+	}
+
+	tdrStyle->cd();
+	TCanvas * c = new TCanvas("c","c");
+	if (useLogY) gPad->SetLogy();
+
+	std::string hsTitles = ""; // can't set them later w/o a seg fault
+	if (!th1Stack.empty()) hsTitles = Form("%s;%s;%s", th1Stack[0]->GetTitle(), th1Stack[0]->GetXaxis()->GetTitle(), th1Stack[0]->GetYaxis()->GetTitle());
+	THStack * hs = new THStack("hs", hsTitles.c_str());
+	for (size_t iTh1S = 0; iTh1S != th1Stack.size(); ++iTh1S)
+		hs->Add(th1Stack[iTh1S], "HIST");
+
+	// find max and min (don't want zero values for min, the plot won't work properly)
+	// NB this currently might not do logY minimums correctly for stacks
+	double max = 0.0;
+	double min = 0.0; // for logY plots
+	bool setMin = false;
+	for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I){
+		
+		if (plotWithErrors == false){
+			if (th1Indi[iTh1I]->GetMaximum() > max || iTh1I == 0) max = th1Indi[iTh1I]->GetMaximum();
+		}
+		else{
+			for (int i=1; i != th1Indi[iTh1I]->GetNbinsX()+1; ++i){
+				if (th1Indi[iTh1I]->GetBinContent(i) + th1Indi[iTh1I]->GetBinError(i) > max || (iTh1I == 0 && i==1) ) max = th1Indi[iTh1I]->GetBinContent(i) + th1Indi[iTh1I]->GetBinError(i);
+			}
+		}
+
+		double histoMinNonZero = 0.0; // lowest non zero value of the histogram
+		bool setHistoMinNonZero = false;
+		for (int i=1; i != th1Indi[iTh1I]->GetNbinsX()+1; ++i)
+			if (th1Indi[iTh1I]->GetBinContent(i) != 0 && (th1Indi[iTh1I]->GetBinContent(i) < histoMinNonZero || setHistoMinNonZero == false) ){
+				histoMinNonZero = th1Indi[iTh1I]->GetBinContent(i);
+				setHistoMinNonZero = true;
+			}
+		if (setHistoMinNonZero == true && (histoMinNonZero < min || setMin == false)){
+			min = histoMinNonZero;
+			setMin = true;
+		}
+	}
+	if (!th1Stack.empty() && hs->GetMaximum() > max) max = hs->GetMaximum();
+	if (!th1Stack.empty() && hs->GetMinimum() != 0 && hs->GetMinimum() < min) min = hs->GetMinimum();	
+	else if (useLogY == true && th1Indi.empty()) min = max / 1000; // it cannot be zero, the division by 1000 is arbitary!! LOOK OUT
+
+	// set histo max and min and draw
+	double initialMax = 0.0; // use to reset the histo max and min to what it initially was
+	double initialMin = 0.0;
+	if (!th1Indi.empty() && !th1Stack.empty()){
+		initialMax = th1Indi[0]->GetMaximum();
+		initialMin = th1Indi[0]->GetMinimum();
+		if (useLogY == false){
+			th1Indi[0]->SetMaximum(1.15 * max);
+			th1Indi[0]->SetMinimum(0);
+		}
+		else{
+			th1Indi[0]->SetMaximum(2.00 * max);
+			th1Indi[0]->SetMinimum(0.50 * min);
+		}
+		th1Indi[0]->Draw("HIST");
+		hs->Draw("same");
+		for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I)
+			if (plotWithErrors == false) th1Indi[iTh1I]->Draw("HIST, same");
+			else th1Indi[iTh1I]->Draw("same, P");
+	}
+	else if (!th1Indi.empty() && th1Stack.empty()){
+		initialMax = th1Indi[0]->GetMaximum();
+		initialMin = th1Indi[0]->GetMinimum();
+		if (useLogY == false){
+			th1Indi[0]->SetMaximum(1.15 * max);
+			th1Indi[0]->SetMinimum(0);
+		}
+		else{
+			th1Indi[0]->SetMaximum(2.00 * max);
+			th1Indi[0]->SetMinimum(0.50 * min);
+		}
+		for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I)
+			if (plotWithErrors == false) th1Indi[iTh1I]->Draw("HIST, same");
+			else th1Indi[iTh1I]->Draw("same, P");
+	}
+	else if (th1Indi.empty() && !th1Stack.empty()){
+		initialMax = th1Stack[0]->GetMaximum();
+		initialMin = th1Stack[0]->GetMinimum();
+		if (useLogY == false){
+			th1Stack[0]->SetMaximum(1.15 * max);
+			th1Stack[0]->SetMinimum(0);
+		}
+		else{
+			th1Stack[0]->SetMaximum(2.00 * max);
+			th1Stack[0]->SetMinimum(0.50 * min);
+		}
+		th1Stack[0]->Draw("HIST");
+		hs->Draw("same");
+	}
+	if (addLatex) DrawLatex();
+	if (leg != NULL) leg->Draw("same");
+	gPad->RedrawAxis();
+
+	// Add the HT division Lines
+	c->Update();
+	unsigned int numberOfBins = 0;
+	if (!th1Indi.empty()) numberOfBins = th1Indi[0]->GetNbinsX();
+	else numberOfBins = th1Stack[0]->GetNbinsX();
+	unsigned int binsPerDivision = numberOfBins / htBins.size();
+	for (unsigned int c = 0; c < numberOfBins; c = c + binsPerDivision){
+
+		if (c != 0){
+			TLine * line = new TLine(c, 0, c, max); // xmin, ymin, xmax, ymax
+			line->SetLineStyle(2);
+			line->SetLineWidth(3);
+			line->Draw();
+		}
+		TLatex * latexHT = new TLatex();
+	    latexHT->SetTextFont(42);
+	    latexHT->SetTextAlign(11); // align from left
+	    latexHT->DrawLatex(c+1, 1.05 * max, htBins[c/binsPerDivision].c_str());
+	}
+
+
+	c->SaveAs(saveName.c_str());
+	c->Close();
+	// reset the max values of histograms that we altered
+	if (!th1Indi.empty()){
+		th1Indi[0]->SetMaximum(initialMax);
+		th1Indi[0]->SetMinimum(initialMin);
+	}
+	else {
+		th1Stack[0]->SetMaximum(initialMax);
+		th1Stack[0]->SetMinimum(initialMin);
 	}
 	std::cout << std::endl;
 	return;
@@ -488,7 +706,7 @@ void Plotter::DrawLatex()
 }
 
 
-int Plotter::SetColor_mellow(const int& position, const int& maxColors)
+int Plotter::SetColor_mellow(int position, const int& maxColors)
 {
 	gStyle->SetPalette(55); // sets what sort of colours we will use	
 	double modifier = 0.00; // modifier is an offset in the colour spectrum
@@ -496,9 +714,10 @@ int Plotter::SetColor_mellow(const int& position, const int& maxColors)
 	int colour = 1;
 	double fraction = (double)(position)/(double)(maxColors);
 	// double fraction = (double)(maxColors) - (double)(position)/(double)(maxColors) - 1.0;
-	if( position > maxColors || position < 0 || maxColors < 0 ) colour = 1;
+	if (position < 0 || maxColors < 0 ) colour = 1;
 	else
 	{
+		if (position > maxColors) position = position % maxColors;
 	    colorIndex = (fraction + modifier) * gStyle->GetNumberOfColors();
 	    colour = gStyle->GetColorPalette(colorIndex);
 	}

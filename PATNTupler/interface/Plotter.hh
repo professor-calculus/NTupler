@@ -12,9 +12,12 @@ public:
 	Plotter(std::vector<PlotEntry>);
 	Plotter(std::vector<PlotEntry>, std::vector<PlotEntry>);
 	Plotter(std::vector<PlotEntry2D>);
-	
+	Plotter(std::vector<TH1D*>);
+	Plotter(std::vector<TH1D*>, std::vector<TH1D*>);
+
 	void AddLegend(TLegend*);
 	void AddLegend(const double&, const double&, const double&, const double&, const double& = 0.04);
+	void AddLegend(const std::vector<std::string>&, const double&, const double&, const double&, const double&, const double& = 0.04);
 	void AddLatex(const double&, const std::string& = "#it{Simulation} W.I.P");
 	void AddLatex(const std::string& = "#it{Simulation} W.I.P");
 	TStyle * GetTStyle(); // get it, to edit it
@@ -24,11 +27,14 @@ public:
 	void Save(const std::string&);
 	void Save2D(const std::string&);
 	void Save2D(const std::string&, const MassRegionCuts&);
+	void SaveSpec01(const std::string& saveName, const std::vector<std::string>);
 
 private:
 	std::vector<PlotEntry> histoIndi;
 	std::vector<PlotEntry> histoStack;
 	std::vector<PlotEntry2D> histos2D;
+	std::vector<TH1D*> th1Indi;
+	std::vector<TH1D*> th1Stack;
 	TLegend * leg;
 	bool addLatex;
 	std::string lumiLabel;
@@ -37,7 +43,7 @@ private:
 	bool useLogZ;
 	bool plotWithErrors;
 	void DrawLatex();	
-	int SetColor_mellow(const int&, const int&);
+	int SetColor_mellow(int, const int&);
 	int SetColor_stark(const int&);
 	TStyle * tdrStyle;
 	TStyle * TDRStyle();
