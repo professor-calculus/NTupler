@@ -43,7 +43,7 @@ namespace MacrosOnCondor{
 		exeFile.open( Form("%s/job.sh", outputDir.c_str()) );
 		exeFile << "#!/bin/bash\n";
 		exeFile << Form("%s%s batchRUN\n", pathToMacrosExe.c_str(), executable.c_str());
-		exeFile << "cp *.pdf *.csv ../../.\n";
+		exeFile << "cp *.pdf *.csv *.root ../../.\n";
 		exeFile.close();
 
 	    return;
