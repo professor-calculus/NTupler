@@ -10,7 +10,6 @@
 #include <TFile.h>
 #include <TTree.h>
 #include <TH2D.h>
-#include <TCanvas.h> //HACK
 
 //RAL PARTICLE HEADERS
 #include "../interface/PlotEntry2D.hh"
