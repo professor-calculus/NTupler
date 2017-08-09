@@ -100,7 +100,7 @@ tdrStyle(TDRStyle())
 	for (size_t iHistos2D = 0; iHistos2D != histos2D.size(); ++iHistos2D){
 		histos2D[iHistos2D].GetHistogram()->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
 		histos2D[iHistos2D].GetHistogram()->GetXaxis()->SetLabelSize(0.04);
-		histos2D[iHistos2D].GetHistogram()->GetYaxis()->SetTitleSize(0.04);
+		histos2D[iHistos2D].GetHistogram()->GetYaxis()->SetTitleSize(0.05);
 		histos2D[iHistos2D].GetHistogram()->GetYaxis()->SetLabelSize(0.04);
 	}
 }
@@ -121,7 +121,7 @@ tdrStyle(TDRStyle())
 		th1Indi[iTh1I]->SetLineWidth(2);
 		th1Indi[iTh1I]->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
 		th1Indi[iTh1I]->GetXaxis()->SetLabelSize(0.04);
-		th1Indi[iTh1I]->GetYaxis()->SetTitleSize(0.04);
+		th1Indi[iTh1I]->GetYaxis()->SetTitleSize(0.05);
 		th1Indi[iTh1I]->GetYaxis()->SetLabelSize(0.04);
 	}
 }
@@ -144,7 +144,7 @@ tdrStyle(TDRStyle())
 		th1Indi[iTh1I]->SetLineWidth(2);
 		th1Indi[iTh1I]->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
 		th1Indi[iTh1I]->GetXaxis()->SetLabelSize(0.04);
-		th1Indi[iTh1I]->GetYaxis()->SetTitleSize(0.04);
+		th1Indi[iTh1I]->GetYaxis()->SetTitleSize(0.05);
 		th1Indi[iTh1I]->GetYaxis()->SetLabelSize(0.04);
 	}
 	for (size_t iTh1S = 0; iTh1S != th1Stack.size(); ++iTh1S){
@@ -152,7 +152,7 @@ tdrStyle(TDRStyle())
 		th1Stack[iTh1S]->SetLineWidth(0.0);
 		th1Stack[iTh1S]->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
 		th1Stack[iTh1S]->GetXaxis()->SetLabelSize(0.04);
-		th1Stack[iTh1S]->GetYaxis()->SetTitleSize(0.04);
+		th1Stack[iTh1S]->GetYaxis()->SetTitleSize(0.05);
 		th1Stack[iTh1S]->GetYaxis()->SetLabelSize(0.04);
 	}
 }
@@ -246,8 +246,6 @@ void Plotter::SetLogZ(){
 
 void Plotter::SetErrors(){
 
-	// THIS FUNCTION NEEDS EXPANDING - to encapsulate styles more - maybe will require an argument(s)
-	// currently don't know what it will do to the Stack
 	plotWithErrors = true;
 	
 	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi){
@@ -259,12 +257,6 @@ void Plotter::SetErrors(){
 			iIndi->GetHistogram()->SetBinError(iBin, sqrt(iIndi->GetStatErrorSquaredVector()[iBin]));
 		}
 	}
-
-	// for (std::vector<PlotEntry>::const_iterator iStack = histoStack.begin(); iStack != histoStack.end(); ++iStack){
-	// 	for (int iBin = 0; iBin < iStack->GetHistogram()->GetNbinsX()+2; ++iBin){
-	// 		iStack->GetHistogram()->SetBinError(iBin, sqrt(iStack->GetStatErrorSquaredVector()[iBin]));
-	// 	}
-	// }
 
 	for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I){
 		
@@ -286,19 +278,21 @@ void Plotter::Save(const std::string& saveName){
 	TCanvas * c = new TCanvas("c","c");
 	if (useLogY) gPad->SetLogy();
 
-	std::string hsTitles = ""; // can't set them later w/o a seg fault
+	std::string hsTitles = ""; // NB, can't set title for THStack after construction
 	if (!histoStack.empty()) hsTitles = Form("%s;%s;%s", histoStack[0].GetHistogram()->GetTitle(), histoStack[0].GetHistogram()->GetXaxis()->GetTitle(), histoStack[0].GetHistogram()->GetYaxis()->GetTitle());
 	THStack * hs = new THStack("hs", hsTitles.c_str());
 	for (std::vector<PlotEntry>::const_iterator iStack = histoStack.begin(); iStack != histoStack.end(); ++iStack)
 		hs->Add(iStack->GetHistogram());
 
-	// find max and min (don't want zero values for min, the plot won't work properly)
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	// find max and min (don't want zero values for min, they won't work properly for logY plots)
 	// NB this currently might not do logY minimums correctly for stacks
 	double max = 0.0;
 	double min = 0.0; // for logY plots
 	bool setMin = false;
 	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi){
 		
+		// MAX from histoIndi
 		if (plotWithErrors == false){
 			if (iIndi->GetHistogram()->GetMaximum() > max || iIndi == histoIndi.begin()) max = iIndi->GetHistogram()->GetMaximum();
 		}
@@ -308,10 +302,12 @@ void Plotter::Save(const std::string& saveName){
 			}
 		}
 
+		// nonzero MIN from histoIndi
 		double histoMinNonZero = 0.0; // lowest non zero value of the histogram
 		bool setHistoMinNonZero = false;
+		// first calculate without error bars
 		for (int i=1; i != iIndi->GetHistogram()->GetNbinsX()+1; ++i)
-			if (iIndi->GetHistogram()->GetBinContent(i) != 0 && (iIndi->GetHistogram()->GetBinContent(i) < histoMinNonZero || setHistoMinNonZero == false) ){
+			if (iIndi->GetHistogram()->GetBinContent(i) > 0 && (iIndi->GetHistogram()->GetBinContent(i) < histoMinNonZero || setHistoMinNonZero == false) ){
 				histoMinNonZero = iIndi->GetHistogram()->GetBinContent(i);
 				setHistoMinNonZero = true;
 			}
@@ -319,14 +315,48 @@ void Plotter::Save(const std::string& saveName){
 			min = histoMinNonZero;
 			setMin = true;
 		}
-	}
-	if (!histoStack.empty() && hs->GetMaximum() > max) max = hs->GetMaximum();
-	if (!histoStack.empty() && hs->GetMinimum() != 0 && hs->GetMinimum() < min) min = hs->GetMinimum();	
-	else if (useLogY == true && histoIndi.empty()) min = max / 1000; // it cannot be zero, the division by 1000 is arbitary!! LOOK OUT
+		// if (plotWithErrors == true){ // CURRENTLY NOT USING ERRORS BARS IN THE MIN EVALUATION
+		// 	for (int i=1; i != iIndi->GetHistogram()->GetNbinsX()+1; ++i)
+		// 		if ( (iIndi->GetHistogram()->GetBinContent(i) - sqrt(iIndi->GetStatErrorSquaredVector()[i]) > 0) && ( (iIndi->GetHistogram()->GetBinContent(i) - sqrt(iIndi->GetStatErrorSquaredVector()[i]) < histoMinNonZero) || setHistoMinNonZero == false ) ){
+		// 			histoMinNonZero = iIndi->GetHistogram()->GetBinContent(i) - sqrt(iIndi->GetStatErrorSquaredVector()[i]);
+		// 			setHistoMinNonZero = true;
+		// 		}
+		// 	if (setHistoMinNonZero == true && (histoMinNonZero < min || setMin == false)){
+		// 		min = histoMinNonZero;
+		// 		setMin = true;
+		// 	}
+		// }
+	} // closes loop through histoIndi elements
+
+	if (!histoStack.empty()){
+
+		TH1D *histoStackClone = (TH1D*)histoStack[0].GetHistogram()->Clone();
+		for (size_t iStack = 1; iStack != histoStack.size(); ++iStack) histoStackClone->Add(histoStack[iStack].GetHistogram());
+
+		// MAX from histoStack
+		if (histoStackClone->GetMaximum() > max) max = histoStackClone->GetMaximum();
+
+		// nonzero MIN from histoStack
+		double histoMinNonZero = 0.0; // lowest non zero value of the histogram
+		bool setHistoMinNonZero = false; // have we found a non zero min value?
+		for (int i=1; i != histoStackClone->GetNbinsX()+1; ++i){
+			if (histoStackClone->GetBinContent(i) > 0 && (histoStackClone->GetBinContent(i) < histoMinNonZero || setHistoMinNonZero == false) ){
+				histoMinNonZero = histoStackClone->GetBinContent(i);
+				setHistoMinNonZero = true;
+			}
+			if (setHistoMinNonZero == true && (histoMinNonZero < min || setMin == false)){
+				min = histoMinNonZero;
+				setMin = true;
+			}
+		}
+	} // closes 'if' histoStack has entries
+
+	/////////////////////////////////////////////////////////////////////////////////////////////
 
 	// set histo max and min and draw
 	double initialMax = 0.0; // use to reset the histo max and min to what it initially was
 	double initialMin = 0.0;
+
 	if (!histoIndi.empty() && !histoStack.empty()){
 		initialMax = histoIndi[0].GetHistogram()->GetMaximum();
 		initialMin = histoIndi[0].GetHistogram()->GetMinimum();
@@ -343,7 +373,20 @@ void Plotter::Save(const std::string& saveName){
 		for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
 			if (plotWithErrors == false) iIndi->GetHistogram()->Draw("same");
 			else iIndi->GetHistogram()->Draw("same P");
+		if (plotWithErrors){
+			TH1D *histoStackClone = (TH1D*)histoStack[0].GetHistogram()->Clone();
+			histoStackClone->SetFillColor(kBlack);
+			histoStackClone->SetFillStyle(3004);
+			std::vector<double> histoStackCloneStatErrSqrdVec(histoStackClone->GetNbinsX()+2, 0.0);
+			for (size_t iStack = 0; iStack != histoStack.size(); ++iStack){
+				if (iStack != 0) histoStackClone->Add(histoStack[iStack].GetHistogram());
+				for (int iBin = 0; iBin < histoStackClone->GetNbinsX()+2; ++iBin) histoStackCloneStatErrSqrdVec[iBin] += histoStack[iStack].GetStatErrorSquaredVector()[iBin];
+			}
+			for (int iBin = 0; iBin < histoStackClone->GetNbinsX()+2; ++iBin) histoStackClone->SetBinError(iBin, sqrt(histoStackCloneStatErrSqrdVec[iBin]));
+			histoStackClone->Draw("same, E2");
+		}
 	}
+
 	else if (!histoIndi.empty() && histoStack.empty()){
 		initialMax = histoIndi[0].GetHistogram()->GetMaximum();
 		initialMin = histoIndi[0].GetHistogram()->GetMinimum();
@@ -359,6 +402,7 @@ void Plotter::Save(const std::string& saveName){
 			if (plotWithErrors == false) iIndi->GetHistogram()->Draw("same");
 			else iIndi->GetHistogram()->Draw("same P");
 	}
+
 	else if (histoIndi.empty() && !histoStack.empty()){
 		initialMax = histoStack[0].GetHistogram()->GetMaximum();
 		initialMin = histoStack[0].GetHistogram()->GetMinimum();
@@ -372,7 +416,20 @@ void Plotter::Save(const std::string& saveName){
 		}
 		histoStack[0].GetHistogram()->Draw();
 		hs->Draw("same");
+		if (plotWithErrors){
+			TH1D *histoStackClone = (TH1D*)histoStack[0].GetHistogram()->Clone();
+			histoStackClone->SetFillColor(kBlack);
+			histoStackClone->SetFillStyle(3004);
+			std::vector<double> histoStackCloneStatErrSqrdVec(histoStackClone->GetNbinsX()+2, 0.0);
+			for (size_t iStack = 0; iStack != histoStack.size(); ++iStack){
+				if (iStack != 0) histoStackClone->Add(histoStack[iStack].GetHistogram());
+				for (int iBin = 0; iBin < histoStackClone->GetNbinsX()+2; ++iBin) histoStackCloneStatErrSqrdVec[iBin] += histoStack[iStack].GetStatErrorSquaredVector()[iBin];
+			}
+			for (int iBin = 0; iBin < histoStackClone->GetNbinsX()+2; ++iBin) histoStackClone->SetBinError(iBin, sqrt(histoStackCloneStatErrSqrdVec[iBin]));
+			histoStackClone->Draw("same, E2");
+		}
 	}
+
 	if (addLatex) DrawLatex();
 	if (leg != NULL) leg->Draw("same");
 	gPad->RedrawAxis();
@@ -389,13 +446,13 @@ void Plotter::Save(const std::string& saveName){
 	}
 	std::cout << std::endl;
 	return;
-}
+} // closes function Save
 
 
 void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::string> htBins){
 
 	if (th1Indi.empty() && th1Stack.empty()){
-		std::cout << "Plotter::Save @@@ Exiting without saving... no histos @@@" << std::endl;
+		std::cout << "Plotter::SaveSpec01 @@@ Exiting without saving... no histos @@@" << std::endl;
 		return;
 	}
 
@@ -403,32 +460,35 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 	TCanvas * c = new TCanvas("c","c");
 	if (useLogY) gPad->SetLogy();
 
-	std::string hsTitles = ""; // can't set them later w/o a seg fault
-	if (!th1Stack.empty()) hsTitles = Form("%s;%s;%s", th1Stack[0]->GetTitle(), th1Stack[0]->GetXaxis()->GetTitle(), th1Stack[0]->GetYaxis()->GetTitle());
+	std::string hsTitles = ""; // NB, can't set title for THStack after construction
+	if (!th1Stack.empty()) hsTitles = Form("%s;%s;%s", th1Stack[0]->GetTitle(), th1Stack[0]->GetXaxis()->GetTitle(), th1Stack[0]->GetYaxis()->GetTitle());	
 	THStack * hs = new THStack("hs", hsTitles.c_str());
 	for (size_t iTh1S = 0; iTh1S != th1Stack.size(); ++iTh1S)
 		hs->Add(th1Stack[iTh1S], "HIST");
 
-	// find max and min (don't want zero values for min, the plot won't work properly)
-	// NB this currently might not do logY minimums correctly for stacks
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	// find max and min (don't want zero values for min, they won't work properly for logY plots)
 	double max = 0.0;
-	double min = 0.0; // for logY plots
+	double min = 0.0; // for logY plots only
 	bool setMin = false;
+
 	for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I){
 		
+		// MAX from th1Indi
 		if (plotWithErrors == false){
 			if (th1Indi[iTh1I]->GetMaximum() > max || iTh1I == 0) max = th1Indi[iTh1I]->GetMaximum();
 		}
 		else{
-			for (int i=1; i != th1Indi[iTh1I]->GetNbinsX()+1; ++i){
-				if (th1Indi[iTh1I]->GetBinContent(i) + th1Indi[iTh1I]->GetBinError(i) > max || (iTh1I == 0 && i==1) ) max = th1Indi[iTh1I]->GetBinContent(i) + th1Indi[iTh1I]->GetBinError(i);
-			}
+			for (int i=1; i != th1Indi[iTh1I]->GetNbinsX()+1; ++i)
+				if ( (th1Indi[iTh1I]->GetBinContent(i) + th1Indi[iTh1I]->GetBinError(i) > max) || (iTh1I == 0 && i==1) ) max = th1Indi[iTh1I]->GetBinContent(i) + th1Indi[iTh1I]->GetBinError(i);	
 		}
-
+		
+		// nonzero MIN from th1Indi
 		double histoMinNonZero = 0.0; // lowest non zero value of the histogram
-		bool setHistoMinNonZero = false;
+		bool setHistoMinNonZero = false; // have we found a non zero min value?
+		// first calculate without error bars
 		for (int i=1; i != th1Indi[iTh1I]->GetNbinsX()+1; ++i)
-			if (th1Indi[iTh1I]->GetBinContent(i) != 0 && (th1Indi[iTh1I]->GetBinContent(i) < histoMinNonZero || setHistoMinNonZero == false) ){
+			if (th1Indi[iTh1I]->GetBinContent(i) > 0 && (th1Indi[iTh1I]->GetBinContent(i) < histoMinNonZero || setHistoMinNonZero == false) ){
 				histoMinNonZero = th1Indi[iTh1I]->GetBinContent(i);
 				setHistoMinNonZero = true;
 			}
@@ -436,14 +496,48 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			min = histoMinNonZero;
 			setMin = true;
 		}
-	}
-	if (!th1Stack.empty() && hs->GetMaximum() > max) max = hs->GetMaximum();
-	if (!th1Stack.empty() && hs->GetMinimum() != 0 && hs->GetMinimum() < min) min = hs->GetMinimum();	
-	else if (useLogY == true && th1Indi.empty()) min = max / 1000; // it cannot be zero, the division by 1000 is arbitary!! LOOK OUT
+		// if (plotWithErrors == true){ // CURRENTLY NOT USING ERRORS BARS IN THE MIN EVALUATION
+		// 	for (int i=1; i != th1Indi[iTh1I]->GetNbinsX()+1; ++i)
+		// 		if ( (th1Indi[iTh1I]->GetBinContent(i) - th1Indi[iTh1I]->GetBinError(i) > 0) && ( (th1Indi[iTh1I]->GetBinContent(i) - th1Indi[iTh1I]->GetBinError(i) < histoMinNonZero) || setHistoMinNonZero == false ) ){
+		// 			histoMinNonZero = th1Indi[iTh1I]->GetBinContent(i) - th1Indi[iTh1I]->GetBinError(i);
+		// 			setHistoMinNonZero = true;
+		// 		}
+		// 	if (setHistoMinNonZero == true && (histoMinNonZero < min || setMin == false)){
+		// 		min = histoMinNonZero;
+		// 		setMin = true;
+		// 	}
+		// }
+	} // closes loop through th1Indi elements
+
+	if (!th1Stack.empty()){
+
+		TH1D *histoStackClone = (TH1D*)th1Stack[0]->Clone();
+		for (size_t iTh1S = 1; iTh1S != th1Stack.size(); ++iTh1S) histoStackClone->Add(th1Stack[iTh1S]);
+
+		// MAX from th1Stack
+		if (histoStackClone->GetMaximum() > max) max = histoStackClone->GetMaximum();
+
+		// nonzero MIN from th1Stack
+		double histoMinNonZero = 0.0; // lowest non zero value of the histogram
+		bool setHistoMinNonZero = false; // have we found a non zero min value?
+		for (int i=1; i != histoStackClone->GetNbinsX()+1; ++i){
+			if (histoStackClone->GetBinContent(i) > 0 && (histoStackClone->GetBinContent(i) < histoMinNonZero || setHistoMinNonZero == false) ){
+				histoMinNonZero = histoStackClone->GetBinContent(i);
+				setHistoMinNonZero = true;
+			}
+			if (setHistoMinNonZero == true && (histoMinNonZero < min || setMin == false)){
+				min = histoMinNonZero;
+				setMin = true;
+			}
+		}
+	} // closes 'if' th1Stack has entries
+
+	/////////////////////////////////////////////////////////////////////////////////////////////
 
 	// set histo max and min and draw
 	double initialMax = 0.0; // use to reset the histo max and min to what it initially was
 	double initialMin = 0.0;
+
 	if (!th1Indi.empty() && !th1Stack.empty()){
 		initialMax = th1Indi[0]->GetMaximum();
 		initialMin = th1Indi[0]->GetMinimum();
@@ -455,12 +549,22 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			th1Indi[0]->SetMaximum(2.00 * max);
 			th1Indi[0]->SetMinimum(0.50 * min);
 		}
-		th1Indi[0]->Draw("HIST");
+		if (!plotWithErrors) th1Indi[0]->Draw("HIST");
+		else th1Indi[0]->Draw("P");
 		hs->Draw("same");
 		for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I)
 			if (plotWithErrors == false) th1Indi[iTh1I]->Draw("HIST, same");
 			else th1Indi[iTh1I]->Draw("same, P");
+		if (plotWithErrors){
+			TH1D *histoStackClone = (TH1D*)th1Stack[0]->Clone();
+			histoStackClone->SetFillColor(kBlack);
+			histoStackClone->SetFillStyle(3004);
+			for (size_t iTh1S = 1; iTh1S != th1Stack.size(); ++iTh1S) histoStackClone->Add(th1Stack[iTh1S]);
+			histoStackClone->Draw("same, E2");
+		}
+
 	}
+
 	else if (!th1Indi.empty() && th1Stack.empty()){
 		initialMax = th1Indi[0]->GetMaximum();
 		initialMin = th1Indi[0]->GetMinimum();
@@ -476,6 +580,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			if (plotWithErrors == false) th1Indi[iTh1I]->Draw("HIST, same");
 			else th1Indi[iTh1I]->Draw("same, P");
 	}
+
 	else if (th1Indi.empty() && !th1Stack.empty()){
 		initialMax = th1Stack[0]->GetMaximum();
 		initialMin = th1Stack[0]->GetMinimum();
@@ -489,10 +594,20 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		}
 		th1Stack[0]->Draw("HIST");
 		hs->Draw("same");
+		if (plotWithErrors){
+			TH1D *histoStackClone = (TH1D*)th1Stack[0]->Clone();
+			histoStackClone->SetFillColor(kBlack);
+			histoStackClone->SetFillStyle(3004);
+			for (size_t iTh1S = 1; iTh1S != th1Stack.size(); ++iTh1S) histoStackClone->Add(th1Stack[iTh1S]);
+			histoStackClone->Draw("same, E2");
+		}
 	}
+
 	if (addLatex) DrawLatex();
 	if (leg != NULL) leg->Draw("same");
 	gPad->RedrawAxis();
+
+	/////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Add the HT division Lines
 	c->Update();
@@ -514,6 +629,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 	    latexHT->DrawLatex(c+1, 1.05 * max, htBins[c/binsPerDivision].c_str());
 	}
 
+	/////////////////////////////////////////////////////////////////////////////////////////////
 
 	c->SaveAs(saveName.c_str());
 	c->Close();
@@ -528,13 +644,13 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 	}
 	std::cout << std::endl;
 	return;
-}
+} // closes function SaveSpec01
 
 
 void Plotter::Save2D(const std::string& saveName){
 
 	if (histos2D.empty()){
-		std::cout << "Plotter::Save @@@ Exiting without saving... no 2D histos @@@" << std::endl;
+		std::cout << "Plotter::Save2D @@@ Exiting without saving... no 2D histos @@@" << std::endl;
 		return;
 	}
 
@@ -568,7 +684,7 @@ void Plotter::Save2D(const std::string& saveName){
 void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCutsObject){
 
 	if (histos2D.empty()){
-		std::cout << "Plotter::Save @@@ Exiting without saving... no 2D histos @@@" << std::endl;
+		std::cout << "Plotter::Save2D @@@ Exiting without saving... no 2D histos @@@" << std::endl;
 		return;
 	}
 
@@ -590,9 +706,8 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 
 	if (addLatex) DrawLatex();
 
+	// **************************
 	// NOW ADD THE MASS CUT LINES
-	// **************************
-	// **************************
 	// **************************
 	c->Update();
 	
@@ -611,9 +726,8 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 	double gradientUpperBand = (upperBand_y2 - upperBand_y1) / (upperBand_x2 - upperBand_x1);
 	double gradientDownerBand = 1 / gradientUpperBand;
 
-	// work out the coords for upper corner of upper segement 1
+	// work out the coords for 'upper' corner of upper segement 1
 	double yValue_S1UpperLeft = SN_Nodes[0];
-	// double xValue_S1UpperLeft = yValue(SN_Nodes[0], gradientLowerSignalLine, S1_Node1, S1_Node2);
 	double xValue_S1UpperLeft = gradientLowerSignalLine * (SN_Nodes[0] - S1_Node1) + S1_Node2;
 	double upperBand_x1U = xValue_S1UpperLeft - 0.5 * (yValue_S1UpperLeft - xValue_S1UpperLeft);
 	double upperBand_y1U = yValue_S1UpperLeft + 0.5 * (yValue_S1UpperLeft - xValue_S1UpperLeft);
@@ -662,7 +776,7 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 	line_downBand->SetLineWidth(3);
 	line_downBand->Draw();
 
-	// does the segments...
+	// does the line segments...
 	for (size_t i=0; i!=SN_Nodes.size(); ++i){
 		
 		double yValueSignalLower = gradientLowerSignalLine * (SN_Nodes[i] - S1_Node1) + S1_Node2;
@@ -674,7 +788,6 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 		line_signalSegment->SetLineWidth(3);
 		line_signalSegment->Draw();
 	}
-
 	// **************************
 	// **************************
 	// **************************
@@ -730,7 +843,9 @@ int Plotter::SetColor_stark(const int& index)
 	if (index==0) return kRed;
 	if (index==1) return kBlue;
 	if (index==2) return kGreen+1;
+	// if (index==2) return kMagenta;
 	if (index==3) return kOrange+1;
+	// if (index==3) return kBlack;
 	if (index==4) return kMagenta-4;
 	if (index==5) return kCyan+1;
 	else return kBlack;
