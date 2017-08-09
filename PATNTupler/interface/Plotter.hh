@@ -23,7 +23,7 @@ public:
 	TStyle * GetTStyle(); // get it, to edit it
 	void SetLogY();
 	void SetLogZ();
-	void SetErrors();
+	void SetErrors(const std::string& = "ALL_ERRORS");
 	void Save(const std::string&);
 	void Save2D(const std::string&);
 	void Save2D(const std::string&, const MassRegionCuts&);
@@ -41,7 +41,8 @@ private:
 	std::string lhsStringAfterCMS;
 	bool useLogY;
 	bool useLogZ;
-	bool plotWithErrors;
+	bool plotWithErrorsIndi;
+	bool plotWithErrorsStack;
 	void DrawLatex();	
 	int SetColor_mellow(int, const int&);
 	int SetColor_stark(const int&);

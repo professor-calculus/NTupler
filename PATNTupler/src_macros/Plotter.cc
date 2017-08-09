@@ -32,7 +32,8 @@ leg(0),
 addLatex(false),
 useLogY(false),
 useLogZ(false),
-plotWithErrors(false),
+plotWithErrorsIndi(false),
+plotWithErrorsStack(false),
 tdrStyle(TDRStyle())
 {
 	if (histoIndiDummy.empty()) std::cout << "Plotter WARNING: no plot entries handed to plotter!" << std::endl;
@@ -56,7 +57,8 @@ leg(0),
 addLatex(false),
 useLogY(false),
 useLogZ(false),
-plotWithErrors(false),
+plotWithErrorsIndi(false),
+plotWithErrorsStack(false),
 tdrStyle(TDRStyle())
 {
 	if (histoIndiDummy.empty()) std::cout << "Plotter Message: first constructor argument std::vector<PlotEntry> is empty" << std::endl;
@@ -91,7 +93,8 @@ leg(0),
 addLatex(false),
 useLogY(false),
 useLogZ(false),
-plotWithErrors(false),
+plotWithErrorsIndi(false),
+plotWithErrorsStack(false),
 tdrStyle(TDRStyle())
 {
 	if (dummyHistos2D.empty()) std::cout << "Plotter Message: constructor argument std::vector<PlotEntry2D> is empty" << std::endl;
@@ -110,7 +113,8 @@ leg(0),
 addLatex(false),
 useLogY(false),
 useLogZ(false),
-plotWithErrors(false),
+plotWithErrorsIndi(false),
+plotWithErrorsStack(false),
 tdrStyle(TDRStyle())
 {
 	if (th1IndiDummy.empty()) std::cout << "Plotter Message: no histograms handed to plotter!" << std::endl;
@@ -131,7 +135,8 @@ leg(0),
 addLatex(false),
 useLogY(false),
 useLogZ(false),
-plotWithErrors(false),
+plotWithErrorsIndi(false),
+plotWithErrorsStack(false),
 tdrStyle(TDRStyle())
 {
 	if (th1IndiDummy.empty()) std::cout << "Plotter Message: first constructor argument std::vector<TH1D*> is empty" << std::endl;
@@ -244,28 +249,34 @@ void Plotter::SetLogZ(){
 }
 
 
-void Plotter::SetErrors(){
+void Plotter::SetErrors(const std::string& errorInfo){
 
-	plotWithErrors = true;
-	
-	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi){
-		
-		iIndi->GetHistogram()->SetMarkerStyle(21);
-		iIndi->GetHistogram()->SetMarkerSize(0.2);
-		iIndi->GetHistogram()->SetLineWidth(3);
-		for (int iBin = 0; iBin < iIndi->GetHistogram()->GetNbinsX()+2; ++iBin){
-			iIndi->GetHistogram()->SetBinError(iBin, sqrt(iIndi->GetStatErrorSquaredVector()[iBin]));
+	if (errorInfo == "only_stack"){
+		plotWithErrorsStack = true;
+		return;
+	}
+	else{		
+		plotWithErrorsIndi = true;
+		for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi){
+			
+			iIndi->GetHistogram()->SetMarkerStyle(21);
+			iIndi->GetHistogram()->SetMarkerSize(0.2);
+			iIndi->GetHistogram()->SetLineWidth(3);
+			for (int iBin = 0; iBin < iIndi->GetHistogram()->GetNbinsX()+2; ++iBin){
+				iIndi->GetHistogram()->SetBinError(iBin, sqrt(iIndi->GetStatErrorSquaredVector()[iBin]));
+			}
+		}
+
+		for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I){
+			
+			th1Indi[iTh1I]->SetMarkerStyle(21);
+			th1Indi[iTh1I]->SetMarkerSize(0.2);
+			th1Indi[iTh1I]->SetLineWidth(3);
 		}
 	}
-
-	for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I){
-		
-		th1Indi[iTh1I]->SetMarkerStyle(21);
-		th1Indi[iTh1I]->SetMarkerSize(0.2);
-		th1Indi[iTh1I]->SetLineWidth(3);
-	}
+	if (errorInfo != "only_indi") plotWithErrorsStack = true;
 }
-
+	
 
 void Plotter::Save(const std::string& saveName){
 
@@ -293,7 +304,7 @@ void Plotter::Save(const std::string& saveName){
 	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi){
 		
 		// MAX from histoIndi
-		if (plotWithErrors == false){
+		if (plotWithErrorsIndi == false){
 			if (iIndi->GetHistogram()->GetMaximum() > max || iIndi == histoIndi.begin()) max = iIndi->GetHistogram()->GetMaximum();
 		}
 		else{
@@ -315,7 +326,7 @@ void Plotter::Save(const std::string& saveName){
 			min = histoMinNonZero;
 			setMin = true;
 		}
-		// if (plotWithErrors == true){ // CURRENTLY NOT USING ERRORS BARS IN THE MIN EVALUATION
+		// if (plotWithErrorsStack == true){ // CURRENTLY NOT USING ERRORS BARS IN THE MIN EVALUATION
 		// 	for (int i=1; i != iIndi->GetHistogram()->GetNbinsX()+1; ++i)
 		// 		if ( (iIndi->GetHistogram()->GetBinContent(i) - sqrt(iIndi->GetStatErrorSquaredVector()[i]) > 0) && ( (iIndi->GetHistogram()->GetBinContent(i) - sqrt(iIndi->GetStatErrorSquaredVector()[i]) < histoMinNonZero) || setHistoMinNonZero == false ) ){
 		// 			histoMinNonZero = iIndi->GetHistogram()->GetBinContent(i) - sqrt(iIndi->GetStatErrorSquaredVector()[i]);
@@ -371,9 +382,9 @@ void Plotter::Save(const std::string& saveName){
 		histoIndi[0].GetHistogram()->Draw();
 		hs->Draw("same");
 		for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
-			if (plotWithErrors == false) iIndi->GetHistogram()->Draw("same");
+			if (plotWithErrorsIndi == false) iIndi->GetHistogram()->Draw("same");
 			else iIndi->GetHistogram()->Draw("same P");
-		if (plotWithErrors){
+		if (plotWithErrorsStack){
 			TH1D *histoStackClone = (TH1D*)histoStack[0].GetHistogram()->Clone();
 			histoStackClone->SetFillColor(kBlack);
 			histoStackClone->SetFillStyle(3004);
@@ -399,7 +410,7 @@ void Plotter::Save(const std::string& saveName){
 			histoIndi[0].GetHistogram()->SetMinimum(0.50 * min);
 		}
 		for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
-			if (plotWithErrors == false) iIndi->GetHistogram()->Draw("same");
+			if (plotWithErrorsIndi == false) iIndi->GetHistogram()->Draw("same");
 			else iIndi->GetHistogram()->Draw("same P");
 	}
 
@@ -416,7 +427,7 @@ void Plotter::Save(const std::string& saveName){
 		}
 		histoStack[0].GetHistogram()->Draw();
 		hs->Draw("same");
-		if (plotWithErrors){
+		if (plotWithErrorsStack){
 			TH1D *histoStackClone = (TH1D*)histoStack[0].GetHistogram()->Clone();
 			histoStackClone->SetFillColor(kBlack);
 			histoStackClone->SetFillStyle(3004);
@@ -475,7 +486,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 	for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I){
 		
 		// MAX from th1Indi
-		if (plotWithErrors == false){
+		if (plotWithErrorsIndi == false){
 			if (th1Indi[iTh1I]->GetMaximum() > max || iTh1I == 0) max = th1Indi[iTh1I]->GetMaximum();
 		}
 		else{
@@ -496,7 +507,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			min = histoMinNonZero;
 			setMin = true;
 		}
-		// if (plotWithErrors == true){ // CURRENTLY NOT USING ERRORS BARS IN THE MIN EVALUATION
+		// if (plotWithErrorsStack == true){ // CURRENTLY NOT USING ERRORS BARS IN THE MIN EVALUATION
 		// 	for (int i=1; i != th1Indi[iTh1I]->GetNbinsX()+1; ++i)
 		// 		if ( (th1Indi[iTh1I]->GetBinContent(i) - th1Indi[iTh1I]->GetBinError(i) > 0) && ( (th1Indi[iTh1I]->GetBinContent(i) - th1Indi[iTh1I]->GetBinError(i) < histoMinNonZero) || setHistoMinNonZero == false ) ){
 		// 			histoMinNonZero = th1Indi[iTh1I]->GetBinContent(i) - th1Indi[iTh1I]->GetBinError(i);
@@ -549,13 +560,13 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			th1Indi[0]->SetMaximum(2.00 * max);
 			th1Indi[0]->SetMinimum(0.50 * min);
 		}
-		if (!plotWithErrors) th1Indi[0]->Draw("HIST");
+		if (!plotWithErrorsIndi) th1Indi[0]->Draw("HIST");
 		else th1Indi[0]->Draw("P");
 		hs->Draw("same");
 		for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I)
-			if (plotWithErrors == false) th1Indi[iTh1I]->Draw("HIST, same");
+			if (plotWithErrorsIndi == false) th1Indi[iTh1I]->Draw("HIST, same");
 			else th1Indi[iTh1I]->Draw("same, P");
-		if (plotWithErrors){
+		if (plotWithErrorsStack){
 			TH1D *histoStackClone = (TH1D*)th1Stack[0]->Clone();
 			histoStackClone->SetFillColor(kBlack);
 			histoStackClone->SetFillStyle(3004);
@@ -577,7 +588,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			th1Indi[0]->SetMinimum(0.50 * min);
 		}
 		for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I)
-			if (plotWithErrors == false) th1Indi[iTh1I]->Draw("HIST, same");
+			if (plotWithErrorsIndi == false) th1Indi[iTh1I]->Draw("HIST, same");
 			else th1Indi[iTh1I]->Draw("same, P");
 	}
 
@@ -594,7 +605,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		}
 		th1Stack[0]->Draw("HIST");
 		hs->Draw("same");
-		if (plotWithErrors){
+		if (plotWithErrorsStack){
 			TH1D *histoStackClone = (TH1D*)th1Stack[0]->Clone();
 			histoStackClone->SetFillColor(kBlack);
 			histoStackClone->SetFillStyle(3004);
