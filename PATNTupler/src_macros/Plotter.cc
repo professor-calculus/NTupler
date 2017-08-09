@@ -342,10 +342,22 @@ void Plotter::Save(const std::string& saveName){
 	if (!histoStack.empty()){
 
 		TH1D *histoStackClone = (TH1D*)histoStack[0].GetHistogram()->Clone();
-		for (size_t iStack = 1; iStack != histoStack.size(); ++iStack) histoStackClone->Add(histoStack[iStack].GetHistogram());
+		std::vector<double> histoStackCloneStatErrSqrdVec(histoStackClone->GetNbinsX()+2, 0.0);
+		for (size_t iStack = 0; iStack != histoStack.size(); ++iStack){
+			if (iStack != 0) histoStackClone->Add(histoStack[iStack].GetHistogram());
+			for (int iBin = 0; iBin < histoStackClone->GetNbinsX()+2; ++iBin) histoStackCloneStatErrSqrdVec[iBin] += histoStack[iStack].GetStatErrorSquaredVector()[iBin];
+		}
+		for (int iBin = 0; iBin < histoStackClone->GetNbinsX()+2; ++iBin) histoStackClone->SetBinError(iBin, sqrt(histoStackCloneStatErrSqrdVec[iBin]));
 
 		// MAX from histoStack
-		if (histoStackClone->GetMaximum() > max) max = histoStackClone->GetMaximum();
+		if (plotWithErrorsStack == false){
+			if (histoStackClone->GetMaximum() > max) max = histoStackClone->GetMaximum();
+		}
+		else{
+			for (int i=1; i != histoStackClone->GetNbinsX()+1; ++i){
+				if (histoStackClone->GetBinContent(i) + histoStackClone->GetBinError(i) > max) max = histoStackClone->GetBinContent(i) + histoStackClone->GetBinError(i);
+			}
+		}
 
 		// nonzero MIN from histoStack
 		double histoMinNonZero = 0.0; // lowest non zero value of the histogram
@@ -526,7 +538,14 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		for (size_t iTh1S = 1; iTh1S != th1Stack.size(); ++iTh1S) histoStackClone->Add(th1Stack[iTh1S]);
 
 		// MAX from th1Stack
-		if (histoStackClone->GetMaximum() > max) max = histoStackClone->GetMaximum();
+		if (plotWithErrorsStack == false){
+			if (histoStackClone->GetMaximum() > max) max = histoStackClone->GetMaximum();
+		}
+		else{
+			for (int i=1; i != histoStackClone->GetNbinsX()+1; ++i){
+				if (histoStackClone->GetBinContent(i) + histoStackClone->GetBinError(i) > max) max = histoStackClone->GetBinContent(i) + histoStackClone->GetBinError(i);
+			}
+		}
 
 		// nonzero MIN from th1Stack
 		double histoMinNonZero = 0.0; // lowest non zero value of the histogram
