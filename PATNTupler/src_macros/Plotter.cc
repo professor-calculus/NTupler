@@ -199,6 +199,7 @@ void Plotter::AddLegend(const std::vector<std::string>& legendNames, const doubl
 {
 	if (legendNames.size() != (th1Indi.size() + th1Stack.size()) ){
 		std::cout << "The legend you provided does not have the correct number of strings to match th1Indi+th1Stack" << std::endl;
+		std::cout << "Not inserting a legend" << std::endl;
 		return;
 	}
 	leg = new TLegend();
@@ -380,16 +381,21 @@ void Plotter::Save(const std::string& saveName){
 	double initialMax = 0.0; // use to reset the histo max and min to what it initially was
 	double initialMin = 0.0;
 
+	double graphMaxLin = 1.05 * max;
+	double graphMaxLog = log10(max/min) * max;
+	double graphMinLin = 0.0;
+	double graphMinLog = min/log10(max/min);
+
 	if (!histoIndi.empty() && !histoStack.empty()){
 		initialMax = histoIndi[0].GetHistogram()->GetMaximum();
 		initialMin = histoIndi[0].GetHistogram()->GetMinimum();
 		if (useLogY == false){
-			histoIndi[0].GetHistogram()->SetMaximum(1.05 * max);
-			histoIndi[0].GetHistogram()->SetMinimum(0);
+			histoIndi[0].GetHistogram()->SetMaximum(graphMaxLin);
+			histoIndi[0].GetHistogram()->SetMinimum(graphMinLin);
 		}
 		else{
-			histoIndi[0].GetHistogram()->SetMaximum(2.00 * max);
-			histoIndi[0].GetHistogram()->SetMinimum(0.50 * min);
+			histoIndi[0].GetHistogram()->SetMaximum(graphMaxLog);
+			histoIndi[0].GetHistogram()->SetMinimum(graphMinLog);
 		}
 		histoIndi[0].GetHistogram()->Draw();
 		hs->Draw("same");
@@ -414,12 +420,12 @@ void Plotter::Save(const std::string& saveName){
 		initialMax = histoIndi[0].GetHistogram()->GetMaximum();
 		initialMin = histoIndi[0].GetHistogram()->GetMinimum();
 		if (useLogY == false){
-			histoIndi[0].GetHistogram()->SetMaximum(1.05 * max);
-			histoIndi[0].GetHistogram()->SetMinimum(0);
+			histoIndi[0].GetHistogram()->SetMaximum(graphMaxLin);
+			histoIndi[0].GetHistogram()->SetMinimum(graphMinLin);
 		}
 		else{
-			histoIndi[0].GetHistogram()->SetMaximum(2.00 * max);
-			histoIndi[0].GetHistogram()->SetMinimum(0.50 * min);
+			histoIndi[0].GetHistogram()->SetMaximum(graphMaxLog);
+			histoIndi[0].GetHistogram()->SetMinimum(graphMinLog);
 		}
 		for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
 			if (plotWithErrorsIndi == false) iIndi->GetHistogram()->Draw("same");
@@ -430,12 +436,12 @@ void Plotter::Save(const std::string& saveName){
 		initialMax = histoStack[0].GetHistogram()->GetMaximum();
 		initialMin = histoStack[0].GetHistogram()->GetMinimum();
 		if (useLogY == false){
-			histoStack[0].GetHistogram()->SetMaximum(1.05 * max);
-			histoStack[0].GetHistogram()->SetMinimum(0);
+			histoStack[0].GetHistogram()->SetMaximum(graphMaxLin);
+			histoStack[0].GetHistogram()->SetMinimum(graphMinLin);
 		}
 		else{
-			histoStack[0].GetHistogram()->SetMaximum(2.00 * max);
-			histoStack[0].GetHistogram()->SetMinimum(0.50 * min);
+			histoStack[0].GetHistogram()->SetMaximum(graphMaxLog);
+			histoStack[0].GetHistogram()->SetMinimum(graphMinLog);
 		}
 		histoStack[0].GetHistogram()->Draw();
 		hs->Draw("same");
@@ -568,16 +574,21 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 	double initialMax = 0.0; // use to reset the histo max and min to what it initially was
 	double initialMin = 0.0;
 
+	double graphMaxLin = 1.12 * max;
+	double graphMaxLog = log10(max/min) * max;
+	double graphMinLin = 0.0;
+	double graphMinLog = min/log10(max/min);
+
 	if (!th1Indi.empty() && !th1Stack.empty()){
 		initialMax = th1Indi[0]->GetMaximum();
 		initialMin = th1Indi[0]->GetMinimum();
 		if (useLogY == false){
-			th1Indi[0]->SetMaximum(1.15 * max);
-			th1Indi[0]->SetMinimum(0);
+			th1Indi[0]->SetMaximum(graphMaxLin);
+			th1Indi[0]->SetMinimum(graphMinLin);
 		}
 		else{
-			th1Indi[0]->SetMaximum(2.00 * max);
-			th1Indi[0]->SetMinimum(0.50 * min);
+			th1Indi[0]->SetMaximum(graphMaxLog);
+			th1Indi[0]->SetMinimum(graphMinLog);
 		}
 		if (!plotWithErrorsIndi) th1Indi[0]->Draw("HIST");
 		else th1Indi[0]->Draw("P");
@@ -592,19 +603,18 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			for (size_t iTh1S = 1; iTh1S != th1Stack.size(); ++iTh1S) histoStackClone->Add(th1Stack[iTh1S]);
 			histoStackClone->Draw("same, E2");
 		}
-
 	}
 
 	else if (!th1Indi.empty() && th1Stack.empty()){
 		initialMax = th1Indi[0]->GetMaximum();
 		initialMin = th1Indi[0]->GetMinimum();
 		if (useLogY == false){
-			th1Indi[0]->SetMaximum(1.15 * max);
-			th1Indi[0]->SetMinimum(0);
+			th1Indi[0]->SetMaximum(graphMaxLin);
+			th1Indi[0]->SetMinimum(graphMinLin);
 		}
 		else{
-			th1Indi[0]->SetMaximum(2.00 * max);
-			th1Indi[0]->SetMinimum(0.50 * min);
+			th1Indi[0]->SetMaximum(graphMaxLog);
+			th1Indi[0]->SetMinimum(graphMinLog);
 		}
 		for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I)
 			if (plotWithErrorsIndi == false) th1Indi[iTh1I]->Draw("HIST, same");
@@ -615,12 +625,12 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		initialMax = th1Stack[0]->GetMaximum();
 		initialMin = th1Stack[0]->GetMinimum();
 		if (useLogY == false){
-			th1Stack[0]->SetMaximum(1.15 * max);
-			th1Stack[0]->SetMinimum(0);
+			th1Stack[0]->SetMaximum(graphMaxLin);
+			th1Stack[0]->SetMinimum(graphMinLin);
 		}
 		else{
-			th1Stack[0]->SetMaximum(2.00 * max);
-			th1Stack[0]->SetMinimum(0.50 * min);
+			th1Stack[0]->SetMaximum(graphMaxLog);
+			th1Stack[0]->SetMinimum(graphMinLog);
 		}
 		th1Stack[0]->Draw("HIST");
 		hs->Draw("same");
@@ -646,9 +656,13 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 	else numberOfBins = th1Stack[0]->GetNbinsX();
 	unsigned int binsPerDivision = numberOfBins / htBins.size();
 	for (unsigned int c = 0; c < numberOfBins; c = c + binsPerDivision){
+		
+		double lineMax = 0.0;
+		if (useLogY == false) lineMax = 1.03 * max;
+		else lineMax = pow(10, 0.92 * (log10(graphMaxLog) - log10(graphMinLog)) + log10(graphMinLog));
 
 		if (c != 0){
-			TLine * line = new TLine(c, 0, c, max); // xmin, ymin, xmax, ymax
+			TLine * line = new TLine(c, 0, c, lineMax); // xmin, ymin, xmax, ymax
 			line->SetLineStyle(2);
 			line->SetLineWidth(3);
 			line->Draw();
@@ -656,7 +670,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		TLatex * latexHT = new TLatex();
 	    latexHT->SetTextFont(42);
 	    latexHT->SetTextAlign(11); // align from left
-	    latexHT->DrawLatex(c+1, 1.05 * max, htBins[c/binsPerDivision].c_str());
+	    latexHT->DrawLatex(c+1, lineMax, htBins[c/binsPerDivision].c_str());
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
