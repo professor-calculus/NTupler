@@ -9,8 +9,21 @@ namespace MacrosOnCondor{
 	void CreateCondorFile(const std::string& outputDir, const std::string& executable, const std::string& logBaseDir)
 	{
 		std::string dateStamp = TimeStamp::GetTimeStamp();
+		
 		std::string logDir = logBaseDir + "/" + executable + "__" + dateStamp;
 		std::system( Form("mkdir %s", logDir.c_str()) );
+
+		// put the executable in a unique tmp location
+		std::string pathToMacrosExe = SystemCommands::GetCmsswBase();
+		pathToMacrosExe += "/src/NTupler/PATNTupler/macros/";
+		pathToMacrosExe += executable;
+
+		std::string pathToTmpExe = SystemCommands::GetCmsswBase();
+		pathToTmpExe += "/src/NTupler/PATNTupler/tmp/";
+		pathToTmpExe += "macroExe_" + dateStamp + "/";
+		std::system( Form("mkdir %s", pathToTmpExe.c_str()) );
+		std::system( Form("cp %s %s", pathToMacrosExe.c_str(), pathToTmpExe.c_str()) );
+		pathToTmpExe += executable;
 
 		std::ofstream condorFile;
 		condorFile.open( Form("%s/job.condor", outputDir.c_str()) );
@@ -20,7 +33,7 @@ namespace MacrosOnCondor{
 		condorFile << Form("Output                 = %s/job.out\n", logDir.c_str());
 		condorFile << Form("Error                  = %s/job.err\n", logDir.c_str());
 		condorFile << "Request_memory         = 1 GB\n";
-		condorFile << "Transfer_input_files   = job.sh\n";
+		condorFile << "Transfer_input_files   = job.sh, " << pathToTmpExe << "\n";
 		condorFile << "\n";
 		condorFile << "should_transfer_files	= YES\n";
 		condorFile << "when_to_transfer_output	= ON_EXIT_OR_EVICT\n";
@@ -33,16 +46,12 @@ namespace MacrosOnCondor{
 	} // closes function "CreateCondorFile"
 
 
-	void CreateExeFile(const std::string& outputDir, const std::string& executable) // executable wrt 'macros' dir
+	void CreateExeFile(const std::string& outputDir, const std::string& executable)
 	{
-		std::string pathToMacrosExe = SystemCommands::GetCmsswBase();
-		// pathToMacrosExe = pathToMacrosExe.substr(0, pathToMacrosExe.size()-1);
-		pathToMacrosExe += "/src/NTupler/PATNTupler/macros/"; 
-
 		std::ofstream exeFile;
 		exeFile.open( Form("%s/job.sh", outputDir.c_str()) );
 		exeFile << "#!/bin/bash\n";
-		exeFile << Form("%s%s batchRUN\n", pathToMacrosExe.c_str(), executable.c_str());
+		exeFile << Form("./%s batchRUN\n", executable.c_str());
 		exeFile << "cp *.pdf *.csv *.root ../../.\n";
 		exeFile.close();
 
@@ -69,7 +78,7 @@ namespace MacrosOnCondor{
 	} // closes function "CreateSubmitFile"
 
 
-	void SubmitJob(const std::string& outputDir, const std::string& executable, const std::string& logBaseDir)
+	void SubmitJob(const std::string& outputDir, const std::string& executable, const std::string& logBaseDir) // executable wrt 'macros' dir
 	{
 		CreateCondorFile(outputDir.c_str(), executable.c_str(), logBaseDir.c_str());
 		CreateExeFile(outputDir.c_str(), executable.c_str());
