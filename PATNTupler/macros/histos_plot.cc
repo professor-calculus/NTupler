@@ -66,20 +66,23 @@ int main(int argc, char** argv){
     // TH1D * h_S_controlA_mH70mSusy2000 = (TH1D*)f_mH70mSusy2000->Get("S_dbtMed2MaxAndOffIDBTCv1");
     // TH1D * h_S_controlB_mH70mSusy2000 = (TH1D*)f_mH70mSusy2000->Get("S_dbtOffIDBTCv1AndMed2Max");
 
-    std::vector<TH1D*> indiHistoVec = {h_S_tag_mH70mSusy1600, h_S_tag_mH70mSusy2000};
+    std::vector<TH1D*> indiHistoVec = {h_S_tag_mH70mSusy1600};
     std::vector<TH1D*> stackHistoVec = {h_S_tag_QCD, h_S_tag_TTJets, h_S_tag_ZJets, h_S_tag_WJets};
     std::vector<std::string> stringVec = {"HT1500-2500", "HT2500-3500", "HT3500+"};
 
 
-    Plotter plot = Plotter(indiHistoVec, stackHistoVec );
+    Plotter plot = Plotter(indiHistoVec, stackHistoVec);
+    // Plotter plot = Plotter({}, stackHistoVec);
     // Plotter plot = Plotter(indiHistoVec);
     plot.AddLatex(luminosity);
-    // plot.SetLogY();
-    // plot.SetErrors();
+    plot.AddRatioBox(0,5);
+    plot.SetLogY();
+    plot.SetErrors("only_stack");
     
     std::vector<std::string> legendNames = {"mH70_mSusy1600", "mH70_mSusy2000", "QCD", "TTJets", "ZJets", "WJets"};
     plot.AddLegend(legendNames, 0.68, 0.88, 0.47, 0.81, 0.03);
-    plot.SaveSpec01("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_20/test3.pdf", stringVec);
+    // plot.SetErrors("only_stack");
+    plot.SaveSpec01("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_20/RATIO/test3.pdf", stringVec);
 
 
     return 0;

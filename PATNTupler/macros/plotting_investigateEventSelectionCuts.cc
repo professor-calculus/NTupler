@@ -28,7 +28,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_14/EventSelection/mSusy2000p0/HTbin_3500plus/attempt03_varyAK4PT"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_20/"; // where we are going to save the output plots (should include the samples name, and any important features)
 
 
 
@@ -42,8 +42,9 @@ int main(int argc, char** argv){
     std::vector<int> cut3_ak8Pt = {300};
     // std::vector<std::vector<int>> cut4_ht = { {1500,2500} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
     // std::vector<std::vector<int>> cut4_ht = { {2500,3500} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
-    std::vector<std::vector<int>> cut4_ht = { {3500,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
-    std::vector<std::vector<int>> cut5_ak4Pt = { {200,200}, {250,250}, {300,300} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
+    // std::vector<std::vector<int>> cut4_ht = { {3500,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
+    std::vector<std::vector<int>> cut4_ht = { {1500, 2500}, {2500, 3500}, {3500,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
+    std::vector<std::vector<int>> cut5_ak4Pt = { {250,250} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
 
 
@@ -147,13 +148,13 @@ int main(int argc, char** argv){
                     plotEntrySignalVec.push_back(mH90_mSusy2000);
 
                     PlotEntry QCD = PlotEntry("QCD", hTemplate, varToPlot.c_str(), luminosity);
-                    QCD.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT700to1000/flatTree.root", cutToApply.c_str(), 6802);
+                    // QCD.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT700to1000/flatTree.root", cutToApply.c_str(), 6802);
                     QCD.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT1000to1500/flatTree.root", cutToApply.c_str(), 1206);
                     QCD.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT1500to2000/flatTree.root", cutToApply.c_str(), 120.4);
                     QCD.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT2000toInf/flatTree.root", cutToApply.c_str(), 25.25);
                     plotEntryBackgroundVec.push_back(QCD);
 
-                    PlotEntry ttbarNLO = PlotEntry("ttbar NLO", hTemplate, varToPlot.c_str(), luminosity);
+                    PlotEntry ttbarNLO = PlotEntry("tt+Jets", hTemplate, varToPlot.c_str(), luminosity);
                     ttbarNLO.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/TTJets_NLO/flatTree.root", cutToApply.c_str(), 831.76);
                     plotEntryBackgroundVec.push_back(ttbarNLO);
 
@@ -171,6 +172,7 @@ int main(int argc, char** argv){
                     // FIVE: plot aesthetics
                     Plotter plot = Plotter(plotEntrySignalVec, plotEntryBackgroundVec);
                     plot.AddLegend(0.55, 0.88, 0.47, 0.87); // top right (extra wide 8)
+                    plot.SetErrors("only_stack");
                     plot.AddLatex(luminosity);
 
 

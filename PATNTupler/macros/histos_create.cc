@@ -106,14 +106,14 @@ int main(int argc, char** argv){
         std::string dirExistCommand = "test -e " + outputDir;
         std::string makeDirCommand = "mkdir -p " + outputDir;
         if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
-        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/histos_v1.cc %s/%s__histos_v1.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/histos_create.cc %s/%s__histos_create.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
     }
     else if (runInstructionString == "batch"){
         std::string dirExistCommand = "test -e " + outputDir;
         std::string makeDirCommand = "mkdir -p " + outputDir;
         if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
-        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/histos_v1.cc %s/%s__histos_v1.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
-        MacrosOnCondor::SubmitJob(outputDir.c_str(), "histos_v1", "/opt/ppd/scratch/xap79297/jobLogs/macros/");
+        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/histos_create.cc %s/%s__histos_create.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+        MacrosOnCondor::SubmitJob(outputDir.c_str(), "histos_create", "/opt/ppd/scratch/xap79297/jobLogs/macros/");
         return 0;
     }
     else if (runInstructionString == "batchRUN"){
@@ -186,7 +186,7 @@ int main(int argc, char** argv){
                 h_[histogramName.c_str()]->SetBinContent(binToFill, plotEntry.GetNumberOfEventsAfterCuts());
                 h_[histogramName.c_str()]->SetBinError(binToFill, plotEntry.GetNumberOfEventsAfterCutsStatError());  
 
-                // below: to check we trust what is going on
+                // this section creates plots to check we trust what is going on
                 // std::string plotSaveName = outputDir + "/plot_" + histogramName + "_binNum" + std::to_string(binToFill) + ".pdf";
                 // Plotter plot = Plotter({plotEntry});
                 // plot.AddLatex(luminosity);

@@ -28,21 +28,21 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_14/EventSelection/mSusy2000p0/HTbin_3500plus/attempt01_varyDBT/EXTRA_PLOTS/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_19/EXTRA_PLOTS/"; // where we are going to save the output plots (should include the samples name, and any important features)
 
 
 
     // TWO: set of cut params, each combination = new plot
-    // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Max","Off","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
-    // std::vector<int> cut3_ak8Pt = {-1};
+    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Max","Off","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    std::vector<int> cut3_ak8Pt = {-1};
     // std::vector<std::vector<int>> cut4_ht = { {-1,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
-    // std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
+    std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
-    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Med2","Max","Med2","Max"}, {"Tight","Max","Tight","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
-    std::vector<int> cut3_ak8Pt = {300};
+    // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Med2","Max","Med2","Max"}, {"Tight","Max","Tight","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    // std::vector<int> cut3_ak8Pt = {300};
     // std::vector<std::vector<int>> cut4_ht = { {1500,2500}, {2500,3500}, {3500,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
-    std::vector<std::vector<int>> cut4_ht = { {3500,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
-    std::vector<std::vector<int>> cut5_ak4Pt = { {250,250} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
+    std::vector<std::vector<int>> cut4_ht = { {1500,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
+    // std::vector<std::vector<int>> cut5_ak4Pt = { {250,250} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
 
 
@@ -157,7 +157,7 @@ int main(int argc, char** argv){
       
                     // FOUR: samples to use
                     PlotEntry2D plot2d = PlotEntry2D("QCD", hTemplate, varToPlot.c_str(), luminosity);
-                    plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT700to1000/flatTree.root", cutToApply.c_str(), 6802);
+                    // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT700to1000/flatTree.root", cutToApply.c_str(), 6802);
                     plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT1000to1500/flatTree.root", cutToApply.c_str(), 1206);
                     plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT1500to2000/flatTree.root", cutToApply.c_str(), 120.4);
                     plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT2000toInf/flatTree.root", cutToApply.c_str(), 25.25);
@@ -168,6 +168,12 @@ int main(int argc, char** argv){
 
 
                     // FIVE: plot aesthetics
+                    double S1_Node1 = 31.5;
+                    double S1_Node2 = 16.5;
+                    double SMAX_Node1 = 117.0;
+                    double SMAX_Node2 = 78.0;
+                    std::vector<double> SN_Nodes = {40.6, 50.7, 61.8, 73.9, 87.0, 101.6};
+                    MassRegionCuts MassCutsObject = MassRegionCuts("MassCutsV03", S1_Node1, S1_Node2, SMAX_Node1, SMAX_Node2, SN_Nodes);
                     Plotter plot = Plotter({plot2d});
                     plot.AddLatex(luminosity);
                     std::string saveName = varToPlotSaveName;
@@ -179,10 +185,12 @@ int main(int argc, char** argv){
                     // saveName += "APPEND_SAVE_NAME"; // OPTIONAL: can manually append the automatic savename
                     // saveName = "MANUAL_SAVE_NAME"; // OPTIONAL: can manually overwrite the automatic savename
                     std::string outputFile = outputDir + "/" + saveName + ".pdf";
-                    plot.Save2D(outputFile.c_str());
+                    // plot.Save2D(outputFile.c_str());
+                    plot.Save2D(outputFile.c_str(), MassCutsObject); // if want mass grids on plot
                     plot.SetLogZ(); // toggle ON or OFF
                     outputFile = outputDir + "/" + saveName + "_logZ.pdf";
-                    plot.Save2D(outputFile.c_str());
+                    // plot.Save2D(outputFile.c_str());
+                    plot.Save2D(outputFile.c_str(), MassCutsObject); // if want mass grids on plot
 
 
 
