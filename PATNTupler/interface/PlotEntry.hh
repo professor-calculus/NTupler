@@ -5,7 +5,6 @@ class PlotEntry{
 
 public:
     // constructor
-    PlotEntry(const std::string&, PlotEntry, PlotEntry); // DIVIDING MODE, divides two existing PlotEntry objects histograms, name of entry (eg for legends), numerator PlotEntry, denominator PlotEntry
     PlotEntry(const std::string&, const TH1D&, const std::string&); // name of entry (eg for legends), histogram template, name of variable we wish to plot (this is for data)
 	PlotEntry(const std::string&, const TH1D&, const std::string&, const double&); // name of entry (eg for legends), histogram template, name of variable we wish to plot, luminosity (this is for MC)
 	

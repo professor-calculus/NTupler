@@ -16,22 +16,6 @@
 
 
 //--------constructor---------//
-PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, PlotEntry numeratorPlotEntry, PlotEntry denominatorPlotEntry) : // this constructor divides two existing PlotEntry histograms to make a new one
-	plotEntryName(plotEntryNameDummy),
-	luminosity(-1.0),
-	numberOfEventsBeforeCuts(-1.0)
-{
-	Int_t nBins = numeratorPlotEntry.GetHistogram()->GetNbinsX();
-	if (numeratorPlotEntry.GetHistogram()->GetXaxis()->GetXbins()->GetArray() == NULL) hTotal = new TH1D("hTotal", Form("%s;%s;%s", numeratorPlotEntry.GetHistogram()->GetTitle(), numeratorPlotEntry.GetHistogram()->GetXaxis()->GetTitle(), numeratorPlotEntry.GetHistogram()->GetYaxis()->GetTitle()), nBins, numeratorPlotEntry.GetHistogram()->GetBinLowEdge(1), numeratorPlotEntry.GetHistogram()->GetBinLowEdge(nBins+1));
-	else hTotal = new TH1D("hTotal", Form("%s;%s;%s", numeratorPlotEntry.GetHistogram()->GetTitle(), numeratorPlotEntry.GetHistogram()->GetXaxis()->GetTitle(), numeratorPlotEntry.GetHistogram()->GetYaxis()->GetTitle()), nBins, numeratorPlotEntry.GetHistogram()->GetXaxis()->GetXbins()->GetArray());
-	hTotal->Divide(numeratorPlotEntry.GetHistogram(),denominatorPlotEntry.GetHistogram());
-	for (int iBin = 0; iBin < nBins+2; ++iBin){
-		double statErrorSquaredForBin = pow(hTotal->GetBinContent(iBin),2);
-		statErrorSquaredForBin *= ( (numeratorPlotEntry.GetStatErrorSquaredVector()[iBin])/(pow(numeratorPlotEntry.GetHistogram()->GetBinContent(iBin),2)) + (denominatorPlotEntry.GetStatErrorSquaredVector()[iBin])/(pow(denominatorPlotEntry.GetHistogram()->GetBinContent(iBin),2)) );
-		statErrorSquared.push_back(statErrorSquaredForBin);
-	}
-}
-
 PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1D& hTemplate, const std::string& variableToPlotDummy) :
 	plotEntryName(plotEntryNameDummy),
 	luminosity(0.0),
