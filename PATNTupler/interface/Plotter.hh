@@ -15,6 +15,8 @@ public:
 	Plotter(std::vector<TH1D*>);
 	Plotter(std::vector<TH1D*>, std::vector<TH1D*>);
 
+	void AddRatioBox(const std::string& = "ratio");
+	void AddRatioBox(const double&, const double&, const std::string& = "ratio");
 	void AddLegend(TLegend*);
 	void AddLegend(const double&, const double&, const double&, const double&, const double& = 0.04);
 	void AddLegend(const std::vector<std::string>&, const double&, const double&, const double&, const double&, const double& = 0.04);
@@ -35,6 +37,10 @@ private:
 	std::vector<PlotEntry2D> histos2D;
 	std::vector<TH1D*> th1Indi;
 	std::vector<TH1D*> th1Stack;
+	bool addRatioBox;
+	std::string addRatioBoxInfo;
+	std::string ratioBoxYAxisTitle;
+	std::vector<double> ratioBoxYAxisMinMax;
 	TLegend * leg;
 	bool addLatex;
 	std::string lumiLabel;

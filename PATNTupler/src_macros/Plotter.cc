@@ -18,6 +18,7 @@
 #include <TLine.h>
 #include <TCanvas.h>
 #include <THStack.h>
+// #include <TGaxis.h>
 
 //RAL PARTICLE HEADERS
 #include "../interface/PlotEntry.hh"
@@ -28,6 +29,7 @@
 
 //--------constructor---------//
 Plotter::Plotter(std::vector<PlotEntry> histoIndiDummy) :
+addRatioBox(false),
 leg(0),
 addLatex(false),
 useLogY(false),
@@ -53,6 +55,7 @@ tdrStyle(TDRStyle())
 }
 
 Plotter::Plotter(std::vector<PlotEntry> histoIndiDummy, std::vector<PlotEntry> histoStackDummy) :
+addRatioBox(false),
 leg(0),
 addLatex(false),
 useLogY(false),
@@ -89,6 +92,7 @@ tdrStyle(TDRStyle())
 }
 
 Plotter::Plotter(std::vector<PlotEntry2D> dummyHistos2D) :
+addRatioBox(false),
 leg(0),
 addLatex(false),
 useLogY(false),
@@ -109,6 +113,7 @@ tdrStyle(TDRStyle())
 }
 
 Plotter::Plotter(std::vector<TH1D*> th1IndiDummy) :
+addRatioBox(false),
 leg(0),
 addLatex(false),
 useLogY(false),
@@ -131,6 +136,7 @@ tdrStyle(TDRStyle())
 }
 
 Plotter::Plotter(std::vector<TH1D*> th1IndiDummy, std::vector<TH1D*> th1StackDummy) :
+addRatioBox(false),
 leg(0),
 addLatex(false),
 useLogY(false),
@@ -164,6 +170,80 @@ tdrStyle(TDRStyle())
 
 
 //-----------public-----------//
+void Plotter::AddRatioBox(const std::string& ratioBoxYAxisTitleDummy){
+	
+	ratioBoxYAxisTitle = ratioBoxYAxisTitleDummy;
+
+	if (histoIndi.size() == 2 && histoStack.empty() && th1Indi.empty() && th1Stack.empty()){
+		addRatioBox = true;
+		addRatioBoxInfo = "typeA";
+		return;
+	}
+	else if (histoIndi.size() == 1 && histoStack.size() > 0 && th1Indi.empty() && th1Stack.empty()){
+		addRatioBox = true;
+		addRatioBoxInfo = "typeB";
+		return;
+	}
+	else if (histoIndi.empty() && histoStack.empty() && th1Indi.size() == 2 && th1Stack.empty()){
+		addRatioBox = true;
+		addRatioBoxInfo = "typeA";
+		return;
+	}
+	else if (histoIndi.empty() && histoStack.empty() && th1Indi.size() == 1 && th1Stack.size() > 0){
+		addRatioBox = true;
+		addRatioBoxInfo = "typeB";
+		return;
+	}
+	else{
+		std::cout << "You have not given the correct objects to the Plotter object to implement the ratio box. It should be..." << std::endl;
+		std::cout << "EITHER a two element histoIndi only" << std::endl;
+		std::cout << "OR a single element histoIndi and a histoStack only" << std::endl;
+		std::cout << "OR a two element th1Indi only" << std::endl;
+		std::cout << "OR a single element th1Indi and a th1Stack only" << std::endl;
+		std::cout << std::endl;
+	}
+	return;
+}
+
+
+void Plotter::AddRatioBox(const double& ratioBoxYAxisMin, const double& ratioBoxYAxisMax, const std::string& ratioBoxYAxisTitleDummy){
+	
+	ratioBoxYAxisTitle = ratioBoxYAxisTitleDummy;
+	ratioBoxYAxisMinMax.push_back(ratioBoxYAxisMin);
+	ratioBoxYAxisMinMax.push_back(ratioBoxYAxisMax);
+
+	if (histoIndi.size() == 2 && histoStack.empty() && th1Indi.empty() && th1Stack.empty()){
+		addRatioBox = true;
+		addRatioBoxInfo = "typeA";
+		return;
+	}
+	else if (histoIndi.size() == 1 && histoStack.size() > 0 && th1Indi.empty() && th1Stack.empty()){
+		addRatioBox = true;
+		addRatioBoxInfo = "typeB";
+		return;
+	}
+	else if (histoIndi.empty() && histoStack.empty() && th1Indi.size() == 2 && th1Stack.empty()){
+		addRatioBox = true;
+		addRatioBoxInfo = "typeA";
+		return;
+	}
+	else if (histoIndi.empty() && histoStack.empty() && th1Indi.size() == 1 && th1Stack.size() > 0){
+		addRatioBox = true;
+		addRatioBoxInfo = "typeB";
+		return;
+	}
+	else{
+		std::cout << "You have not given the correct objects to the Plotter object to implement the ratio box. It should be..." << std::endl;
+		std::cout << "EITHER a two element histoIndi only" << std::endl;
+		std::cout << "OR a single element histoIndi and a histoStack only" << std::endl;
+		std::cout << "OR a two element th1Indi only" << std::endl;
+		std::cout << "OR a single element th1Indi and a th1Stack only" << std::endl;
+		std::cout << std::endl;
+	}
+	return;
+}
+
+
 void Plotter::AddLegend(TLegend * legDummy)
 {
 	leg = legDummy;
@@ -276,6 +356,7 @@ void Plotter::SetErrors(const std::string& errorInfo){
 		}
 	}
 	if (errorInfo != "only_indi") plotWithErrorsStack = true;
+	return;
 }
 	
 
@@ -286,15 +367,24 @@ void Plotter::Save(const std::string& saveName){
 		return;
 	}
 
-	tdrStyle->cd();
-	TCanvas * c = new TCanvas("c","c");
-	if (useLogY) gPad->SetLogy();
-
 	std::string hsTitles = ""; // NB, can't set title for THStack after construction
 	if (!histoStack.empty()) hsTitles = Form("%s;%s;%s", histoStack[0].GetHistogram()->GetTitle(), histoStack[0].GetHistogram()->GetXaxis()->GetTitle(), histoStack[0].GetHistogram()->GetYaxis()->GetTitle());
 	THStack * hs = new THStack("hs", hsTitles.c_str());
 	for (std::vector<PlotEntry>::const_iterator iStack = histoStack.begin(); iStack != histoStack.end(); ++iStack)
 		hs->Add(iStack->GetHistogram());
+
+	tdrStyle->cd();
+	TCanvas * c = new TCanvas("c","c");
+	
+	if (addRatioBox){
+		TPad *padUp = new TPad("padUp","padUp",0,0.3,1,1);
+		padUp->SetBottomMargin(0.016);
+		padUp->Draw();
+		padUp->cd();
+		histoIndi[0].GetHistogram()->SetLabelOffset(777.7);
+	} 		
+
+	if (useLogY) gPad->SetLogy();
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	// find max and min (don't want zero values for min, they won't work properly for logY plots)
@@ -462,8 +552,72 @@ void Plotter::Save(const std::string& saveName){
 	if (addLatex) DrawLatex();
 	if (leg != NULL) leg->Draw("same");
 	gPad->RedrawAxis();
+
+	/////////////////////////////////////////////////////////////////////////////////////////////
+
+	// do ratio box plot if implemented
+	if (addRatioBox){
+		c->cd();
+		TPad *padDown = new TPad("padDown","padDown",0,0,1,0.3);
+		padDown->SetTopMargin(0.0);
+		padDown->SetBottomMargin(0.30);
+		padDown->Draw("same");
+		padDown->cd();
+
+		TH1D * ratioPlotEntry;
+		Int_t nBins = histoIndi[0].GetHistogram()->GetNbinsX();
+		if (histoIndi[0].GetHistogram()->GetXaxis()->GetXbins()->GetArray() == NULL) ratioPlotEntry = new TH1D("ratioPlotEntry", Form("%s;%s;%s", histoIndi[0].GetHistogram()->GetTitle(), histoIndi[0].GetHistogram()->GetXaxis()->GetTitle(), histoIndi[0].GetHistogram()->GetYaxis()->GetTitle()), nBins, histoIndi[0].GetHistogram()->GetBinLowEdge(1), histoIndi[0].GetHistogram()->GetBinLowEdge(nBins+1));
+		else ratioPlotEntry = new TH1D("hTotal", Form("%s;%s;%s", histoIndi[0].GetHistogram()->GetTitle(), histoIndi[0].GetHistogram()->GetXaxis()->GetTitle(), histoIndi[0].GetHistogram()->GetYaxis()->GetTitle()), nBins, histoIndi[0].GetHistogram()->GetXaxis()->GetXbins()->GetArray());
+
+		TH1D * histoIndi0 = (TH1D*)histoIndi[0].GetHistogram()->Clone();
+		for (int iBin = 0; iBin < histoIndi[0].GetHistogram()->GetNbinsX()+2; ++iBin) histoIndi0->SetBinError(iBin, sqrt(histoIndi[0].GetStatErrorSquaredVector()[iBin]));
+
+		if (addRatioBoxInfo == "typeA"){
+			TH1D * histoIndi1 = (TH1D*)histoIndi[1].GetHistogram()->Clone();
+			for (int iBin = 0; iBin < histoIndi[1].GetHistogram()->GetNbinsX()+2; ++iBin) histoIndi1->SetBinError(iBin, sqrt(histoIndi[1].GetStatErrorSquaredVector()[iBin]));
+			ratioPlotEntry->Divide(histoIndi0, histoIndi1);
+		}
+		if (addRatioBoxInfo == "typeB"){
+			TH1D *histoStackClone = (TH1D*)histoStack[0].GetHistogram()->Clone();
+			std::vector<double> histoStackCloneStatErrSqrdVec(histoStackClone->GetNbinsX()+2, 0.0);
+			for (size_t iStack = 0; iStack != histoStack.size(); ++iStack){
+				if (iStack != 0) histoStackClone->Add(histoStack[iStack].GetHistogram());
+				for (int iBin = 0; iBin < histoStackClone->GetNbinsX()+2; ++iBin) histoStackCloneStatErrSqrdVec[iBin] += histoStack[iStack].GetStatErrorSquaredVector()[iBin];
+			}
+			for (int iBin = 0; iBin < histoStackClone->GetNbinsX()+2; ++iBin) histoStackClone->SetBinError(iBin, sqrt(histoStackCloneStatErrSqrdVec[iBin]));
+			ratioPlotEntry->Divide(histoIndi0, histoStackClone);
+		}
+		ratioPlotEntry->SetMarkerStyle(20);
+		ratioPlotEntry->SetMarkerSize(0.7);
+		ratioPlotEntry->SetLineColor(kBlack);
+		ratioPlotEntry->SetLineWidth(1.5);
+		if (ratioBoxYAxisMinMax.size()==2){
+			ratioPlotEntry->SetMinimum(ratioBoxYAxisMinMax[0]);
+			ratioPlotEntry->SetMaximum(ratioBoxYAxisMinMax[1]);
+		}
+		ratioPlotEntry->GetXaxis()->SetTitleSize(0.05 * 2.5);
+		ratioPlotEntry->GetXaxis()->SetTitleOffset(1.00);
+		ratioPlotEntry->GetXaxis()->SetLabelSize(0.04 * 2.5);
+		ratioPlotEntry->GetXaxis()->SetLabelOffset(0.007);
+		ratioPlotEntry->GetXaxis()->SetTickLength(0.03 * 2.5);
+
+		ratioPlotEntry->GetYaxis()->SetTitle(ratioBoxYAxisTitle.c_str());
+		ratioPlotEntry->GetYaxis()->CenterTitle(true);
+		ratioPlotEntry->GetYaxis()->SetNdivisions(505);
+		ratioPlotEntry->GetYaxis()->SetTitleSize(0.05 * 2.5);
+		ratioPlotEntry->GetYaxis()->SetTitleOffset(0.4);
+		ratioPlotEntry->GetYaxis()->SetLabelSize(0.04 * 2.5);
+		ratioPlotEntry->GetYaxis()->SetLabelOffset(0.007);
+
+		ratioPlotEntry->Draw("P");
+	} 	
+
+	/////////////////////////////////////////////////////////////////////////////////////////////
+
 	c->SaveAs(saveName.c_str());
 	c->Close();
+	std::cout << std::endl;
+
 	// reset the max values of histograms that we altered
 	if (!histoIndi.empty()){
 		histoIndi[0].GetHistogram()->SetMaximum(initialMax);
@@ -473,7 +627,8 @@ void Plotter::Save(const std::string& saveName){
 		histoStack[0].GetHistogram()->SetMaximum(initialMax);
 		histoStack[0].GetHistogram()->SetMinimum(initialMin);
 	}
-	std::cout << std::endl;
+	if (addRatioBox) histoIndi[0].GetHistogram()->SetLabelOffset(0.007);
+
 	return;
 } // closes function Save
 
@@ -485,15 +640,24 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		return;
 	}
 
-	tdrStyle->cd();
-	TCanvas * c = new TCanvas("c","c");
-	if (useLogY) gPad->SetLogy();
-
 	std::string hsTitles = ""; // NB, can't set title for THStack after construction
 	if (!th1Stack.empty()) hsTitles = Form("%s;%s;%s", th1Stack[0]->GetTitle(), th1Stack[0]->GetXaxis()->GetTitle(), th1Stack[0]->GetYaxis()->GetTitle());	
 	THStack * hs = new THStack("hs", hsTitles.c_str());
 	for (size_t iTh1S = 0; iTh1S != th1Stack.size(); ++iTh1S)
 		hs->Add(th1Stack[iTh1S], "HIST");
+
+	tdrStyle->cd();
+	TCanvas * c = new TCanvas("c","c");
+	
+	if (addRatioBox){
+		TPad *padUp = new TPad("padUp","padUp",0,0.3,1,1);
+		padUp->SetBottomMargin(0.016);
+		padUp->Draw();
+		padUp->cd();
+		th1Indi[0]->SetLabelOffset(777.7);
+	}
+
+	if (useLogY) gPad->SetLogy();
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	// find max and min (don't want zero values for min, they won't work properly for logY plots)
@@ -675,8 +839,57 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
 
+	// do ratio box plot if implemented
+	if (addRatioBox){
+		c->cd();
+		TPad *padDown = new TPad("padDown","padDown",0,0,1,0.3);
+		padDown->SetTopMargin(0.0);
+		padDown->SetBottomMargin(0.30);
+		padDown->Draw("same");
+		padDown->cd();
+
+		TH1D * ratioPlotEntry;
+		Int_t nBins = th1Indi[0]->GetNbinsX();
+		if (th1Indi[0]->GetXaxis()->GetXbins()->GetArray() == NULL) ratioPlotEntry = new TH1D("ratioPlotEntry", Form("%s;%s;%s", th1Indi[0]->GetTitle(), th1Indi[0]->GetXaxis()->GetTitle(), th1Indi[0]->GetYaxis()->GetTitle()), nBins, th1Indi[0]->GetBinLowEdge(1), th1Indi[0]->GetBinLowEdge(nBins+1));
+		else ratioPlotEntry = new TH1D("hTotal", Form("%s;%s;%s", th1Indi[0]->GetTitle(), th1Indi[0]->GetXaxis()->GetTitle(), th1Indi[0]->GetYaxis()->GetTitle()), nBins, th1Indi[0]->GetXaxis()->GetXbins()->GetArray());
+		
+		if (addRatioBoxInfo == "typeA") ratioPlotEntry->Divide(th1Indi[0], th1Indi[1]);
+		if (addRatioBoxInfo == "typeB"){
+			TH1D *histoStackClone = (TH1D*)th1Stack[0]->Clone();
+			for (size_t iTh1S = 1; iTh1S != th1Stack.size(); ++iTh1S) histoStackClone->Add(th1Stack[iTh1S]);
+			ratioPlotEntry->Divide(th1Indi[0], histoStackClone);
+		}
+		ratioPlotEntry->SetMarkerStyle(20);
+		ratioPlotEntry->SetMarkerSize(0.7);
+		ratioPlotEntry->SetLineColor(kBlack);
+		ratioPlotEntry->SetLineWidth(1.5);
+		if (ratioBoxYAxisMinMax.size()==2){
+			ratioPlotEntry->SetMinimum(ratioBoxYAxisMinMax[0]);
+			ratioPlotEntry->SetMaximum(ratioBoxYAxisMinMax[1]);
+		}
+		ratioPlotEntry->GetXaxis()->SetTitleSize(0.05 * 2.5);
+		ratioPlotEntry->GetXaxis()->SetTitleOffset(1.00);
+		ratioPlotEntry->GetXaxis()->SetLabelSize(0.04 * 2.5);
+		ratioPlotEntry->GetXaxis()->SetLabelOffset(0.007);
+		ratioPlotEntry->GetXaxis()->SetTickLength(0.03 * 2.5);
+
+		ratioPlotEntry->GetYaxis()->SetTitle(ratioBoxYAxisTitle.c_str());
+		ratioPlotEntry->GetYaxis()->CenterTitle(true);
+		ratioPlotEntry->GetYaxis()->SetNdivisions(505);
+		ratioPlotEntry->GetYaxis()->SetTitleSize(0.05 * 2.5);
+		ratioPlotEntry->GetYaxis()->SetTitleOffset(0.4);
+		ratioPlotEntry->GetYaxis()->SetLabelSize(0.04 * 2.5);
+		ratioPlotEntry->GetYaxis()->SetLabelOffset(0.007);
+
+		ratioPlotEntry->Draw("P");
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////
+
 	c->SaveAs(saveName.c_str());
 	c->Close();
+	std::cout << std::endl;
+
 	// reset the max values of histograms that we altered
 	if (!th1Indi.empty()){
 		th1Indi[0]->SetMaximum(initialMax);
@@ -686,7 +899,9 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		th1Stack[0]->SetMaximum(initialMax);
 		th1Stack[0]->SetMinimum(initialMin);
 	}
-	std::cout << std::endl;
+
+	if (addRatioBox) th1Indi[0]->SetLabelOffset(0.007);
+
 	return;
 } // closes function SaveSpec01
 
@@ -1013,7 +1228,7 @@ TStyle * Plotter::TDRStyle()
 	// For the axis labels:
 	tdrStyle->SetLabelColor(1, "XYZ");
 	tdrStyle->SetLabelFont(42, "XYZ");
-	tdrStyle->SetLabelOffset(0.007, "XYZ");
+	// tdrStyle->SetLabelOffset(0.007, "XYZ");
 	// tdrStyle->SetLabelSize(0.05, "XYZ");
 	tdrStyle->SetLabelSize(0.04, "XYZ");
 
