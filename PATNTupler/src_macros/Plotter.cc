@@ -258,6 +258,7 @@ void Plotter::AddLegend(TLegend * legDummy)
 {
 	leg = legDummy;
 	leg->SetBorderSize(0);
+	leg->SetFillStyle(0);
 	for (std::vector<PlotEntry>::const_iterator iStack = histoStack.begin(); iStack != histoStack.end(); ++iStack)
 		leg->AddEntry(iStack->GetHistogram(), iStack->GetPlotEntryName().c_str(), "f");
 
@@ -276,6 +277,7 @@ void Plotter::AddLegend(const double& x1, const double& x2, const double& y1, co
     leg->SetY2NDC(y2);
 	leg->SetTextSize(textSize);
 	leg->SetBorderSize(0);
+	leg->SetFillStyle(0);
 	for (std::vector<PlotEntry>::const_iterator iStack = histoStack.begin(); iStack != histoStack.end(); ++iStack)
 		leg->AddEntry(iStack->GetHistogram(), iStack->GetPlotEntryName().c_str(), "f");
 
@@ -299,6 +301,7 @@ void Plotter::AddLegend(const std::vector<std::string>& legendNames, const doubl
     leg->SetY2NDC(y2);
 	leg->SetTextSize(textSize);
 	leg->SetBorderSize(0);
+	leg->SetFillStyle(0);
 	for (size_t i = 0; i < legendNames.size(); ++i){
 		if (i < th1Indi.size()) leg->AddEntry(th1Indi[i], legendNames[i].c_str(), "L");
 		else leg->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
