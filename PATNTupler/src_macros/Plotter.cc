@@ -36,6 +36,8 @@ useLogY(false),
 useLogZ(false),
 plotWithErrorsIndi(false),
 plotWithErrorsStack(false),
+setYValueMin(false),
+yValueMin(0.0),
 tdrStyle(TDRStyle())
 {
 	if (histoIndiDummy.empty()) std::cout << "Plotter WARNING: no plot entries handed to plotter!" << std::endl;
@@ -62,6 +64,8 @@ useLogY(false),
 useLogZ(false),
 plotWithErrorsIndi(false),
 plotWithErrorsStack(false),
+setYValueMin(false),
+yValueMin(0.0),
 tdrStyle(TDRStyle())
 {
 	if (histoIndiDummy.empty()) std::cout << "Plotter Message: first constructor argument std::vector<PlotEntry> is empty" << std::endl;
@@ -99,6 +103,8 @@ useLogY(false),
 useLogZ(false),
 plotWithErrorsIndi(false),
 plotWithErrorsStack(false),
+setYValueMin(false),
+yValueMin(0.0),
 tdrStyle(TDRStyle())
 {
 	if (dummyHistos2D.empty()) std::cout << "Plotter Message: constructor argument std::vector<PlotEntry2D> is empty" << std::endl;
@@ -120,6 +126,8 @@ useLogY(false),
 useLogZ(false),
 plotWithErrorsIndi(false),
 plotWithErrorsStack(false),
+setYValueMin(false),
+yValueMin(0.0),
 tdrStyle(TDRStyle())
 {
 	if (th1IndiDummy.empty()) std::cout << "Plotter Message: no histograms handed to plotter!" << std::endl;
@@ -143,6 +151,8 @@ useLogY(false),
 useLogZ(false),
 plotWithErrorsIndi(false),
 plotWithErrorsStack(false),
+setYValueMin(false),
+yValueMin(0.0),
 tdrStyle(TDRStyle())
 {
 	if (th1IndiDummy.empty()) std::cout << "Plotter Message: first constructor argument std::vector<TH1D*> is empty" << std::endl;
@@ -358,7 +368,15 @@ void Plotter::SetErrors(const std::string& errorInfo){
 	if (errorInfo != "only_indi") plotWithErrorsStack = true;
 	return;
 }
-	
+
+
+void Plotter::SetYValueMin(const double& yValueMinDummy){
+
+	setYValueMin = true;
+	yValueMin = yValueMinDummy;
+	return;
+}
+
 
 void Plotter::Save(const std::string& saveName){
 
@@ -464,6 +482,7 @@ void Plotter::Save(const std::string& saveName){
 			}
 		}
 	} // closes 'if' histoStack has entries
+	if (setYValueMin) min = yValueMin;
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -731,6 +750,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			}
 		}
 	} // closes 'if' th1Stack has entries
+	if (setYValueMin) min = yValueMin;
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
 
