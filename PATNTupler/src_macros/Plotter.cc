@@ -86,7 +86,7 @@ tdrStyle(TDRStyle())
 	}
 
 	for (size_t iStack = 0; iStack != histoStack.size(); ++iStack){
-		histoStack[iStack].GetHistogram()->SetFillColor(SetColor_mellow(iStack+2, histoStack.size()));	
+		histoStack[iStack].GetHistogram()->SetFillColor(SetColor_mellow(iStack, histoStack.size()));	
 		histoStack[iStack].GetHistogram()->SetLineWidth(0.0);
 		histoStack[iStack].GetHistogram()->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
 		histoStack[iStack].GetHistogram()->GetXaxis()->SetLabelSize(0.04);
@@ -169,7 +169,7 @@ tdrStyle(TDRStyle())
 		th1Indi[iTh1I]->GetYaxis()->SetLabelSize(0.04);
 	}
 	for (size_t iTh1S = 0; iTh1S != th1Stack.size(); ++iTh1S){
-		th1Stack[iTh1S]->SetFillColor(SetColor_mellow(iTh1S+2, th1Stack.size()));
+		th1Stack[iTh1S]->SetFillColor(SetColor_mellow(iTh1S, th1Stack.size()));
 		th1Stack[iTh1S]->SetLineWidth(0.0);
 		th1Stack[iTh1S]->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
 		th1Stack[iTh1S]->GetXaxis()->SetLabelSize(0.04);
@@ -1101,12 +1101,16 @@ void Plotter::DrawLatex()
 }
 
 
-int Plotter::SetColor_mellow(int position, const int& maxColors)
+int Plotter::SetColor_mellow(int position, int maxColors)
 {
 	gStyle->SetPalette(55); // sets what sort of colours we will use	
 	double modifier = 0.00; // modifier is an offset in the colour spectrum
 	double colorIndex;
 	int colour = 1;
+	position++;
+	if (maxColors < 4) position++;
+	maxColors++;
+	if (maxColors < 6) maxColors = 6;
 	double fraction = (double)(position)/(double)(maxColors);
 	// double fraction = (double)(maxColors) - (double)(position)/(double)(maxColors) - 1.0;
 	if (position < 0 || maxColors < 0 ) colour = 1;

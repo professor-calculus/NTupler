@@ -53,7 +53,7 @@ private:
 	bool setYValueMin;
 	double yValueMin;
 	void DrawLatex();	
-	int SetColor_mellow(int, const int&);
+	int SetColor_mellow(int, int);
 	int SetColor_stark(const int&);
 	TStyle * tdrStyle;
 	TStyle * TDRStyle();
