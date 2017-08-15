@@ -31,6 +31,7 @@
 Plotter::Plotter(std::vector<PlotEntry> histoIndiDummy) :
 addRatioBox(false),
 leg(0),
+leg2Cols(0),
 addLatex(false),
 useLogY(false),
 useLogZ(false),
@@ -59,6 +60,7 @@ tdrStyle(TDRStyle())
 Plotter::Plotter(std::vector<PlotEntry> histoIndiDummy, std::vector<PlotEntry> histoStackDummy) :
 addRatioBox(false),
 leg(0),
+leg2Cols(0),
 addLatex(false),
 useLogY(false),
 useLogZ(false),
@@ -98,6 +100,7 @@ tdrStyle(TDRStyle())
 Plotter::Plotter(std::vector<PlotEntry2D> dummyHistos2D) :
 addRatioBox(false),
 leg(0),
+leg2Cols(0),
 addLatex(false),
 useLogY(false),
 useLogZ(false),
@@ -121,6 +124,7 @@ tdrStyle(TDRStyle())
 Plotter::Plotter(std::vector<TH1D*> th1IndiDummy) :
 addRatioBox(false),
 leg(0),
+leg2Cols(0),
 addLatex(false),
 useLogY(false),
 useLogZ(false),
@@ -146,6 +150,7 @@ tdrStyle(TDRStyle())
 Plotter::Plotter(std::vector<TH1D*> th1IndiDummy, std::vector<TH1D*> th1StackDummy) :
 addRatioBox(false),
 leg(0),
+leg2Cols(0),
 addLatex(false),
 useLogY(false),
 useLogZ(false),
@@ -305,6 +310,51 @@ void Plotter::AddLegend(const std::vector<std::string>& legendNames, const doubl
 	for (size_t i = 0; i < legendNames.size(); ++i){
 		if (i < th1Indi.size()) leg->AddEntry(th1Indi[i], legendNames[i].c_str(), "L");
 		else leg->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
+	}
+	return;
+}
+
+void Plotter::AddLegend2Cols(const unsigned int& numRowsBeforeUsing2Cols, const std::vector<std::string>& legendNames, const double& x1, const double& x2, const double& y1, const double& y2, const double& textSize)
+{
+	if (legendNames.size() != (th1Indi.size() + th1Stack.size()) ){
+		std::cout << "The legend you provided does not have the correct number of strings to match th1Indi+th1Stack" << std::endl;
+		std::cout << "Not inserting a legend" << std::endl;
+		return;
+	}
+
+	int numRowsUsing2Cols = ceil(0.5 * (legendNames.size() - numRowsBeforeUsing2Cols));
+	int numRowsTotal = numRowsBeforeUsing2Cols + numRowsUsing2Cols;
+	double fractionRowsBeforeUsing2Cols = double(numRowsBeforeUsing2Cols) / numRowsTotal;
+
+	leg = new TLegend();
+    leg->SetX1NDC(x1);
+    leg->SetX2NDC(x2);
+	leg->SetY1NDC(y2 - fractionRowsBeforeUsing2Cols * (y2-y1));
+    leg->SetY2NDC(y2);
+	leg->SetTextSize(textSize);
+	leg->SetBorderSize(0);
+	leg->SetFillStyle(0);
+
+	leg2Cols = new TLegend();
+	leg2Cols->SetNColumns(2);
+    leg2Cols->SetX1NDC(x1);
+    leg2Cols->SetX2NDC(x2);
+	leg2Cols->SetY1NDC(y1);
+    leg2Cols->SetY2NDC(y2 - fractionRowsBeforeUsing2Cols * (y2-y1));
+	leg2Cols->SetTextSize(textSize);
+	leg2Cols->SetBorderSize(0);
+	leg2Cols->SetFillStyle(0);
+
+	for (size_t i = 0; i < legendNames.size(); ++i){
+		
+		if (i < numRowsBeforeUsing2Cols){
+			if (i < th1Indi.size()) leg->AddEntry(th1Indi[i], legendNames[i].c_str(), "L");
+			else leg->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
+		}
+		else {
+			if (i < th1Indi.size()) leg2Cols->AddEntry(th1Indi[i], legendNames[i].c_str(), "L");
+			else leg2Cols->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
+		}
 	}
 	return;
 }
@@ -832,6 +882,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 
 	if (addLatex) DrawLatex();
 	if (leg != NULL) leg->Draw("same");
+	if (leg2Cols != NULL) leg2Cols->Draw("same");
 	gPad->RedrawAxis();
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
