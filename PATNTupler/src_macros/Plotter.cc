@@ -1178,13 +1178,17 @@ int Plotter::SetColor_mellow(int position, int maxColors)
 int Plotter::SetColor_stark(const int& index)
 {
 	if (index==0) return kRed;
+	
 	if (index==1) return kBlue;
-	if (index==2) return kGreen+1;
-	// if (index==2) return kMagenta;
+	// if (index==1) return kBlue+2;
+	// if (index==1) return kGreen+1;
+	
+	// if (index==2) return kGreen+1;
+	if (index==2) return kMagenta-4;
+
 	if (index==3) return kOrange+1;
-	// if (index==3) return kBlack;
-	if (index==4) return kMagenta-4;
-	if (index==5) return kCyan+1;
+	// if (index==3) return kGreen+3;
+	
 	else return kBlack;
 }
 
@@ -1300,7 +1304,7 @@ TStyle * Plotter::TDRStyle()
 	tdrStyle->SetTitleSize(0.06, "XYZ");
 	// tdrStyle->SetTitleXSize(0.06); // Another way to set the size?
 	tdrStyle->SetTitleXOffset(0.95);//EDITFROM 0.9
-	tdrStyle->SetTitleYOffset(1.25);
+	tdrStyle->SetTitleYOffset(1.25); // original
 	// tdrStyle->SetTitleOffset(1.1, "Y"); // Another way to set the Offset
 
 	// For the axis labels:
@@ -1332,7 +1336,7 @@ TStyle * Plotter::TDRStyle()
 
 	// tdrStyle->SetBarOffset(Float_t baroff = 0.5);
 	// tdrStyle->SetBarWidth(Float_t barwidth = 0.5);
-	// tdrStyle->SetPaintTextFormat(const char* format = "g");
+	tdrStyle->SetPaintTextFormat(".2f"); // default is "g"
 	// tdrStyle->SetPalette(Int_t ncolors = 0, Int_t* colors = 0);
 	// tdrStyle->SetTimeOffset(Double_t toffset);
 	// tdrStyle->SetHistMinimumZero(kTRUE);
