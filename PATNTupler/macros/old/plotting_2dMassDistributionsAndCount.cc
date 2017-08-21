@@ -52,10 +52,10 @@ int main(int argc, char** argv){
     // THREE: set the mass regions (use a KEYNAME and keep track of what means what!!!)
     double S1_Node1 = 31.5;
     double S1_Node2 = 16.5;
-    double SMAX_Node1 = 117.0;
-    double SMAX_Node2 = 78.0;
-    std::vector<double> SN_Nodes = {40.6, 50.7, 61.8, 73.9, 87.0, 101.6};
-    MassRegionCuts MassCutsObject = MassRegionCuts("MassCutsV03", S1_Node1, S1_Node2, SMAX_Node1, SMAX_Node2, SN_Nodes);    
+    double SMAX_Node1 = 168.5;
+    double SMAX_Node2 = 115.04;
+    std::vector<double> SN_Nodes = {40.7, 50.9, 62.1, 74.3, 87.5, 101.7, 116.9, 133.1, 150.3};
+    MassRegionCuts MassCutsObject = MassRegionCuts("MassCutsV04", S1_Node1, S1_Node2, SMAX_Node1, SMAX_Node2, SN_Nodes);
 
 
 
