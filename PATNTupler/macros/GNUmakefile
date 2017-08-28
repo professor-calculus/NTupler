@@ -72,10 +72,18 @@ ${TMPDIR}/ParticleDict.cc:	${INCDIR}/Particles.hh ${INCDIR}/ntpLinkDef.h
 	rootcint -f $@ -c $< ${INCDIR}/ntpLinkDef.h
 
 clean:
-	rm -rf plotting_compareDifferentSamples plotting_compareDifferentSamples.o ${OBJDIR}/* ${TMPDIR}/*
-	rm -rf plotting_compareDifferentCuts plotting_compareDifferentCuts.o ${OBJDIR}/* ${TMPDIR}/*
-	rm -rf plotting_compare2D plotting_compare2D.o ${OBJDIR}/* ${TMPDIR}/*
-	rm -rf plotting_investigateEventSelectionCuts plotting_investigateEventSelectionCuts.o ${OBJDIR}/* ${TMPDIR}/*
-	rm -rf table_investigateEventSelectionCuts table_investigateEventSelectionCuts.o ${OBJDIR}/* ${TMPDIR}/*
-	rm -rf histos_create histos_create.o ${OBJDIR}/* ${TMPDIR}/*
-	rm -rf histos_plot histos_plot.o ${OBJDIR}/* ${TMPDIR}/*
+	# rm -rf plotting_compareDifferentSamples plotting_compareDifferentSamples.o ${OBJDIR}/* ${TMPDIR}/*
+	# rm -rf plotting_compareDifferentCuts plotting_compareDifferentCuts.o ${OBJDIR}/* ${TMPDIR}/*
+	# rm -rf plotting_compare2D plotting_compare2D.o ${OBJDIR}/* ${TMPDIR}/*
+	# rm -rf plotting_investigateEventSelectionCuts plotting_investigateEventSelectionCuts.o ${OBJDIR}/* ${TMPDIR}/*
+	# rm -rf table_investigateEventSelectionCuts table_investigateEventSelectionCuts.o ${OBJDIR}/* ${TMPDIR}/*
+	# rm -rf histos_create histos_create.o ${OBJDIR}/* ${TMPDIR}/*
+	# rm -rf histos_plot histos_plot.o ${OBJDIR}/* ${TMPDIR}/*
+
+	rm -rf plotting_compareDifferentSamples plotting_compareDifferentSamples.o ${OBJDIR}/*
+	rm -rf plotting_compareDifferentCuts plotting_compareDifferentCuts.o ${OBJDIR}/*
+	rm -rf plotting_compare2D plotting_compare2D.o ${OBJDIR}/*
+	rm -rf plotting_investigateEventSelectionCuts plotting_investigateEventSelectionCuts.o ${OBJDIR}/*
+	rm -rf table_investigateEventSelectionCuts table_investigateEventSelectionCuts.o ${OBJDIR}/*
+	rm -rf histos_create histos_create.o ${OBJDIR}/*
+	rm -rf histos_plot histos_plot.o ${OBJDIR}/*
