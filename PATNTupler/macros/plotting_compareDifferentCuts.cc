@@ -20,6 +20,7 @@
 #include "MacrosOnCondor.h"
 
 // COMPARE A SET OF DIFFERENT CUTS ON A CHOSEN DATA SET VARIABLE
+
 int main(int argc, char** argv){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,7 +29,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_14/QCD/MassShapeStudies/invDBT/1D_20_0_200/fullCutsVariation_HT1500to2500/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_08_14/trashDONTSTUDYTHIS/TTJets/trial/1D_20_0_200/"; // where we are going to save the output plots (should include the samples name + binning maybe)
 
 
 
@@ -38,9 +39,9 @@ int main(int argc, char** argv){
     // std::vector<std::vector<int>> cut4_ht = { {-1,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
     // std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
-    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Med2","Max","Med2","Max"}, {"Off","Loose","Off","Loose"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Med2","Max","Med2","Max"}, {"Med2","Max","Off","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     std::vector<int> cut3_ak8Pt = {300};
-    std::vector<std::vector<int>> cut4_ht = { {1500,2500} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
+    std::vector<std::vector<int>> cut4_ht = { {1500,2500}  }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
     std::vector<std::vector<int>> cut5_ak4Pt = { {250,250} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
 
@@ -48,14 +49,15 @@ int main(int argc, char** argv){
     // THREE: plot histogram settings
     double luminosity = 50.0; // note that this value doesn't matter IF you normalise later
     
-    std::string varToPlot = "fatJetA_softDropMass";
-    // std::string varToPlot = "fatJetB_softDropMass";
+    // std::string varToPlot = "fatJetA_softDropMass";
+    std::string varToPlot = "fatJetB_softDropMass";
 
+    // TH1D hTemplate("hTemplate", ";fatJetA_SoftDrop_Mass (GeV);a.u.", 25, 0, 200);
     // TH1D hTemplate("hTemplate", ";fatJetA_SoftDrop_Mass (GeV);a.u.", 20, 0, 200);
-    TH1D hTemplate("hTemplate", ";fatJetA_SoftDrop_Mass (GeV);events / bin", 50, 0, 200);
-    // TH1D hTemplate("hTemplate", ";fatJetB_SoftDrop_Mass (GeV);a.u.", 20, 0, 200);
+    // TH1D hTemplate("hTemplate", ";fatJetA_SoftDrop_Mass (GeV);events / bin", 50, 0, 200);
+    // TH1D hTemplate("hTemplate", ";fatJetB_SoftDrop_Mass (GeV);a.u.", 25, 0, 200);
+    TH1D hTemplate("hTemplate", ";fatJetB_SoftDrop_Mass (GeV);a.u.", 20, 0, 200);
     // TH1D hTemplate("hTemplate", ";fatJetB_SoftDrop_Mass (GeV);events / bin", 50, 0, 200);
-
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,15 +135,17 @@ int main(int argc, char** argv){
                     PlotEntry plotElement = PlotEntry(legendName.c_str(), hTemplate, varToPlot.c_str(), luminosity); // note that the luminosity value doesn't matter IF we will normalise later
 
                     // QCD
-                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT700to1000/flatTree.root", cutToApply.c_str(), 6802);
                     plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT1000to1500/flatTree.root", cutToApply.c_str(), 1206);
                     plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT1500to2000/flatTree.root", cutToApply.c_str(), 120.4);
                     plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT2000toInf/flatTree.root", cutToApply.c_str(), 25.25);
+                    // plotElement.NormalisePlot(); // OPTIONAL: toggle on or off
 
-                    plotElement.NormalisePlot(); // OPTIONAL: toggle on or off
+                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/TTJets_NLO/flatTree.root", cutToApply.c_str(), 831.76);
+                    // plotElement.NormalisePlot(); // OPTIONAL: toggle on or off
+
+
+
                     plotEntryVec.push_back(plotElement);
-
-
 
                 } // closes loop through cut 5 states
             } // closes loop through cut 4 states
@@ -156,13 +160,13 @@ int main(int argc, char** argv){
     // plot.AddLegend(0.65, 0.88, 0.77, 0.87); // top right (wide 2)
     // plot.AddLegend(0.65, 0.88, 0.70, 0.87); // top right (wide 4)
     // plot.AddLegend(0.65, 0.88, 0.62, 0.87); // top right (wide 6)
-    plot.AddLegend(0.45, 0.88, 0.77, 0.87); // top right (extra wide 2)
+    plot.AddLegend(0.45, 0.88, 0.74, 0.87, 0.04); // top right (extra wide 2)
     // plot.AddLegend(0.45, 0.88, 0.70, 0.87); // top right (extra wide 4)
     // plot.AddLegend(0.45, 0.88, 0.62, 0.87); // top right (extra wide 6)
     plot.AddLatex(); // if you HAVE normalised
     // plot.AddLatex(luminosity); // if you HAVE NOT normalised
     plot.SetErrors();
-
+    // plot.AddRatioBox(0.2, 1.8, "tag / inverted");
 
 
     std::string saveName = varToPlot;

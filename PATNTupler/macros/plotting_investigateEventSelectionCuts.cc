@@ -20,6 +20,7 @@
 #include "MacrosOnCondor.h"
 
 // COMPARE SIGNAL AND BACKGROUND FOR DIFFERENT CUTS
+
 int main(int argc, char** argv){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,7 +29,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_20/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_08_10/"; // where we are going to save the output plots (should include the samples name, and any important features)
 
 
 
