@@ -29,12 +29,13 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_07_19/QCD/MassCutsV03/fullCutsNOAK4PT_HT1500to2500/signal/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_08_14/4bQCD_Studies/cutFlows/endUpInSignalRegions_noDBT/cutHt1500to2500_qcdHt1000toInf/"; // where we are going to save the output plots (should include the samples name + binning maybe)
 
 
 
     // TWO: set the cut params.
-    std::vector<std::string> cut2_ak8Dbt = {"Med2","Max","Med2","Max"}; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    std::vector<std::string> cut2_ak8Dbt = {"Off","Max","Off","Max"}; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    // std::vector<std::string> cut2_ak8Dbt = {"Med2","Max","Med2","Max"}; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     // std::vector<std::string> cut2_ak8Dbt = {"Off","Loose","Off","Loose"}; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     // std::vector<std::string> cut2_ak8Dbt = {"Med2","Max","Off","IDBTCv1"}; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     // std::vector<std::string> cut2_ak8Dbt = {"Off","IDBTCv1","Med2","Max"}; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
@@ -44,8 +45,8 @@ int main(int argc, char** argv){
     // std::vector<int> cut4_ht = {2500,3500}; // HT BIN
     // std::vector<int> cut4_ht = {3500,13000}; // HT BIN
     // std::vector<int> cut4_ht = {-1,13000}; // HT BIN
-    // std::vector<int> cut5_ak4Pt = {250,250}; // 1st element for leading pt, 2nd element for secondary pt
-    std::vector<int> cut5_ak4Pt = {-1,-1}; // 1st element for leading pt, 2nd element for secondary pt
+    std::vector<int> cut5_ak4Pt = {250,250}; // 1st element for leading pt, 2nd element for secondary pt
+    // std::vector<int> cut5_ak4Pt = {-1,-1}; // 1st element for leading pt, 2nd element for secondary pt
 
 
 
@@ -54,8 +55,8 @@ int main(int argc, char** argv){
     double S1_Node2 = 16.5;
     double SMAX_Node1 = 168.5;
     double SMAX_Node2 = 115.04;
-    std::vector<double> SN_Nodes = {40.7, 50.9, 62.1, 74.3, 87.5, 101.7, 116.9, 133.1, 150.3};
-    MassRegionCuts MassCutsObject = MassRegionCuts("MassCutsV04", S1_Node1, S1_Node2, SMAX_Node1, SMAX_Node2, SN_Nodes);
+    std::vector<double> SN_Nodes = {31.5};
+    MassRegionCuts MassCutsObject = MassRegionCuts("MassCutsV04_nointerior", S1_Node1, S1_Node2, SMAX_Node1, SMAX_Node2, SN_Nodes);
 
 
 
@@ -131,7 +132,8 @@ int main(int argc, char** argv){
     table << "CUT_TYPE, COUNT, STAT_ERROR\n";
 
     // loop through the different mass regions
-    for (size_t iMassRegion = 0; iMassRegion!=MassCutsObject.GetAllCuts().size()+1; ++iMassRegion){
+    // for (size_t iMassRegion = 0; iMassRegion!=MassCutsObject.GetAllCuts().size()+1; ++iMassRegion){
+    for (size_t iMassRegion = 0; iMassRegion!=MassCutsObject.Get_S_Cuts().size(); ++iMassRegion){
 
         std::string cutToApply;
         if (iMassRegion != MassCutsObject.GetAllCuts().size()) cutToApply = cutToApplyBase + " && " + MassCutsObject.GetAllCuts()[iMassRegion];
