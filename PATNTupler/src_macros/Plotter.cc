@@ -1183,8 +1183,8 @@ int Plotter::SetColor_stark(const int& index)
 	// if (index==1) return kBlue+2;
 	// if (index==1) return kGreen+1;
 	
-	// if (index==2) return kGreen+1;
-	if (index==2) return kMagenta-4;
+	if (index==2) return kGreen+1;
+	// if (index==2) return kMagenta-4;
 
 	if (index==3) return kOrange+1;
 	// if (index==3) return kGreen+3;
