@@ -1,3 +1,8 @@
+# important to keep up-to-date:
+# 1. Global Tag
+# 2. dataset (for local running only)
+# 3. HLT trigger path
+
 import FWCore.ParameterSet.Config as cms
 
 from FWCore.ParameterSet.VarParsing import VarParsing
@@ -15,7 +20,7 @@ process = cms.Process("HEEP")
 process.load("FWCore.MessageService.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport = cms.untracked.PSet(
     reportEvery = cms.untracked.int32(10),
-    limit = cms.untracked.int32(1500)
+    limit = cms.untracked.int32(2000)
 )
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
@@ -26,23 +31,19 @@ process.TFileService = cms.Service("TFileService", fileName=cms.string('nTuple.r
 #setup global tag
 from Configuration.AlCa.GlobalTag import GlobalTag
 from Configuration.AlCa.autoCond import autoCond
-# process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016SeptRepro_v5', '') #
-# process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016LegacyRepro_v4', '') #
-process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_Prompt_v10', '') #
+process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016SeptRepro_v7', '') #
 
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(2000) )
 process.source = cms.Source ("PoolSource",fileNames = cms.untracked.vstring(
-        'root://dcap.pp.rl.ac.uk:1094/pnfs/pp.rl.ac.uk/data/cms/store/data/Run2016G/DoubleMuon/MINIAOD/23Sep2016-v1/100000/00993A51-DF90-E611-A4EE-7845C4FC3650.root'
+        'root://dcap.pp.rl.ac.uk:1094/pnfs/pp.rl.ac.uk/data/cms/store/data/Run2016E/JetHT/MINIAOD/03Feb2017-v1/110000/00098E8E-9CEB-E611-BA25-008CFA110B08.root'
 )
                                        
 )
 useMiniAOD=True
 
 if useMiniAOD==True:
-    # process.source.fileNames=cms.untracked.vstring('/store/data/Run2016G/DoubleMuon/MINIAOD/23Sep2016-v1/100000/00993A51-DF90-E611-A4EE-7845C4FC3650.root',)
-    # process.source.fileNames=cms.untracked.vstring('/store/data/Run2016D/JetHT/MINIAOD/07Aug17-v1/110000/006E5601-D189-E711-9EDC-0025905A60E4.root',)
-    process.source.fileNames=cms.untracked.vstring('/store/data/Run2016D/JetHT/MINIAOD/PromptReco-v2/000/276/315/00000/208AB2DD-0145-E611-910F-02163E0144AD.root',)
+    process.source.fileNames=cms.untracked.vstring('/store/data/Run2016E/JetHT/MINIAOD/03Feb2017-v1/110000/00098E8E-9CEB-E611-BA25-008CFA110B08.root',)
 
 #setup the VID with HEEP 7.0
 from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
@@ -76,7 +77,7 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        bits = cms.InputTag("TriggerResults","","HLT"),
                                        prescales = cms.InputTag("patTrigger"),
                                        objects = cms.InputTag("selectedPatTrigger"),
-                                       selectedTriggerPaths = cms.vstring("HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW_v","HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_v","HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL_v","HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v2","HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v2"),#matches triggers that *contain* the stated names, so finish with _v to make sure your trigger name isn't a subset of others
+                                       selectedTriggerPaths = cms.vstring("HLT_PFHT900_v"),#matches triggers that *contain* the stated names, so finish with _v to make sure your trigger name isn't a subset of others
                                        elesAOD=cms.InputTag("gedGsfElectrons"),
                                        elesMiniAOD=cms.InputTag("slimmedElectrons"),
                                        trkIsolMap=cms.InputTag("heepIDVarValueMaps","eleTrkPtIso"),
@@ -86,4 +87,3 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
 process.p = cms.Path(
     process.egmGsfElectronIDSequence* 
     process.demo) #our analysing example module, replace with your module
-
