@@ -1,5 +1,6 @@
 import os
 
+# this script hadds together outputs of flatTree jobs on mass
 # run with
 # $ python $CMSSW_BASE/src/NTupler/PATNTupler/batchJobs/haddBatchOutput.py
 

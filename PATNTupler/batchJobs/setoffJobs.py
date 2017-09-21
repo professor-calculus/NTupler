@@ -1,7 +1,9 @@
 import os
 
+# this script sets off jobs on mass that have been setup by the script submitCondorNtupleJobs_VJ.py
 # run with
 # $ python $CMSSW_BASE/src/NTupler/PATNTupler/batchJobs/setoffJobs.py
+
 
 ###########################################################################################################
 ############## USER INPUTS ################################################################################
