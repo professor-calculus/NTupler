@@ -276,7 +276,9 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
    //}
 
 
-   //if (triggerOfInterest || isMC_){
+   if (triggerOfInterest || isMC_){ // default
+   // if (true){ // use this option if running on data and want all events in the dataset
+
      electronCollection_ = new std::vector<ran::ElectronStruct>();
      muonCollection_ = new std::vector<ran::MuonStruct>();
      jetCollection_ = new std::vector<ran::JetStruct>();
@@ -320,7 +322,7 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
      delete recordedTriggers_;
 
-     //}//Passed Trigger? 
+     }//Passed Trigger? 
 
 #ifdef THIS_IS_AN_EVENT_EXAMPLE
    Handle<ExampleData> pIn;
