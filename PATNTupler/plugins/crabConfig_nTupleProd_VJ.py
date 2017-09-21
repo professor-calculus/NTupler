@@ -2,11 +2,12 @@ from CRABClient.UserUtilities import config
 config = config()
 
 # submit, from plugins directory, with $ crab submit -c crabConfig_nTupleProd_VJ.py
-# check $ cmsRun nTupleProduction.py, is behaving correctly first!!!
-# EDIT the following
-# uniqueName, config.Data.inputDataset, config.Data.inputDBS, config.Data.unitsPerJob, (config.Data.outLFNDirBase)
+# check $ cmsRun nTupleProduction.py, is setup correctly first (and that RALMiniAnalyzer is compiled)!!!
+# EDIT the following:
+# uniqueName, config.Data.inputDataset, config.Data.inputDBS, config.Data.unitsPerJob
 
 uniqueName = 'mH90p0_mSusy1600p0_ratio0p99_splitting0p1_CMSSW8021wDBTV4_21f544f_v4' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+
 config.General.requestName = uniqueName # name of the crab job project (eg on dashboard)
 config.General.workArea = 'crab_projects' # name of directory where crab project info is stored
 config.General.transferOutputs = True
@@ -67,17 +68,14 @@ config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH90p0_mSusy1600p0_rati
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH90p0_mSusy2000p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH90p0_mSusy2000p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 
 #################################################################################################
-
 # config.Data.inputDBS = 'global' # for centrally produced data
 config.Data.inputDBS = 'phys03' # for personal simulation
 config.Data.unitsPerJob = 1
-
 #################################################################################################
 
 config.Data.totalUnits = -1 # '-1' does them all
 config.Data.splitting = 'FileBased'
 config.Data.publication = False
 config.Data.outLFNDirBase = '/store/user/taylor/ntuples_MC' # Wherever you want the ntuples to go on the RAL T2
-# config.Data.outLFNDirBase = '/store/user/taylor/ntuples_DATA' # Wherever you want the ntuples to go on the RAL T2
 
 config.Site.storageSite = 'T2_UK_SGrid_RALPP'
