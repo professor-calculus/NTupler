@@ -31,7 +31,7 @@ process.GlobalTag = GlobalTag(process.GlobalTag, '80X_mcRun2_asymptotic_2016_min
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(2000) )
 process.source = cms.Source ("PoolSource",fileNames = cms.untracked.vstring(
-        'root://dcap.pp.rl.ac.uk:1094/pnfs/pp.rl.ac.uk/data/cms/store/mc/RunIISpring16MiniAODv1/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUSpring16_80X_mcRun2_asymptotic_2016_v3_ext1-v1/20000/AC5DA257-68FC-E511-8E8F-5065F381E271.root'
+        'root://dcap.pp.rl.ac.uk:1094/pnfs/pp.rl.ac.uk/data/cms/store/mc/RunIISummer16MiniAODv2/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/0693E0E7-97BE-E611-B32F-0CC47A78A3D8.root'
 )
                                        
 )
@@ -62,7 +62,7 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        isThisMC = cms.bool(True),
                                        #mcWeight = cms.double(MCWEIGHT_INSERTEDHERE),
                                        containsLHE = cms.bool(True),
-                                       # containsLHE = cms.bool(False), # FOR SIGNAL SAMPLES: they do not have the correct lhe info format
+                                       # containsLHE = cms.bool(False), # use for personal MC samples that do not have the correct lhe info format
                                        lhe = cms.InputTag("externalLHEProducer"),
                                        ignoreTopInLheHtCalculation = cms.bool(True),
                                        heepId = cms.InputTag("heepId"),

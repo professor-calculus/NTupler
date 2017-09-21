@@ -26,10 +26,12 @@ process.TFileService = cms.Service("TFileService", fileName=cms.string('nTuple.r
 #setup global tag
 from Configuration.AlCa.GlobalTag import GlobalTag
 from Configuration.AlCa.autoCond import autoCond
-process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016SeptRepro_v5', '') #
+# process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016SeptRepro_v5', '') #
+# process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016LegacyRepro_v4', '') #
+process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_Prompt_v10', '') #
 
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(2000) )
 process.source = cms.Source ("PoolSource",fileNames = cms.untracked.vstring(
         'root://dcap.pp.rl.ac.uk:1094/pnfs/pp.rl.ac.uk/data/cms/store/data/Run2016G/DoubleMuon/MINIAOD/23Sep2016-v1/100000/00993A51-DF90-E611-A4EE-7845C4FC3650.root'
 )
@@ -38,8 +40,9 @@ process.source = cms.Source ("PoolSource",fileNames = cms.untracked.vstring(
 useMiniAOD=True
 
 if useMiniAOD==True:
-#    process.source.fileNames=cms.untracked.vstring('root://dcap.pp.rl.ac.uk:1094/pnfs/pp.rl.ac.uk/data/cms/store/mc/RunIISpring16MiniAODv1/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUSpring16_80X_mcRun2_asymptotic_2016_v3_ext1-v1/20000/AC5DA257-68FC-E511-8E8F-5065F381E271.root',)
-    process.source.fileNames=cms.untracked.vstring('/store/data/Run2016G/DoubleMuon/MINIAOD/23Sep2016-v1/100000/00993A51-DF90-E611-A4EE-7845C4FC3650.root',)
+    # process.source.fileNames=cms.untracked.vstring('/store/data/Run2016G/DoubleMuon/MINIAOD/23Sep2016-v1/100000/00993A51-DF90-E611-A4EE-7845C4FC3650.root',)
+    # process.source.fileNames=cms.untracked.vstring('/store/data/Run2016D/JetHT/MINIAOD/07Aug17-v1/110000/006E5601-D189-E711-9EDC-0025905A60E4.root',)
+    process.source.fileNames=cms.untracked.vstring('/store/data/Run2016D/JetHT/MINIAOD/PromptReco-v2/000/276/315/00000/208AB2DD-0145-E611-910F-02163E0144AD.root',)
 
 #setup the VID with HEEP 7.0
 from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
@@ -60,7 +63,9 @@ for idmod in my_id_modules:
 #this is our example analysis module reading the results
 process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        isThisMC = cms.bool(False),
-                                       #mcWeight = cms.double(MCWEIGHT_INSERTEDHERE),
+                                       containsLHE = cms.bool(False), # data does not have lhe info
+                                       lhe = cms.InputTag("externalLHEProducer"),
+                                       # ignoreTopInLheHtCalculation = cms.bool(True), 
                                        heepId = cms.InputTag("heepId"),
                                        vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
                                        muons = cms.InputTag("slimmedMuons"),
