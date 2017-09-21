@@ -470,6 +470,8 @@ int main(int argc, char** argv){
 			// return 1;
 		// }
 
+		TTreeReaderValue<std::vector<unsigned int>> recordedTriggerValue(treeReader, "recordedTriggers");
+
 		// // Fails if the ntuple doesn't have the lheHT branch
 		// TTreeReaderValue<float> lheHTValue(treeReader, "lheHT");
 		// if (lheHTValue.GetSetupStatus() < 0) {
@@ -500,6 +502,15 @@ int main(int argc, char** argv){
 			std::vector<ran::NtFatJet> fatJetVec(fatJetBranchValue->begin(), fatJetBranchValue->end());
 			// std::sort(fatJetVec.begin(), fatJetVec.end(), [](const ran::NtFatJet& a, const ran::NtFatJet& b) {return b.pt() < a.pt();} );
 			std::sort(fatJetVec.begin(), fatJetVec.end(), [](const ran::NtFatJet& a, const ran::NtFatJet& b) {return b.pfBoostedDoubleSecondaryVertexAK8BJetTags() < a.pfBoostedDoubleSecondaryVertexAK8BJetTags();} );
+
+			const std::vector<unsigned int> recordedTriggerVec(recordedTriggerValue->begin(), recordedTriggerValue->end());
+			bool doesEventPassTrigger = false;
+			for (const unsigned int& recordedTrigger : recordedTriggerVec){
+				if (recordedTrigger != 0){
+					doesEventPassTrigger = true;
+					break;
+				}
+			}
 
 			if (doesNtupleHaveLheHt) T->GetEntry(fileEvtIdx);
 			// // test the GetEntry method runs on the same events
@@ -548,8 +559,8 @@ int main(int argc, char** argv){
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, lheHT, slimJets, false);
-				else doubleBFatJetPairTree.fillTree(*evtInfo, fatJetB, fatJetA, ht, lheHT, slimJets, false);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, lheHT, slimJets, doesEventPassTrigger);
+				else doubleBFatJetPairTree.fillTree(*evtInfo, fatJetB, fatJetA, ht, lheHT, slimJets, doesEventPassTrigger);
 
 				// Fat Jets ordered by DBT discriminator score
 				// doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, lheHT, slimJets, false);
