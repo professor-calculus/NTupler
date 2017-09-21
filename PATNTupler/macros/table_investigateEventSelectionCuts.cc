@@ -28,12 +28,13 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_08_14/cutFlowTables/background/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_08_14/4bQCD_Studies/cutFlows/HT1000toInf_noDBT/"; // where we are going to save the output plots (should include the samples name, and any important features)
 
 
 
     // TWO: set of cut params (first element is the choice for an individual table, second element is the choice for an individual table, etc.)
-    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Med2","Max","Med2","Max"}, {"Med2","Max","Med2","Max"}, {"Med2","Max","Med2","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Med2","Max","Med2","Max"}, {"Med2","Max","Med2","Max"}, {"Med2","Max","Med2","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Max","Off","Max"}, {"Off","Max","Off","Max"}, {"Off","Max","Off","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     std::vector<int> cut3_ak8Pt = {300, 300, 300};
     std::vector<std::vector<int>>cut4_ht = { {1500,2500}, {2500,3500}, {3500,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
     std::vector<std::vector<int>> cut5_ak4Pt = { {250,250}, {250,250}, {250,250} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
@@ -165,15 +166,23 @@ int main(int argc, char** argv){
             givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT1500to2000/flatTree.root", cutToApplyVec[iC].c_str(), 120.4);
             givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT2000toInf/flatTree.root", cutToApplyVec[iC].c_str(), 25.25);
 
-            givenCutObject.push_back( PlotEntry("TT+Jets", hTemplate, varToPlot.c_str(), luminosity) );
-            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/TTJets_NLO/flatTree.root", cutToApplyVec[iC].c_str(), 831.76);
+            // givenCutObject.push_back( PlotEntry("TT+Jets", hTemplate, varToPlot.c_str(), luminosity) );
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/TTJets_NLO/flatTree.root", cutToApplyVec[iC].c_str(), 831.76);
 
-            givenCutObject.push_back( PlotEntry("Z+Jets HT>600", hTemplate, varToPlot.c_str(), luminosity) );
-            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/ZJets_HT600toInf/flatTree.root", cutToApplyVec[iC].c_str(), 5.67);
+            // givenCutObject.push_back( PlotEntry("Z+Jets HT>600", hTemplate, varToPlot.c_str(), luminosity) );
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/ZJets_HT600toInf/flatTree.root", cutToApplyVec[iC].c_str(), 5.67);
 
-            givenCutObject.push_back( PlotEntry("W+Jets HT>600", hTemplate, varToPlot.c_str(), luminosity) );
-            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/WJets_HT600toInf/flatTree.root", cutToApplyVec[iC].c_str(), 95.14);
+            // givenCutObject.push_back( PlotEntry("W+Jets HT>600", hTemplate, varToPlot.c_str(), luminosity) );
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/WJets_HT600toInf/flatTree.root", cutToApplyVec[iC].c_str(), 95.14);
 
+            // givenCutObject.push_back( PlotEntry("QCD HT 1000-1500", hTemplate, varToPlot.c_str(), luminosity) );
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT1000to1500/flatTree.root", cutToApplyVec[iC].c_str(), 1206);
+
+            // givenCutObject.push_back( PlotEntry("QCD HT 1500-2000", hTemplate, varToPlot.c_str(), luminosity) );
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT1500to2000/flatTree.root", cutToApplyVec[iC].c_str(), 120.4);
+            
+            // givenCutObject.push_back( PlotEntry("QCD HT 2000+", hTemplate, varToPlot.c_str(), luminosity) );
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_07_14_CMSSW_8_0_2X_dbtV4_newFatJetLabelling/QCD_HT2000toInf/flatTree.root", cutToApplyVec[iC].c_str(), 25.25);
 
 
 
