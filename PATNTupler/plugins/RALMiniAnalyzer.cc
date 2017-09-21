@@ -439,13 +439,14 @@ bool RALMiniAnalyzer::passedTrigger(const edm::Event& iEvent){
 	 triggerPath_Iter != targetTriggerPaths_.end(); ++triggerPath_Iter){// loop over the triggers I have specified via the config
       if (triggerBits->accept(i) && (triggerPath.compare(0,triggerPath_Iter->size(),*triggerPath_Iter) == 0)){
       //string compare method compare(pos of first char to be compared, size of string to compare, string to compare )       
-	recordedTriggers_->at(hltTriggers_->getTrigIndex(*triggerPath_Iter)) = triggerPrescales->getPrescaleForIndex(i);//non zero int means passed, zero is failed
+       recordedTriggers_->at(hltTriggers_->getTrigIndex(*triggerPath_Iter)) = triggerPrescales->getPrescaleForIndex(i);//non zero int means passed, zero is failed
 	//std::cout <<"FOUND TRIGGER " << triggerPath << "\n";
-	//std::cout <<"Trigger prsecale: " <<  triggerPrescales->getPrescaleForIndex(i) << "\n";
+	//std::cout <<"Trigger prescale: " <<  triggerPrescales->getPrescaleForIndex(i) << "\n";
 	trigPass =  true;
-      } else {//pass specified trigger
-	recordedTriggers_->at(hltTriggers_->getTrigIndex(*triggerPath_Iter)) = 0;
       }
+ //      else {//pass specified trigger
+	// recordedTriggers_->at(hltTriggers_->getTrigIndex(*triggerPath_Iter)) = 0;
+ //      }
     }
   }
 
