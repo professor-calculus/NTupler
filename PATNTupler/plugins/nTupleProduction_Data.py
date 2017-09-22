@@ -44,6 +44,7 @@ useMiniAOD=True
 
 if useMiniAOD==True:
     process.source.fileNames=cms.untracked.vstring('/store/data/Run2016E/JetHT/MINIAOD/03Feb2017-v1/110000/00098E8E-9CEB-E611-BA25-008CFA110B08.root',)
+    # process.source.fileNames=cms.untracked.vstring('/store/data/Run2016E/SingleMuon/MINIAOD/03Feb2017-v1/110000/001D567A-0CEB-E611-A438-D8D385AE8848.root',)
 
 #setup the VID with HEEP 7.0
 from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
