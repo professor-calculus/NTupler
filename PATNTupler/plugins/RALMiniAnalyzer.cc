@@ -480,7 +480,7 @@ void RALMiniAnalyzer::ReadInLheInfo(const edm::Event& iEvent)
     // Now, loop over the particles in the LHE event ...
     int numParticles = eventInfo.NUP;
     for(int idx=0; idx<numParticles; idx++){
-      const int pdgId = eventInfo.IDUP.at(idx);
+      const int pdgId = abs(eventInfo.IDUP.at(idx));
       const int status = eventInfo.ISTUP.at(idx);
       const std::pair<int, int> parents = eventInfo.MOTHUP.at(idx);
       const int parent1pdgId = parents.first == 0 ? 0 : eventInfo.IDUP.at(parents.first - 1);
