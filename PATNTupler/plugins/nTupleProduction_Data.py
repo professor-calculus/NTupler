@@ -20,7 +20,7 @@ process = cms.Process("HEEP")
 process.load("FWCore.MessageService.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport = cms.untracked.PSet(
     reportEvery = cms.untracked.int32(10),
-    limit = cms.untracked.int32(2000)
+    limit = cms.untracked.int32(100)
 )
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')

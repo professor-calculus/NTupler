@@ -19,7 +19,7 @@ config.JobType.psetName = 'nTupleProduction_Data.py'
 #################################################################################################
 # DATASETS --------------------------------------------------------------------------------------
 
-# JetHT 2016 - 03Feb2017: ~ 100k events/file (use two units per job) 
+# JetHT 2016 - 03Feb2017: ~ 100k events/file (use five units per job) 
 # config.Data.inputDataset = '/JetHT/Run2016B-03Feb2017_ver1-v1/MINIAOD'
 # config.Data.inputDataset = '/JetHT/Run2016B-03Feb2017_ver2-v2/MINIAOD'
 # config.Data.inputDataset = '/JetHT/Run2016C-03Feb2017-v1/MINIAOD'
@@ -31,7 +31,7 @@ config.JobType.psetName = 'nTupleProduction_Data.py'
 config.Data.inputDataset = '/JetHT/Run2016H-03Feb2017_ver3-v1/MINIAOD'
 
 #################################################################################################
-config.Data.unitsPerJob = 1
+config.Data.unitsPerJob = 5
 #################################################################################################
 
 config.Data.inputDBS = 'global' # for centrally produced data
