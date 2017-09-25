@@ -174,6 +174,8 @@ private:
 	TLorentzVector* treeVar_jetA_p4Ptr_; TLorentzVector treeVar_jetA_p4_;
 	TLorentzVector* treeVar_jetB_p4Ptr_; TLorentzVector treeVar_jetB_p4_;
 
+	Double_t treeVar_muon_maxPt_;
+	Double_t treeVar_muon_sumPt_;
 
 public:
 	FatDoubleBJetPairTree(const std::string& treeName, const std::string& fileName) :
@@ -229,11 +231,14 @@ public:
 		mainAnaTree_->Branch("nrSlimJets", &treeVar_nrSlimJets_, "nrSlimJets/i");
 		mainAnaTree_->Branch("slimJetA_p4", &treeVar_jetA_p4Ptr_);
 		mainAnaTree_->Branch("slimJetB_p4", &treeVar_jetB_p4Ptr_);
+
+		mainAnaTree_->Branch("muon_maxPt", &treeVar_muon_maxPt_,   "muon_maxPt/D");
+		mainAnaTree_->Branch("muon_sumPt", &treeVar_muon_sumPt_,   "muon_sumPt/D");
 	}
 
 	~FatDoubleBJetPairTree(){}
 
-	void fillTree(const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, float ht, float lheHT, const std::vector<ran::NtJet>& slimJets, bool trigDecision)
+	void fillTree(const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& lheHT, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision, const double& muon_maxPt, const double& muon_sumPt)
 	{
 		// FIXME : Fill in weights with actual values
 		treeVar_weight_ = 1.0;
@@ -293,6 +298,10 @@ public:
 			treeVar_jetA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
 			treeVar_jetB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
 		}
+
+		treeVar_muon_maxPt_ = muon_maxPt;
+		treeVar_muon_sumPt_ = muon_sumPt;
+
 		// And finally fill the tree ...
 		mainAnaTree_->Fill();
 	}
@@ -537,6 +546,13 @@ int main(int argc, char** argv){
 			// 	// std::cout << "      double b-tag descriminator = " << fatJet.pfBoostedDoubleSecondaryVertexAK8BJetTags() << std::endl;
 			// }
 
+			double muon_maxPt = 0.0;
+			double muon_sumPt = 0.0;
+			for (const ran::NtMuon& muon : muonVec) {
+				muon_sumPt += muon.pt();
+				if (muon.pt() > muon_maxPt) muon_maxPt = muon.pt();
+			}
+
 			std::vector<ran::NtFatJet> centralFatJetVec; // get the *central* fatJets
 			for (const ran::NtFatJet& fatJet : fatJetVec) {
 				if (fabs(fatJet.eta()) < 2.4) centralFatJetVec.push_back(fatJet);
@@ -559,11 +575,11 @@ int main(int argc, char** argv){
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, lheHT, slimJets, doesEventPassTrigger);
-				else doubleBFatJetPairTree.fillTree(*evtInfo, fatJetB, fatJetA, ht, lheHT, slimJets, doesEventPassTrigger);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, lheHT, slimJets, doesEventPassTrigger, muon_maxPt, muon_sumPt);
+				else doubleBFatJetPairTree.fillTree(*evtInfo, fatJetB, fatJetA, ht, lheHT, slimJets, doesEventPassTrigger, muon_maxPt, muon_sumPt);
 
 				// Fat Jets ordered by DBT discriminator score
-				// doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, lheHT, slimJets, false);
+				// doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, lheHT, slimJets, doesEventPassTrigger, muon_maxPt, muon_sumPt);
 			}
 			// event counter
             if (outputEvery!=0 ? (evtIdx % outputEvery == 0) : false){
