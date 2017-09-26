@@ -232,8 +232,8 @@ public:
 		mainAnaTree_->Branch("slimJetA_p4", &treeVar_jetA_p4Ptr_);
 		mainAnaTree_->Branch("slimJetB_p4", &treeVar_jetB_p4Ptr_);
 
-		mainAnaTree_->Branch("muon_maxPt", &treeVar_muon_maxPt_,   "muon_maxPt/D");
-		mainAnaTree_->Branch("muon_sumPt", &treeVar_muon_sumPt_,   "muon_sumPt/D");
+		// mainAnaTree_->Branch("muon_maxPt", &treeVar_muon_maxPt_,   "muon_maxPt/D");
+		// mainAnaTree_->Branch("muon_sumPt", &treeVar_muon_sumPt_,   "muon_sumPt/D");
 	}
 
 	~FatDoubleBJetPairTree(){}
@@ -299,8 +299,8 @@ public:
 			treeVar_jetB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
 		}
 
-		treeVar_muon_maxPt_ = muon_maxPt;
-		treeVar_muon_sumPt_ = muon_sumPt;
+		// treeVar_muon_maxPt_ = muon_maxPt;
+		// treeVar_muon_sumPt_ = muon_sumPt;
 
 		// And finally fill the tree ...
 		mainAnaTree_->Fill();
@@ -548,10 +548,10 @@ int main(int argc, char** argv){
 
 			double muon_maxPt = 0.0;
 			double muon_sumPt = 0.0;
-			for (const ran::NtMuon& muon : muonVec) {
-				muon_sumPt += muon.pt();
-				if (muon.pt() > muon_maxPt) muon_maxPt = muon.pt();
-			}
+			// for (const ran::NtMuon& muon : muonVec) {
+			// 	muon_sumPt += muon.pt();
+			// 	if (muon.pt() > muon_maxPt) muon_maxPt = muon.pt();
+			// }
 
 			std::vector<ran::NtFatJet> centralFatJetVec; // get the *central* fatJets
 			for (const ran::NtFatJet& fatJet : fatJetVec) {
