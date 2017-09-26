@@ -10,6 +10,7 @@
 #include <TFile.h>
 #include <TTree.h>
 #include <TH1D.h>
+#include <TEfficiency.h>
 
 //RAL PARTICLE HEADERS
 #include "../interface/PlotEntry.hh"
@@ -21,6 +22,7 @@ PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1D& hTemplat
 	luminosity(0.0),
 	variableToPlot(variableToPlotDummy),
 	hNull(hTemplate),
+	hEff(NULL),
 	numberOfEventsBeforeCuts(0.0)
 {
 	Int_t nBins = hTemplate.GetNbinsX();
@@ -35,6 +37,7 @@ PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1D& hTemplat
 	luminosity(luminosityDummy),
 	variableToPlot(variableToPlotDummy),
 	hNull(hTemplate),
+	hEff(NULL),
 	numberOfEventsBeforeCuts(0.0)
 {
 	Int_t nBins = hTemplate.GetNbinsX();
@@ -110,9 +113,48 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 	std::cout << std::endl;
 }
 
+void PlotEntry::AddInputEfficiency(const std::string& flatTreeAddress, const std::string& commonCut, const std::string& numeratorCut)
+{
+	TFile * f = TFile::Open(flatTreeAddress.c_str());
+	TTree * T = (TTree*)f->Get("doubleBFatJetPairTree");
+	
+	TH1D hDenominator = hNull; // make a copy of the empty histogram to fill with TTreeDraw
+	hDenominator.SetName("hDenominator");
+	std::string drawStringA = Form("%s>>hDenominator", variableToPlot.c_str());
+	std::string drawStringB = Form("%s", commonCut.c_str());
+	std::cout << "Filling Denominator from TTree: " << flatTreeAddress << std::endl;
+	std::cout << "Variable used: " << variableToPlot << std::endl;
+	if (!drawStringB.empty()) std::cout << "Cut applied: " << drawStringB << std::endl;
+	else std::cout << "NB: no cut applied" << std::endl;
+	std::cout << "NB: no event weighting (for data)" << std::endl;
+	T->Draw(drawStringA.c_str(), drawStringB.c_str(), "");	
+
+	TH1D hNumerator = hNull; // make a copy of the empty histogram to fill with TTreeDraw
+	hNumerator.SetName("hNumerator");
+	drawStringA = Form("%s>>hNumerator", variableToPlot.c_str());
+	if (commonCut.empty()) drawStringB = numeratorCut;
+	else drawStringB = numeratorCut + " && " + drawStringB;
+	std::cout << "Filling Numerator from TTree: " << flatTreeAddress << std::endl;
+	std::cout << "Variable used: " << variableToPlot << std::endl;
+	if (!drawStringB.empty()) std::cout << "Cut applied: " << drawStringB << std::endl;
+	else std::cout << "NB: no cut applied" << std::endl;
+	std::cout << "NB: no event weighting (for data)" << std::endl;
+	T->Draw(drawStringA.c_str(), drawStringB.c_str(), "");	
+
+	TEfficiency * hEffDummy = new TEfficiency(hNumerator, hDenominator);
+	hEff = (TEfficiency*)hEffDummy->Clone();
+	for (int iBin = 0; iBin < hNull.GetNbinsX()+2; ++iBin){
+		hTotal->AddBinContent(iBin, hEffDummy->GetEfficiency(iBin));
+		// we don't set errors here as in general they are asymmetrical for effiencies
+	}
+	std::cout << std::endl;
+}
+
 std::string PlotEntry::GetPlotEntryName() const {return plotEntryName;}
 
 TH1D* PlotEntry::GetHistogram() const {return hTotal;}
+
+TEfficiency* PlotEntry::GetTEff() const {return hEff;}
 
 double PlotEntry::GetNumberOfEventsBeforeCuts() const {return numberOfEventsBeforeCuts;}
 

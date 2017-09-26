@@ -1,6 +1,8 @@
 #ifndef PLOTENTRY_HH
 #define PLOTENTRY_HH
 
+#include <TEfficiency.h>
+
 class PlotEntry{
 
 public:
@@ -10,8 +12,10 @@ public:
 	
 	void AddInput(const std::string&, const std::string&); // flatTree address, selection cut (this is for data)
 	void AddInput(const std::string&, const std::string&, const double&, const bool& = true); // flatTree address, selection cut, sample cross-section (this is for MC), bool to prevent adding to numberOfEventsBeforeCuts
+	void AddInputEfficiency(const std::string&, const std::string&, const std::string&); // flatTree address, common cut (to numerator and denominator), additional cut for the numerator
 	std::string GetPlotEntryName() const;
 	TH1D* GetHistogram() const;
+	TEfficiency* GetTEff() const;
 	double GetNumberOfEventsBeforeCuts() const;
 	double GetNumberOfEventsAfterCuts() const;
 	// double GetLuminosity() const;
@@ -23,6 +27,7 @@ private:
 	std::string variableToPlot;
 	TH1D hNull;
 	TH1D* hTotal;
+	TEfficiency* hEff;
 	double numberOfEventsBeforeCuts;
 	std::vector<double> statErrorSquared;
 };
