@@ -25,12 +25,18 @@ int main(int argc, char** argv){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_09_25/triggerEff/testing/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_09_25/triggerEff/2016_PFHT900/"; // where we are going to save the output plots (should include the samples name, and any important features)
 
     // TWO: plot histogram settings
-    TH1D hTemplate("hTemplate", ";offline H_{T} (GeV);efficiency", 100, 0, 5000);
-    // std::vector<double> customBinning = {-1.0, -0.6, 0.2, 0.3, 0.6, 0.8, 1.0};
-    // TH1D hTemplate("hTemplate", ";offline H_{T} (GeV);efficiency", customBinning.size()-1, &(customBinning)[0]);
+    // TH1D hTemplate("hTemplate", ";offline H_{T} (GeV);efficiency", 100, 0, 5000);
+    std::vector<double> customBinning;
+    // customBinning = {0, 1500, 10000};
+    for(double binLowerEdge=  0.0; binLowerEdge< 1500.0; binLowerEdge+= 50.0) customBinning.push_back(binLowerEdge);
+    for(double binLowerEdge=  1500.0; binLowerEdge< 2000.0; binLowerEdge+= 100.0) customBinning.push_back(binLowerEdge);
+    for(double binLowerEdge=  2000.0; binLowerEdge< 2800.0; binLowerEdge+= 200.0) customBinning.push_back(binLowerEdge);
+    for(double binLowerEdge=  2800.0; binLowerEdge< 4000.0; binLowerEdge+= 400.0) customBinning.push_back(binLowerEdge);
+    for(double binLowerEdge=  4000.0; binLowerEdge< 5000.1; binLowerEdge+= 500.0) customBinning.push_back(binLowerEdge);
+    TH1D hTemplate("hTemplate", ";offline H_{T} (GeV);efficiency", customBinning.size()-1, &(customBinning)[0]);
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,18 +53,18 @@ int main(int argc, char** argv){
 
     // THREE: make effiencies
     PlotEntry plot_ratio1 = PlotEntry("Run2016G", hTemplate, "ht");
-    plot_ratio1.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_25_CMSSW_8_0_29_dbtV4_wMu/data/SingleMuon_Run2016G-03Feb2017-v1/flatTree.root", "muon_maxPt < 100", "trgDecision==1");
+    plot_ratio1.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_22_CMSSW_8_0_29_dbtV4/data/SingleMuon_Run2016G-03Feb2017-v1/flatTree.root", "", "trgDecision==1");
     plotVec.push_back(plot_ratio1);
 
     PlotEntry plot_ratio2 = PlotEntry("Run2016H", hTemplate, "ht");
-    plot_ratio2.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_25_CMSSW_8_0_29_dbtV4_wMu/data/SingleMuon_Run2016H-03Feb2017_ver2-v1/flatTree.root", "muon_maxPt < 100", "trgDecision==1");
+    plot_ratio2.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_22_CMSSW_8_0_29_dbtV4/data/SingleMuon_Run2016H-03Feb2017_ver2-v1/flatTree.root", "", "trgDecision==1");
     plotVec.push_back(plot_ratio2);
 
 
     // FOUR: plot aesthetics
     Plotter plot = Plotter(plotVec); // individual plots
-    plot.AddLegend(0.45, 0.88, 0.70, 0.87); // top right (extra wide 2)
-    plot.AddLatex("Data 2016 Period H");
+    plot.AddLegend(0.70, 0.88, 0.25, 0.40); // top right (extra wide 2)
+    plot.AddLatex("Data 2016 - Single Muon");
 
 
     std::string saveName = "trigEff";
