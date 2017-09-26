@@ -589,9 +589,18 @@ void Plotter::Save(const std::string& saveName){
 			histoIndi[0].GetHistogram()->SetMaximum(graphMaxLog);
 			histoIndi[0].GetHistogram()->SetMinimum(graphMinLog);
 		}
-		for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
+		for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi){
+			if (iIndi->GetTEff() != NULL){				
+				iIndi->GetTEff()->SetLineColor(iIndi->GetHistogram()->GetLineColor());
+				iIndi->GetTEff()->SetLineWidth(2);
+				// iIndi->GetTEff()->SetMarkerStyle(1);
+				iIndi->GetHistogram()->Draw("same P");
+				iIndi->GetTEff()->Draw("same");
+				continue;
+			}
 			if (plotWithErrorsIndi == false) iIndi->GetHistogram()->Draw("same");
 			else iIndi->GetHistogram()->Draw("same P");
+		}
 	}
 
 	else if (histoIndi.empty() && !histoStack.empty()){
@@ -888,29 +897,30 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 	/////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Add the HT division Lines
-	c->Update();
-	unsigned int numberOfBins = 0;
-	if (!th1Indi.empty()) numberOfBins = th1Indi[0]->GetNbinsX();
-	else numberOfBins = th1Stack[0]->GetNbinsX();
-	unsigned int binsPerDivision = numberOfBins / htBins.size();
-	for (unsigned int c = 0; c < numberOfBins; c = c + binsPerDivision){
-		
-		double lineMax = 0.0;
-		if (useLogY == false) lineMax = 1.03 * max;
-		else lineMax = pow(10, 0.92 * (log10(graphMaxLog) - log10(graphMinLog)) + log10(graphMinLog));
+	if (!htBins.empty()){
+		c->Update();
+		unsigned int numberOfBins = 0;
+		if (!th1Indi.empty()) numberOfBins = th1Indi[0]->GetNbinsX();
+		else numberOfBins = th1Stack[0]->GetNbinsX();
+		unsigned int binsPerDivision = numberOfBins / htBins.size();
+		for (unsigned int c = 0; c < numberOfBins; c = c + binsPerDivision){
+			
+			double lineMax = 0.0;
+			if (useLogY == false) lineMax = 1.03 * max;
+			else lineMax = pow(10, 0.92 * (log10(graphMaxLog) - log10(graphMinLog)) + log10(graphMinLog));
 
-		if (c != 0){
-			TLine * line = new TLine(c, 0, c, lineMax); // xmin, ymin, xmax, ymax
-			line->SetLineStyle(2);
-			line->SetLineWidth(3);
-			line->Draw();
+			if (c != 0){
+				TLine * line = new TLine(c, 0, c, lineMax); // xmin, ymin, xmax, ymax
+				line->SetLineStyle(2);
+				line->SetLineWidth(3);
+				line->Draw();
+			}
+			TLatex * latexHT = new TLatex();
+		    latexHT->SetTextFont(42);
+		    latexHT->SetTextAlign(11); // align from left
+		    latexHT->DrawLatex(c+1, lineMax, htBins[c/binsPerDivision].c_str());
 		}
-		TLatex * latexHT = new TLatex();
-	    latexHT->SetTextFont(42);
-	    latexHT->SetTextAlign(11); // align from left
-	    latexHT->DrawLatex(c+1, lineMax, htBins[c/binsPerDivision].c_str());
 	}
-
 	/////////////////////////////////////////////////////////////////////////////////////////////
 
 	// do ratio box plot if implemented
