@@ -30,6 +30,7 @@
 //--------constructor---------//
 Plotter::Plotter(std::vector<PlotEntry> histoIndiDummy) :
 addRatioBox(false),
+addRatioBoxUnityLine(false),
 leg(0),
 leg2Cols(0),
 addLatex(false),
@@ -59,6 +60,7 @@ tdrStyle(TDRStyle())
 
 Plotter::Plotter(std::vector<PlotEntry> histoIndiDummy, std::vector<PlotEntry> histoStackDummy) :
 addRatioBox(false),
+addRatioBoxUnityLine(false),
 leg(0),
 leg2Cols(0),
 addLatex(false),
@@ -99,6 +101,7 @@ tdrStyle(TDRStyle())
 
 Plotter::Plotter(std::vector<PlotEntry2D> dummyHistos2D) :
 addRatioBox(false),
+addRatioBoxUnityLine(false),
 leg(0),
 leg2Cols(0),
 addLatex(false),
@@ -123,6 +126,7 @@ tdrStyle(TDRStyle())
 
 Plotter::Plotter(std::vector<TH1D*> th1IndiDummy) :
 addRatioBox(false),
+addRatioBoxUnityLine(false),
 leg(0),
 leg2Cols(0),
 addLatex(false),
@@ -149,6 +153,7 @@ tdrStyle(TDRStyle())
 
 Plotter::Plotter(std::vector<TH1D*> th1IndiDummy, std::vector<TH1D*> th1StackDummy) :
 addRatioBox(false),
+addRatioBoxUnityLine(false),
 leg(0),
 leg2Cols(0),
 addLatex(false),
@@ -185,28 +190,32 @@ tdrStyle(TDRStyle())
 
 
 //-----------public-----------//
-void Plotter::AddRatioBox(const std::string& ratioBoxYAxisTitleDummy){
+void Plotter::AddRatioBox(const std::string& ratioBoxYAxisTitleDummy, const bool& drawUnityLine){
 	
 	ratioBoxYAxisTitle = ratioBoxYAxisTitleDummy;
 
 	if (histoIndi.size() == 2 && histoStack.empty() && th1Indi.empty() && th1Stack.empty()){
 		addRatioBox = true;
 		addRatioBoxInfo = "typeA";
+		if (drawUnityLine) addRatioBoxUnityLine = true;
 		return;
 	}
 	else if (histoIndi.size() == 1 && histoStack.size() > 0 && th1Indi.empty() && th1Stack.empty()){
 		addRatioBox = true;
 		addRatioBoxInfo = "typeB";
+		if (drawUnityLine) addRatioBoxUnityLine = true;
 		return;
 	}
 	else if (histoIndi.empty() && histoStack.empty() && th1Indi.size() == 2 && th1Stack.empty()){
 		addRatioBox = true;
 		addRatioBoxInfo = "typeA";
+		if (drawUnityLine) addRatioBoxUnityLine = true;
 		return;
 	}
 	else if (histoIndi.empty() && histoStack.empty() && th1Indi.size() == 1 && th1Stack.size() > 0){
 		addRatioBox = true;
 		addRatioBoxInfo = "typeB";
+		if (drawUnityLine) addRatioBoxUnityLine = true;
 		return;
 	}
 	else{
@@ -216,12 +225,13 @@ void Plotter::AddRatioBox(const std::string& ratioBoxYAxisTitleDummy){
 		std::cout << "OR a two element th1Indi only" << std::endl;
 		std::cout << "OR a single element th1Indi and a th1Stack only" << std::endl;
 		std::cout << std::endl;
+		return;
 	}
 	return;
 }
 
 
-void Plotter::AddRatioBox(const double& ratioBoxYAxisMin, const double& ratioBoxYAxisMax, const std::string& ratioBoxYAxisTitleDummy){
+void Plotter::AddRatioBox(const double& ratioBoxYAxisMin, const double& ratioBoxYAxisMax, const std::string& ratioBoxYAxisTitleDummy, const bool& drawUnityLine){
 	
 	ratioBoxYAxisTitle = ratioBoxYAxisTitleDummy;
 	ratioBoxYAxisMinMax.push_back(ratioBoxYAxisMin);
@@ -230,21 +240,25 @@ void Plotter::AddRatioBox(const double& ratioBoxYAxisMin, const double& ratioBox
 	if (histoIndi.size() == 2 && histoStack.empty() && th1Indi.empty() && th1Stack.empty()){
 		addRatioBox = true;
 		addRatioBoxInfo = "typeA";
+		if (drawUnityLine) addRatioBoxUnityLine = true;
 		return;
 	}
 	else if (histoIndi.size() == 1 && histoStack.size() > 0 && th1Indi.empty() && th1Stack.empty()){
 		addRatioBox = true;
 		addRatioBoxInfo = "typeB";
+		if (drawUnityLine) addRatioBoxUnityLine = true;
 		return;
 	}
 	else if (histoIndi.empty() && histoStack.empty() && th1Indi.size() == 2 && th1Stack.empty()){
 		addRatioBox = true;
 		addRatioBoxInfo = "typeA";
+		if (drawUnityLine) addRatioBoxUnityLine = true;
 		return;
 	}
 	else if (histoIndi.empty() && histoStack.empty() && th1Indi.size() == 1 && th1Stack.size() > 0){
 		addRatioBox = true;
 		addRatioBoxInfo = "typeB";
+		if (drawUnityLine) addRatioBoxUnityLine = true;
 		return;
 	}
 	else{
@@ -310,6 +324,45 @@ void Plotter::AddLegend(const std::vector<std::string>& legendNames, const doubl
 	for (size_t i = 0; i < legendNames.size(); ++i){
 		if (i < th1Indi.size()) leg->AddEntry(th1Indi[i], legendNames[i].c_str(), "L");
 		else leg->AddEntry(th1Stack[i-th1Indi.size()], legendNames[i].c_str(), "f");
+	}
+	return;
+}
+
+void Plotter::AddLegend2Cols(const unsigned int& numRowsBeforeUsing2Cols,  const double& x1, const double& x2, const double& y1, const double& y2, const double& textSize)
+{
+	size_t numberOfEntries = histoIndi.size() + histoStack.size();
+	int numRowsUsing2Cols = ceil(0.5 * (histoStack.size() + histoIndi.size() - numRowsBeforeUsing2Cols));
+	int numRowsTotal = numRowsBeforeUsing2Cols + numRowsUsing2Cols;
+	double fractionRowsBeforeUsing2Cols = double(numRowsBeforeUsing2Cols) / numRowsTotal;
+
+	leg = new TLegend();
+    leg->SetX1NDC(x1);
+    leg->SetX2NDC(x2);
+	leg->SetY1NDC(y2 - fractionRowsBeforeUsing2Cols * (y2-y1));
+    leg->SetY2NDC(y2);
+	leg->SetTextSize(textSize);
+	leg->SetBorderSize(0);
+	leg->SetFillStyle(0);
+
+	leg2Cols = new TLegend();
+	leg2Cols->SetNColumns(2);
+    leg2Cols->SetX1NDC(x1);
+    leg2Cols->SetX2NDC(x2);
+	leg2Cols->SetY1NDC(y1);
+    leg2Cols->SetY2NDC(y2 - fractionRowsBeforeUsing2Cols * (y2-y1));
+	leg2Cols->SetTextSize(textSize);
+	leg2Cols->SetBorderSize(0);
+	leg2Cols->SetFillStyle(0);
+
+	for (size_t i = 0; i < numberOfEntries; ++i){
+		if (i < numRowsBeforeUsing2Cols){
+			if (i < histoIndi.size()) leg->AddEntry(histoIndi[i].GetHistogram(), histoIndi[i].GetPlotEntryName().c_str(), "L");
+			else leg->AddEntry(histoStack[i-histoIndi.size()].GetHistogram(), histoStack[i-histoIndi.size()].GetPlotEntryName().c_str(), "f");
+		}
+		else {
+			if (i < histoIndi.size()) leg2Cols->AddEntry(histoIndi[i].GetHistogram(), histoIndi[i].GetPlotEntryName().c_str(), "L");
+			else leg2Cols->AddEntry(histoStack[i-histoIndi.size()].GetHistogram(), histoStack[i-histoIndi.size()].GetPlotEntryName().c_str(), "f");
+		}
 	}
 	return;
 }
@@ -632,6 +685,7 @@ void Plotter::Save(const std::string& saveName){
 
 	if (addLatex) DrawLatex();
 	if (leg != NULL) leg->Draw("same");
+	if (leg2Cols != NULL) leg2Cols->Draw("same");
 	gPad->RedrawAxis();
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
@@ -691,6 +745,15 @@ void Plotter::Save(const std::string& saveName){
 		ratioPlotEntry->GetYaxis()->SetLabelOffset(0.007);
 
 		ratioPlotEntry->Draw("P");
+
+		if (addRatioBoxUnityLine){
+			TLine * lineRatio = new TLine(0, 1.0, ratioPlotEntry->GetNbinsX(), 1.0); // xmin, ymin, xmax, ymax
+			lineRatio->SetLineStyle(2);
+			lineRatio->SetLineWidth(1);
+			lineRatio->SetLineColor(36);
+			lineRatio->Draw("same");
+			ratioPlotEntry->Draw("P, same");
+		}
 	} 	
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
@@ -966,6 +1029,14 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		ratioPlotEntry->GetYaxis()->SetLabelOffset(0.007);
 
 		ratioPlotEntry->Draw("P");
+		if (addRatioBoxUnityLine){
+			TLine * lineRatio = new TLine(0, 1.0, ratioPlotEntry->GetNbinsX(), 1.0); // xmin, ymin, xmax, ymax
+			lineRatio->SetLineStyle(2);
+			lineRatio->SetLineWidth(1);
+			lineRatio->SetLineColor(36);
+			lineRatio->Draw("same");
+			ratioPlotEntry->Draw("P, same");
+		}
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
