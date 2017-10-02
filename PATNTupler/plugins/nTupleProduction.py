@@ -2,6 +2,7 @@
 # 1. Global Tag
 # 2. dataset (for local running only)
 # 3. HLT trigger path
+# 4. LHE calculation properties
 
 import FWCore.ParameterSet.Config as cms
 
