@@ -22,7 +22,7 @@ public:
 	void AddLegend(const std::vector<std::string>&, const double&, const double&, const double&, const double&, const double& = 0.04);
 	void AddLegend2Cols(const unsigned int&, const double&, const double&, const double&, const double&, const double& = 0.04);
 	void AddLegend2Cols(const unsigned int&, const std::vector<std::string>&, const double&, const double&, const double&, const double&, const double& = 0.04);
-	void AddLatex(const double&, const std::string& = "#it{Simulation} W.I.P");
+	void AddLatex(const double&, const std::string& = "#it{Simulation}");
 	void AddLatex(const std::string& = "#it{Simulation} W.I.P");
 	TStyle * GetTStyle(); // get it, to edit it
 	void SetLogY();
