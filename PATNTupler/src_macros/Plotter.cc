@@ -415,7 +415,7 @@ void Plotter::AddLegend2Cols(const unsigned int& numRowsBeforeUsing2Cols, const 
 void Plotter::AddLatex(const double& lumiValueDummy, const std::string& lhsStringAfterCMSDummy)
 {
 	addLatex = true;
-	lumiLabel = Form("%.1f fb^{-1} (13 TeV)", lumiValueDummy);
+	lumiLabel = Form("%.2f fb^{-1} (13 TeV)", lumiValueDummy);
 	lhsStringAfterCMS = lhsStringAfterCMSDummy;
 
 	return;
