@@ -126,7 +126,7 @@ void PlotEntry::AddInputEfficiency(const std::string& flatTreeAddress, const std
 	std::cout << "Variable used: " << variableToPlot << std::endl;
 	if (!drawStringB.empty()) std::cout << "Cut applied: " << drawStringB << std::endl;
 	else std::cout << "NB: no cut applied" << std::endl;
-	std::cout << "NB: no event weighting (for data)" << std::endl;
+	std::cout << "NB: no event weighting (DOING A RATIO)" << std::endl;
 	T->Draw(drawStringA.c_str(), drawStringB.c_str(), "");	
 
 	TH1D hNumerator = hNull; // make a copy of the empty histogram to fill with TTreeDraw
@@ -138,7 +138,7 @@ void PlotEntry::AddInputEfficiency(const std::string& flatTreeAddress, const std
 	std::cout << "Variable used: " << variableToPlot << std::endl;
 	if (!drawStringB.empty()) std::cout << "Cut applied: " << drawStringB << std::endl;
 	else std::cout << "NB: no cut applied" << std::endl;
-	std::cout << "NB: no event weighting (for data)" << std::endl;
+	std::cout << "NB: no event weighting (DOING A RATIO)" << std::endl;
 	T->Draw(drawStringA.c_str(), drawStringB.c_str(), "");	
 
 	TEfficiency * hEffDummy = new TEfficiency(hNumerator, hDenominator);
