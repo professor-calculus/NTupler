@@ -744,7 +744,7 @@ void Plotter::Save(const std::string& saveName){
 		ratioPlotEntry->GetYaxis()->SetLabelSize(0.04 * 2.5);
 		ratioPlotEntry->GetYaxis()->SetLabelOffset(0.007);
 
-		ratioPlotEntry->Draw("P");
+		ratioPlotEntry->Draw("E0");
 
 		if (addRatioBoxUnityLine){
 			TLine * lineRatio = new TLine(0, 1.0, ratioPlotEntry->GetNbinsX(), 1.0); // xmin, ymin, xmax, ymax
@@ -752,7 +752,7 @@ void Plotter::Save(const std::string& saveName){
 			lineRatio->SetLineWidth(1);
 			lineRatio->SetLineColor(36);
 			lineRatio->Draw("same");
-			ratioPlotEntry->Draw("P, same");
+			ratioPlotEntry->Draw("E0, same");
 		}
 	} 	
 
@@ -1028,14 +1028,14 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		ratioPlotEntry->GetYaxis()->SetLabelSize(0.04 * 2.5);
 		ratioPlotEntry->GetYaxis()->SetLabelOffset(0.007);
 
-		ratioPlotEntry->Draw("P");
+		ratioPlotEntry->Draw("E0");
 		if (addRatioBoxUnityLine){
 			TLine * lineRatio = new TLine(0, 1.0, ratioPlotEntry->GetNbinsX(), 1.0); // xmin, ymin, xmax, ymax
 			lineRatio->SetLineStyle(2);
 			lineRatio->SetLineWidth(1);
 			lineRatio->SetLineColor(36);
 			lineRatio->Draw("same");
-			ratioPlotEntry->Draw("P, same");
+			ratioPlotEntry->Draw("E0, same");
 		}
 	}
 
