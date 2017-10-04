@@ -60,5 +60,8 @@ ${TMPDIR}/ParticleDict.cc:	${INCDIR}/Particles.hh ${INCDIR}/ntpLinkDef.h
 	rootcint -f $@ -c $< ${INCDIR}/ntpLinkDef.h
 
 clean:
-	rm -rf nTupAnaNMSSM mainNMSSM.o ${OBJDIR}/* ${TMPDIR}/*
-	rm -rf nTupAna main.o ${OBJDIR}/* ${TMPDIR}/*
+	# rm -rf nTupAnaNMSSM mainNMSSM.o ${OBJDIR}/* ${TMPDIR}/*
+	# rm -rf nTupAna main.o ${OBJDIR}/* ${TMPDIR}/*
+
+	rm -rf nTupAnaNMSSM mainNMSSM.o ${OBJDIR}/*
+	rm -rf nTupAna main.o ${OBJDIR}/*
