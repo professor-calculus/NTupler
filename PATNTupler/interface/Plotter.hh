@@ -56,7 +56,7 @@ private:
 	bool plotWithErrorsStack;
 	bool setYValueMin;
 	double yValueMin;
-	void DrawLatex();	
+	void DrawLatex(const unsigned int& = 1);	
 	int SetColor_mellow(int, int);
 	int SetColor_stark(const int&);
 	TStyle * tdrStyle;

@@ -1084,7 +1084,7 @@ void Plotter::Save2D(const std::string& saveName){
 		// iHistos2D->GetHistogram()->Draw("colz, same, text");
 	}
 
-	if (addLatex) DrawLatex();
+	if (addLatex) DrawLatex(2);
 	c->SaveAs(saveName.c_str());
 	c->Close();
 	
@@ -1118,7 +1118,7 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 		// iHistos2D->GetHistogram()->Draw("colz, same, text");
 	}
 
-	if (addLatex) DrawLatex();
+	if (addLatex) DrawLatex(2);
 
 	// **************************
 	// NOW ADD THE MASS CUT LINES
@@ -1217,17 +1217,19 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 
 
 //-----------private----------//
-void Plotter::DrawLatex()
+void Plotter::DrawLatex(const unsigned int& dimensions)
 {
 	TLatex * latex = new TLatex();
     latex->SetNDC();
     latex->SetTextFont(42);
-    
+
     latex->SetTextAlign(11); // align from left
-    latex->DrawLatex(0.15,0.92,Form("#bf{CMS} %s", lhsStringAfterCMS.c_str()));
+    if (dimensions == 1) latex->DrawLatex(0.15,0.92,Form("#bf{CMS} %s", lhsStringAfterCMS.c_str()));
+    else latex->DrawLatex(0.12,0.92,Form("#bf{CMS} %s", lhsStringAfterCMS.c_str()));
 
     latex->SetTextAlign(31); // align from right
-	latex->DrawLatex(0.92,0.92,lumiLabel.c_str());
+	if (dimensions == 1) latex->DrawLatex(0.92,0.92,lumiLabel.c_str());
+	else latex->DrawLatex(0.90,0.92,lumiLabel.c_str());
 
 	return;
 }
