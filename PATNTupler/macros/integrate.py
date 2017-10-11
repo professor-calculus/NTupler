@@ -42,6 +42,29 @@ def f_anti_1d(x):
 	p8 = -8.54973e+00
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
 
+def f_control_1d_LooseToMed2(x):
+	p0 =  1.00005e-03
+	p1 =  7.76647e-01
+	p2 = -3.75699e-02
+	p3 =  1.88846e+00
+	p4 =  3.57878e-01
+	p5 = -2.31772e+01
+	p6 =  2.23972e-02
+	p7 =  8.24659e+02
+	p8 = -5.59663e-02
+	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
+
+def f_control_1d_OffToIDBTCv21(x):
+	p0 =  3.91070e-03
+	p1 =  1.73050e+00
+	p2 = -3.54452e+01
+	p3 = -2.66813e+01
+	p4 = -1.71158e+01
+	p5 =  1.89739e+02
+	p6 = -6.18362e+00
+	p7 =  5.11784e+03
+	p8 = -1.19781e+01
+	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
 
 # MASS REGION CUTS #
 
@@ -53,11 +76,11 @@ SMAX_Node2 = 115.04;
 SN_Nodes = [40.7, 50.9, 62.1, 74.3, 87.5, 101.7, 116.9, 133.1, 150.3];
 
 # NEW ATTEMPTS
-# S1_Node1 = 31.5;
-# S1_Node2 = 16.5;
+# S1_Node1 = 35.0;
+# S1_Node2 = 20.0;
 # SMAX_Node1 = 168.5;
 # SMAX_Node2 = 115.04;
-# SN_Nodes = [40.7, 50.9, 62.1, 74.3, 87.5, 101.7, 116.9, 133.1, 150.3];
+# SN_Nodes = [45.7, 50.9, 62.1, 74.3, 87.5, 101.7, 116.9, 133.1, 150.3];
 
 #################################################################################################
 #################################################################################################
@@ -80,6 +103,15 @@ def f_tag_2d(x,y):
 # The normalised 2d softdropmass functionality for 'anti' AK8Jets
 def f_anti_2d(x,y):
 	return f_anti_1d(x) * f_anti_1d(y)
+
+# The normalised 2d softdropmass functionality for 'control' AK8Jets
+def f_control_2d_orientation1(x,y):
+	return f_control_1d_LooseToMed2(x) * f_control_1d_OffToIDBTCv21(y)
+
+# The normalised 2d softdropmass functionality for 'control' AK8Jets
+def f_control_2d_orientation2(x,y):
+	return f_control_1d_OffToIDBTCv21(x) * f_control_1d_LooseToMed2(y)
+
 
 gradientUpperSignalLine = (SMAX_Node1 - S1_Node1) / (SMAX_Node2 - S1_Node2)
 gradientLowerSignalLine = 1 / gradientUpperSignalLine
@@ -141,6 +173,7 @@ for i in range(0, len(three_x_points_vec)-1):
 
 	integral_U_tag = 0
 	integral_U_anti = 0
+	integral_U_control = 0
 	
 	if (i==0):
 
@@ -155,14 +188,27 @@ for i in range(0, len(three_x_points_vec)-1):
 		integral_U_anti += integrate.nquad(f_anti_2d, [bounds_y_uSpec, bounds_x_u2])[0]
 		integral_U_anti += integrate.nquad(f_anti_2d, [bounds_y_u3, bounds_x_u3])[0]
 
+		# U_control needs to do it with the function reflected
+		integral_U_control += 0.5 * integrate.nquad(f_control_2d_orientation1, [bounds_y_uSpec, bounds_x_u2])[0]
+		integral_U_control += 0.5 * integrate.nquad(f_control_2d_orientation2, [bounds_y_uSpec, bounds_x_u2])[0]
+		integral_U_control += 0.5 * integrate.nquad(f_control_2d_orientation1, [bounds_y_u3, bounds_x_u3])[0]
+		integral_U_control += 0.5 * integrate.nquad(f_control_2d_orientation2, [bounds_y_u3, bounds_x_u3])[0]
+
 	else:
 		integral_U_tag += integrate.nquad(f_tag_2d, [bounds_y_u1, bounds_x_u1])[0]
 		integral_U_tag += integrate.nquad(f_tag_2d, [bounds_y_u2, bounds_x_u2])[0]
 		integral_U_tag += integrate.nquad(f_tag_2d, [bounds_y_u3, bounds_x_u3])[0]
 
-		integral_U_anti = integrate.nquad(f_anti_2d, [bounds_y_u1, bounds_x_u1])[0]
+		integral_U_anti += integrate.nquad(f_anti_2d, [bounds_y_u1, bounds_x_u1])[0]
 		integral_U_anti += integrate.nquad(f_anti_2d, [bounds_y_u2, bounds_x_u2])[0]
 		integral_U_anti += integrate.nquad(f_anti_2d, [bounds_y_u3, bounds_x_u3])[0]
+
+		integral_U_control += 0.5 * integrate.nquad(f_control_2d_orientation1, [bounds_y_u1, bounds_x_u1])[0]
+		integral_U_control += 0.5 * integrate.nquad(f_control_2d_orientation2, [bounds_y_u1, bounds_x_u1])[0]
+		integral_U_control += 0.5 * integrate.nquad(f_control_2d_orientation1, [bounds_y_u2, bounds_x_u2])[0]
+		integral_U_control += 0.5 * integrate.nquad(f_control_2d_orientation2, [bounds_y_u2, bounds_x_u2])[0]
+		integral_U_control += 0.5 * integrate.nquad(f_control_2d_orientation1, [bounds_y_u3, bounds_x_u3])[0]
+		integral_U_control += 0.5 * integrate.nquad(f_control_2d_orientation2, [bounds_y_u3, bounds_x_u3])[0]
 
 	integral_S_tag = integrate.nquad(f_tag_2d, [bounds_y_s1, bounds_x_s1])[0]
 	integral_S_tag += integrate.nquad(f_tag_2d, [bounds_y_s2, bounds_x_s2])[0]
@@ -172,5 +218,15 @@ for i in range(0, len(three_x_points_vec)-1):
 	integral_S_anti += integrate.nquad(f_anti_2d, [bounds_y_s2, bounds_x_s2])[0]
 	integral_S_anti += integrate.nquad(f_anti_2d, [bounds_y_s3, bounds_x_s3])[0]
 
-	correctionFactor = (integral_S_tag / integral_S_anti) * (integral_U_anti / integral_U_tag)
-	print "correction factor C_" + str(i) + " = " + str(correctionFactor)
+	integral_S_control = integrate.nquad(f_control_2d_orientation1, [bounds_y_s1, bounds_x_s1])[0]
+	integral_S_control += integrate.nquad(f_control_2d_orientation1, [bounds_y_s2, bounds_x_s2])[0]
+	integral_S_control += integrate.nquad(f_control_2d_orientation1, [bounds_y_s3, bounds_x_s3])[0]
+
+	correctionFactorTag = (integral_S_tag / integral_S_anti) * (integral_U_anti / integral_U_tag)
+	correctionFactorControl = (integral_S_control / integral_S_anti) * (integral_U_anti / integral_U_control)
+
+	print "correction factor tag C_" + str(i) + " = " + str(correctionFactorTag)
+	# print "correction factor control C_" + str(i) + " = " + str(correctionFactorControl)
+	# print integral_S_tag
+	# print integral_S_anti
+	# print integral_S_control
