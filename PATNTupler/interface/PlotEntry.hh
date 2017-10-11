@@ -21,6 +21,7 @@ public:
 	// double GetLuminosity() const;
 	std::vector<double> GetStatErrorSquaredVector() const;
 	void NormalisePlot();
+	void FitFunction(const std::string&, const double&, const double&, const std::vector<double>&, const int& = 46);
 private:
 	std::string plotEntryName;
 	double luminosity;

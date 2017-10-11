@@ -10,6 +10,7 @@
 #include <TFile.h>
 #include <TTree.h>
 #include <TH1D.h>
+#include <TF1.h>
 #include <TEfficiency.h>
 
 //RAL PARTICLE HEADERS
@@ -175,6 +176,17 @@ void PlotEntry::NormalisePlot()
 	for (int iBin = 0; iBin < hTotal->GetNbinsX()+2; ++iBin) numberOfEventsAfterCuts += hTotal->GetBinContent(iBin);
 	hTotal->Scale(1/numberOfEventsAfterCuts);
 	for (size_t iBin = 0; iBin < statErrorSquared.size(); ++iBin) statErrorSquared[iBin] = statErrorSquared[iBin] / (numberOfEventsAfterCuts * numberOfEventsAfterCuts);
+}
+
+void PlotEntry::FitFunction(const std::string& functionToFit, const double& minXFit, const double& maxXFit, const std::vector<double>& initialParams, const int& colour)
+{
+	TF1* f1 = new TF1("f1", functionToFit.c_str(), minXFit, maxXFit);
+	f1->SetLineColor(colour);
+	for (size_t i = 0; i < initialParams.size(); ++i) f1->SetParameter(i, initialParams[i]);
+	hTotal->Fit("f1", "R");
+	hTotal->SetStats(0);
+	std::cout << std::endl;
+	std::cout << std::endl;
 }
 
 //-----------private----------//
