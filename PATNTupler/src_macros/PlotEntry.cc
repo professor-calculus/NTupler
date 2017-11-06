@@ -183,7 +183,7 @@ void PlotEntry::FitFunction(const std::string& functionToFit, const double& minX
 	TF1* f1 = new TF1("f1", functionToFit.c_str(), minXFit, maxXFit);
 	f1->SetLineColor(colour);
 	for (size_t i = 0; i < initialParams.size(); ++i) f1->SetParameter(i, initialParams[i]);
-	hTotal->Fit("f1", "R");
+	hTotal->Fit("f1", "RI");
 	hTotal->SetStats(0);
 	std::cout << std::endl;
 	std::cout << std::endl;
