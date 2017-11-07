@@ -559,6 +559,7 @@ int main(int argc, char** argv){
 			}			
 
 			if (centralFatJetVec.size() >= 2) {
+			// if (centralFatJetVec.size() >= 2 && ht > 1499.0) { // INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
 				const ran::NtFatJet& fatJetA = centralFatJetVec.at(0);
 				const ran::NtFatJet& fatJetB = centralFatJetVec.at(1);
 
