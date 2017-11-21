@@ -60,6 +60,8 @@ histos_create: histos_create.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
 histos_plot: histos_plot.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
+histos_forCombine: histos_forCombine.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
 
 %.o: 	%.cc %.hh
 	$(info generic.o target's commands)
@@ -94,4 +96,5 @@ clean:
 	rm -rf table_investigateEventSelectionCuts table_investigateEventSelectionCuts.o ${OBJDIR}/*
 	rm -rf histos_create histos_create.o ${OBJDIR}/*
 	rm -rf histos_plot histos_plot.o ${OBJDIR}/*
+	rm -rf histos_forCombine histos_forCombine.o ${OBJDIR}/*
 	rm -rf table_QXY table_QXY.o ${OBJDIR}/*
