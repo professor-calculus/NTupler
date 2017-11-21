@@ -7,6 +7,7 @@ from scipy import integrate
 # notes on script:
 # - it is very much geometry specific and not completely general for any MassRegion object!
 # - assumes indendence between the 2 fatJet mass distributions (good for QCD)
+# - a lot of objects are hard coded in, might want to address that in the future
 #################################################################################################
 #################################################################################################
 #################################################################################################
@@ -129,6 +130,21 @@ def f_fullCutsNOAK4_anti_ht2500to3500_1d(x):
 	p8 = -1.22904e+01
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
 
+def f_fullCutsNOAK4_tagMC_ht1500to2500_1d(x):
+	p0 = -1.13984e-02
+	p1 =  5.65592e+00
+	p2 = -1.38089e+02
+	p3 = -1.37508e+02
+	p4 = -2.57079e+02
+	p5 =  1.24214e+03
+	p6 = -1.66594e+01
+	p7 =  2.98400e+04
+	p8 = -1.05509e+02
+	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
+
+####################
+####################
+####################
 # MASS REGION CUTS #
 
 # MassCutsV04
@@ -139,26 +155,22 @@ SMAX_Node2 = 115.04;
 SN_Nodes = [40.7, 50.9, 62.1, 74.3, 87.5, 101.7, 116.9, 133.1, 150.3];
 
 # NEW ATTEMPTS
-# S1_Node1 = 35.0;
-# S1_Node2 = 20.0;
+# S1_Node1 = 31.5;
+# S1_Node2 = 16.5;
 # SMAX_Node1 = 168.5;
 # SMAX_Node2 = 115.04;
-# SN_Nodes = [45.7, 50.9, 62.1, 74.3, 87.5, 101.7, 116.9, 133.1, 150.3];
+# SN_Nodes = [40.7, 50.9, 62.1, 74.3, 87.5, 101.7, 116.9, 133.1, 150.3];
 
 #################################################################################################
 #################################################################################################
 #################################################################################################
 #################################################################################################
 #################################################################################################
-# lineInfo object explainer:
-# lineInfo[0] is x0
-# lineInfo[1] is y0
-# lineInfo[2] is m
-def yValue(x, lineInfo):
-	if (len(lineInfo) != 3):
-		return "lineInfo object does not have three params as required"
-	else:
-		return lineInfo[2] * (x - lineInfo[0]) + lineInfo[1]
+#################################################################################################
+#################################################################################################
+#################################################################################################
+#################################################################################################
+#################################################################################################
 
 def f_specCuts_tag_2d(x,y):
 	return f_specCuts_tag_1d(x) * f_specCuts_tag_1d(y)
@@ -187,6 +199,21 @@ def f_fullCutsNOAK4_anti_ht1500to2500_2d(x,y):
 def f_fullCutsNOAK4_anti_ht2500to3500_2d(x,y):
 	return f_fullCutsNOAK4_anti_ht2500to3500_1d(x) * f_fullCutsNOAK4_anti_ht2500to3500_1d(y)
 
+def f_fullCutsNOAK4_tagMC_ht1500to2500_2d(x,y):
+	return f_fullCutsNOAK4_tagMC_ht1500to2500_1d(x) * f_fullCutsNOAK4_tagMC_ht1500to2500_1d(y)
+
+
+# lineInfo object explainer:
+# lineInfo[0] is x0
+# lineInfo[1] is y0
+# lineInfo[2] is m
+def yValue(x, lineInfo):
+	if (len(lineInfo) != 3):
+		return "lineInfo object does not have three params as required"
+	else:
+		return lineInfo[2] * (x - lineInfo[0]) + lineInfo[1]
+
+
 gradientUpperSignalLine = (SMAX_Node1 - S1_Node1) / (SMAX_Node2 - S1_Node2)
 gradientLowerSignalLine = 1 / gradientUpperSignalLine
 upperBand_x1 = S1_Node2 - 0.5 * (S1_Node1 - S1_Node2)
@@ -213,11 +240,11 @@ for SN_Node in SN_Nodes:
 three_x_points_vec.append([upperBand_x2, SMAX_Node2, SMAX_Node1])
 # print three_x_points_vec
 
-
 for i in range(0, len(three_x_points_vec)-1):
 
 	lineInfo_negLow = [three_x_points_vec[i][2], three_x_points_vec[i][1], -1]
 	lineInfo_negHigh = [three_x_points_vec[i+1][2], three_x_points_vec[i+1][1], -1]
+	# print lineInfo_negLow
 
 	# define the integration bounds for x in the three U integral segments
 	bounds_x_u1 = [three_x_points_vec[i][0], three_x_points_vec[i+1][0]]
@@ -252,6 +279,7 @@ for i in range(0, len(three_x_points_vec)-1):
 	integral_U_fullCuts_anti_ht3500toInf = 0
 	integral_U_fullCutsNOAK4_anti_ht1500to2500 = 0
 	integral_U_fullCutsNOAK4_anti_ht2500to3500 = 0
+	integral_U_fullCutsNOAK4_tagMC_ht1500to2500 = 0
 	integral_U_specCuts_control = 0
 
 	if (i==0):
@@ -281,6 +309,9 @@ for i in range(0, len(three_x_points_vec)-1):
 
 		integral_U_fullCutsNOAK4_anti_ht2500to3500 += integrate.nquad(f_fullCutsNOAK4_anti_ht2500to3500_2d, [bounds_y_uSpec, bounds_x_u2])[0]
 		integral_U_fullCutsNOAK4_anti_ht2500to3500 += integrate.nquad(f_fullCutsNOAK4_anti_ht2500to3500_2d, [bounds_y_u3, bounds_x_u3])[0]
+
+		integral_U_fullCutsNOAK4_tagMC_ht1500to2500 += integrate.nquad(f_fullCutsNOAK4_tagMC_ht1500to2500_2d, [bounds_y_uSpec, bounds_x_u2])[0]
+		integral_U_fullCutsNOAK4_tagMC_ht1500to2500 += integrate.nquad(f_fullCutsNOAK4_tagMC_ht1500to2500_2d, [bounds_y_u3, bounds_x_u3])[0]
 
 		# U_control needs to do it with the function reflected
 		integral_U_specCuts_control += 0.5 * integrate.nquad(f_specCuts_control_2d_orientation1, [bounds_y_uSpec, bounds_x_u2])[0]
@@ -318,6 +349,10 @@ for i in range(0, len(three_x_points_vec)-1):
 		integral_U_fullCutsNOAK4_anti_ht2500to3500 += integrate.nquad(f_fullCutsNOAK4_anti_ht2500to3500_2d, [bounds_y_u2, bounds_x_u2])[0]
 		integral_U_fullCutsNOAK4_anti_ht2500to3500 += integrate.nquad(f_fullCutsNOAK4_anti_ht2500to3500_2d, [bounds_y_u3, bounds_x_u3])[0]
 
+		integral_U_fullCutsNOAK4_tagMC_ht1500to2500 += integrate.nquad(f_fullCutsNOAK4_tagMC_ht1500to2500_2d, [bounds_y_u1, bounds_x_u1])[0]
+		integral_U_fullCutsNOAK4_tagMC_ht1500to2500 += integrate.nquad(f_fullCutsNOAK4_tagMC_ht1500to2500_2d, [bounds_y_u2, bounds_x_u2])[0]
+		integral_U_fullCutsNOAK4_tagMC_ht1500to2500 += integrate.nquad(f_fullCutsNOAK4_tagMC_ht1500to2500_2d, [bounds_y_u3, bounds_x_u3])[0]
+
 		# U_control needs to do it with the function reflected
 		integral_U_specCuts_control += 0.5 * integrate.nquad(f_specCuts_control_2d_orientation1, [bounds_y_u1, bounds_x_u1])[0]
 		integral_U_specCuts_control += 0.5 * integrate.nquad(f_specCuts_control_2d_orientation2, [bounds_y_u1, bounds_x_u1])[0]
@@ -354,10 +389,18 @@ for i in range(0, len(three_x_points_vec)-1):
 	integral_S_fullCutsNOAK4_anti_ht2500to3500 += integrate.nquad(f_fullCutsNOAK4_anti_ht2500to3500_2d, [bounds_y_s2, bounds_x_s2])[0]
 	integral_S_fullCutsNOAK4_anti_ht2500to3500 += integrate.nquad(f_fullCutsNOAK4_anti_ht2500to3500_2d, [bounds_y_s3, bounds_x_s3])[0]
 
+	integral_S_fullCutsNOAK4_tagMC_ht1500to2500 = integrate.nquad(f_fullCutsNOAK4_tagMC_ht1500to2500_2d, [bounds_y_s1, bounds_x_s1])[0]
+	integral_S_fullCutsNOAK4_tagMC_ht1500to2500 += integrate.nquad(f_fullCutsNOAK4_tagMC_ht1500to2500_2d, [bounds_y_s2, bounds_x_s2])[0]
+	integral_S_fullCutsNOAK4_tagMC_ht1500to2500 += integrate.nquad(f_fullCutsNOAK4_tagMC_ht1500to2500_2d, [bounds_y_s3, bounds_x_s3])[0]
+
 	integral_S_specCuts_control = integrate.nquad(f_specCuts_control_2d_orientation1, [bounds_y_s1, bounds_x_s1])[0]
 	integral_S_specCuts_control += integrate.nquad(f_specCuts_control_2d_orientation1, [bounds_y_s2, bounds_x_s2])[0]
 	integral_S_specCuts_control += integrate.nquad(f_specCuts_control_2d_orientation1, [bounds_y_s3, bounds_x_s3])[0]
 
+	###############################################################
+	###############################################################
+	###############################################################
+	###############################################################
 	###############################################################
 	###############################################################
 	###############################################################
@@ -370,14 +413,18 @@ for i in range(0, len(three_x_points_vec)-1):
 	ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf = integral_S_fullCuts_anti_ht3500toInf / (2 * integral_U_fullCuts_anti_ht3500toInf)
 	ratio__antiS_over_antiUnD__fullCutsNOAK4_anti_ht1500to2500 = integral_S_fullCutsNOAK4_anti_ht1500to2500 / (2 * integral_U_fullCutsNOAK4_anti_ht1500to2500)
 	ratio__antiS_over_antiUnD__fullCutsNOAK4_anti_ht2500to3500 = integral_S_fullCutsNOAK4_anti_ht2500to3500 / (2 * integral_U_fullCutsNOAK4_anti_ht2500to3500)
-	print ratio__antiS_over_antiUnD__fullCuts_anti_ht1500to2500
-	print ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500
-	print ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf
+	# print "R_" + str(i) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht1500to2500)
+	# print "R_" + str(i) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500)
+	# print "R_" + str(i) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf)
+	# print "R_" + str(i) + " = " + str(ratio__antiS_over_antiUnD__fullCutsNOAK4_anti_ht1500to2500)
+	# print ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500
+	# print ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf
 	# print ratio__antiS_over_antiUnD__fullCutsNOAK4_anti_ht1500to2500
 	# print ratio__antiS_over_antiUnD__fullCutsNOAK4_anti_ht2500to3500
+	# print
+	print integral_S_fullCutsNOAK4_tagMC_ht1500to2500 / 0.331042195284
 	print
 
-	# BELOW IS OLD STUFF
 	# correctionFactorTag = (integral_S_specCuts_tag / integral_S_specCuts_anti) * (integral_U_specCuts_anti / integral_U_specCuts_tag)
 	# correctionFactorControl = (integral_S_specCuts_control / integral_S_specCuts_anti) * (integral_U_specCuts_anti / integral_U_specCuts_control)
 	# ratio_antiS_over_antiUnD = integral_S_specCuts_anti / (2 * integral_U_specCuts_anti)
@@ -389,6 +436,10 @@ for i in range(0, len(three_x_points_vec)-1):
 	# print integral_S_specCuts_anti
 	# print integral_S_specCuts_control
 
+	###############################################################
+	###############################################################
+	###############################################################
+	###############################################################
 	###############################################################
 	###############################################################
 	###############################################################
