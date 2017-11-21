@@ -36,15 +36,15 @@ int main(int argc, char** argv){
     // TWO: set of cut params, each combination = new plot
     // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Max","Off","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     // std::vector<int> cut3_ak8Pt = {-1};
-    // std::vector<std::vector<int>> cut4_ht = { {-1,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
+    // std::vector<std::vector<int>> cut4_ht = { {-1,99999} }; // these are HT bins, not just cuts (NB: use 99999 for a maximum)
     // std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
     std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Med2","Max","Med2","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     std::vector<int> cut3_ak8Pt = {300};
-    // std::vector<std::vector<int>> cut4_ht = { {1500,2500} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
-    // std::vector<std::vector<int>> cut4_ht = { {2500,3500} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
-    // std::vector<std::vector<int>> cut4_ht = { {3500,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
-    std::vector<std::vector<int>> cut4_ht = { {1500, 2500}, {2500, 3500}, {3500,13000} }; // these are HT bins, not just cuts (NB: use 13000 for a maximum)
+    // std::vector<std::vector<int>> cut4_ht = { {1500,2500} }; // these are HT bins, not just cuts (NB: use 99999 for a maximum)
+    // std::vector<std::vector<int>> cut4_ht = { {2500,3500} }; // these are HT bins, not just cuts (NB: use 99999 for a maximum)
+    // std::vector<std::vector<int>> cut4_ht = { {3500,99999} }; // these are HT bins, not just cuts (NB: use 99999 for a maximum)
+    std::vector<std::vector<int>> cut4_ht = { {1500, 2500}, {2500, 3500}, {3500,99999} }; // these are HT bins, not just cuts (NB: use 99999 for a maximum)
     std::vector<std::vector<int>> cut5_ak4Pt = { {250,250} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
 
@@ -53,7 +53,7 @@ int main(int argc, char** argv){
     double luminosity = 36.773; // 2016 DATASET
     // double luminosity = 50.0; // ROUGH WORKING POINT
     std::string varToPlot = "fatJetA_softDropMass";    
-    TH1D hTemplate("hTemplate", ";fatJetA_SoftDrop_Mass (GeV);events / 4 GeV", 50, 0, 200);
+    TH1D hTemplate("hTemplate", ";fatJetA_SoftDrop_Mass (GeV);events / 5 GeV", 40, 0, 200);
 
 
 
@@ -169,19 +169,16 @@ int main(int argc, char** argv){
 
 
 
-
                     // FIVE: plot aesthetics
                     Plotter plot = Plotter(plotEntrySignalVec, plotEntryBackgroundVec);
                     plot.AddLegend(0.55, 0.88, 0.47, 0.87); // top right (extra wide 8)
                     plot.SetErrors("only_stack");
                     plot.AddLatex(luminosity);
 
-
-
                     std::string saveName = varToPlot;
                     std::string cutName = "dbt" + cut2_ak8Dbt[iCut2][0] + cut2_ak8Dbt[iCut2][1] + "And" + cut2_ak8Dbt[iCut2][2] + cut2_ak8Dbt[iCut2][3];
                     cutName += Form("_ak8pt%d", cut3_ak8Pt[iCut3]);
-                    if (cut4_ht[iCut4][1]==13000) cutName += Form("_ht%dplus",cut4_ht[iCut4][0]);
+                    if (cut4_ht[iCut4][1]==99999) cutName += Form("_ht%dplus",cut4_ht[iCut4][0]);
                     else cutName += Form("_ht%dto%d",cut4_ht[iCut4][0],cut4_ht[iCut4][1]);
                     cutName += Form("_ak4pt%dn%d", cut5_ak4Pt[iCut5][0], cut5_ak4Pt[iCut5][1]);
                     saveName += "__" + cutName;

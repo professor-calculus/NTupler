@@ -48,8 +48,6 @@ plotting_compareDifferentCuts: plotting_compareDifferentCuts.o ${SRCMACDIR}/Plot
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 plotting_compare2D: plotting_compare2D.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
-plotting_investigateEventSelectionCuts: plotting_investigateEventSelectionCuts.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
-	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 plotting_triggerEff: plotting_triggerEff.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 table_investigateEventSelectionCuts: table_investigateEventSelectionCuts.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
@@ -91,7 +89,6 @@ clean:
 	rm -rf plotting_compareDifferentSamples plotting_compareDifferentSamples.o ${OBJDIR}/*
 	rm -rf plotting_compareDifferentCuts plotting_compareDifferentCuts.o ${OBJDIR}/*
 	rm -rf plotting_compare2D plotting_compare2D.o ${OBJDIR}/*
-	rm -rf plotting_investigateEventSelectionCuts plotting_investigateEventSelectionCuts.o ${OBJDIR}/*
 	rm -rf plotting_triggerEff plotting_triggerEff.o ${OBJDIR}/*
 	rm -rf table_investigateEventSelectionCuts table_investigateEventSelectionCuts.o ${OBJDIR}/*
 	rm -rf histos_create histos_create.o ${OBJDIR}/*
