@@ -16,6 +16,7 @@
 
 //RAL PARTICLE HEADERS
 #include "TimeStamp.h"
+#include "QcdSidebandCorr.h"
 
 
 // RE-FORMAT HISTOGRAMS TO USE WITH COMBINED
@@ -29,25 +30,28 @@ int main(){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/testingHistogramsForCombineTool6/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/testingHistogramsForCombineTool1000/"; // where we are going to save the output plots (should include the samples name, and any important features)
   
 
-    // TWO: what was the ht binning of the original histograms
-    std::vector<std::string> ht_bins = {"1500to2500", "2500to3500", "3500toInf"};
+    // TWO: labels for the original ht binning of the histograms and number of bins in histo
+    std::vector<std::string> ht_bins = {"ht1500to2500", "ht2500to3500", "ht3500toInf"};
     size_t numberOfBins_original = 30;
 
 
-    // THREE: 
+    // THREE: Samples
+    std::string dataSample = "QCD"; // use dummy data until we can unblind true data
+    std::string signalSample = "mH70_mSusy2000";
+    std::vector<std::string> monteCarloBackgrounds = {"TTJets", "ZJets"};
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
     std::vector<std::string> processNameVec;
-    processNameVec.push_back("mH70_mSusy2000");
-    processNameVec.push_back("QCD");
-    processNameVec.push_back("TTJets");
-    processNameVec.push_back("ZJets");
+    processNameVec.push_back(dataSample); // first element is Data, used for S_{data}^tag and ABCD estimation of this
+    processNameVec.push_back(signalSample); // second element is the signal sample
+    for (size_t iMC = 0; iMC < monteCarloBackgrounds.size(); ++iMC) processNameVec.push_back(monteCarloBackgrounds[iMC]); // the other elements are MC backgrounds
 
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
     size_t numberOfBins_new = numberOfBins_original / ht_bins.size();
     
     std::string dirExistCommand = "test -e " + outputDir;
@@ -55,23 +59,18 @@ int main(){
     if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
     std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/histos_forCombine.cc %s/%s__histos_forCombine.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
 
-    // explanation of terminology
-    // 1. S, U, D --> refers to mass space. pred is the prediction of S. UnD is the sum U+D.
-    // 2. tag, anti, control --> refers to 2*DBT space
-    // 3. sample name on the end
     std::map<std::string, TH1D*> h_;
     GetHistograms(h_);
-
 
     // loop through the different ht bins
     for (size_t iHt = 0; iHt < ht_bins.size(); ++iHt){ 
 
-        std::string outputFileName = outputDir + "/combineTH1D_ht" + ht_bins[iHt] + ".root";
+        std::string outputFileName = outputDir + "/combineTH1D" + ht_bins[iHt] + ".root";
         TFile * outputFile = new TFile(outputFileName.c_str(), "RECREATE");
 
-        // TH1D * h_data = new TH1D("data_obs", ";bin;events / bin", numberOfBins_new, 0, numberOfBins_new);
-
+        TH1D * h_data = new TH1D("data_obs", ";bin;events / bin", numberOfBins_new, 0, numberOfBins_new);
         
+
         // loop through the different processes
         for (size_t iPro = 0; iPro < processNameVec.size(); ++iPro){
 
@@ -79,68 +78,150 @@ int main(){
             TH1D * h = new TH1D(processNameVec[iPro].c_str(), ";bin;events / bin", numberOfBins_new, 0, numberOfBins_new);
             std::map<std::string, TH1D*> hErr_;
 
+            // create the statistical fluctation histograms to fill later
+            // count number of empty bins for a given process and ht bin
+            // calculate the event_weighting (we use it for the pseudo stat. error of empty bins)
             unsigned int numberOfEmptyBins = 0;
             std::vector<double> eventWeightVec;
             for (unsigned int iBin = 1; iBin < numberOfBins_new + 1; ++iBin){
 
                 hErr_[Form("%s_bin%dStatUp", processNameVec[iPro].c_str(), iBin)] = new TH1D(Form("%s_bin%dStatUp", processNameVec[iPro].c_str(), iBin), ";bin;events / bin", numberOfBins_new, 0, numberOfBins_new);
                 hErr_[Form("%s_bin%dStatDown", processNameVec[iPro].c_str(), iBin)] = new TH1D(Form("%s_bin%dStatDown", processNameVec[iPro].c_str(), iBin), ";bin;events / bin", numberOfBins_new, 0, numberOfBins_new);
-                
-                double binContent = h_[Form("S_tag_%s", processNameVec[iPro].c_str())]->GetBinContent(iBin + firstBin_original);
-                if (binContent == 0) numberOfEmptyBins++;
-                else{
-                    double binError = h_[Form("S_tag_%s", processNameVec[iPro].c_str())]->GetBinError(iBin + firstBin_original);
-                    double eventWeight = binError * binError / binContent;
-                    eventWeightVec.push_back(eventWeight);
+
+                double binContent = -8881.81; // intialize with crazy value                
+                double eventWeight = -8882.82; // intialize with crazy value
+
+                if (iPro == 0){ // DATA - note that this is purely for UnD^tag and not for the full ABCD calculation.
+                    /*
+                    SPECIAL NOTE:
+                    for the true dataset the count of UnD^tag should be an integer and the event weight should be unity
+                    whilst we are using a dummy dataset this will not be the case...
+                    >>> to replicate true data we round binContent to the nearest integer AND set binError = sqrt(binContent).
+                    >>> we also set event weight to unity.
+                    */
+                    binContent = round( h_[Form("UnD_tag_%s", processNameVec[iPro].c_str())]->GetBinContent(iBin + firstBin_original) );
+                    eventWeight = 1.0;
                 }
+
+                else if (iPro == 1){ // SIGNAL
+                    binContent = h_[Form("S_tag_%s", processNameVec[iPro].c_str())]->GetBinContent(iBin + firstBin_original);
+                    double binError = h_[Form("S_tag_%s", processNameVec[iPro].c_str())]->GetBinError(iBin + firstBin_original);
+                    if (binContent != 0) eventWeight = binError * binError / binContent;
+                }
+
+                else { // BACKGROUND MC SAMPLES ::: NOTSURE-handling negative mc
+                    double corrFactor = QcdSidebandCorr::GetCorr(ht_bins[iHt], iBin);
+                    double binContent_S = h_[Form("S_tag_%s", processNameVec[iPro].c_str())]->GetBinContent(iBin + firstBin_original);
+                    double binError_S = h_[Form("S_tag_%s", processNameVec[iPro].c_str())]->GetBinError(iBin + firstBin_original);
+                    double binContent_UnD = h_[Form("UnD_tag_%s", processNameVec[iPro].c_str())]->GetBinContent(iBin + firstBin_original);
+                    double binError_UnD = h_[Form("UnD_tag_%s", processNameVec[iPro].c_str())]->GetBinError(iBin + firstBin_original);
+                    
+                    binContent = binContent_S - corrFactor * binContent_UnD;
+                    
+                    if (binContent_S != 0){
+                        eventWeight = binError_S * binError_S / binContent_S;
+                        if (binContent_UnD != 0){ // check you get the same event weight in the sideband
+                            double eventWeight2 = binError_UnD * binError_UnD / binContent_UnD;
+                            if (float(eventWeight) != float(eventWeight2) ){
+                                std::cout << std::endl;
+                                std::cout << "The event weights for process:" << processNameVec[iPro] << ", htBin:" << ht_bins[iHt];
+                                std::cout << ", are not the same between S and U+D for bin:" <<  iBin << ". Exiting..." << std::endl;
+                                std::cout << std::endl;
+                                outputFile->Close();
+                                delete outputFile;
+                                return 1;           
+                            }
+                        }
+                    }
+                    else if (binContent_UnD != 0) eventWeight = binError_UnD * binError_UnD / binContent_UnD;                
+                } // closes 'else' corresponding to background MC samples
+
+                if (binContent == 0) numberOfEmptyBins++;
+                else eventWeightVec.push_back(eventWeight);
+                
             } // closes loop through individual bins
 
-            // calculate the event_weighting* (we use it for the stat. error of empty bins)
-            // if entry composed of multiple event_weightings use the average and print a warning message
-            double averageEventWeight = 0.0;
-            bool writeWarning = false;
+            // check that all event weights for a given process are the same
             for (size_t iEW = 0; iEW < eventWeightVec.size(); ++iEW){
-                if (iEW != 0 && float(eventWeightVec[iEW]) != float(eventWeightVec[iEW-1])) writeWarning = true;
-                averageEventWeight += eventWeightVec[iEW];
+                if (iEW != 0 && float(eventWeightVec[iEW]) != float(eventWeightVec[iEW-1]) ){
+                    std::cout << std::endl;
+                    std::cout << "The event weights for process:" << processNameVec[iPro] << ", htBin:" << ht_bins[iHt];
+                    std::cout << ", are not the same... Exiting..." << std::endl;
+                    std::cout << std::endl;
+                    outputFile->Close();
+                    delete outputFile;
+                    return 1;
+                }
             }
-            if (eventWeightVec.size() > 0) averageEventWeight = averageEventWeight / eventWeightVec.size();
-            if (writeWarning == true && numberOfEmptyBins > 0){
-                std::cout << std::endl;
-                std::cout << "WARNING! Event weight for ";
-                std::cout << "SAMPLE: " << processNameVec[iPro];
-                std::cout << ", HT bin: " << ht_bins[iHt];
-                std::cout << ", is not uniform" << std::endl;
-                std::cout << "...and we need this weight for the ~stat fluctation of empty bins" << std::endl;
-                std::cout << "The effective weights are: " << std::endl;
-                for (size_t iEW = 0; iEW < eventWeightVec.size(); ++iEW) std::cout << eventWeightVec[iEW] << ", ";
-                std::cout << std::endl;
-                std::cout << "Using the mean of these values as the weight = " << averageEventWeight << std::endl;
-                std::cout << std::endl;
-            }
+            double processEventWeight = -8883.83; // intialize with crazy value
+            if (eventWeightVec.size() > 0) processEventWeight = eventWeightVec[0];
 
-            // FILL THE HISTOS
+
+
+            // FILL THE HISTOGRAMS (with bin erros = 0 for combine)
             for (unsigned int iBin = 1; iBin < numberOfBins_new + 1; ++iBin){
 
+                double binContent = -8884.84; // intialize with crazy value
+                double binError = -8885.85; // intialize with crazy value
+                double corrFactor = QcdSidebandCorr::GetCorr(ht_bins[iHt], iBin);
+
+                if (iPro == 0){ // DATA ABCD PREDICTION and DATA_{S}^{tag}                
+                    /*
+                    SPECIAL NOTE:
+                    for the true dataset the count of UnD^tag should be an integer and the event weight should be unity
+                    whilst we are using a dummy dataset this will not be the case...
+                    >>> to replicate true data we round binContent to the nearest integer AND set binError = sqrt(binContent).
+                    >>> we also set event weight to unity.
+                    */
+                    double binContent_UnD = round( h_[Form("UnD_tag_%s", processNameVec[iPro].c_str())]->GetBinContent(iBin + firstBin_original) );
+                    double binError_UnD = sqrt(binContent_UnD);
+                    binContent = corrFactor * binContent_UnD;
+                    binError = corrFactor * binError_UnD;
+
+                    // SPECIAL CASE: fill the DATA_{S}^{tag} (to replicate data we round to nearest integer)
+                    double binContent_sTagData = round( h_[Form("S_tag_%s", processNameVec[iPro].c_str())]->GetBinContent(iBin + firstBin_original) );
+                    h_data->SetBinContent(iBin, binContent_sTagData);
+                    h_data->SetBinError(iBin, 0);
+                }
+
+                else if (iPro == 1){ // SIGNAL
+                    binContent = h_[Form("S_tag_%s", processNameVec[iPro].c_str())]->GetBinContent(iBin + firstBin_original);
+                    binError = h_[Form("S_tag_%s", processNameVec[iPro].c_str())]->GetBinError(iBin + firstBin_original);
+                }
+
+                else { // BACKGROUND MC SAMPLES
+                    double binContent_S = h_[Form("S_tag_%s", processNameVec[iPro].c_str())]->GetBinContent(iBin + firstBin_original);
+                    double binError_S = h_[Form("S_tag_%s", processNameVec[iPro].c_str())]->GetBinError(iBin + firstBin_original);
+                    double binContent_UnD = h_[Form("UnD_tag_%s", processNameVec[iPro].c_str())]->GetBinContent(iBin + firstBin_original);
+                    double binError_UnD = h_[Form("UnD_tag_%s", processNameVec[iPro].c_str())]->GetBinError(iBin + firstBin_original);
+                    binContent = binContent_S - corrFactor * binContent_UnD;
+                    binError = sqrt(binError_S * binError_S + corrFactor * corrFactor * binError_UnD * binError_UnD);
+                }
+
                 // fill the iBin'th bin of the histogram
-                double binContent = h_[Form("S_tag_%s", processNameVec[iPro].c_str())]->GetBinContent(iBin + firstBin_original);             
                 h->SetBinContent(iBin, binContent);
                 h->SetBinError(iBin, 0);
 
+
                 // fill in the statistical fluctuations for the iBin'th bin of the iBin'th systematic histogram
                 if (binContent > 0){
-                    double binError = h_[Form("S_tag_%s", processNameVec[iPro].c_str())]->GetBinError(iBin + firstBin_original);
                     hErr_[Form("%s_bin%dStatUp", processNameVec[iPro].c_str(), iBin)]->SetBinContent(iBin, binContent+binError);
                     hErr_[Form("%s_bin%dStatDown", processNameVec[iPro].c_str(), iBin)]->SetBinContent(iBin, binContent-binError);
                     hErr_[Form("%s_bin%dStatUp", processNameVec[iPro].c_str(), iBin)]->SetBinError(iBin, 0);
                     hErr_[Form("%s_bin%dStatDown", processNameVec[iPro].c_str(), iBin)]->SetBinError(iBin, 0);
                 }
                 else if (binContent == 0.0 && numberOfEmptyBins < numberOfBins_new){
-                    double binError = averageEventWeight * sqrt(1.0/numberOfEmptyBins);
-                    hErr_[Form("%s_bin%dStatUp", processNameVec[iPro].c_str(), iBin)]->SetBinContent(iBin, binError);
+                    double binErrorSpecial = processEventWeight * sqrt(1.0/numberOfEmptyBins);
+                    if (iPro == 0){ // correct for the fact that the DATA event weight comes before applying the corrFactor
+                        binErrorSpecial = corrFactor * binErrorSpecial;
+                    }
+                    hErr_[Form("%s_bin%dStatUp", processNameVec[iPro].c_str(), iBin)]->SetBinContent(iBin, binErrorSpecial);
                     hErr_[Form("%s_bin%dStatDown", processNameVec[iPro].c_str(), iBin)]->SetBinContent(iBin, 0);
                     hErr_[Form("%s_bin%dStatUp", processNameVec[iPro].c_str(), iBin)]->SetBinError(iBin, 0);
                     hErr_[Form("%s_bin%dStatDown", processNameVec[iPro].c_str(), iBin)]->SetBinError(iBin, 0);
                 }
+
+// NOTSURE-handling negative mc
                 else {
                     hErr_[Form("%s_bin%dStatUp", processNameVec[iPro].c_str(), iBin)]->SetBinContent(iBin, 0);
                     hErr_[Form("%s_bin%dStatDown", processNameVec[iPro].c_str(), iBin)]->SetBinContent(iBin, 0);
@@ -148,7 +229,7 @@ int main(){
                     hErr_[Form("%s_bin%dStatDown", processNameVec[iPro].c_str(), iBin)]->SetBinError(iBin, 0);                   
                 }
 
-                // fill in the (null) statistical fluctuations for the iBin'th bin of the NOT iBin'th systematic histogram
+                // fill in the (null by definition) statistical fluctuations for the iBin'th bin of the NOT iBin'th systematic histogram
                 for (unsigned int iBinLabel = 1; iBinLabel < numberOfBins_new + 1; ++iBinLabel){
                     if (iBinLabel != iBin){
                         hErr_[Form("%s_bin%dStatUp", processNameVec[iPro].c_str(), iBinLabel)]->SetBinContent(iBin, binContent);
@@ -161,12 +242,11 @@ int main(){
             } // close loop through individual bins
 
             h->Write();
-            // h_data->Add(h);
             for (auto & hErrEle : hErr_ ) hErrEle.second->Write();
 
         } // closes loop through the different processes
+        h_data->Write();
 
-        // h_data->Write();
         outputFile->Close();
         std::cout << "Created the ROOT file: " << outputFileName << std::endl;
         delete outputFile;
@@ -208,9 +288,9 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
     histoNameVec.push_back("mH70_mSusy2000");
     histoNameVec.push_back("mH90_mSusy2000");
 
-    std::string postamble_noAk4 = "MassCutsV04_ak8pt300_ht1500x2500x3500x_ak4pt-1n-1_lumi37.root"; // comment out when working on MC
+    std::string postamble_noAk4 = "MassCutsV04_ak8pt300_ht1500x2500x3500x_ak4pt-1n-1_lumi37.root";
     std::vector<std::string> histoNameVec_noAk4;
-    // histoNameVec_noAk4.push_back("Data_JetHt2016_goldenJson_NOAK4");
+    // histoNameVec_noAk4.push_back("Data_JetHt2016_goldenJson_NOAK4"); // comment out when working on MC
     histoNameVec_noAk4.push_back("QCD_NOAK4");
     histoNameVec_noAk4.push_back("TTJets_NOAK4");
     histoNameVec_noAk4.push_back("ZJets_NOAK4");
@@ -238,24 +318,9 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
         // 1. S, U, D --> refers to mass space. pred is the prediction of S. UnD is the sum U+D.
         // 2. tag, anti, control --> refers to 2*DBT space
         // 3. sample name on the end
-
         h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtMed2MaxAndMed2Max");
-        h_[Form("U_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtMed2MaxAndMed2Max");
-        h_[Form("D_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtMed2MaxAndMed2Max");
-
-        h_[Form("S_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtOffLooseAndOffLoose");
-        h_[Form("U_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtOffLooseAndOffLoose");
-        h_[Form("D_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtOffLooseAndOffLoose");
-
-        h_[Form("UnD_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("U_tag_%s", histoToUse.c_str())]->Clone();
-        h_[Form("UnD_tag_%s", histoToUse.c_str())]->Add(h_[Form("D_tag_%s", histoToUse.c_str())]);
-
-        h_[Form("UnD_anti_%s", histoToUse.c_str())] = (TH1D*)h_[Form("U_anti_%s", histoToUse.c_str())]->Clone();
-        h_[Form("UnD_anti_%s", histoToUse.c_str())]->Add(h_[Form("D_anti_%s", histoToUse.c_str())]);
-   
-        h_[Form("pred_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
-        h_[Form("pred_tag_%s", histoToUse.c_str())]->Multiply(h_[Form("S_anti_%s", histoToUse.c_str())]);
-        h_[Form("pred_tag_%s", histoToUse.c_str())]->Divide(h_[Form("UnD_anti_%s", histoToUse.c_str())]);
+        h_[Form("UnD_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtMed2MaxAndMed2Max");
+        h_[Form("UnD_tag_%s", histoToUse.c_str())]->Add((TH1D*)f->Get("D_dbtMed2MaxAndMed2Max"));
 
     } // closes loop through histoNameVec
 }
