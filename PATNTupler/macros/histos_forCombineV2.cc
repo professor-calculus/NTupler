@@ -54,7 +54,7 @@ int main(){
 
 
     // ONE: save info
-    const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/testingHistogramsForCombineToolNEW001/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2017_09_28_CMSSW_8_0_29_dbtV4/MassCutsV04/histosForCombined/background_TTJets/signal_mH70_mSusy2000/"; // where we are going to save the output plots (should include the samples name, and any important features)
   
 
     // TWO: labels for the original ht binning of the histograms and number of bins in histo
@@ -63,9 +63,10 @@ int main(){
 
 
     // THREE: Samples
-    const std::string dataSample = "QCD"; // use dummy data until we can unblind true data
+    const std::string dataSample = "pseudoData"; // use dummy data until we can unblind true data
     const std::string signalSample = "mH70_mSusy2000";
-    const std::vector<std::string> monteCarloBackgrounds = {"TTJets", "ZJets"};
+    const std::vector<std::string> monteCarloBackgrounds = {"TTJets"};
+    // const std::vector<std::string> monteCarloBackgrounds = {"TTJets", "ZJets"};
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,7 +76,7 @@ int main(){
     std::string dirExistCommand = "test -e " + outputDir;
     std::string makeDirCommand = "mkdir -p " + outputDir;
     if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
-    std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/histos_forCombine.cc %s/%s__histos_forCombine.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+    std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/histos_forCombineV2.cc %s/%s__histos_forCombineV2.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
 
     std::map<std::string, TH1D*> hOriginal_;
     GetHistograms(hOriginal_);
@@ -86,7 +87,7 @@ int main(){
     for (size_t iHt = 0; iHt < ht_bins.size(); ++iHt){ 
 
         std::cout << "HTBIN = " << ht_bins[iHt] << std::endl;
-        const std::string outputFileName = outputDir + "/combineTH1D" + ht_bins[iHt] + ".root";
+        const std::string outputFileName = outputDir + "/combineTH1D_" + ht_bins[iHt] + ".root";
         TFile * outputFile = new TFile(outputFileName.c_str(), "RECREATE");
         size_t firstBin_original = iHt * numberOfBins_new;
 
@@ -123,6 +124,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
     std::string postamble = "MassCutsV04_ak8pt300_ht1500x2500x3500x_ak4pt250n250_lumi37.root";
     std::vector<std::string> histoNameVec;
     // histoNameVec.push_back("Data_JetHt2016_goldenJson"); // comment out when working on MC
+    histoNameVec.push_back("pseudoData");
     histoNameVec.push_back("QCD");
     histoNameVec.push_back("TTJets");
     histoNameVec.push_back("ZJets");
