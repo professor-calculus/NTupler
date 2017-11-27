@@ -11,12 +11,12 @@ import os
 ###########################################################################################################
 ###########################################################################################################
 
-outputFile = "/opt/ppd/scratch/xap79297/CMSSW_8_0_29/src/NTupler/PATNTupler/combinedWorkspaces/testing001.txt"
+outputFile = "/opt/ppd/scratch/xap79297/CMSSW_8_0_29/src/NTupler/PATNTupler/combinedWorkspaces/Data_JetHt2016_goldenJson_NOAK4.txt"
 
 numberOfBinsPerHisto = 10
 htBins = ["ht1500to2500", "ht2500to3500", "ht3500toInf"]
-processVec = ["mH70_mSusy2000", "QCD", "TTJets", "ZJets"]
-rootFileInputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2017_09_28_CMSSW_8_0_29_dbtV4/MassCutsV04/histosForCombined/background_TTJets/signal_mH70_mSusy2000/"
+processVec = ["mH70_mSusy2000_NOAK4", "QCD", "TTJets_NOAK4", "ZJets_NOAK4", "WJets_NOAK4"] # first element is for the signal sample, the rest is background (note that QCD never has the NOAK4 label)
+rootFileInputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2017_09_28_CMSSW_8_0_29_dbtV4/MassCutsV04/histosForCombined/Data_JetHt2016_goldenJson_NOAK4/mH70_mSusy2000_NOAK4/"
 
 ###########################################################################################################
 ###########################################################################################################
@@ -32,7 +32,7 @@ listofDashes = "-" * 20
 
 def writeBlock(stringToWrite, f):
 	
-	charactersPerBlock = 20
+	charactersPerBlock = 25
 	f.write("%s" % stringToWrite)
 
 	if ( len(stringToWrite) < charactersPerBlock ):
@@ -104,5 +104,6 @@ for iChan in range(0, numberOfChannels):
 					writeBlock("-", f)
 			f.write("\n")
 		f.write("\n")
+	f.write("\n")
 
 f.close()
