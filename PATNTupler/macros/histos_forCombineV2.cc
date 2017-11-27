@@ -54,7 +54,7 @@ int main(){
 
 
     // ONE: save info
-    const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2017_09_28_CMSSW_8_0_29_dbtV4/MassCutsV04/histosForCombined/background_TTJets/signal_mH70_mSusy2000/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2017_09_28_CMSSW_8_0_29_dbtV4/MassCutsV04/histosForCombined/Data_JetHt2016_goldenJson_NOAK4/"; // where we are going to save the output plots (should include the samples name, and any important features)
   
 
     // TWO: labels for the original ht binning of the histograms and number of bins in histo
@@ -63,53 +63,62 @@ int main(){
 
 
     // THREE: Samples
-    const std::string dataSample = "pseudoData"; // use dummy data until we can unblind true data
-    const std::string signalSample = "mH70_mSusy2000";
-    const std::vector<std::string> monteCarloBackgrounds = {"TTJets"};
-    // const std::vector<std::string> monteCarloBackgrounds = {"TTJets", "ZJets"};
+    const std::string dataSample = "Data_JetHt2016_goldenJson_NOAK4"; // use dummy data until we can unblind true data
+    // std::vector<std::string> signalSampleVec = {"mH30_mSusy1600", "mH50_mSusy1600", "mH70_mSusy1600", "mH90_mSusy1600", "mH30_mSusy2000", "mH50_mSusy2000", "mH70_mSusy2000", "mH90_mSusy2000"}; // the different signal samples you wish to use
+    std::vector<std::string> signalSampleVec = {"mH70_mSusy1600_NOAK4", "mH70_mSusy2000_NOAK4"}; // the different signal samples you wish to use
+    // const std::vector<std::string> monteCarloBackgrounds = {"TTJets", "ZJets", "WJets"};
+    const std::vector<std::string> monteCarloBackgrounds = {"TTJets_NOAK4", "ZJets_NOAK4", "WJets_NOAK4"};
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
+    for (size_t iSig = 0; iSig < signalSampleVec.size(); ++iSig){
 
-    std::string dirExistCommand = "test -e " + outputDir;
-    std::string makeDirCommand = "mkdir -p " + outputDir;
-    if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
-    std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/histos_forCombineV2.cc %s/%s__histos_forCombineV2.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+        std::cout << "***** SIGNAL SAMPLE = " << signalSampleVec[iSig] << " *****" << std::endl;
 
-    std::map<std::string, TH1D*> hOriginal_;
-    GetHistograms(hOriginal_);
-    const size_t numberOfBins_new = numberOfBins_original / ht_bins.size();
+        const std::string outputDir = outputDirGeneral + "/" + signalSampleVec[iSig] + "/";
+        const std::string dirExistCommand = "test -e " + outputDir;
+        const std::string makeDirCommand = "mkdir -p " + outputDir;
+        if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
+        std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/histos_forCombineV2.cc %s/%s__histos_forCombineV2.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+
+        std::map<std::string, TH1D*> hOriginal_;
+        GetHistograms(hOriginal_);
+        const size_t numberOfBins_new = numberOfBins_original / ht_bins.size();
 
 
-    // loop through the different ht bins
-    for (size_t iHt = 0; iHt < ht_bins.size(); ++iHt){ 
+        // loop through the different ht bins
+        for (size_t iHt = 0; iHt < ht_bins.size(); ++iHt){ 
 
-        std::cout << "HTBIN = " << ht_bins[iHt] << std::endl;
-        const std::string outputFileName = outputDir + "/combineTH1D_" + ht_bins[iHt] + ".root";
-        TFile * outputFile = new TFile(outputFileName.c_str(), "RECREATE");
-        size_t firstBin_original = iHt * numberOfBins_new;
+            std::cout << "HTBIN = " << ht_bins[iHt] << std::endl;
+            const std::string outputFileName = outputDir + "combineTH1D_" + ht_bins[iHt] + ".root";
+            TFile * outputFile = new TFile(outputFileName.c_str(), "RECREATE");
+            size_t firstBin_original = iHt * numberOfBins_new;
 
-        CombineHistogramSet data = CombineHistogramSet(dataSample, numberOfBins_new, hOriginal_, firstBin_original, true);
-        CombineHistogramSet signal = CombineHistogramSet(signalSample, numberOfBins_new, hOriginal_, firstBin_original);
-        std::vector<CombineHistogramSet> mcVec;
-        std::vector<std::vector<double>> mcVec_binContentUnD;
-        std::vector<std::vector<double>> mcVec_binErrorUnD;
-        for (size_t iMC = 0; iMC < monteCarloBackgrounds.size(); ++iMC){
-            mcVec.push_back( CombineHistogramSet(monteCarloBackgrounds[iMC], numberOfBins_new, hOriginal_, firstBin_original) );
-            mcVec_binContentUnD.push_back(mcVec[iMC].Get_UnD_binContentVec());
-            mcVec_binErrorUnD.push_back(mcVec[iMC].Get_UnD_binErrorVec());
-        }
+            CombineHistogramSet data = CombineHistogramSet(dataSample, numberOfBins_new, hOriginal_, firstBin_original, true);
+            CombineHistogramSet signal = CombineHistogramSet(signalSampleVec[iSig], numberOfBins_new, hOriginal_, firstBin_original);
+            std::vector<CombineHistogramSet> mcVec;
+            std::vector<std::vector<double>> mcVec_binContentUnD;
+            std::vector<std::vector<double>> mcVec_binErrorUnD;
+            for (size_t iMC = 0; iMC < monteCarloBackgrounds.size(); ++iMC){
+                mcVec.push_back( CombineHistogramSet(monteCarloBackgrounds[iMC], numberOfBins_new, hOriginal_, firstBin_original) );
+                mcVec_binContentUnD.push_back(mcVec[iMC].Get_UnD_binContentVec());
+                mcVec_binErrorUnD.push_back(mcVec[iMC].Get_UnD_binErrorVec());
+            }
 
-        doQcdHistograms(ht_bins[iHt], numberOfBins_new, data.Get_UnD_binContentVec(), data.Get_UnD_binErrorVec(), mcVec_binContentUnD, mcVec_binErrorUnD);
+            doQcdHistograms(ht_bins[iHt], numberOfBins_new, data.Get_UnD_binContentVec(), data.Get_UnD_binErrorVec(), mcVec_binContentUnD, mcVec_binErrorUnD);
 
-        outputFile->Close();
-        std::cout << "Created the ROOT file: " << outputFileName << std::endl;
+            outputFile->Close();
+            std::cout << "Created the ROOT file: " << outputFileName << std::endl;
+            std::cout << std::endl;
+            delete outputFile;
+
+        } // closes loop through the different ht bins
+
         std::cout << std::endl;
-        delete outputFile;
-
-    } // closes loop through the different ht bins
+        std::cout << std::endl;
+    } // closes loop through the different signal samples
     return 0;
 }
 
@@ -123,8 +132,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
     
     std::string postamble = "MassCutsV04_ak8pt300_ht1500x2500x3500x_ak4pt250n250_lumi37.root";
     std::vector<std::string> histoNameVec;
-    // histoNameVec.push_back("Data_JetHt2016_goldenJson"); // comment out when working on MC
-    histoNameVec.push_back("pseudoData");
+    histoNameVec.push_back("Data_JetHt2016_goldenJson"); // comment out when working on MC
     histoNameVec.push_back("QCD");
     histoNameVec.push_back("TTJets");
     histoNameVec.push_back("ZJets");
@@ -148,7 +156,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
 
     std::string postamble_noAk4 = "MassCutsV04_ak8pt300_ht1500x2500x3500x_ak4pt-1n-1_lumi37.root";
     std::vector<std::string> histoNameVec_noAk4;
-    // histoNameVec_noAk4.push_back("Data_JetHt2016_goldenJson_NOAK4"); // comment out when working on MC
+    histoNameVec_noAk4.push_back("Data_JetHt2016_goldenJson_NOAK4"); // comment out when working on MC
     histoNameVec_noAk4.push_back("QCD_NOAK4");
     histoNameVec_noAk4.push_back("TTJets_NOAK4");
     histoNameVec_noAk4.push_back("ZJets_NOAK4");
@@ -248,9 +256,6 @@ whilst we are using a dummy dataset this will not be the case...
             //////////////////////////////////////
             // properties of the S_{i}^{tag} count
             double binContent_S = hOriginal_[Form("S_tag_%s", processName.c_str())]->GetBinContent(iBin + firstBin_original);
-            h->SetBinContent(iBin, binContent_S);
-            h->SetBinError(iBin, 0);              
-
             double binError_S = hOriginal_[Form("S_tag_%s", processName.c_str())]->GetBinError(iBin + firstBin_original);
             if (binContent_S == 0) numberOfEmptyBins_S++; 
             else eventWeightVec.push_back(binError_S * binError_S / binContent_S);
@@ -285,10 +290,16 @@ whilst we are using a dummy dataset this will not be the case...
             double binContent_S = hOriginal_[Form("S_tag_%s", processName.c_str())]->GetBinContent(iBin + firstBin_original);
             double binError_S = hOriginal_[Form("S_tag_%s", processName.c_str())]->GetBinError(iBin + firstBin_original);
 
+            if (binContent_S > 0) h->SetBinContent(iBin, binContent_S);
+            else h->SetBinContent(iBin, 0);
+
+            h->SetBinError(iBin, 0);
+
             // fill in the statistical fluctuations for the iBin'th bin of the iBin'th systematic histogram
             if (binContent_S > 0){ // non empty bin
                 hErr_[Form("%s_bin%dStatUp", processName.c_str(), iBin)]->SetBinContent(iBin, binContent_S + binError_S);
-                hErr_[Form("%s_bin%dStatDown", processName.c_str(), iBin)]->SetBinContent(iBin, binContent_S - binError_S);
+                if (binContent_S - binError_S >= 0) hErr_[Form("%s_bin%dStatDown", processName.c_str(), iBin)]->SetBinContent(iBin, binContent_S - binError_S);
+                else hErr_[Form("%s_bin%dStatDown", processName.c_str(), iBin)]->SetBinContent(iBin, 1e-14);
                 hErr_[Form("%s_bin%dStatUp", processName.c_str(), iBin)]->SetBinError(iBin, 0);
                 hErr_[Form("%s_bin%dStatDown", processName.c_str(), iBin)]->SetBinError(iBin, 0);
             }
