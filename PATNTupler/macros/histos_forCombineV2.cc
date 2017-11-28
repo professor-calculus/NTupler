@@ -24,16 +24,20 @@
 
 void GetHistograms(std::map<std::string,TH1D*>&); // NEED TO CHANGE THE FILE PATH IN THIS FUNCTION WHEN USING NEW HISTOGRAMS
 void doQcdHistograms(const std::string& htBin, const unsigned int& numberOfBins, const std::vector<double>& data_binContentUnD, const std::vector<double>& data_binErrorUnD, const std::vector<std::vector<double>>& mcVec_binContentUnD, const std::vector<std::vector<double>>& mcVec_binErrorUnD);
+void doQcdHistogramsLumi(const std::string&, const unsigned int&, const std::vector<double>&, const std::vector<std::vector<double>>&, const std::vector<std::vector<double>>&);
+void doQcdHistogramsXS(const std::string&, const unsigned int&, const std::vector<double>&, const std::vector<std::vector<double>>&, const std::vector<double>&, const std::vector<double>&, const std::string&);
 
 class CombineHistogramSet{
 
 public:
     // constructor    
     CombineHistogramSet(const std::string&, const unsigned int&, std::map<std::string,TH1D*>&, const unsigned int&, const bool& = false);
-    
+    CombineHistogramSet(const std::string&, const unsigned int&, std::map<std::string,TH1D*>&, const unsigned int&, const std::string&, const double&);
+
     std::vector<double> Get_UnD_binContentVec();
     std::vector<double> Get_UnD_binErrorVec();
-
+    std::vector<double> Get_UnD_binContent_sysUp_Vec();
+    std::vector<double> Get_UnD_binContent_sysDown_Vec();
 private:
     void WriteHistograms();
     bool isThisData;
@@ -41,8 +45,12 @@ private:
     std::map<std::string, TH1D*> hErr_;
     TH1D * h;
     TH1D * h_data;
+    TH1D * h_up;
+    TH1D * h_down;
     std::vector<double> UnD_binContentVec;
     std::vector<double> UnD_binErrorVec;
+    std::vector<double> UnD_binContent_sysUp_Vec;
+    std::vector<double> UnD_binContent_sysDown_Vec;
 };
 
 
@@ -54,7 +62,7 @@ int main(){
 
 
     // ONE: save info
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2017_09_28_CMSSW_8_0_29_dbtV4/MassCutsV04/histosForCombined/Data_JetHt2016_goldenJson_NOAK4/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2017_09_28_CMSSW_8_0_29_dbtV4/MassCutsV04/histosForCombined/TESTING_wAK4/"; // where we are going to save the output plots (should include the samples name, and any important features)
   
 
     // TWO: labels for the original ht binning of the histograms and number of bins in histo
@@ -63,16 +71,28 @@ int main(){
 
 
     // THREE: Samples
-    const std::string dataSample = "Data_JetHt2016_goldenJson_NOAK4"; // use dummy data until we can unblind true data
+    const std::string dataSample = "Data_JetHt2016_goldenJson"; // use dummy data until we can unblind true data
     // std::vector<std::string> signalSampleVec = {"mH30_mSusy1600", "mH50_mSusy1600", "mH70_mSusy1600", "mH90_mSusy1600", "mH30_mSusy2000", "mH50_mSusy2000", "mH70_mSusy2000", "mH90_mSusy2000"}; // the different signal samples you wish to use
-    std::vector<std::string> signalSampleVec = {"mH70_mSusy1600_NOAK4", "mH70_mSusy2000_NOAK4"}; // the different signal samples you wish to use
+    std::vector<std::string> signalSampleVec = {"mH70_mSusy1600"}; // the different signal samples you wish to use
     // const std::vector<std::string> monteCarloBackgrounds = {"TTJets", "ZJets", "WJets"};
-    const std::vector<std::string> monteCarloBackgrounds = {"TTJets_NOAK4", "ZJets_NOAK4", "WJets_NOAK4"};
+    const std::vector<std::string> monteCarloBackgrounds = {"TTJets", "ZJets", "WJets"};
+
+
+
+    // FOUR: Systematics
+    double sys_lumi = 1.1;
+    double sys_xs_signal = 1.3;
+    std::vector<double> sys_xs_mc = {1.7, 1.8, 1.9}; // must match size of monteCarloBackgrounds
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
+    if (sys_xs_mc.size() != monteCarloBackgrounds.size()){
+        std::cout << "sys_xs_mc.size() does not equal monteCarloBackgrounds.size(), exiting..." << std::endl;
+        return 1;
+    }
+
     for (size_t iSig = 0; iSig < signalSampleVec.size(); ++iSig){
 
         std::cout << "***** SIGNAL SAMPLE = " << signalSampleVec[iSig] << " *****" << std::endl;
@@ -96,6 +116,7 @@ int main(){
             TFile * outputFile = new TFile(outputFileName.c_str(), "RECREATE");
             size_t firstBin_original = iHt * numberOfBins_new;
 
+            // normal method and statistical systematics
             CombineHistogramSet data = CombineHistogramSet(dataSample, numberOfBins_new, hOriginal_, firstBin_original, true);
             CombineHistogramSet signal = CombineHistogramSet(signalSampleVec[iSig], numberOfBins_new, hOriginal_, firstBin_original);
             std::vector<CombineHistogramSet> mcVec;
@@ -106,8 +127,32 @@ int main(){
                 mcVec_binContentUnD.push_back(mcVec[iMC].Get_UnD_binContentVec());
                 mcVec_binErrorUnD.push_back(mcVec[iMC].Get_UnD_binErrorVec());
             }
-
             doQcdHistograms(ht_bins[iHt], numberOfBins_new, data.Get_UnD_binContentVec(), data.Get_UnD_binErrorVec(), mcVec_binContentUnD, mcVec_binErrorUnD);
+
+            // luminosity systematics
+            CombineHistogramSet signal_lumi = CombineHistogramSet(signalSampleVec[iSig], numberOfBins_new, hOriginal_, firstBin_original, "lumi", sys_lumi);
+            std::vector<CombineHistogramSet> mcVec_lumi;
+            std::vector<std::vector<double>> mcVec_binContentUnD_lumiUp;
+            std::vector<std::vector<double>> mcVec_binContentUnD_lumiDown;
+            for (size_t iMC = 0; iMC < monteCarloBackgrounds.size(); ++iMC){
+                mcVec_lumi.push_back( CombineHistogramSet(monteCarloBackgrounds[iMC], numberOfBins_new, hOriginal_, firstBin_original, "lumi", sys_lumi) );
+                mcVec_binContentUnD_lumiUp.push_back(mcVec_lumi[iMC].Get_UnD_binContent_sysUp_Vec());
+                mcVec_binContentUnD_lumiDown.push_back(mcVec_lumi[iMC].Get_UnD_binContent_sysDown_Vec());
+            }           
+            doQcdHistogramsLumi(ht_bins[iHt], numberOfBins_new, data.Get_UnD_binContentVec(), mcVec_binContentUnD_lumiUp, mcVec_binContentUnD_lumiDown);
+
+            // cross section systematics
+            CombineHistogramSet signal_xs = CombineHistogramSet(signalSampleVec[iSig], numberOfBins_new, hOriginal_, firstBin_original, "xsSig", sys_xs_signal);
+            std::vector<CombineHistogramSet> mcVec_xs;
+            for (size_t iMC = 0; iMC < monteCarloBackgrounds.size(); ++iMC){
+                mcVec_xs.push_back( CombineHistogramSet(monteCarloBackgrounds[iMC], numberOfBins_new, hOriginal_, firstBin_original, "xs" + monteCarloBackgrounds[iMC].substr(0,3), sys_xs_mc[iMC]) );
+                
+                std::vector<std::vector<double>> mcVecSubset_binContentUnD;
+                for (size_t iSS = 0; iSS < monteCarloBackgrounds.size(); ++iSS){
+                    if (iSS != iMC) mcVecSubset_binContentUnD.push_back( mcVec[iSS].Get_UnD_binContentVec() );
+                } 
+                doQcdHistogramsXS(ht_bins[iHt], numberOfBins_new, data.Get_UnD_binContentVec(), mcVecSubset_binContentUnD, mcVec_xs[iMC].Get_UnD_binContent_sysUp_Vec(), mcVec_xs[iMC].Get_UnD_binContent_sysDown_Vec(), monteCarloBackgrounds[iMC].substr(0,3) );
+            }             
 
             outputFile->Close();
             std::cout << "Created the ROOT file: " << outputFileName << std::endl;
@@ -196,15 +241,18 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
 
 CombineHistogramSet::CombineHistogramSet(const std::string& processName, const unsigned int& numberOfBins, std::map<std::string,TH1D*>& hOriginal_, const unsigned int& firstBin_original, const bool& isThisDataDummy) :
 isThisData(isThisDataDummy),
-eventWeightsOkay(true)
+eventWeightsOkay(true),
+h_up(NULL),
+h_down(NULL)
 {
+// this constructor does the normal fills and the statistical uncertainty systematics
 
     if (isThisData){
         std::cout << "creating histograms for process: " << processName << " (this is our data sample)" << std::endl;
 /*
 SPECIAL NOTE:
 for the true dataset the count of DATA_{U+D}^{tag} and DATA_{S}^{tag} should be an integer and the event weight should be unity
-whilst we are using a dummy dataset this will not be the case...
+if we are using a dummy dataset this will not be the case...
 >>> to replicate true data we round binContent to the nearest integer AND binError = sqrt(binContent).
 >>> we also set event weight to unity.
 */
@@ -331,7 +379,7 @@ whilst we are using a dummy dataset this will not be the case...
             if (eventWeightsOkay){
                 unsigned int iVec = iBin - 1;
                 double binError_UnD = -8000.0;
-                if (UnD_binContentVec[iVec] > 0) binError_UnD = eventWeight * sqrt(UnD_binContentVec[iVec]);
+                if (UnD_binContentVec[iVec] > 0) binError_UnD = hOriginal_[Form("UnD_tag_%s", processName.c_str())]->GetBinError(iBin + firstBin_original);
                 else if (numberOfEmptyBins_UnD < numberOfBins) binError_UnD = eventWeight * sqrt(1.0 / numberOfEmptyBins_UnD);
                 else binError_UnD = 0.0;
                 UnD_binErrorVec.push_back(binError_UnD);
@@ -341,6 +389,56 @@ whilst we are using a dummy dataset this will not be the case...
     } // closes 'if' NOT data
     WriteHistograms();
 } // closes the constructor
+
+
+CombineHistogramSet::CombineHistogramSet(const std::string& processName, const unsigned int& numberOfBins, std::map<std::string,TH1D*>& hOriginal_, const unsigned int& firstBin_original, const std::string& systematicType, const double& systematicValue) :
+isThisData(false),
+eventWeightsOkay(true)
+{
+// this constructor does the specific systematic histograms
+    const std::string processSysName = processName + "_" + systematicType;
+    const std::string processSysNameUp = processName + "_" + systematicType + "Up";
+    const std::string processSysNameDown = processName + "_" + systematicType + "Down";
+
+    std::cout << "creating systematic histograms " << processSysName << std::endl;
+    h_data = NULL;
+    h = NULL;
+    h_up = new TH1D(processSysNameUp.c_str(), ";bin;events / bin", numberOfBins, 0, numberOfBins); 
+    h_down = new TH1D(processSysNameDown.c_str(), ";bin;events / bin", numberOfBins, 0, numberOfBins); 
+
+    for (unsigned int iBin = 1; iBin < numberOfBins + 1; ++iBin){
+
+        //////////////////////////////////////
+        // properties of the S_{i}^{tag} count
+        double binContent_S = hOriginal_[Form("S_tag_%s", processName.c_str())]->GetBinContent(iBin + firstBin_original);
+        
+        double binContent_S_Up = systematicValue * binContent_S;
+        if (binContent_S_Up > 0) h_up->SetBinContent(iBin, binContent_S_Up);
+        else h_up->SetBinContent(iBin, 0);
+        h_up->SetBinError(iBin, 0);
+        
+        double binContent_S_Down = (2 - systematicValue) * binContent_S;
+        if (binContent_S_Down > 0) h_down->SetBinContent(iBin, binContent_S_Down);
+        else h_down->SetBinContent(iBin, 0);
+        h_down->SetBinError(iBin, 0);
+
+        ////////////////////////////////////////
+        // properties of the U+D_{i}^{tag} count
+        double binContent_UnD = hOriginal_[Form("UnD_tag_%s", processName.c_str())]->GetBinContent(iBin + firstBin_original);
+        
+        double binContent_UnD_Up = systematicValue * binContent_UnD;
+        if (binContent_UnD_Up < 0) binContent_UnD_Up = 0;
+        
+        double binContent_UnD_Down = (2 - systematicValue) * binContent_UnD;
+        if (binContent_UnD_Down < 0) binContent_UnD_Down = 0;
+
+        UnD_binContent_sysUp_Vec.push_back(binContent_UnD_Up);
+        UnD_binContent_sysDown_Vec.push_back(binContent_UnD_Down);
+
+    } // closes loop through individual bins (for the second time)
+    WriteHistograms();
+} // closes the constructor
+
 
 void CombineHistogramSet::WriteHistograms()
 {
@@ -352,7 +450,9 @@ void CombineHistogramSet::WriteHistograms()
 
     if (isThisData) h_data->Write();
     else {
-        h->Write();
+        if (h != NULL) h->Write();
+        if (h_up != NULL) h_up->Write();
+        if (h_down != NULL) h_down->Write();
         for (auto & hErrEle : hErr_ ) hErrEle.second->Write();
     }
     return;
@@ -360,12 +460,13 @@ void CombineHistogramSet::WriteHistograms()
 
 std::vector<double> CombineHistogramSet::Get_UnD_binContentVec(){return UnD_binContentVec;}
 std::vector<double> CombineHistogramSet::Get_UnD_binErrorVec(){return UnD_binErrorVec;}
+std::vector<double> CombineHistogramSet::Get_UnD_binContent_sysUp_Vec(){return UnD_binContent_sysUp_Vec;}
+std::vector<double> CombineHistogramSet::Get_UnD_binContent_sysDown_Vec(){return UnD_binContent_sysDown_Vec;}
 
 
 
-
-void doQcdHistograms(const std::string& htBin, const unsigned int& numberOfBins, const std::vector<double>& data_binContentUnD, const std::vector<double>& data_binErrorUnD, const std::vector<std::vector<double>>& mcVec_binContentUnD, const std::vector<std::vector<double>>& mcVec_binErrorUnD){
-
+void doQcdHistograms(const std::string& htBin, const unsigned int& numberOfBins, const std::vector<double>& data_binContentUnD, const std::vector<double>& data_binErrorUnD, const std::vector<std::vector<double>>& mcVec_binContentUnD, const std::vector<std::vector<double>>& mcVec_binErrorUnD)
+{
     std::cout << "Doing ABCD method for QCD" << std::endl;
 
     // check all the vectors are the right size
@@ -465,3 +566,130 @@ void doQcdHistograms(const std::string& htBin, const unsigned int& numberOfBins,
     for (auto & hErrEle : hErr_ ) hErrEle.second->Write();
 
 } // closes function doQcdHistograms
+
+
+
+void doQcdHistogramsLumi(const std::string& htBin, const unsigned int& numberOfBins, const std::vector<double>& data_binContentUnD, const std::vector<std::vector<double>>& mcVec_binContentUnD_lumiUp, const std::vector<std::vector<double>>& mcVec_binContentUnD_lumiDown)
+{
+    std::cout << "Doing ABCD method for QCD with luminosity systematics" << std::endl;
+
+    // check all the vectors are the right size
+    if (data_binContentUnD.size() != numberOfBins){
+        std::cout << "NOT DOING QCD: The number of entries in the vector data_binContentUnD does not match the number that should be in the desired histogram" << std::endl;
+        return;
+    }
+    if (mcVec_binContentUnD_lumiUp.size() != mcVec_binContentUnD_lumiDown.size()){
+        std::cout << "NOT DOING QCD: The number of MC entries is different between mcVec_binContentUnD_lumiUp and mcVec_binContentUnD_lumiDown" << std::endl;
+        return;
+    }
+    for (size_t iMC = 0; iMC < mcVec_binContentUnD_lumiUp.size(); ++iMC){
+        if (mcVec_binContentUnD_lumiUp[iMC].size() != numberOfBins){
+            std::cout << "NOT DOING QCD: The number of entries in the vector mcVec_binContentUnD_lumiUp[" << iMC << "] does not match the number that should be in the desired histogram" << std::endl;
+            return;
+        }
+        if (mcVec_binContentUnD_lumiDown[iMC].size() != numberOfBins){
+            std::cout << "NOT DOING QCD: The number of entries in the vector mcVec_binContentUnD_lumiDown[" << iMC << "] does not match the number that should be in the desired histogram" << std::endl;
+            return;
+        }                
+    }
+
+    // now do the real thing...
+    TH1D * h_QCD_Up = new TH1D("QCD_lumiUp", ";bin;events / bin", numberOfBins, 0, numberOfBins);
+    TH1D * h_QCD_Down = new TH1D("QCD_lumiDown", ";bin;events / bin", numberOfBins, 0, numberOfBins);
+
+    // body = (U+D)_{data}^{tag} - sum_over_mc[ (U+D)_{MC}^{tag} ]
+    for (unsigned int iVec = 0; iVec < numberOfBins; ++iVec){
+
+        unsigned int iBin = iVec + 1;
+
+        double bodyUp = data_binContentUnD[iVec];
+        double bodyDown = data_binContentUnD[iVec];
+
+        for (size_t iMC = 0; iMC < mcVec_binContentUnD_lumiUp.size(); ++iMC){
+            bodyUp = bodyUp - mcVec_binContentUnD_lumiUp[iMC][iVec];
+            bodyDown = bodyDown - mcVec_binContentUnD_lumiDown[iMC][iVec];
+        }
+
+        double ratio = QcdSidebandCorr::GetCorr(htBin.c_str(), iBin);
+        bodyUp = ratio * bodyUp;
+        bodyDown = ratio * bodyDown;
+        if (bodyUp < 0) bodyUp = 0;
+        if (bodyDown < 0) bodyDown = 0;
+
+        h_QCD_Up->SetBinContent(iBin, bodyUp);
+        h_QCD_Up->SetBinError(iBin, 0);
+        h_QCD_Down->SetBinContent(iBin, bodyDown);
+        h_QCD_Down->SetBinError(iBin, 0);
+
+    } // closes loop through the bins (first time)
+
+    h_QCD_Up->Write();
+    h_QCD_Down->Write();
+
+} // closes function doQcdHistogramsLumi
+
+
+
+void doQcdHistogramsXS(const std::string& htBin, const unsigned int& numberOfBins, const std::vector<double>& data_binContentUnD, const std::vector<std::vector<double>>& mcVecSubset_binContentUnD, const std::vector<double>& mcVec_binContentUnD_xsUp, const std::vector<double>& mcVec_binContentUnD_xsDown, const std::string& xslabel)
+{
+    std::cout << "Doing ABCD method for QCD with cross section systematics xs" << xslabel << std::endl;
+
+    // check all the vectors are the right size
+    if (data_binContentUnD.size() != numberOfBins){
+        std::cout << "NOT DOING QCD: The number of entries in the vector data_binContentUnD does not match the number that should be in the desired histogram" << std::endl;
+        return;
+    }
+    if (mcVec_binContentUnD_xsUp.size() != numberOfBins){
+        std::cout << "NOT DOING QCD: The number of entries in the vector mcVec_binContentUnD_xsUp does not match the number that should be in the desired histogram" << std::endl;
+        return;
+    }
+    if (mcVec_binContentUnD_xsDown.size() != numberOfBins){
+        std::cout << "NOT DOING QCD: The number of entries in the vector mcVec_binContentUnD_xsDown does not match the number that should be in the desired histogram" << std::endl;
+        return;
+    }
+    for (size_t iSS = 0; iSS < mcVecSubset_binContentUnD.size(); ++iSS){
+        if (mcVecSubset_binContentUnD[iSS].size() != numberOfBins){
+            std::cout << "NOT DOING QCD: The number of entries in the vector mcVecSubset_binContentUnD[" << iSS << "] does not match the number that should be in the desired histogram" << std::endl;
+            return;
+        }              
+    }
+
+    // now do the real thing...
+    const std::string upLabel = "QCD_xs" + xslabel + "Up";
+    const std::string downLabel = "QCD_xs" + xslabel + "Down";
+    TH1D * h_QCD_Up = new TH1D(upLabel.c_str(), ";bin;events / bin", numberOfBins, 0, numberOfBins);
+    TH1D * h_QCD_Down = new TH1D(downLabel.c_str(), ";bin;events / bin", numberOfBins, 0, numberOfBins);
+
+    // body = (U+D)_{data}^{tag} - sum_over_mc[ (U+D)_{MC}^{tag} ]
+    for (unsigned int iVec = 0; iVec < numberOfBins; ++iVec){
+
+        unsigned int iBin = iVec + 1;
+
+        double bodyUp = data_binContentUnD[iVec];
+        double bodyDown = data_binContentUnD[iVec];
+
+        for (size_t iSS = 0; iSS < mcVecSubset_binContentUnD.size(); ++iSS){
+            bodyUp = bodyUp - mcVecSubset_binContentUnD[iSS][iVec];
+            bodyDown = bodyDown - mcVecSubset_binContentUnD[iSS][iVec];
+        }
+
+        bodyUp = bodyUp - mcVec_binContentUnD_xsUp[iVec];
+        bodyDown = bodyDown - mcVec_binContentUnD_xsDown[iVec];
+
+        double ratio = QcdSidebandCorr::GetCorr(htBin.c_str(), iBin);
+        bodyUp = ratio * bodyUp;
+        bodyDown = ratio * bodyDown;
+        if (bodyUp < 0) bodyUp = 0;
+        if (bodyDown < 0) bodyDown = 0;
+
+        h_QCD_Up->SetBinContent(iBin, bodyUp);
+        h_QCD_Up->SetBinError(iBin, 0);
+        h_QCD_Down->SetBinContent(iBin, bodyDown);
+        h_QCD_Down->SetBinError(iBin, 0);
+
+    } // closes loop through the bins (first time)
+
+    h_QCD_Up->Write();
+    h_QCD_Down->Write();
+
+} // closes function doQcdHistogramsXS
