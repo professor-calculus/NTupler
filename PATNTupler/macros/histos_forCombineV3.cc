@@ -23,8 +23,7 @@
 
 
 void GetHistograms(std::map<std::string,TH1D*>&); // NEED TO CHANGE THE FILE PATH IN THIS FUNCTION WHEN USING NEW HISTOGRAMS
-void CombineHistogram(const std::string&, const unsigned int&, std::map<std::string,TH1D*>&, const unsigned int&, const std::string&, const bool& = false);
-
+void CombineHistogram(const std::string&, const unsigned int&, const unsigned int&, std::map<std::string,TH1D*>&, const std::string&, const bool& = false);
 
 int main(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,18 +32,18 @@ int main(){
 
 
     // ONE: save info
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2017_09_28_CMSSW_8_0_29_dbtV4/MassCutsV04/histosForCombined/codeV3testing/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2017_09_28_CMSSW_8_0_29_dbtV4/MassCutsV04/histosForCombined/codeV3testing_noht_newemptybinerror_new/"; // where we are going to save the output plots (should include the samples name, and any important features)
   
 
-    // TWO: labels for the original ht binning of the histograms and number of bins in histo
-    const std::vector<std::string> ht_bins = {"ht1500to2500", "ht2500to3500", "ht3500toInf"};
-    const size_t numberOfBins_original = 30;
+    // TWO: total number of bins in the histograms and the number of ht divisions within
+    const unsigned int numberOfBinsTotal = 30;
+    const unsigned int numberOfBinsHT = 3;
 
 
     // THREE: Samples
     const std::string dataSample = "Data_JetHt2016_goldenJson"; // use dummy data until we can unblind true data
     // std::vector<std::string> signalSampleVec = {"mH30_mSusy1600", "mH50_mSusy1600", "mH70_mSusy1600", "mH90_mSusy1600", "mH30_mSusy2000", "mH50_mSusy2000", "mH70_mSusy2000", "mH90_mSusy2000"}; // the different signal samples you wish to use
-    std::vector<std::string> signalSampleVec = {"mH70_mSusy1600"}; // the different signal samples you wish to use
+    std::vector<std::string> signalSampleVec = {"mH70_mSusy1600", "mH90_mSusy1600"}; // the different signal samples you wish to use
     // const std::vector<std::string> monteCarloBackgrounds = {"TTJets", "ZJets", "WJets"};
     const std::vector<std::string> monteCarloBackgrounds = {"TTJets", "ZJets", "WJets"};
 
@@ -66,34 +65,25 @@ int main(){
 
         std::map<std::string, TH1D*> hOriginal_;
         GetHistograms(hOriginal_);
-        const size_t numberOfBins_new = numberOfBins_original / ht_bins.size();
-
 
         // loop through the different mass types
         const std::vector<std::string> massLabelVec = {"S", "UnD"};
         for (auto massLabel : massLabelVec){
 
-            // loop through the different ht bins
-            for (size_t iHt = 0; iHt < ht_bins.size(); ++iHt){ 
+            const std::string outputFileName = outputDir + "combineTH1D_" + massLabel + ".root";
+            TFile * outputFile = new TFile(outputFileName.c_str(), "RECREATE");
 
-                std::cout << massLabel << ": HTBIN = " << ht_bins[iHt] << std::endl;
-                const std::string outputFileName = outputDir + "combineTH1D_" + massLabel + "_" + ht_bins[iHt] + ".root";
-                TFile * outputFile = new TFile(outputFileName.c_str(), "RECREATE");
-                const size_t firstBin_original = iHt * numberOfBins_new;
+            if (massLabel == "S") CombineHistogram(dataSample, numberOfBinsTotal, numberOfBinsHT, hOriginal_, massLabel, true);
+            else CombineHistogram(dataSample, numberOfBinsTotal, numberOfBinsHT, hOriginal_, massLabel);
+            CombineHistogram(signalSampleVec[iSig], numberOfBinsTotal, numberOfBinsHT, hOriginal_, massLabel);
+            for (size_t iMC = 0; iMC < monteCarloBackgrounds.size(); ++iMC) CombineHistogram(monteCarloBackgrounds[iMC], numberOfBinsTotal, numberOfBinsHT, hOriginal_, massLabel);
 
-                if (massLabel == "S") CombineHistogram(dataSample, numberOfBins_new, hOriginal_, firstBin_original, massLabel, true);
-                else CombineHistogram(dataSample, numberOfBins_new, hOriginal_, firstBin_original, massLabel);
-                CombineHistogram(signalSampleVec[iSig], numberOfBins_new, hOriginal_, firstBin_original, massLabel);
-                for (size_t iMC = 0; iMC < monteCarloBackgrounds.size(); ++iMC) CombineHistogram(monteCarloBackgrounds[iMC], numberOfBins_new, hOriginal_, firstBin_original, massLabel);
+            outputFile->Close();
+            std::cout << "Created the ROOT file: " << outputFileName << std::endl;
+            std::cout << std::endl;
+            delete outputFile;
 
-                outputFile->Close();
-                std::cout << "Created the ROOT file: " << outputFileName << std::endl;
-                std::cout << std::endl;
-                delete outputFile;
-
-            } // closes loop through the different ht bins
         } // closes loop through differet mass types
-
         std::cout << std::endl;
         std::cout << std::endl;
     } // closes loop through the different signal samples
@@ -168,23 +158,27 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
 } // closes function GetHistograms
 
 
-void CombineHistogram(const std::string& processName, const unsigned int& numberOfBins, std::map<std::string,TH1D*>& hOriginal_, const unsigned int& firstBin_original, const std::string& massLabel, const bool& isThisSignalData){
+void CombineHistogram(const std::string& processName, const unsigned int& numberOfBinsTotal, const unsigned int& numberOfBinsHT, std::map<std::string,TH1D*>& hOriginal_, const std::string& massLabel, const bool& isThisSignalData){
     std::cout << "creating histogram for process " << massLabel << "_" << processName;
     if (isThisSignalData) std::cout << " (this is our signal data sample)" << std::endl;
     else std::cout << std::endl;
 
     TH1D * h;
-    if (isThisSignalData) h = new TH1D("data_obs", ";bin;events / bin", numberOfBins, 0, numberOfBins);
-    else h = new TH1D(processName.c_str(), ";bin;events / bin", numberOfBins, 0, numberOfBins);
+    if (isThisSignalData) h = new TH1D("data_obs", ";bin;events / bin", numberOfBinsTotal, 0, numberOfBinsTotal);
+    else h = new TH1D(processName.c_str(), ";bin;events / bin", numberOfBinsTotal, 0, numberOfBinsTotal);
 
-    unsigned int numberOfEmptyBins = 0;
+    std::vector<unsigned int> numberOfEmptyBinsVec(numberOfBinsHT, 0);
     std::vector<double> eventWeightVec;
 
-    for (unsigned int iBin = 1; iBin < numberOfBins + 1; ++iBin){
-
-        double binContent = hOriginal_[Form("%s_tag_%s", massLabel.c_str(), processName.c_str())]->GetBinContent(iBin + firstBin_original);
-        double binError = hOriginal_[Form("%s_tag_%s", massLabel.c_str(), processName.c_str())]->GetBinError(iBin + firstBin_original);
-        if (binContent == 0) numberOfEmptyBins++; 
+    for (unsigned int iBin = 1; iBin < numberOfBinsTotal + 1; ++iBin){
+    
+        double binContent = hOriginal_[Form("%s_tag_%s", massLabel.c_str(), processName.c_str())]->GetBinContent(iBin);
+        double binError = hOriginal_[Form("%s_tag_%s", massLabel.c_str(), processName.c_str())]->GetBinError(iBin);
+    
+        if (binContent == 0){
+            unsigned int iHT = floor( (iBin - 1) * numberOfBinsHT / numberOfBinsTotal );
+            numberOfEmptyBinsVec[iHT]++;
+        } 
         else eventWeightVec.push_back(binError * binError / binContent);
 
     } // closes loop through individual bins (for the first time)
@@ -198,33 +192,31 @@ void CombineHistogram(const std::string& processName, const unsigned int& number
             return;
         }
     }
+    for (unsigned int iBin = 1; iBin < numberOfBinsTotal + 1; ++iBin){
 
-    for (unsigned int iBin = 1; iBin < numberOfBins + 1; ++iBin){
-
-        double binContent = hOriginal_[Form("%s_tag_%s", massLabel.c_str(), processName.c_str())]->GetBinContent(iBin + firstBin_original);
-        double binError = hOriginal_[Form("%s_tag_%s", massLabel.c_str(), processName.c_str())]->GetBinError(iBin + firstBin_original);
+        double binContent = hOriginal_[Form("%s_tag_%s", massLabel.c_str(), processName.c_str())]->GetBinContent(iBin);
         
-        double corrRatio = QcdSidebandCorr::GetCorr(iBin + firstBin_original);
+        double binError = -8000.0;
+        unsigned int iHT = floor( (iBin - 1) * numberOfBinsHT / numberOfBinsTotal );
+        if (binContent > 0) binError = hOriginal_[Form("%s_tag_%s", massLabel.c_str(), processName.c_str())]->GetBinError(iBin);
+        else if (binContent == 0.0 && numberOfEmptyBinsVec[iHT] < (numberOfBinsTotal / numberOfBinsHT) ){
+            binContent = 0.0;
+            binError = eventWeight;
+        }
+        else{
+            binContent = 0.0;
+            binError = 0.0;
+        }
+
         if (massLabel == "UnD"){
+            double corrRatio = QcdSidebandCorr::GetCorr(iBin);
             binContent = corrRatio * binContent;
             binError = corrRatio * binError;
         }
 
-        if (binContent > 0) h->SetBinContent(iBin, binContent);
-        else h->SetBinContent(iBin, 0);
+        h->SetBinContent(iBin, binContent);
+        h->SetBinError(iBin, binError);
 
-        // fill in the statistical errors
-        if (binContent > 0){ // non empty bin
-            h->SetBinError(iBin, binError);
-        }
-        else if (binContent == 0.0 && numberOfEmptyBins < numberOfBins){ // empty bin, but not all bins in histogram are empty
-            double binErrorSpecial = eventWeight * sqrt(1.0 / numberOfEmptyBins);
-            if (massLabel == "UnD") binErrorSpecial = corrRatio * binErrorSpecial;
-            h->SetBinError(iBin, binErrorSpecial);    
-        }
-        else { // empty bin, and all bins in this histogram are empty
-            h->SetBinError(iBin, 0);    
-        }
     } // closes loop through individual bins (for the second time)
     
     h->Write();
