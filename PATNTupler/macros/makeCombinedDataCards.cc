@@ -21,6 +21,7 @@
 
 // MAKE DATACARDS TO USE WITH COMBINED
 
+
 void GetHistograms(std::map<std::string,TH1D*>&); // NEED TO CHANGE THE FILE PATH IN THIS FUNCTION WHEN USING NEW HISTOGRAMS
 
 class CommonSystematic{
@@ -36,6 +37,7 @@ private:
 };
 
 double GetEventWeight(const std::string&, std::map<std::string,TH1D*>&, const unsigned int&);
+std::vector<int> GetStatErrorLogic(const std::string&, std::map<std::string,TH1D*>&, const unsigned int&, const unsigned int&);
 
 void WriteBlock(const std::string&, const unsigned int&, std::ofstream&, const bool = false);
 
@@ -49,19 +51,21 @@ int main(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    // ONE: save info
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2017_09_28_CMSSW_8_0_29_dbtV4/MassCutsV04/histosForCombined/dataCardTesting_v01/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    // ONE: save info (signal specific directories beneath this)
+    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2017_12_07/firstPlay/fullCuts/"; // where we are going to save the output cards (should include the samples name, and any important features)
   
 
     // TWO: physics info
     const unsigned int numberOfBins = 30;
+    const unsigned int numberOfHtDivisions = 3;
 
 
     // THREE: Samples to Use
     const std::string dataSample = "Data_JetHt2016_goldenJson";
-    std::vector<std::string> signalVec = {"mH70_mSusy1600"}; // the different signal samples you wish to use
+    std::vector<std::string> signalVec = {"mH30_mSusy1600", "mH50_mSusy1600", "mH70_mSusy1600", "mH90_mSusy1600", "mH30_mSusy2000", "mH50_mSusy2000", "mH70_mSusy2000", "mH90_mSusy2000"}; // the different signal samples you wish to use
+    // std::vector<std::string> signalVec = {"mH70_mSusy1600", "mH70_mSusy2000"}; // the different signal samples you wish to use
     const std::vector<std::string> mcbkVec = {"TTJets", "ZJets", "WJets"};
-    const std::string qcdName = "QCD";
+    const std::string qcdName = "QCD"; // this is just a label as QCD contribution is driven during the fit
 
 
     // FOUR: data card layout info
@@ -70,13 +74,18 @@ int main(){
 
 
     // FIVE: common systematics 
-    // nb, "SIGNAL" refers to the signal sample and qcdName is used for qcd
+    // nb, make the sure the sample names match to the above
+    // ("SIGNAL" refers to the signal sample and qcdName is used for qcd)
     std::vector<CommonSystematic> CommonSystematicVec;
-    CommonSystematicVec.push_back( CommonSystematic("luminosity lnN", 1.2, {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("XS_Signal lnN", 1.4, {"SIGNAL"}) );
-    CommonSystematicVec.push_back( CommonSystematic("XS_TTJets lnN", 1.3, {"TTJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("XS_ZJets lnN", 1.2, {"ZJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("XS_WJets lnN", 1.1, {"WJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("luminosity lnN", 1.2, {"SIGNAL", "TTJets_NOAK4", "ZJets_NOAK4", "WJets_NOAK4"}) );
+    CommonSystematicVec.push_back( CommonSystematic("XS_Signal lnN", 1.6, {"SIGNAL"}) );
+    CommonSystematicVec.push_back( CommonSystematic("XS_TTJets lnN", 1.5, {"TTJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("XS_ZJets lnN", 1.4, {"ZJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("XS_WJets lnN", 1.3, {"WJets"}) );
+
+
+    // SIX: are we blinded ? use data_obs_UnD as a dummy for data_obs_S
+    bool areWeBlinded = true;
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,13 +94,19 @@ int main(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
+    if (numberOfBins % numberOfHtDivisions != 0){
+        std::cout << "number of ht divisions does not divide into the number of bins. Exiting..." << std::endl;
+        return 1;
+    }
+
     std::map<std::string, TH1D*> hOriginal_;
     GetHistograms(hOriginal_);
     
+    // get event weightings and see whether we want to set stat errors for mc bkgrd in a ht division
     std::vector<double> signalWeightVec;
     std::vector<double> mcbkWeightVec;
+    std::vector<std::vector<int>>  mcbkStatErrorLogicVec;
 
-    // get event weightings
     for (auto signal : signalVec){
         double eventWeight = GetEventWeight(signal, hOriginal_, numberOfBins);
         signalWeightVec.push_back(eventWeight);
@@ -99,6 +114,7 @@ int main(){
     for (auto mcbk : mcbkVec){
         double eventWeight = GetEventWeight(mcbk, hOriginal_, numberOfBins);
         mcbkWeightVec.push_back(eventWeight);
+        mcbkStatErrorLogicVec.push_back( GetStatErrorLogic(mcbk, hOriginal_, numberOfBins, numberOfHtDivisions) );
     }
 
     // loop through the different signal sample references
@@ -114,8 +130,8 @@ int main(){
 
         for (unsigned int iBin = 1; iBin < numberOfBins + 1; ++iBin){
 
-            // INSERT: GET THE RATES FROM THE HISTOS
-            const unsigned int data_obs_S = hOriginal_[Form("S_tag_%s", dataSample.c_str())]->GetBinContent(iBin);
+            unsigned int data_obs_S = hOriginal_[Form("S_tag_%s", dataSample.c_str())]->GetBinContent(iBin);
+            if (areWeBlinded) data_obs_S = hOriginal_[Form("UnD_tag_%s", dataSample.c_str())]->GetBinContent(iBin); // to get a non zero and roughly realistic value whilst we are blinded
             const unsigned int data_obs_UnD = hOriginal_[Form("UnD_tag_%s", dataSample.c_str())]->GetBinContent(iBin);
             const double rate_signal_S = hOriginal_[Form("S_tag_%s", signal.c_str())]->GetBinContent(iBin);
             const double rate_signal_UnD = hOriginal_[Form("UnD_tag_%s", signal.c_str())]->GetBinContent(iBin);;
@@ -136,11 +152,21 @@ int main(){
                 rate_mcbkVec_UnD_str.push_back( std::to_string(rate_UnD) );
             }
 
+            // write the command for combining the cards
+            std::ofstream comboCommand;
+            comboCommand.open( Form("%scomboCommand.sh", outputDir.c_str()) );
+            std::string comboCommandStr = "combineCards.py ";
+            for (unsigned int i = 1; i < numberOfBins + 1; ++i){
+                comboCommandStr += outputDir + "bin" + std::to_string(i) + ".txt ";
+            }
+            comboCommandStr += "> " + outputDir + "allbins.txt\n";
+            comboCommand << comboCommandStr;
+            comboCommand.close();
 
             // write the data card
             std::ofstream dataCard;
-            dataCard.open( Form("%sbin%d.txt", outputDir.c_str(),iBin) );
 
+            dataCard.open( Form("%sbin%d.txt", outputDir.c_str(),iBin) );
             dataCard << "imax 2\n";
             dataCard << "jmax " << mcbkVec.size() + 1 << "\n";
             dataCard << "kmax *\n";
@@ -211,8 +237,9 @@ int main(){
 
             dataCard << "\n# unique systematics\n";
             for (size_t iMC = 0; iMC < mcbkVec.size(); ++iMC){
-                const int rawCount =  round(rate_mcbkVec_S[iMC] / mcbkWeightVec[iMC]);
-                if (rawCount != 0){
+                const unsigned int iVec = iBin - 1;
+                if (mcbkStatErrorLogicVec[iMC][iVec] == 1){
+                    const int rawCount =  round(rate_mcbkVec_S[iMC] / mcbkWeightVec[iMC]);
                     const std::string statSysName = "ch" + std::to_string(iBin) + "_" + mcbkVec[iMC] + "_S_stats gmN " + std::to_string(rawCount);
                     const std::string mcbkWeightStr = std::to_string(mcbkWeightVec[iMC]);
                     WriteBlock(statSysName, firstColSize, dataCard);
@@ -227,8 +254,9 @@ int main(){
                 }
             }
             for (size_t iMC = 0; iMC < mcbkVec.size(); ++iMC){
-                const int rawCount =  round(rate_mcbkVec_UnD[iMC] / mcbkWeightVec[iMC]);
-                if (rawCount != 0){
+                const unsigned int iVec = iBin - 1;
+                if (mcbkStatErrorLogicVec[iMC][iVec] == 1){
+                    const int rawCount =  round(rate_mcbkVec_UnD[iMC] / mcbkWeightVec[iMC]);
                     const std::string statSysName = "ch" + std::to_string(iBin) + "_" + mcbkVec[iMC] + "_UnD_stats gmN " + std::to_string(rawCount);
                     const std::string mcbkWeightStr = std::to_string(mcbkWeightVec[iMC]);
                     WriteBlock(statSysName, firstColSize, dataCard);
@@ -254,14 +282,18 @@ int main(){
             double qcdInitialEstimate = data_obs_UnD;
             for (auto rate_mcbk_UnD : rate_mcbkVec_UnD) qcdInitialEstimate = qcdInitialEstimate - rate_mcbk_UnD;
             if (qcdInitialEstimate < 0) qcdInitialEstimate = 0.0;
-            dataCard << qcdInitialEstimate << "\n";
+            double qcdUpperLimit = data_obs_UnD + 3.0 * sqrt(data_obs_UnD + 1);
+            dataCard << std::to_string(qcdInitialEstimate) << " " << "[0," << std::to_string(qcdUpperLimit) << "]\n";
             WriteBlock(Form("ch%d_beta", iBin), otherColSize, dataCard);
             dataCard << "rateParam mass_S " << qcdName << " (@0*@1) ch" << iBin << "_R,ch" << iBin << "_alpha\n";
 
             dataCard.close();
 
-
         } // closes loop through the histogram bins
+
+    // combine the data cards into one
+    std::system( Form("source %scomboCommand.sh", outputDir.c_str()) );
+
     } // closes loop through the different signal samples
     return 0; 
 }
@@ -377,6 +409,30 @@ double GetEventWeight(const std::string& histogramName, std::map<std::string,TH1
     }
     return eventWeight;
 }
+
+
+std::vector<int> GetStatErrorLogic(const std::string& histogramName, std::map<std::string,TH1D*>& hOriginal_, const unsigned int& numberOfBins, const unsigned int& numberOfHtDivisions){
+
+    std::vector<int> StatErrorLogic(numberOfBins,0);
+    const unsigned int numberOfBinsPerHtDivision = numberOfBins / numberOfHtDivisions;
+
+    for (unsigned int iVec = 0; iVec < numberOfBins; ++iVec){
+    
+        const unsigned int iBin = iVec + 1;
+        const unsigned int htDivisionIndex = floor(iVec / numberOfBinsPerHtDivision);
+
+        double binContent_S = hOriginal_[Form("S_tag_%s", histogramName.c_str())]->GetBinContent(iBin);
+        double binContent_UnD = hOriginal_[Form("UnD_tag_%s", histogramName.c_str())]->GetBinContent(iBin);
+
+        if (binContent_S > 0 || binContent_UnD > 0){
+            for (unsigned int c = 0; c < numberOfBinsPerHtDivision * (htDivisionIndex + 1); ++c){
+                StatErrorLogic[c] = 1;
+            }
+        }
+    } // closes loop through the bins
+
+    return StatErrorLogic;
+} // closes the function GetStatErrorLogic
 
 
 void WriteBlock(const std::string& strToWrite, const unsigned int& numberOfBlockSpaces, std::ofstream& dataCard, const bool appendNewLine){
