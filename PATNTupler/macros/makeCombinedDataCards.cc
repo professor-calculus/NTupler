@@ -52,7 +52,7 @@ int main(){
 
 
     // ONE: save info (signal specific directories beneath this)
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2017_12_07/firstPlay/fullCuts/"; // where we are going to save the output cards (should include the samples name, and any important features)
+    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2017_12_07/firstPlay/fullCuts_v2/"; // where we are going to save the output cards (should include the samples name, and any important features)
   
 
     // TWO: physics info
@@ -293,7 +293,8 @@ int main(){
 
     // combine the data cards into one
     std::system( Form("source %scomboCommand.sh", outputDir.c_str()) );
-
+    std::system( Form("text2workspace.py %sallbins.txt", outputDir.c_str()) );
+    std::cout << std::endl;
     } // closes loop through the different signal samples
     return 0; 
 }
