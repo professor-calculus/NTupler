@@ -7,7 +7,7 @@ config = config()
 # uniqueName, config.Data.lumiMask, config.Data.inputDataset, config.Data.unitsPerJob
 
 uniqueName = 'JetHt_Run2016F-03Feb2017-v1_CMSSW8029wDBTV4_1bec5005_sub2' # name for this ntuple production (include commit hash so it is unique and can be traced) 
-config.Data.lumiMask = 'Cert_271036-284044_13TeV_PromptReco_Collisions16_JSON.txt'
+config.Data.lumiMask = 'Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
 
 config.General.requestName = uniqueName # name of the crab job project (eg on dashboard)
 config.General.workArea = 'crab_projects' # name of directory where crab project info is stored
