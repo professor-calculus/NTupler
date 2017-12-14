@@ -20,9 +20,9 @@ import datetime
 
 executable = "nTupAnaNMSSM" # wrt 'main' directory
 code = "mainNMSSM.cc" # wrt 'main' directory
-inputFileListPath = "/opt/ppd/scratch/xap79297/CMSSW_8_0_29/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4/JetHt_Run2016B-03Feb2017_ver2-v2.list"
+inputFileListPath = "/opt/ppd/scratch/xap79297/CMSSW_8_0_29/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4/JetHT_Run2016B-03Feb2017_ver2-v2.list"
 outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_27_CMSSW_8_0_29_dbtV4/data/JetHt_Run2016B-03Feb2017_ver2-v2/" # has to be the full path
-filesPerJob = 10
+filesPerJob = 5
 jsonFile = ""
 logDirectoryBase = "/opt/ppd/scratch/xap79297/jobLogs/flatTrees/"
 
@@ -114,15 +114,17 @@ for jobList in filesPerJobList:
     shellJob = open(shellJobName,"w")
 
     cmd = "#!/bin/bash\n"
-    # cmd += "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch/\n"
-    # cmd += "source $VO_CMS_SW_DIR/cmsset_default.sh\n"
-    # cmd += "cd " + baseDir + "/src/\n"
-    # cmd += "eval `scramv1 runtime -sh`\n"
     cmd += baseDir + "/src/NTupler/PATNTupler/main/" + executable + " flatTree_" + str(jobNum) + ".root " + jobListFileName + " batch " + jsonFile + "\n"
-    cmd += "cp flatTree_" + str(jobNum) + ".root ../../.\n"
-    # cmd += baseDir + "/src/NTupler/PATNTupler/main/" + executable + " /scratch/flatTree_" + str(jobNum) + ".root " + jobListFileName + " batch " + jsonFile + "\n"
-    # cmd += "mv  /scratch/flatTree_" + str(jobNum) + ".root " + outputDirectory + "\n"
-
+    cmd += "if [ $? -eq 0 ]\n"
+    cmd += "then\n"
+    cmd += "    echo\n"
+    cmd += "    echo JOB to ROOT FILE SUCCESSFUL: COPYING FILE BACK TO LOCAL\n"
+    cmd += "    # cp flatTree_" + str(jobNum) + ".root ../../.\n" # you don't explicitly need to do the copying so I have commented out this bit
+    cmd += "else\n"
+    cmd += "    echo\n"
+    cmd += "    echo JOB to ROOT FILE UNSUCCESSFUL: NOT COPYING FILE BACK TO LOCAL\n"
+    cmd += "    rm flatTree_" + str(jobNum) + ".root\n"
+    cmd += "fi\n"
 
     shellJob.write(cmd)
     os.chmod(shellJobName, 0755)
