@@ -6,7 +6,7 @@ config = config()
 # EDIT the following:
 # uniqueName, config.Data.inputDataset, config.Data.inputDBS, config.Data.unitsPerJob
 
-uniqueName = 'qcdHt1000to1500_CMSSW8029wDBTV4_668a436_v' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+uniqueName = 'mH70p0_mSusy2000p0_ratio0p99_splitting0p1_CMSSW8029wDBTV4_1d778bc_QCUT30' # name for this ntuple production (include commit hash so it is unique and can be traced) 
 
 config.General.requestName = uniqueName # name of the crab job project (eg on dashboard)
 config.General.workArea = 'crab_projects' # name of directory where crab project info is stored
@@ -29,7 +29,7 @@ config.JobType.psetName = 'nTupleProduction.py'
 # config.Data.inputDataset = '/QCD_HT700to1000_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
 
 # MORIOND2017_QCD_HT1000to1500_v1: 4.7M events, 90 files = 52K events/file (use three units per job)
-config.Data.inputDataset = '/QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'
+# config.Data.inputDataset = '/QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'
 # MORIOND2017_QCD_HT1000to1500_v2: 10.3M events, 170 files = 60K events/file (use three units per job)
 # config.Data.inputDataset = '/QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
 
@@ -66,11 +66,12 @@ config.Data.inputDataset = '/QCD_HT1000to1500_TuneCUETP8M1_13TeV-madgraphMLM-pyt
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH50p0_mSusy2000p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH50p0_mSusy2000p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH70p0_mSusy2000p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH70p0_mSusy2000p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH90p0_mSusy2000p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH90p0_mSusy2000p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH70p0_mSusy2000p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021qCut40RAL_mH70p0_mSusy2000p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 
 #################################################################################################
-config.Data.inputDBS = 'global' # for centrally produced data
-# config.Data.inputDBS = 'phys03' # for personal simulation
-config.Data.unitsPerJob = 3
+# config.Data.inputDBS = 'global' # for centrally produced data
+config.Data.inputDBS = 'phys03' # for personal simulation
+config.Data.unitsPerJob = 5
 #################################################################################################
 
 config.Data.totalUnits = -1 # '-1' does them all
