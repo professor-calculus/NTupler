@@ -67,8 +67,8 @@ for idmod in my_id_modules:
 process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        isThisMC = cms.bool(True),
                                        #mcWeight = cms.double(MCWEIGHT_INSERTEDHERE),
-                                       containsLHE = cms.bool(True),
-                                       # containsLHE = cms.bool(False), # use for personal MC samples that do not have the correct lhe info format
+                                       # containsLHE = cms.bool(True),
+                                       containsLHE = cms.bool(False), # use for personal MC samples that do not have the correct lhe info format
                                        lhe = cms.InputTag("externalLHEProducer"),
                                        ignoreTopInLheHtCalculation = cms.bool(False), # if true will ignore top quarks and daughter particles in the ht calculation (also does so for W, Z, H)
                                        heepId = cms.InputTag("heepId"),
