@@ -242,6 +242,8 @@ three_x_points_vec.append([upperBand_x2, SMAX_Node2, SMAX_Node1])
 
 for i in range(0, len(three_x_points_vec)-1):
 
+	iMR = i + 1 # index to label the Mass Regions
+
 	lineInfo_negLow = [three_x_points_vec[i][2], three_x_points_vec[i][1], -1]
 	lineInfo_negHigh = [three_x_points_vec[i+1][2], three_x_points_vec[i+1][1], -1]
 	# print lineInfo_negLow
@@ -413,23 +415,18 @@ for i in range(0, len(three_x_points_vec)-1):
 	ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf = integral_S_fullCuts_anti_ht3500toInf / (2 * integral_U_fullCuts_anti_ht3500toInf)
 	ratio__antiS_over_antiUnD__fullCutsNOAK4_anti_ht1500to2500 = integral_S_fullCutsNOAK4_anti_ht1500to2500 / (2 * integral_U_fullCutsNOAK4_anti_ht1500to2500)
 	ratio__antiS_over_antiUnD__fullCutsNOAK4_anti_ht2500to3500 = integral_S_fullCutsNOAK4_anti_ht2500to3500 / (2 * integral_U_fullCutsNOAK4_anti_ht2500to3500)
-	# print "R_" + str(i) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht1500to2500)
-	# print "R_" + str(i) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500)
-	# print "R_" + str(i) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf)
-	# print "R_" + str(i) + " = " + str(ratio__antiS_over_antiUnD__fullCutsNOAK4_anti_ht1500to2500)
-	# print ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500
-	# print ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf
-	# print ratio__antiS_over_antiUnD__fullCutsNOAK4_anti_ht1500to2500
-	# print ratio__antiS_over_antiUnD__fullCutsNOAK4_anti_ht2500to3500
+	# print "R_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht1500to2500)
+	# print "R_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500)
+	print "R_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf)
+	# print "R_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCutsNOAK4_anti_ht1500to2500)
 	# print
-	print integral_S_fullCutsNOAK4_tagMC_ht1500to2500 / 0.331042195284
-	print
+	# print integral_S_fullCutsNOAK4_tagMC_ht1500to2500 / 0.331042195284
 
 	# correctionFactorTag = (integral_S_specCuts_tag / integral_S_specCuts_anti) * (integral_U_specCuts_anti / integral_U_specCuts_tag)
 	# correctionFactorControl = (integral_S_specCuts_control / integral_S_specCuts_anti) * (integral_U_specCuts_anti / integral_U_specCuts_control)
 	# ratio_antiS_over_antiUnD = integral_S_specCuts_anti / (2 * integral_U_specCuts_anti)
-	# print "correction factor tag C_" + str(i) + " = " + str(correctionFactorTag)
-	# print "correction factor control C_" + str(i) + " = " + str(correctionFactorControl)
+	# print "correction factor tag C_" + str(iMR) + " = " + str(correctionFactorTag)
+	# print "correction factor control C_" + str(iMR) + " = " + str(correctionFactorControl)
 	# print ratio_antiS_over_antiUnD
 	
 	# print integral_S_specCuts_tag

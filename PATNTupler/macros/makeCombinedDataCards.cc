@@ -77,7 +77,7 @@ int main(){
     // nb, make the sure the sample names match to the above
     // ("SIGNAL" refers to the signal sample and qcdName is used for qcd)
     std::vector<CommonSystematic> CommonSystematicVec;
-    CommonSystematicVec.push_back( CommonSystematic("luminosity lnN", 1.2, {"SIGNAL", "TTJets_NOAK4", "ZJets_NOAK4", "WJets_NOAK4"}) );
+    CommonSystematicVec.push_back( CommonSystematic("luminosity lnN", 1.025, {"SIGNAL", "TTJets_NOAK4", "ZJets_NOAK4", "WJets_NOAK4"}) );
     CommonSystematicVec.push_back( CommonSystematic("XS_Signal lnN", 1.6, {"SIGNAL"}) );
     CommonSystematicVec.push_back( CommonSystematic("XS_TTJets lnN", 1.5, {"TTJets"}) );
     CommonSystematicVec.push_back( CommonSystematic("XS_ZJets lnN", 1.4, {"ZJets"}) );

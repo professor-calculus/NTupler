@@ -47,8 +47,7 @@ int main(int argc, char** argv){
 
 
     // THREE: plot histogram settings
-    double luminosity = 36.773; // 2016 DATASET (DATA PLOTS SHOULD NOT BE USING THIS OBJECT)
-    // double luminosity = 50.0; // ROUGH WORKING POINT (doesn't matter if you are normalising later)
+    double luminosity = 35.867; // 2016 DATASET (DATA PLOTS SHOULD NOT BE USING THIS OBJECT)
     
     std::string varToPlot = "fatJetA_softDropMass";
     // TH1D hTemplate("hTemplate", ";fatJetA_SoftDrop_Mass (GeV);events / bin", 40, 0, 200);

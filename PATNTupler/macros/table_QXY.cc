@@ -55,8 +55,7 @@ int main(int argc, char** argv){
 
 
     // FOUR: set up the histogram template
-    double luminosity = 36.773; // 2016 DATASET (DATA PLOTS SHOULD NOT BE USING THIS OBJECT)
-    // double luminosity = 50.0; // ROUGH WORKING POINT (doesn't matter if you are normalising later)
+    double luminosity = 35.867; // 2016 DATASET (DATA PLOTS SHOULD NOT BE USING THIS OBJECT)
     TH2D hTemplate = TH2D("hTemplate", ";fatJetA_SoftDrop_Mass (GeV);fatJetB_SoftDrop_Mass (GeV)", 300, 0, 300, 300, 0, 300);
     std::string varXAxis = "fatJetA_softDropMass";
     std::string varYAxis = "fatJetB_softDropMass";

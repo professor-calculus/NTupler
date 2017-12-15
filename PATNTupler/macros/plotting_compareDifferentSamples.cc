@@ -29,28 +29,33 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_11_03/fatJet_independenceStudies/mass_independence_doneCorrectly/TTJets/fatJet300_ht1500toInf/noMassCut_vs_fatJetBmass150to200/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_12_14/compare_QCUT30andQCUT80/mH70_mSusy2000/fullCuts/fatJetB_softDropMass/"; // where we are going to save the output plots (should include the samples name, and any important features)
 
 
 
     // TWO: set of cut params, each combination = new plot
-    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Max","Off","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Max","Off","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     // std::vector<int> cut3_ak8Pt = {-1};
     // std::vector<std::vector<int>> cut4_ht = { {-1,99999} }; // these are HT bins, not just cuts (NB: use 99999 for a maximum)
-    std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
+    // std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
-    // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Med2","Max","Med2","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Med2","Max","Med2","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     std::vector<int> cut3_ak8Pt = {300};
     std::vector<std::vector<int>> cut4_ht = { {1500,99999} }; // these are HT bins, not just cuts (NB: use 99999 for a maximum)
-    // std::vector<std::vector<int>> cut5_ak4Pt = { {250,250} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
+    std::vector<std::vector<int>> cut5_ak4Pt = { {250,250} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
 
 
     // THREE: plot histogram settings
-    double luminosity = 36.773; // 2016 DATASET (DATA PLOTS SHOULD NOT BE USING THIS OBJECT)
-    // double luminosity = 50.0; // ROUGH WORKING POINT (doesn't matter if you are normalising later)
-    std::string varToPlot = "fatJetA_softDropMass";
-    TH1D hTemplate("hTemplate", ";fatJetA_Mass (GeV);a.u.", 40, 0, 200);
+    double luminosity = 35.867; // 2016 DATASET (data plots should not be using this object)
+    std::string varToPlot = "fatJetB_softDropMass";
+    // std::string varToPlot = "fatJetA_p4.Pt()";
+    // std::string varToPlot = "slimJetA_p4.Pt()";
+    // std::string varToPlot = "ht";
+    TH1D hTemplate("hTemplate", ";fatJetB SoftDropMass (GeV);a.u.", 50, 0, 200);
+    // TH1D hTemplate("hTemplate", ";H_{T} (GeV);a.u.", 80, 0, 8000);
+    // TH1D hTemplate("hTemplate", ";fatJetA p_{T} (GeV);a.u.", 60, 0, 3000);
+    // TH1D hTemplate("hTemplate", ";leadingAK4Jet p_{T} (GeV);a.u.", 60, 0, 3000);
 
 
 
@@ -125,10 +130,10 @@ int main(int argc, char** argv){
                     // // WJets.NormalisePlot(); // OPTIONAL: toggle on or off
                     // plotEntryVec.push_back(WJets);
 
-                    PlotEntry ttbarNLO = PlotEntry("No fatJetB Mass Cut", hTemplate, varToPlot.c_str(), luminosity);
-                    ttbarNLO.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_27_CMSSW_8_0_29_dbtV4/mc/TTJets_NLO_ht1500plus/flatTree.root", cutToApply.c_str(), 831.76);
-                    ttbarNLO.NormalisePlot(); // OPTIONAL: toggle on or off
-                    plotEntryVec.push_back(ttbarNLO);
+                    // PlotEntry ttbarNLO = PlotEntry("No fatJetB Mass Cut", hTemplate, varToPlot.c_str(), luminosity);
+                    // ttbarNLO.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_27_CMSSW_8_0_29_dbtV4/mc/TTJets_NLO_ht1500plus/flatTree.root", cutToApply.c_str(), 831.76);
+                    // ttbarNLO.NormalisePlot(); // OPTIONAL: toggle on or off
+                    // plotEntryVec.push_back(ttbarNLO);
 
 
 
@@ -175,11 +180,11 @@ int main(int argc, char** argv){
 
 
 
-                    std::string cutToApplyA = "150 <= fatJetB_softDropMass && fatJetB_softDropMass < 200 && " + cutToApply;
-                    PlotEntry TTJets_A = PlotEntry("150 < fatJetB Mass < 200 GeV", hTemplate, varToPlot.c_str(), luminosity);
-                    TTJets_A.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_27_CMSSW_8_0_29_dbtV4/mc/TTJets_NLO_ht1500plus/flatTree.root", cutToApplyA.c_str(), 831.76);
-                    TTJets_A.NormalisePlot(); // OPTIONAL: toggle on or off
-                    plotEntryVec.push_back(TTJets_A);
+                    // std::string cutToApplyA = "150 <= fatJetB_softDropMass && fatJetB_softDropMass < 200 && " + cutToApply;
+                    // PlotEntry TTJets_A = PlotEntry("150 < fatJetB Mass < 200 GeV", hTemplate, varToPlot.c_str(), luminosity);
+                    // TTJets_A.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_27_CMSSW_8_0_29_dbtV4/mc/TTJets_NLO_ht1500plus/flatTree.root", cutToApplyA.c_str(), 831.76);
+                    // TTJets_A.NormalisePlot(); // OPTIONAL: toggle on or off
+                    // plotEntryVec.push_back(TTJets_A);
 
                     // std::string cutToApplyB = "40 < fatJetB_softDropMass && fatJetB_softDropMass < 50 && " + cutToApply;
                     // PlotEntry TTJets_B = PlotEntry("40 < fatJetB Mass < 50 GeV", hTemplate, varToPlot.c_str(), luminosity);
@@ -344,10 +349,16 @@ int main(int argc, char** argv){
                     // // // mH50_mSusy2000.NormalisePlot(); // OPTIONAL: toggle on or off
                     // // plotEntryVec2.push_back(mH50_mSusy2000);
 
-                    // PlotEntry mH70_mSusy2000 = PlotEntry("mH70_mSusy2000", hTemplate, varToPlot.c_str(), luminosity);
-                    // mH70_mSusy2000.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_27_CMSSW_8_0_29_dbtV4/mc/mH70p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
-                    // mH70_mSusy2000.NormalisePlot(); // OPTIONAL: toggle on or off
-                    // plotEntryVec2.push_back(mH70_mSusy2000);
+                    PlotEntry mH70_mSusy2000 = PlotEntry("mH70_mSusy2000_QCUT80", hTemplate, varToPlot.c_str(), luminosity);
+                    mH70_mSusy2000.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_27_CMSSW_8_0_29_dbtV4/mc/mH70p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
+                    mH70_mSusy2000.NormalisePlot(); // OPTIONAL: toggle on or off
+
+                    PlotEntry mH70_mSusy2000_QCUT30 = PlotEntry("mH70_mSusy2000_QCUT30", hTemplate, varToPlot.c_str(), luminosity);
+                    mH70_mSusy2000_QCUT30.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_27_CMSSW_8_0_29_dbtV4/mc/mH70p0_mSusy2000p0_ratio0p99_splitting0p1_QCUT30/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
+                    mH70_mSusy2000_QCUT30.NormalisePlot(); // OPTIONAL: toggle on or off
+                    plotEntryVec2.push_back(mH70_mSusy2000_QCUT30);
+                    plotEntryVec2.push_back(mH70_mSusy2000);
+
 
                     // PlotEntry mH90_mSusy2000 = PlotEntry("mH90_mSusy2000", hTemplate, varToPlot.c_str(), luminosity);
                     // mH90_mSusy2000.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_27_CMSSW_8_0_29_dbtV4/mc/mH90p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.009*0.85*0.85);
@@ -359,16 +370,16 @@ int main(int argc, char** argv){
 
 
                     // FIVE: plot aesthetics
-                    Plotter plot = Plotter(plotEntryVec);
-                    // Plotter plot = Plotter(plotEntryVec2);
+                    // Plotter plot = Plotter(plotEntryVec);
+                    Plotter plot = Plotter(plotEntryVec2);
                     // Plotter plot = Plotter(plotEntryVec2, plotEntryVec);
                     // Plotter plot = Plotter({}, plotEntryVec2);
                     // plot.AddLegend(0.74, 0.88, 0.77, 0.87); // top right (thin 2)
                     // plot.AddLegend(0.65, 0.88, 0.77, 0.87); // top right (wide 2)
                     // plot.AddLegend(0.50, 0.88, 0.77, 0.87); // top right (extra wide 2)
                     // plot.AddLegend(0.74, 0.88, 0.70, 0.87); // top right (thin 4)
-                    // plot.AddLegend(0.65, 0.88, 0.70, 0.87); // top right (wide 4)
-                    plot.AddLegend(0.50, 0.88, 0.70, 0.87); // top right (extra wide 4)
+                    plot.AddLegend(0.60, 0.88, 0.70, 0.87); // top right (wide 4)
+                    // plot.AddLegend(0.50, 0.88, 0.70, 0.87); // top right (extra wide 4)
                     // plot.AddLegend2Cols(0, 0.25, 0.88, 0.77, 0.87, 0.03); // 2 COLUMNS
                     // plot.AddLegend(0.17, 0.35, 0.17, 0.37); // bottom left (wide 4)
                     // plot.AddLegend(0.17, 0.35, 0.70, 0.87); // top left (wide 4)
@@ -378,7 +389,7 @@ int main(int argc, char** argv){
                     // plot.AddLatex("#it{Data} 2016"); // normalised DATA
                     // plot.AddLatex(luminosity, "#it{Data} 2016"); // DATA
                     
-                    plot.AddRatioBox();
+                    plot.AddRatioBox(0.1, 1.9, "ratio", true);
                     // plot.AddRatioBox(0.91, 1.09);
                     plot.SetErrors();
 

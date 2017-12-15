@@ -42,8 +42,7 @@ int main(int argc, char** argv){
 
 
     // THREE: lumi settings
-    double luminosity = 36.773; // 2016 DATASET
-    // double luminosity = 50.0; // ROUGH WORKING POINT
+    double luminosity = 35.867; // 2016 DATASET
 
 
 
