@@ -747,7 +747,7 @@ void Plotter::Save(const std::string& saveName){
 		ratioPlotEntry->Draw("E0");
 
 		if (addRatioBoxUnityLine){
-			TLine * lineRatio = new TLine(0, 1.0, ratioPlotEntry->GetBinLowEdge(ratioPlotEntry->GetNbinsX()+1), 1.0); // xmin, ymin, xmax, ymax
+			TLine * lineRatio = new TLine(ratioPlotEntry->GetBinLowEdge(1), 1.0, ratioPlotEntry->GetBinLowEdge(ratioPlotEntry->GetNbinsX()+1), 1.0); // xmin, ymin, xmax, ymax
 			lineRatio->SetLineStyle(2);
 			lineRatio->SetLineWidth(1);
 			lineRatio->SetLineColor(36);
@@ -1030,7 +1030,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 
 		ratioPlotEntry->Draw("E0");
 		if (addRatioBoxUnityLine){
-			TLine * lineRatio = new TLine(0, 1.0, ratioPlotEntry->GetBinLowEdge(ratioPlotEntry->GetNbinsX()+1), 1.0); // xmin, ymin, xmax, ymax
+			TLine * lineRatio = new TLine(ratioPlotEntry->GetBinLowEdge(1), 1.0, ratioPlotEntry->GetBinLowEdge(ratioPlotEntry->GetNbinsX()+1), 1.0); // xmin, ymin, xmax, ymax
 			lineRatio->SetLineStyle(2);
 			lineRatio->SetLineWidth(1);
 			lineRatio->SetLineColor(36);
