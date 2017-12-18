@@ -29,12 +29,13 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_legacy/plots_2017_11_03/2d_pt_newCutIdeas/fullCutsNODBT_ak8JetCuts/sig/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_legacy/plots_2017_11_03/2d_dbt_newCutIdeas/fullCutsNODBT_ak8JetCuts/sig/"; // where we are going to save the output plots (should include the samples name, and any important features)
 
 
 
     // TWO: set of cut params, each combination = new plot
-    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Max","Off","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Max","Off","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"DIAG_UP", "Loose"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     // std::vector<int> cut3_ak8Pt = {-1};
     // std::vector<std::vector<int>> cut4_ht = { {-1,99999} }; // these are HT bins, not just cuts (NB: use 99999 for a maximum)
     std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
@@ -53,9 +54,9 @@ int main(int argc, char** argv){
     // std::string varXAxis = "fatJetA_softDropMass";
     // std::string varYAxis = "fatJetB_softDropMass";
 
-    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA DBT_Score;fatJetB DBT_Score", 14, 0.3, 1.0, 14, 0.3, 1.0);
-    // std::string varXAxis = "fatJetA_doubleBtagDiscrim";
-    // std::string varYAxis = "fatJetB_doubleBtagDiscrim";
+    TH2D hTemplate = TH2D("hTemplate", ";fatJetA DBT_Score;fatJetB DBT_Score", 100, 0.3, 1.0, 100, 0.3, 1.0);
+    std::string varXAxis = "fatJetA_doubleBtagDiscrim";
+    std::string varYAxis = "fatJetB_doubleBtagDiscrim";
 
     // TH2D hTemplate = TH2D("hTemplate", ";fatJetA p_{T} (GeV);fatJetB p_{T} (GeV)", 100, 0, 1000, 100, 0, 1000);
     // std::string varXAxis = "fatJetA_p4.Pt()";
@@ -69,9 +70,9 @@ int main(int argc, char** argv){
     // std::string varXAxis = "slimJetA_p4.Pt()";
     // std::string varYAxis = "fatJetA_p4.Pt()";
 
-    TH2D hTemplate = TH2D("hTemplate", ";secondaryAK4Jet p_{T} (GeV);fatJetA p_{T} (GeV)", 200, 0, 2000, 200, 0, 2000);
-    std::string varXAxis = "slimJetB_p4.Pt()";
-    std::string varYAxis = "fatJetA_p4.Pt()";
+    // TH2D hTemplate = TH2D("hTemplate", ";secondaryAK4Jet p_{T} (GeV);fatJetA p_{T} (GeV)", 200, 0, 2000, 200, 0, 2000);
+    // std::string varXAxis = "slimJetB_p4.Pt()";
+    // std::string varYAxis = "fatJetA_p4.Pt()";
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,7 +121,13 @@ int main(int argc, char** argv){
             for (size_t iCut4 = 0; iCut4 < cut4_ht.size(); ++iCut4){        
                 for (size_t iCut5 = 0; iCut5 < cut5_ak4Pt.size(); ++iCut5){
 
-                    std::string cutToApply = Form("fatJetA_doubleBtagDiscrim>=%f && fatJetA_doubleBtagDiscrim<%f && fatJetB_doubleBtagDiscrim>=%f && fatJetB_doubleBtagDiscrim<%f && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d", DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][0]), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][1]), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][2]), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][3]), cut3_ak8Pt[iCut3], cut3_ak8Pt[iCut3], cut4_ht[iCut4][0], cut4_ht[iCut4][1], cut5_ak4Pt[iCut5][0], cut5_ak4Pt[iCut5][1]);
+                    std::string dbtCut = "";
+                    if (cut2_ak8Dbt[iCut2].size() == 2 && cut2_ak8Dbt[iCut2][0] == "DIAG_UP")
+                        dbtCut = Form("fatJetA_doubleBtagDiscrim >= (-1.0 * fatJetB_doubleBtagDiscrim + 1.0 + %f) ", DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][1]) );
+                    if (cut2_ak8Dbt[iCut2].size() == 4)
+                        dbtCut = Form("fatJetA_doubleBtagDiscrim>=%f && fatJetA_doubleBtagDiscrim<%f && fatJetB_doubleBtagDiscrim>=%f && fatJetB_doubleBtagDiscrim<%f ", DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][0]), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][1]), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][2]), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][3]) );
+                    
+                    std::string cutToApply = Form("%s && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d", dbtCut.c_str(), cut3_ak8Pt[iCut3], cut3_ak8Pt[iCut3], cut4_ht[iCut4][0], cut4_ht[iCut4][1], cut5_ak4Pt[iCut5][0], cut5_ak4Pt[iCut5][1]);
 
 
       
@@ -192,7 +199,8 @@ int main(int argc, char** argv){
                     Plotter plot = Plotter({plot2d});
                     plot.AddLatex(luminosity);
                     std::string saveName = varToPlotSaveName;
-                    saveName += "__dbt" + cut2_ak8Dbt[iCut2][0] + cut2_ak8Dbt[iCut2][1] + "And" + cut2_ak8Dbt[iCut2][2] + cut2_ak8Dbt[iCut2][3];
+                    if (cut2_ak8Dbt[iCut2].size() == 4) saveName += "__dbt" + cut2_ak8Dbt[iCut2][0] + cut2_ak8Dbt[iCut2][1] + "And" + cut2_ak8Dbt[iCut2][2] + cut2_ak8Dbt[iCut2][3];
+                    if (cut2_ak8Dbt[iCut2].size() == 2) saveName += "__dbtDiagUp" + cut2_ak8Dbt[iCut2][1];
                     saveName += Form("_ak8pt%d", cut3_ak8Pt[iCut3]);
                     if (cut4_ht[iCut4][1]==99999) saveName += Form("_ht%dplus",cut4_ht[iCut4][0]);
                     else saveName += Form("_ht%dto%d",cut4_ht[iCut4][0],cut4_ht[iCut4][1]);
