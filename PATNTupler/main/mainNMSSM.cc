@@ -57,7 +57,10 @@ public:
 
 	// PUBLIC METHODS
 	void setEventCounter(unsigned int nEvtsTotal){
-		totNumEvtsAnalyzed_ = nEvtsTotal;  numEvtsPass_ = mainAnaTree_->GetEntries(); }
+		totNumEvtsAnalyzed_ = nEvtsTotal;
+		numEvtsPass_ = mainAnaTree_->GetEntries();
+		std::cout << "Number of events run over: " << nEvtsTotal << "   Number of events passed: " << numEvtsPass_ << std::endl;
+	}
 	void saveToFile();
 
 	std::string fileName() const { return fileName_; }
