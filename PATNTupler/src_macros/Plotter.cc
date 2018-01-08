@@ -1072,6 +1072,7 @@ void Plotter::Save2D(const std::string& saveName){
 	double default_PadRightMargin = tdrStyle->GetPadRightMargin();
 	double default_PadLeftMargin = tdrStyle->GetPadLeftMargin();
 	// std::cout << default_PadLeftMargin << " " << default_PadRightMargin << std::endl;
+
 	tdrStyle->SetPadRightMargin(0.11);
 	tdrStyle->SetPadLeftMargin(0.11);
 
@@ -1079,7 +1080,10 @@ void Plotter::Save2D(const std::string& saveName){
 	if (useLogZ) gPad->SetLogz();
 
 	for (std::vector<PlotEntry2D>::const_iterator iHistos2D = histos2D.begin(); iHistos2D != histos2D.end(); ++iHistos2D){
+
 		iHistos2D->GetHistogram()->SetEntries(1);
+		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.0);
+		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.0);
 		iHistos2D->GetHistogram()->Draw("colz, same");
 		// iHistos2D->GetHistogram()->Draw("colz, same, text");
 	}
@@ -1113,7 +1117,10 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 	if (useLogZ) gPad->SetLogz();
 
 	for (std::vector<PlotEntry2D>::const_iterator iHistos2D = histos2D.begin(); iHistos2D != histos2D.end(); ++iHistos2D){
+		
 		iHistos2D->GetHistogram()->SetEntries(1);
+		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.0);
+		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.0);
 		iHistos2D->GetHistogram()->Draw("colz, same");
 		// iHistos2D->GetHistogram()->Draw("colz, same, text");
 	}
@@ -1386,7 +1393,7 @@ TStyle * Plotter::TDRStyle()
 	tdrStyle->SetTitleFont(42, "XYZ");
 	tdrStyle->SetTitleSize(0.06, "XYZ");
 	// tdrStyle->SetTitleXSize(0.06); // Another way to set the size?
-	tdrStyle->SetTitleXOffset(0.95);//EDITFROM 0.9
+	tdrStyle->SetTitleXOffset(1.00);//EDITFROM 0.9
 	tdrStyle->SetTitleYOffset(1.25); // original
 	// tdrStyle->SetTitleOffset(1.1, "Y"); // Another way to set the Offset
 
