@@ -6,7 +6,7 @@ config = config()
 # EDIT the following:
 # uniqueName, config.Data.inputDataset, config.Data.inputDBS, config.Data.unitsPerJob
 
-uniqueName = 'mH70p0_mSusy2400p0_ratio0p99_splitting0p1_CMSSW8029wDBTV4_1d778bc_QCUT30_sub2' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+uniqueName = 'mH30p0_mSusy2400p0_ratio0p99_splitting0p1_CMSSW8029wDBTV4_55561c_sub3' # name for this ntuple production (include commit hash so it is unique and can be traced) 
 
 config.General.requestName = uniqueName # name of the crab job project (eg on dashboard)
 config.General.workArea = 'crab_projects' # name of directory where crab project info is stored
@@ -54,25 +54,48 @@ config.JobType.psetName = 'nTupleProduction.py'
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH50p0_mSusy800p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v9_mH50p0_mSusy800p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH70p0_mSusy800p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v9_mH70p0_mSusy800p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH90p0_mSusy800p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v9_mH90p0_mSusy800p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH125p0_mSusy800p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH125p0_mSusy800p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH30p0_mSusy1200p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v4_mH30p0_mSusy1200p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH50p0_mSusy1200p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v4_mH50p0_mSusy1200p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH70p0_mSusy1200p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v4_mH70p0_mSusy1200p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH90p0_mSusy1200p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v4_mH90p0_mSusy1200p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH125p0_mSusy1200p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH125p0_mSusy1200p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH30p0_mSusy1600p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH30p0_mSusy1600p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH50p0_mSusy1600p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH50p0_mSusy1600p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH70p0_mSusy1600p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH70p0_mSusy1600p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH90p0_mSusy1600p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH90p0_mSusy1600p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH125p0_mSusy1600p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH125p0_mSusy1600p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH30p0_mSusy2000p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH30p0_mSusy2000p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH50p0_mSusy2000p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH50p0_mSusy2000p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH70p0_mSusy2000p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH70p0_mSusy2000p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH90p0_mSusy2000p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH90p0_mSusy2000p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
-# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH70p0_mSusy2000p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021qCut40RAL_mH70p0_mSusy2000p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
-config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH70p0_mSusy2400p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021qCut40RAL_mH70p0_mSusy2400p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH125p0_mSusy2000p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH125p0_mSusy2000p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+
+# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH30p0_mSusy2200p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH30p0_mSusy2200p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH50p0_mSusy2200p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH50p0_mSusy2200p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+# config.Data.inputDataset = 'SEVENTY_MISSING_CURRENTLY'
+# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH90p0_mSusy2200p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH90p0_mSusy2200p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH125p0_mSusy2200p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH125p0_mSusy2200p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+
+config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH30p0_mSusy2400p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH30p0_mSusy2400p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH50p0_mSusy2400p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH50p0_mSusy2400p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH70p0_mSusy2400p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH70p0_mSusy2400p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH90p0_mSusy2400p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH90p0_mSusy2400p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH125p0_mSusy2400p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH125p0_mSusy2400p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+
+# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH30p0_mSusy2600p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH30p0_mSusy2600p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH50p0_mSusy2600p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH50p0_mSusy2600p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH70p0_mSusy2600p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH70p0_mSusy2600p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH90p0_mSusy2600p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v2_mH90p0_mSusy2600p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH125p0_mSusy2600p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH125p0_mSusy2600p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 
 #################################################################################################
 # config.Data.inputDBS = 'global' # for centrally produced data
 config.Data.inputDBS = 'phys03' # for personal simulation
-config.Data.unitsPerJob = 5
+config.Data.unitsPerJob = 1
 #################################################################################################
 
 config.Data.totalUnits = -1 # '-1' does them all
