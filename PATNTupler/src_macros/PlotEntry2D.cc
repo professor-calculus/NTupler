@@ -50,13 +50,21 @@ void PlotEntry2D::AddInput(const std::string& flatTreeAddress, const std::string
     TTree * evT = (TTree*)f->Get("eventCountTree");
     Int_t evTEntries = (Int_t)evT->GetEntries();
 	UInt_t nEvtsRunOverForInputEntry;
-	evT->SetBranchAddress("nEvtsRunOver",&nEvtsRunOverForInputEntry);        
+	UInt_t nEvtsAfterPreSelForInputEntry;
+	evT->SetBranchAddress("nEvtsRunOver",&nEvtsRunOverForInputEntry);
+	evT->SetBranchAddress("nEvtsPass",&nEvtsAfterPreSelForInputEntry);
+	unsigned int numberOfEventsAfterPreSelection = 0;
     for (Int_t ievT=0; ievT<evTEntries; ++ievT){
         evT->GetEntry(ievT);
         numberOfEventsBeforeCuts += nEvtsRunOverForInputEntry;
+        numberOfEventsAfterPreSelection += nEvtsAfterPreSelForInputEntry;
     }
 
 	TTree * T = (TTree*)f->Get("doubleBFatJetPairTree");
+	if (T->GetEntries() != numberOfEventsAfterPreSelection){
+		std::cout << "ERROR: number of events in doubleBFatJetPairTree of " << flatTreeAddress << " does not equal those in the nEvtsPass count. NOT FILLING." << std::endl;
+		return;
+	}
 	TH2D hContainer = hNull; // make a copy of the empty histogram to fill with TTreeDraw
 	hContainer.SetName("hContainer");
 	std::string drawStringA = Form("%s>>hContainer", variablesToPlot.c_str());
@@ -83,16 +91,24 @@ void PlotEntry2D::AddInput(const std::string& flatTreeAddress, const std::string
     TTree * evT = (TTree*)f->Get("eventCountTree");
     Int_t evTEntries = (Int_t)evT->GetEntries();
 	UInt_t nEvtsRunOverForInputEntry;
-	evT->SetBranchAddress("nEvtsRunOver",&nEvtsRunOverForInputEntry);        
+	UInt_t nEvtsAfterPreSelForInputEntry;
+	evT->SetBranchAddress("nEvtsRunOver",&nEvtsRunOverForInputEntry);
+	evT->SetBranchAddress("nEvtsPass",&nEvtsAfterPreSelForInputEntry);        
     UInt_t nEvtsRunOverForInputTotal = 0;
+    unsigned int numberOfEventsAfterPreSelection = 0;
     for (Int_t ievT=0; ievT<evTEntries; ++ievT){
         evT->GetEntry(ievT);
         nEvtsRunOverForInputTotal += nEvtsRunOverForInputEntry;
+        numberOfEventsAfterPreSelection += nEvtsAfterPreSelForInputEntry;
     }
     if (addNumEventsBeforeCutsToTotal) numberOfEventsBeforeCuts += 1000.0 * crossSection * luminosity;
     double eventWeighting = 1000.0 * crossSection * luminosity / nEvtsRunOverForInputTotal;
 
 	TTree * T = (TTree*)f->Get("doubleBFatJetPairTree");
+	if (T->GetEntries() != numberOfEventsAfterPreSelection){
+		std::cout << "ERROR: number of events in doubleBFatJetPairTree of " << flatTreeAddress << " does not equal those in the nEvtsPass count. NOT FILLING." << std::endl;
+		return;
+	}
 	TH2D hContainer = hNull; // make a copy of the empty histogram to fill with TTreeDraw
 	hContainer.SetName("hContainer");
 	std::string drawStringA = Form("%s>>hContainer", variablesToPlot.c_str());
