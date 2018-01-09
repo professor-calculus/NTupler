@@ -1083,7 +1083,7 @@ void Plotter::Save2D(const std::string& saveName){
 
 		iHistos2D->GetHistogram()->SetEntries(1);
 		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.0);
-		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.0);
+		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.09);
 		iHistos2D->GetHistogram()->Draw("colz, same");
 		// iHistos2D->GetHistogram()->Draw("colz, same, text");
 	}
@@ -1120,7 +1120,7 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 		
 		iHistos2D->GetHistogram()->SetEntries(1);
 		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.0);
-		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.0);
+		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.09);
 		iHistos2D->GetHistogram()->Draw("colz, same");
 		// iHistos2D->GetHistogram()->Draw("colz, same, text");
 	}
@@ -1426,7 +1426,7 @@ TStyle * Plotter::TDRStyle()
 
 	// tdrStyle->SetBarOffset(Float_t baroff = 0.5);
 	// tdrStyle->SetBarWidth(Float_t barwidth = 0.5);
-	tdrStyle->SetPaintTextFormat(".2f"); // default is "g"
+	tdrStyle->SetPaintTextFormat(".3f"); // default is "g"
 	// tdrStyle->SetPalette(Int_t ncolors = 0, Int_t* colors = 0);
 	// tdrStyle->SetTimeOffset(Double_t toffset);
 	// tdrStyle->SetHistMinimumZero(kTRUE);
