@@ -18,7 +18,9 @@ namespace DoubleBTagWPs{
 		// else if (dbtString == "IDBTCv10") dbtDouble = 0.40;
 		// else if (dbtString == "IDBTCv11") dbtDouble = -0.80;
 		// else if (dbtString == "IDBTCv20") dbtDouble = -0.50;
-		else if (dbtString == "IDBTCv21") dbtDouble = -0.60;
+		// else if (dbtString == "IDBTCv21") dbtDouble = -0.60;
+		// else if (dbtString == "IDBTCv22") dbtDouble = -0.20;
+		else if (dbtString == "IDBTCv23") dbtDouble = -0.40;
 	    else{
 	        std::cout << "Have not specified the DBT string correctly\nExiting..." << std::endl;
 	        exit(EXIT_FAILURE);
