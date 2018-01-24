@@ -7,12 +7,13 @@ from scipy import integrate
 # notes on script:
 # - it is very much geometry specific and not completely general for any MassRegion object!
 # - assumes indendence between the 2 fatJet mass distributions (good for QCD)
-# - a lot of objects are hard coded in, might want to address that in the future
 #################################################################################################
 #################################################################################################
 #################################################################################################
 #################################################################################################
 #################################################################################################
+
+function_1d = {}
 
 # FUNCTIONS #
 # all these functions are 'normalised', by which we do not mean that the area under the function is unity...
@@ -21,7 +22,7 @@ from scipy import integrate
 # 'fullCutsMC' means that the cuts were: preSel + 2*fatJet300 + 1*ak4pt300 + GIVEN_DBT_REGION + GIVEN_HT_BIN, preformed on MC
 # fits valid between 13 and 200 GeV
 
-def f_fullCutsData_anti_ht1500to2500_1d(x):
+def f1d_fullCutsData_anti_ht1500to2500(x):
 	p0 = -4.22179e-02
 	p1 =  1.92541e+01
 	p2 = -1.62503e+02
@@ -32,8 +33,9 @@ def f_fullCutsData_anti_ht1500to2500_1d(x):
 	p7 =  1.69088e+05
 	p8 = -6.33536e+01
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
+function_1d["fullCutsData_anti_ht1500to2500"] = f1d_fullCutsData_anti_ht1500to2500
 
-def f_fullCutsData_anti_ht2500to3500_1d(x):
+def f1d_fullCutsData_anti_ht2500to3500(x):
 	p0 = -1.74534e-02
 	p1 =  7.86667e+00
 	p2 = -1.27512e+02
@@ -44,8 +46,9 @@ def f_fullCutsData_anti_ht2500to3500_1d(x):
 	p7 =  5.44686e+04
 	p8 = -1.60781e+01
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
+function_1d["fullCutsData_anti_ht2500to3500"] = f1d_fullCutsData_anti_ht2500to3500
 
-def f_fullCutsMC_anti_ht1500to2500_1d(x):
+def f1d_fullCutsMC_anti_ht1500to2500(x):
 	p0 = -4.94653e-02
 	p1 =  2.49991e+01
 	p2 = -1.96038e+02
@@ -56,8 +59,9 @@ def f_fullCutsMC_anti_ht1500to2500_1d(x):
 	p7 =  2.49535e+05
 	p8 = -1.00538e+02
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
+function_1d["fullCutsMC_anti_ht1500to2500"] = f1d_fullCutsMC_anti_ht1500to2500
 
-def f_fullCutsMC_anti_ht2500to3500_1d(x):
+def f1d_fullCutsMC_anti_ht2500to3500(x):
 	p0 = -6.47232e-03
 	p1 =  2.97326e+00
 	p2 = -4.89351e+01
@@ -68,8 +72,9 @@ def f_fullCutsMC_anti_ht2500to3500_1d(x):
 	p7 =  2.13680e+04
 	p8 = -1.26207e+01
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
+function_1d["fullCutsMC_anti_ht2500to3500"] = f1d_fullCutsMC_anti_ht2500to3500
 
-def f_fullCutsMC_anti_ht3500toInf_1d(x):
+def f1d_fullCutsMC_anti_ht3500toInf(x):
 	p0 =  1.22198e-03
 	p1 =  5.97083e-01
 	p2 =  4.98529e+00
@@ -80,8 +85,9 @@ def f_fullCutsMC_anti_ht3500toInf_1d(x):
 	p7 = -2.48275e+02
 	p8 = -2.33471e-01
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
+function_1d["fullCutsMC_anti_ht3500toInf"] = f1d_fullCutsMC_anti_ht3500toInf
 
-def f_fullCutsMC_tag_ht1500to2500_1d(x):
+def f1d_fullCutsMC_tag_ht1500to2500(x):
 	p0 = -3.98710e-02
 	p1 =  1.83449e+01
 	p2 = -1.64520e+02
@@ -92,8 +98,9 @@ def f_fullCutsMC_tag_ht1500to2500_1d(x):
 	p7 =  1.87972e+05
 	p8 = -7.22679e+01
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))	
+function_1d["fullCutsMC_tag_ht1500to2500"] = f1d_fullCutsMC_tag_ht1500to2500
 
-def f_fullCutsMC_tag_ht2500to3500_1d(x):
+def f1d_fullCutsMC_tag_ht2500to3500(x):
 	p0 = -7.91664e-03
 	p1 =  3.88477e+00
 	p2 = -1.11492e+02
@@ -104,7 +111,7 @@ def f_fullCutsMC_tag_ht2500to3500_1d(x):
 	p7 =  3.16980e+04
 	p8 = -2.55109e+01
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
-
+function_1d["fullCutsMC_tag_ht2500to3500"] = f1d_fullCutsMC_tag_ht2500to3500
 
 ####################
 ####################
@@ -128,28 +135,15 @@ SN_Nodes = [42.5, 52.9, 64.2, 76.4, 89.5, 103.5, 118.4, 134.2, 150.9];
 #################################################################################################
 #################################################################################################
 #################################################################################################
+function_2d = {}
+integral_U = {}
+integral_S = {}
 
-def f_fullCutsData_anti_ht1500to2500_2d(x,y):
-	return f_fullCutsData_anti_ht1500to2500_1d(x) * f_fullCutsData_anti_ht1500to2500_1d(y)
-
-def f_fullCutsData_anti_ht2500to3500_2d(x,y):
-	return f_fullCutsData_anti_ht2500to3500_1d(x) * f_fullCutsData_anti_ht2500to3500_1d(y)
-
-def f_fullCutsMC_anti_ht1500to2500_2d(x,y):
-	return f_fullCutsMC_anti_ht1500to2500_1d(x) * f_fullCutsMC_anti_ht1500to2500_1d(y)
-
-def f_fullCutsMC_anti_ht2500to3500_2d(x,y):
-	return f_fullCutsMC_anti_ht2500to3500_1d(x) * f_fullCutsMC_anti_ht2500to3500_1d(y)
-
-def f_fullCutsMC_anti_ht3500toInf_2d(x,y):
-	return f_fullCutsMC_anti_ht3500toInf_1d(x) * f_fullCutsMC_anti_ht3500toInf_1d(y)
-
-def f_fullCutsMC_tag_ht1500to2500_2d(x,y):
-	return f_fullCutsMC_tag_ht1500to2500_1d(x) * f_fullCutsMC_tag_ht1500to2500_1d(y)
-
-def f_fullCutsMC_tag_ht2500to3500_2d(x,y):
-	return f_fullCutsMC_tag_ht2500to3500_1d(x) * f_fullCutsMC_tag_ht2500to3500_1d(y)
-
+keys = function_1d.keys()
+for iK in range (0, len(keys)):
+	def f2d(x,y):
+		return function_1d[keys[iK]](x) * function_1d[keys[iK]](y)
+	function_2d[ keys[iK] ] = f2d
 
 # lineInfo object explainer:
 # lineInfo[0] is x0
@@ -221,99 +215,28 @@ for i in range(0, len(three_x_points_vec)-1):
 	def bounds_y_s3(x):
 		return [yValue(x,lineInfo_lowerSignal), yValue(x,lineInfo_negHigh)]
 
-	integral_U_fullCutsData_anti_ht1500to2500 = 0
-	integral_U_fullCutsData_anti_ht2500to3500 = 0
-	integral_U_fullCutsMC_anti_ht1500to2500 = 0
-	integral_U_fullCutsMC_anti_ht2500to3500 = 0
-	integral_U_fullCutsMC_anti_ht3500toInf = 0
-	integral_U_fullCutsMC_tag_ht1500to2500 = 0
-	integral_U_fullCutsMC_tag_ht2500to3500 = 0
+	for iK in range (0, len(keys)):
+		integral_U[ keys[iK] ] = 0
 
 	if (i==0):
-
 		gradient_Spec = (yValue(three_x_points_vec[1][0],lineInfo_negHigh) - S1_Node1) / (three_x_points_vec[1][0] - S1_Node2)
 		lineInfo_Spec = [S1_Node2, S1_Node1, gradient_Spec]
 		def bounds_y_uSpec(x):
 			return [yValue(x,lineInfo_Spec), yValue(x,lineInfo_negHigh)]
-
-		integral_U_fullCutsData_anti_ht1500to2500 += integrate.nquad(f_fullCutsData_anti_ht1500to2500_2d, [bounds_y_uSpec, bounds_x_u2])[0]
-		integral_U_fullCutsData_anti_ht1500to2500 += integrate.nquad(f_fullCutsData_anti_ht1500to2500_2d, [bounds_y_u3, bounds_x_u3])[0]
-
-		integral_U_fullCutsData_anti_ht2500to3500 += integrate.nquad(f_fullCutsData_anti_ht2500to3500_2d, [bounds_y_uSpec, bounds_x_u2])[0]
-		integral_U_fullCutsData_anti_ht2500to3500 += integrate.nquad(f_fullCutsData_anti_ht2500to3500_2d, [bounds_y_u3, bounds_x_u3])[0]
-
-		integral_U_fullCutsMC_anti_ht1500to2500 += integrate.nquad(f_fullCutsMC_anti_ht1500to2500_2d, [bounds_y_uSpec, bounds_x_u2])[0]
-		integral_U_fullCutsMC_anti_ht1500to2500 += integrate.nquad(f_fullCutsMC_anti_ht1500to2500_2d, [bounds_y_u3, bounds_x_u3])[0]
-
-		integral_U_fullCutsMC_anti_ht2500to3500 += integrate.nquad(f_fullCutsMC_anti_ht2500to3500_2d, [bounds_y_uSpec, bounds_x_u2])[0]
-		integral_U_fullCutsMC_anti_ht2500to3500 += integrate.nquad(f_fullCutsMC_anti_ht2500to3500_2d, [bounds_y_u3, bounds_x_u3])[0]
-
-		integral_U_fullCutsMC_anti_ht3500toInf += integrate.nquad(f_fullCutsMC_anti_ht3500toInf_2d, [bounds_y_uSpec, bounds_x_u2])[0]
-		integral_U_fullCutsMC_anti_ht3500toInf += integrate.nquad(f_fullCutsMC_anti_ht3500toInf_2d, [bounds_y_u3, bounds_x_u3])[0]
-
-		integral_U_fullCutsMC_tag_ht1500to2500 += integrate.nquad(f_fullCutsMC_tag_ht1500to2500_2d, [bounds_y_uSpec, bounds_x_u2])[0]
-		integral_U_fullCutsMC_tag_ht1500to2500 += integrate.nquad(f_fullCutsMC_tag_ht1500to2500_2d, [bounds_y_u3, bounds_x_u3])[0]
-
-		integral_U_fullCutsMC_tag_ht2500to3500 += integrate.nquad(f_fullCutsMC_tag_ht2500to3500_2d, [bounds_y_uSpec, bounds_x_u2])[0]
-		integral_U_fullCutsMC_tag_ht2500to3500 += integrate.nquad(f_fullCutsMC_tag_ht2500to3500_2d, [bounds_y_u3, bounds_x_u3])[0]		
+		for iK in range (0, len(keys)):
+			integral_U[ keys[iK] ] += integrate.nquad(function_2d[keys[iK]], [bounds_y_uSpec, bounds_x_u2])[0]
+			integral_U[ keys[iK] ] += integrate.nquad(function_2d[keys[iK]], [bounds_y_u3, bounds_x_u3])[0]
 
 	else:
-		integral_U_fullCutsData_anti_ht1500to2500 += integrate.nquad(f_fullCutsData_anti_ht1500to2500_2d, [bounds_y_u1, bounds_x_u1])[0]
-		integral_U_fullCutsData_anti_ht1500to2500 += integrate.nquad(f_fullCutsData_anti_ht1500to2500_2d, [bounds_y_u2, bounds_x_u2])[0]
-		integral_U_fullCutsData_anti_ht1500to2500 += integrate.nquad(f_fullCutsData_anti_ht1500to2500_2d, [bounds_y_u3, bounds_x_u3])[0]
+		for iK in range (0, len(keys)):
+			integral_U[ keys[iK] ] += integrate.nquad(function_2d[keys[iK]], [bounds_y_u1, bounds_x_u1])[0]
+			integral_U[ keys[iK] ] += integrate.nquad(function_2d[keys[iK]], [bounds_y_u2, bounds_x_u2])[0]
+			integral_U[ keys[iK] ] += integrate.nquad(function_2d[keys[iK]], [bounds_y_u3, bounds_x_u3])[0]
 
-		integral_U_fullCutsData_anti_ht2500to3500 += integrate.nquad(f_fullCutsData_anti_ht2500to3500_2d, [bounds_y_u1, bounds_x_u1])[0]
-		integral_U_fullCutsData_anti_ht2500to3500 += integrate.nquad(f_fullCutsData_anti_ht2500to3500_2d, [bounds_y_u2, bounds_x_u2])[0]
-		integral_U_fullCutsData_anti_ht2500to3500 += integrate.nquad(f_fullCutsData_anti_ht2500to3500_2d, [bounds_y_u3, bounds_x_u3])[0]
-
-		integral_U_fullCutsMC_anti_ht1500to2500 += integrate.nquad(f_fullCutsMC_anti_ht1500to2500_2d, [bounds_y_u1, bounds_x_u1])[0]
-		integral_U_fullCutsMC_anti_ht1500to2500 += integrate.nquad(f_fullCutsMC_anti_ht1500to2500_2d, [bounds_y_u2, bounds_x_u2])[0]
-		integral_U_fullCutsMC_anti_ht1500to2500 += integrate.nquad(f_fullCutsMC_anti_ht1500to2500_2d, [bounds_y_u3, bounds_x_u3])[0]
-
-		integral_U_fullCutsMC_anti_ht2500to3500 += integrate.nquad(f_fullCutsMC_anti_ht2500to3500_2d, [bounds_y_u1, bounds_x_u1])[0]
-		integral_U_fullCutsMC_anti_ht2500to3500 += integrate.nquad(f_fullCutsMC_anti_ht2500to3500_2d, [bounds_y_u2, bounds_x_u2])[0]
-		integral_U_fullCutsMC_anti_ht2500to3500 += integrate.nquad(f_fullCutsMC_anti_ht2500to3500_2d, [bounds_y_u3, bounds_x_u3])[0]
-
-		integral_U_fullCutsMC_anti_ht3500toInf += integrate.nquad(f_fullCutsMC_anti_ht3500toInf_2d, [bounds_y_u1, bounds_x_u1])[0]
-		integral_U_fullCutsMC_anti_ht3500toInf += integrate.nquad(f_fullCutsMC_anti_ht3500toInf_2d, [bounds_y_u2, bounds_x_u2])[0]
-		integral_U_fullCutsMC_anti_ht3500toInf += integrate.nquad(f_fullCutsMC_anti_ht3500toInf_2d, [bounds_y_u3, bounds_x_u3])[0]
-
-		integral_U_fullCutsMC_tag_ht1500to2500 += integrate.nquad(f_fullCutsMC_tag_ht1500to2500_2d, [bounds_y_u1, bounds_x_u1])[0]
-		integral_U_fullCutsMC_tag_ht1500to2500 += integrate.nquad(f_fullCutsMC_tag_ht1500to2500_2d, [bounds_y_u2, bounds_x_u2])[0]
-		integral_U_fullCutsMC_tag_ht1500to2500 += integrate.nquad(f_fullCutsMC_tag_ht1500to2500_2d, [bounds_y_u3, bounds_x_u3])[0]
-
-		integral_U_fullCutsMC_tag_ht2500to3500 += integrate.nquad(f_fullCutsMC_tag_ht2500to3500_2d, [bounds_y_u1, bounds_x_u1])[0]
-		integral_U_fullCutsMC_tag_ht2500to3500 += integrate.nquad(f_fullCutsMC_tag_ht2500to3500_2d, [bounds_y_u2, bounds_x_u2])[0]
-		integral_U_fullCutsMC_tag_ht2500to3500 += integrate.nquad(f_fullCutsMC_tag_ht2500to3500_2d, [bounds_y_u3, bounds_x_u3])[0]
-
-
-	integral_S_fullCutsData_anti_ht1500to2500 = integrate.nquad(f_fullCutsData_anti_ht1500to2500_2d, [bounds_y_s1, bounds_x_s1])[0]
-	integral_S_fullCutsData_anti_ht1500to2500 += integrate.nquad(f_fullCutsData_anti_ht1500to2500_2d, [bounds_y_s2, bounds_x_s2])[0]
-	integral_S_fullCutsData_anti_ht1500to2500 += integrate.nquad(f_fullCutsData_anti_ht1500to2500_2d, [bounds_y_s3, bounds_x_s3])[0]
-
-	integral_S_fullCutsData_anti_ht2500to3500 = integrate.nquad(f_fullCutsData_anti_ht2500to3500_2d, [bounds_y_s1, bounds_x_s1])[0]
-	integral_S_fullCutsData_anti_ht2500to3500 += integrate.nquad(f_fullCutsData_anti_ht2500to3500_2d, [bounds_y_s2, bounds_x_s2])[0]
-	integral_S_fullCutsData_anti_ht2500to3500 += integrate.nquad(f_fullCutsData_anti_ht2500to3500_2d, [bounds_y_s3, bounds_x_s3])[0]
-
-	integral_S_fullCutsMC_anti_ht1500to2500 = integrate.nquad(f_fullCutsMC_anti_ht1500to2500_2d, [bounds_y_s1, bounds_x_s1])[0]
-	integral_S_fullCutsMC_anti_ht1500to2500 += integrate.nquad(f_fullCutsMC_anti_ht1500to2500_2d, [bounds_y_s2, bounds_x_s2])[0]
-	integral_S_fullCutsMC_anti_ht1500to2500 += integrate.nquad(f_fullCutsMC_anti_ht1500to2500_2d, [bounds_y_s3, bounds_x_s3])[0]
-
-	integral_S_fullCutsMC_anti_ht2500to3500 = integrate.nquad(f_fullCutsMC_anti_ht2500to3500_2d, [bounds_y_s1, bounds_x_s1])[0]
-	integral_S_fullCutsMC_anti_ht2500to3500 += integrate.nquad(f_fullCutsMC_anti_ht2500to3500_2d, [bounds_y_s2, bounds_x_s2])[0]
-	integral_S_fullCutsMC_anti_ht2500to3500 += integrate.nquad(f_fullCutsMC_anti_ht2500to3500_2d, [bounds_y_s3, bounds_x_s3])[0]
-
-	integral_S_fullCutsMC_anti_ht3500toInf = integrate.nquad(f_fullCutsMC_anti_ht3500toInf_2d, [bounds_y_s1, bounds_x_s1])[0]
-	integral_S_fullCutsMC_anti_ht3500toInf += integrate.nquad(f_fullCutsMC_anti_ht3500toInf_2d, [bounds_y_s2, bounds_x_s2])[0]
-	integral_S_fullCutsMC_anti_ht3500toInf += integrate.nquad(f_fullCutsMC_anti_ht3500toInf_2d, [bounds_y_s3, bounds_x_s3])[0]
-
-	integral_S_fullCutsMC_tag_ht1500to2500 = integrate.nquad(f_fullCutsMC_tag_ht1500to2500_2d, [bounds_y_s1, bounds_x_s1])[0]
-	integral_S_fullCutsMC_tag_ht1500to2500 += integrate.nquad(f_fullCutsMC_tag_ht1500to2500_2d, [bounds_y_s2, bounds_x_s2])[0]
-	integral_S_fullCutsMC_tag_ht1500to2500 += integrate.nquad(f_fullCutsMC_tag_ht1500to2500_2d, [bounds_y_s3, bounds_x_s3])[0]
-
-	integral_S_fullCutsMC_tag_ht2500to3500 = integrate.nquad(f_fullCutsMC_tag_ht2500to3500_2d, [bounds_y_s1, bounds_x_s1])[0]
-	integral_S_fullCutsMC_tag_ht2500to3500 += integrate.nquad(f_fullCutsMC_tag_ht2500to3500_2d, [bounds_y_s2, bounds_x_s2])[0]
-	integral_S_fullCutsMC_tag_ht2500to3500 += integrate.nquad(f_fullCutsMC_tag_ht2500to3500_2d, [bounds_y_s3, bounds_x_s3])[0]
+	for iK in range (0, len(keys)):
+		integral_S[ keys[iK] ] = integrate.nquad(function_2d[keys[iK]], [bounds_y_s1, bounds_x_s1])[0]
+		integral_S[ keys[iK] ] += integrate.nquad(function_2d[keys[iK]], [bounds_y_s2, bounds_x_s2])[0]
+		integral_S[ keys[iK] ] += integrate.nquad(function_2d[keys[iK]], [bounds_y_s3, bounds_x_s3])[0]
 
 	###############################################################
 	###############################################################
@@ -326,20 +249,20 @@ for i in range(0, len(three_x_points_vec)-1):
 	##### #### ### ## # CALCULATIONS AND OUTPUT # ## ### #### #####
 	# Do calculations with the total counts in each 2d mass segment
 
-	ratio__antiS_over_antiUnD__fullCuts_anti_ht1500to2500 = integral_S_fullCutsData_anti_ht1500to2500 / (2 * integral_U_fullCutsData_anti_ht1500to2500)
-	ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500 = integral_S_fullCutsData_anti_ht2500to3500 / (2 * integral_U_fullCutsData_anti_ht2500to3500)
-	ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf = integral_S_fullCutsMC_anti_ht3500toInf / (2 * integral_U_fullCutsMC_anti_ht3500toInf)	
-	# print "A_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht1500to2500)
+	ratio__antiS_over_antiUnD__fullCuts_anti_ht1500to2500 = integral_S["fullCutsData_anti_ht1500to2500"] / (2 * integral_U["fullCutsData_anti_ht1500to2500"])
+	ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500 = integral_S["fullCutsData_anti_ht2500to3500"] / (2 * integral_U["fullCutsData_anti_ht2500to3500"])
+	ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf = integral_S["fullCutsMC_anti_ht3500toInf"] / (2 * integral_U["fullCutsMC_anti_ht3500toInf"])	
+	print "A_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht1500to2500)
 	# print "A_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500)
-	print "A_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf)
+	# print "A_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf)
 
-	correctionFactor_ht1500to2500 = (integral_S_fullCutsMC_tag_ht1500to2500 / integral_S_fullCutsMC_anti_ht1500to2500) * (integral_U_fullCutsMC_anti_ht1500to2500 / integral_U_fullCutsMC_tag_ht1500to2500)
-	correctionFactor_ht2500to3500 = (integral_S_fullCutsMC_tag_ht2500to3500 / integral_S_fullCutsMC_anti_ht2500to3500) * (integral_U_fullCutsMC_anti_ht2500to3500 / integral_U_fullCutsMC_tag_ht2500to3500)
+	correctionFactor_ht1500to2500 = (integral_S["fullCutsMC_tag_ht1500to2500"] / integral_S["fullCutsMC_anti_ht1500to2500"]) * (integral_U["fullCutsMC_anti_ht1500to2500"] / integral_U["fullCutsMC_tag_ht1500to2500"])
+	correctionFactor_ht2500to3500 = (integral_S["fullCutsMC_tag_ht2500to3500"] / integral_S["fullCutsMC_anti_ht2500to3500"]) * (integral_U["fullCutsMC_anti_ht2500to3500"] / integral_U["fullCutsMC_tag_ht2500to3500"])
 	# print "correction factor tag C_" + str(iMR) + " = " + str(correctionFactor_ht1500to2500)
 	# print "correction factor tag C_" + str(iMR) + " = " + str(correctionFactor_ht2500to3500)
 	# print "correction factor tag C_" + str(iMR) + " = " + str(correctionFactor_ht1500to2500) + "    " + str(correctionFactor_ht2500to3500)
 	
-	# print integral_S_fullCutsMC_tag_ht1500to2500
+	# print integral_S["fullCutsMC_tag_ht1500to2500"]
 	###############################################################
 	###############################################################
 	###############################################################
