@@ -11,19 +11,19 @@ namespace QcdSidebandCorr{
 
 		std::vector<double> corrVec;
 
-		// ht1500to2500
-		corrVec.push_back(1.72095039307);
-		corrVec.push_back(0.8282414859);
-		corrVec.push_back(0.863177034516);
-		corrVec.push_back(0.905665580354);
-		corrVec.push_back(0.947521934812);
-		corrVec.push_back(0.985142191059);
-		corrVec.push_back(1.0195367264);
-		corrVec.push_back(1.05554429897);
-		corrVec.push_back(1.10290856858);
-		corrVec.push_back(1.18358319242);
+		// ht1500to2500 - normal method
+		corrVec.push_back(1.6645285439);
+		corrVec.push_back(0.8743148003);
+		corrVec.push_back(0.8934723481);
+		corrVec.push_back(0.8319770225);
+		corrVec.push_back(0.8696296296);
+		corrVec.push_back(0.9246206559);
+		corrVec.push_back(1.0578193833);
+		corrVec.push_back(1.1185819071);
+		corrVec.push_back(1.2488584475);
+		corrVec.push_back(1.1579846285);
 
-		// ht2500to3500
+		// ht2500to3500 - calculation
 		corrVec.push_back(1.55514522072);
 		corrVec.push_back(0.714415425744);
 		corrVec.push_back(0.794138432615);
@@ -35,7 +35,7 @@ namespace QcdSidebandCorr{
 		corrVec.push_back(1.03472134577);
 		corrVec.push_back(1.05736017431);
 
-		// ht3500toInf
+		// ht3500toInf - calculation
 		corrVec.push_back(1.76016501196);
 		corrVec.push_back(0.814215526066);
 		corrVec.push_back(0.837869954443);
@@ -50,6 +50,54 @@ namespace QcdSidebandCorr{
 		if (binIndex > 0 && binIndex < corrVec.size() + 1 ) return corrVec[binIndex - 1];
 		else{
 			std::cout << "WARNING: you haven't provided a valid index for the QCD sideband correction factor" << std::endl;
+			std::cout << "You are being given a dummy value of -123456789.0" << std::endl;
+			return -123456789.0;
+		}
+	}
+
+	double GetCorrErr(const unsigned int& binIndex){
+
+		std::vector<double> corrErrVec;
+
+		// ht1500to2500 - normal method
+		corrErrVec.push_back(0.0533375121);
+		corrErrVec.push_back(0.0253305568);
+		corrErrVec.push_back(0.0276928267);
+		corrErrVec.push_back(0.0270113604);
+		corrErrVec.push_back(0.0283356018);
+		corrErrVec.push_back(0.0295134639);
+		corrErrVec.push_back(0.0346219452);
+		corrErrVec.push_back(0.0380596574);
+		corrErrVec.push_back(0.0462317130);
+		corrErrVec.push_back(0.0461952289);
+
+		// ht2500to3500 - calculation
+		corrErrVec.push_back(0.1);
+		corrErrVec.push_back(0.1);
+		corrErrVec.push_back(0.1);
+		corrErrVec.push_back(0.1);
+		corrErrVec.push_back(0.1);
+		corrErrVec.push_back(0.1);
+		corrErrVec.push_back(0.1);
+		corrErrVec.push_back(0.1);
+		corrErrVec.push_back(0.1);
+		corrErrVec.push_back(0.1);
+
+		// ht3500toInf - calculation
+		corrErrVec.push_back(0.1);
+		corrErrVec.push_back(0.1);
+		corrErrVec.push_back(0.1);
+		corrErrVec.push_back(0.1);
+		corrErrVec.push_back(0.1);
+		corrErrVec.push_back(0.1);
+		corrErrVec.push_back(0.1);
+		corrErrVec.push_back(0.1);
+		corrErrVec.push_back(0.1);
+		corrErrVec.push_back(0.1);
+
+		if (binIndex > 0 && binIndex < corrErrVec.size() + 1 ) return corrErrVec[binIndex - 1];
+		else{
+			std::cout << "WARNING: you haven't provided a valid index for the QCD sideband correction factor error" << std::endl;
 			std::cout << "You are being given a dummy value of -123456789.0" << std::endl;
 			return -123456789.0;
 		}
