@@ -883,6 +883,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 	double initialMax = 0.0; // use to reset the histo max and min to what it initially was
 	double initialMin = 0.0;
 
+	// max = 2.1; // HACK maxima
 	double graphMaxLin = 1.12 * max;
 	double graphMaxLog = log10(max/min) * max;
 	double graphMinLin = 0.0;
@@ -927,7 +928,17 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		}
 		for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I)
 			if (plotWithErrorsIndi == false) th1Indi[iTh1I]->Draw("HIST, same");
-			else th1Indi[iTh1I]->Draw("same, P");
+			else{
+				th1Indi[iTh1I]->Draw("same, P");
+				// if (iTh1I > 0){ // lil HACK for A_{i} plotz
+				// 	th1Indi[iTh1I]->SetFillColor(kGreen+1);
+				// 	th1Indi[iTh1I]->SetLineColor(kGreen+1);
+				// 	th1Indi[iTh1I]->SetFillStyle(3002);
+				// 	th1Indi[iTh1I]->Draw("same, e2");
+				// 	th1Indi[0]->SetLineColor(kBlue);
+				// 	th1Indi[0]->Draw("same, P");
+				// }
+			}
 	}
 
 	else if (th1Indi.empty() && !th1Stack.empty()){
