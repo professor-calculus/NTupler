@@ -124,6 +124,7 @@ void MassRegionCuts::make_cuts()
 	std::string lowerBandLine = Form("(%f * (fatJetA_softDropMass - %f) + %f)", 1/gradientUpperBand, upperBand_y1, upperBand_x1);
 
 	std::string lowerBandBaseLineCuts = "fatJetB_softDropMass >= " + lowerBandLine;
+	if (gradientUpperBand < 0) lowerBandBaseLineCuts = "fatJetB_softDropMass <= " + lowerBandLine;
 	lowerBandBaseLineCuts +=  " && fatJetB_softDropMass < " + lowerSignalLine;
 
 	double gradientDownerSegment1LowerBound = 1 / gradientUpperSegment1LowerBound;
