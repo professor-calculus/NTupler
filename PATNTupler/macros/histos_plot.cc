@@ -33,7 +33,7 @@ int main(){
 
 
     // ONE: save info & luminosity
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/oneDimensionRepresentation/DATA/control/IDBTCv23_minus0p4/newPredictionMethod/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/oneDimensionRepresentation/MC/S_anti/mH70_normal/"; // where we are going to save the output plots (should include the samples name, and any important features)
     double luminosity = 35.867; // NB this is just a label for the plot. It should match the lumi of the histograms!
     
     std::string dirExistCommand = "test -e " + outputDir;
@@ -46,12 +46,12 @@ int main(){
     std::map<std::string, TH1D*> h_;
     GetHistograms(h_);
     // explanation of terminology
-    // 1. S, U, D --> refers to mass space. pred is the prediction of S. UnD is the sum U+D.
+    // 1. S, U, D --> refers to mass space. pred(Old)(New) is the prediction of S. UnD is the sum U+D.
     // 2. tag, anti, control --> refers to 2*DBT space
     // 3. sample name on the end
 
 
-    // FOR A_{i} PLOTS
+    // FOR A_{i} PLOTS: DON"T DELETE
     // h_["S_anti_data"]->Divide(h_["UnD_anti_data"]);
     // h_["S_anti_data"]->GetYaxis()->SetTitle("A_{i}");
     // h_["S_anti_data"]->GetYaxis()->SetRangeUser(0,2.2);
@@ -67,42 +67,41 @@ int main(){
 
 
     // TWO: make plot aesthetics and saving
-    // std::vector<TH1D*> indiHistoVec = {h_["S_anti_QCD"], h};
-    std::vector<TH1D*> indiHistoVec = {h_["S_control_data"], h_["predNew_control_data"]};
-    // std::vector<TH1D*> indiHistoVec = {h_["S_tag_mH70_mSusy2000"], h_["UnD_tag_mH70_mSusy2000"]};
-    // std::vector<TH1D*> stackHistoVec = {h_["UnD_control_WJets"], h_["UnD_control_ZJets"], h_["UnD_control_TTJets"], h_["UnD_control_QCD"]};
+    // std::vector<TH1D*> indiHistoVec = {h_["S_control_data"], h_["predNew_control_data"]};
+    std::vector<TH1D*> indiHistoVec = {h_["S_anti_mH70_mSusy1200"], h_["S_anti_mH70_mSusy1600"], h_["S_anti_mH70_mSusy2000"]};
+    std::vector<TH1D*> stackHistoVec = {h_["S_anti_WJets"], h_["S_anti_ZJets"], h_["S_anti_TTJets"], h_["S_anti_QCD"]};
 
-    Plotter plot = Plotter(indiHistoVec);
+    // Plotter plot = Plotter(indiHistoVec);
     // Plotter plot = Plotter({}, stackHistoVec);
-    // Plotter plot = Plotter(indiHistoVec, stackHistoVec);
+    Plotter plot = Plotter(indiHistoVec, stackHistoVec);
 
     // std::vector<std::string> legendNames = {"QCD MC", "calculation"};
-    // std::vector<std::string> legendNames = {"S_anti", "UnD_anti"};
-    std::vector<std::string> legendNames = {"control", "control prediction"};
-    // std::vector<std::string> legendNames = {"mH70_mSusy1200", "mH70_mSusy1600", "mH70_mSusy2000", "WJets", "ZJets", "TTJets", "QCD"};
+    // std::vector<std::string> legendNames = {"control", "control prediction"};
+    std::vector<std::string> legendNames = {"mH70_mSusy1200", "mH70_mSusy1600", "mH70_mSusy2000", "WJets", "ZJets", "TTJets", "QCD"};
     // std::vector<std::string> legendNames = {"WJets", "ZJets", "TTJets", "QCD"};
 
     // plot.AddLegend(legendNames, 0.70, 0.88, 0.64, 0.83, 0.028);
     // plot.AddLegend(legendNames, 0.18, 0.38, 0.58, 0.81, 0.028);
     // plot.AddLegend(legendNames, 0.18, 0.38, 0.18, 0.30, 0.040);
-    plot.AddLegend(legendNames, 0.68, 0.88, 0.58, 0.81, 0.040);
+    // plot.AddLegend(legendNames, 0.68, 0.88, 0.58, 0.81, 0.040);
     // plot.AddLegend(legendNames, 0.18, 0.38, 0.58, 0.81, 0.040);
     // plot.AddLegend(legendNames, 0.75, 0.88, 0.64, 0.83, 0.028);
     // plot.AddLegend(legendNames, 0.67, 0.88, 0.61, 0.80, 0.04); // with ratio box
-    // plot.AddLegend2Cols(3, legendNames, 0.70, 0.88, 0.64, 0.83, 0.028);
+    // plot.AddLegend2Cols(2, legendNames, 0.70, 0.88, 0.64, 0.83, 0.028);
+    plot.AddLegend2Cols(3, legendNames, 0.70, 0.88, 0.64, 0.83, 0.028);
     // plot.AddLegend2Cols(4, legendNames, 0.70, 0.88, 0.64, 0.83, 0.028);
     
     // plot.AddLatex();
-    // plot.AddLatex(luminosity);
-    plot.AddLatex(luminosity, "#it{Data} 2016");
+    plot.AddLatex(luminosity);
+    // plot.AddLatex(luminosity, "#it{Data} 2016");
     // plot.AddRatioBox(0.1, 1.9, "ratio", true);
     // plot.AddRatioBox("ratio", true);
     // plot.AddRatioBox("true / pred", true);
-    plot.AddRatioBox(0.1,2.2, "true / pred", true);
+    // plot.AddRatioBox(0.1,2.2, "true / pred", true);
     // plot.AddRatioBox(0.1,2.2, "S / UnD", true);
     // plot.AddRatioBox("S / UnD", true);
-    plot.SetErrors();
-    // plot.SetErrors("only_stack");
+    // plot.SetErrors();
+    plot.SetErrors("only_stack");
     // plot.SetErrors("only_indi");
 
     std::vector<std::string> stringVec = {"HT1500-2500", "HT2500-3500", "HT3500+"};
@@ -111,8 +110,8 @@ int main(){
     
     plotName = "log";
     plot.SetLogY();
-    // plot.SetYValueMin(0.15); // REMEMBER THIS PARAM! (only for log)
-    plot.SetYValueMin(0.80); // REMEMBER THIS PARAM! (only for log)
+    plot.SetYValueMin(0.15); // REMEMBER THIS PARAM! (only for log)
+    // plot.SetYValueMin(0.80); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(1.10); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(3.10); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(12.10); // REMEMBER THIS PARAM! (only for log)
@@ -139,22 +138,41 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
     histoNameVec.push_back("TTJets");
     histoNameVec.push_back("ZJets");
     histoNameVec.push_back("WJets");
-    // histoNameVec.push_back("mH30_mSusy800");
-    // histoNameVec.push_back("mH50_mSusy800");
-    // histoNameVec.push_back("mH70_mSusy800");
-    // histoNameVec.push_back("mH90_mSusy800");
-    // histoNameVec.push_back("mH30_mSusy1200");
-    // histoNameVec.push_back("mH50_mSusy1200");
-    // histoNameVec.push_back("mH70_mSusy1200");
-    // histoNameVec.push_back("mH90_mSusy1200");
-    // histoNameVec.push_back("mH30_mSusy1600");
-    // histoNameVec.push_back("mH50_mSusy1600");
-    // histoNameVec.push_back("mH70_mSusy1600");
-    // histoNameVec.push_back("mH90_mSusy1600");
-    // histoNameVec.push_back("mH30_mSusy2000");
-    // histoNameVec.push_back("mH50_mSusy2000");
-    // histoNameVec.push_back("mH70_mSusy2000");
-    // histoNameVec.push_back("mH90_mSusy2000");
+    histoNameVec.push_back("mH30_mSusy800");
+    histoNameVec.push_back("mH50_mSusy800");
+    histoNameVec.push_back("mH70_mSusy800");
+    histoNameVec.push_back("mH90_mSusy800");
+    histoNameVec.push_back("mH125_mSusy800");
+    histoNameVec.push_back("mH30_mSusy1200");
+    histoNameVec.push_back("mH50_mSusy1200");
+    histoNameVec.push_back("mH70_mSusy1200");
+    histoNameVec.push_back("mH90_mSusy1200");
+    histoNameVec.push_back("mH125_mSusy1200");
+    histoNameVec.push_back("mH30_mSusy1600");
+    histoNameVec.push_back("mH50_mSusy1600");
+    histoNameVec.push_back("mH70_mSusy1600");
+    histoNameVec.push_back("mH90_mSusy1600");
+    histoNameVec.push_back("mH125_mSusy1600");
+    histoNameVec.push_back("mH30_mSusy2000");
+    histoNameVec.push_back("mH50_mSusy2000");
+    histoNameVec.push_back("mH70_mSusy2000");
+    histoNameVec.push_back("mH90_mSusy2000");
+    histoNameVec.push_back("mH125_mSusy2000");
+    histoNameVec.push_back("mH30_mSusy2200");
+    histoNameVec.push_back("mH50_mSusy2200");
+    histoNameVec.push_back("mH70_mSusy2200");
+    histoNameVec.push_back("mH90_mSusy2200");
+    histoNameVec.push_back("mH125_mSusy2200");
+    histoNameVec.push_back("mH30_mSusy2400");
+    histoNameVec.push_back("mH50_mSusy2400");
+    histoNameVec.push_back("mH70_mSusy2400");
+    histoNameVec.push_back("mH90_mSusy2400");
+    histoNameVec.push_back("mH125_mSusy2400");
+    histoNameVec.push_back("mH30_mSusy2600");
+    histoNameVec.push_back("mH50_mSusy2600");
+    histoNameVec.push_back("mH70_mSusy2600");
+    histoNameVec.push_back("mH90_mSusy2600");
+    histoNameVec.push_back("mH125_mSusy2600");
 
     std::string postamble_noAk4 = "MassCutsV05_ak8pt300_ht1500x2500x3500x_ak4pt-1n-1_lumi36.root";
     std::vector<std::string> histoNameVec_noAk4;
@@ -163,10 +181,6 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
     histoNameVec_noAk4.push_back("TTJets_NOAK4");
     histoNameVec_noAk4.push_back("ZJets_NOAK4");
     histoNameVec_noAk4.push_back("WJets_NOAK4");
-    // histoNameVec_noAk4.push_back("mH70_mSusy800_NOAK4");
-    // histoNameVec_noAk4.push_back("mH70_mSusy1200_NOAK4");
-    // histoNameVec_noAk4.push_back("mH70_mSusy1600_NOAK4");
-    // histoNameVec_noAk4.push_back("mH70_mSusy2000_NOAK4");
 
     for (size_t iH = 0; iH < (histoNameVec.size() + histoNameVec_noAk4.size()); ++iH){
 
