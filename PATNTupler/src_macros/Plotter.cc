@@ -1112,6 +1112,8 @@ void Plotter::Save2D(const std::string& saveName){
 
 void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCutsObject){
 
+	double sideBandScaleFactor = MassCutsObject.Get_sideBandScaleFactor();
+
 	if (histos2D.empty()){
 		std::cout << "Plotter::Save2D @@@ Exiting without saving... no 2D histos @@@" << std::endl;
 		return;
@@ -1152,18 +1154,18 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 
 	double gradientUpperSignalLine = (SMAX_Node1 - S1_Node1) / (SMAX_Node2 - S1_Node2);
 	double gradientLowerSignalLine = 1 / gradientUpperSignalLine;
-	double upperBand_x1 = S1_Node2 - 0.5 * (S1_Node1 - S1_Node2);
-	double upperBand_y1 = S1_Node1 + 0.5 * (S1_Node1 - S1_Node2);
-	double upperBand_x2 = SMAX_Node2 - 0.5 * (SMAX_Node1 - SMAX_Node2);
-	double upperBand_y2 = SMAX_Node1 + 0.5 * (SMAX_Node1 - SMAX_Node2);
+	double upperBand_x1 = S1_Node2 - sideBandScaleFactor * (S1_Node1 - S1_Node2);
+	double upperBand_y1 = S1_Node1 + sideBandScaleFactor * (S1_Node1 - S1_Node2);
+	double upperBand_x2 = SMAX_Node2 - sideBandScaleFactor * (SMAX_Node1 - SMAX_Node2);
+	double upperBand_y2 = SMAX_Node1 + sideBandScaleFactor * (SMAX_Node1 - SMAX_Node2);
 	double gradientUpperBand = (upperBand_y2 - upperBand_y1) / (upperBand_x2 - upperBand_x1);
 	double gradientDownerBand = 1 / gradientUpperBand;
 
 	// work out the coords for 'upper' corner of upper segement 1
 	double yValue_S1UpperLeft = SN_Nodes[0];
 	double xValue_S1UpperLeft = gradientLowerSignalLine * (SN_Nodes[0] - S1_Node1) + S1_Node2;
-	double upperBand_x1U = xValue_S1UpperLeft - 0.5 * (yValue_S1UpperLeft - xValue_S1UpperLeft);
-	double upperBand_y1U = yValue_S1UpperLeft + 0.5 * (yValue_S1UpperLeft - xValue_S1UpperLeft);
+	double upperBand_x1U = xValue_S1UpperLeft - sideBandScaleFactor * (yValue_S1UpperLeft - xValue_S1UpperLeft);
+	double upperBand_y1U = yValue_S1UpperLeft + sideBandScaleFactor * (yValue_S1UpperLeft - xValue_S1UpperLeft);
 	TLine *line_U1Cap = new TLine(S1_Node2, S1_Node1, upperBand_x1U, upperBand_y1U); // xmin, ymin, xmax, ymax
 	line_U1Cap->SetLineStyle(2);
 	line_U1Cap->SetLineWidth(3);

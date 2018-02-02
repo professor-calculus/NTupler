@@ -15,8 +15,9 @@
 
 
 //--------constructor---------//
-MassRegionCuts::MassRegionCuts(const std::string& MassRegionCutNameDummy, const double& S1_Node1Dummy, const double& S1_Node2Dummy, const double& SMAX_Node1Dummy, const double& SMAX_Node2Dummy, const std::vector<double>& SN_NodesDummy) :
+MassRegionCuts::MassRegionCuts(const std::string& MassRegionCutNameDummy, const double& S1_Node1Dummy, const double& S1_Node2Dummy, const double& SMAX_Node1Dummy, const double& SMAX_Node2Dummy, const std::vector<double>& SN_NodesDummy, const double& sideBandScaleFactorDummy) :
 MassRegionCutName(MassRegionCutNameDummy),
+sideBandScaleFactor(sideBandScaleFactorDummy),
 S1_Node1(S1_Node1Dummy),
 S1_Node2(S1_Node2Dummy),
 SMAX_Node1(SMAX_Node1Dummy),
@@ -33,6 +34,7 @@ double MassRegionCuts::Get_S1_Node2() const {return S1_Node2;}
 double MassRegionCuts::Get_S1_Node1() const {return S1_Node1;}
 double MassRegionCuts::Get_SMAX_Node1() const {return SMAX_Node1;}
 double MassRegionCuts::Get_SMAX_Node2() const {return SMAX_Node2;}
+double MassRegionCuts::Get_sideBandScaleFactor() const {return sideBandScaleFactor;}
 std::vector<double> MassRegionCuts::Get_SN_Nodes() const {return SN_Nodes;}
 std::vector<std::string> MassRegionCuts::Get_S_Cuts() const {return S_Cuts;}
 std::vector<std::string> MassRegionCuts::Get_U_Cuts() const {return U_Cuts;}
@@ -85,10 +87,10 @@ void MassRegionCuts::make_cuts()
 	S_Cuts = additionalSignalRegionCuts;
 
 	// U cuts
-	double upperBand_x1 = S1_Node2 - 0.5 * (S1_Node1 - S1_Node2);
-	double upperBand_y1 = S1_Node1 + 0.5 * (S1_Node1 - S1_Node2);
-	double upperBand_x2 = SMAX_Node2 - 0.5 * (SMAX_Node1 - SMAX_Node2);
-	double upperBand_y2 = SMAX_Node1 + 0.5 * (SMAX_Node1 - SMAX_Node2);
+	double upperBand_x1 = S1_Node2 - sideBandScaleFactor * (S1_Node1 - S1_Node2);
+	double upperBand_y1 = S1_Node1 + sideBandScaleFactor * (S1_Node1 - S1_Node2);
+	double upperBand_x2 = SMAX_Node2 - sideBandScaleFactor * (SMAX_Node1 - SMAX_Node2);
+	double upperBand_y2 = SMAX_Node1 + sideBandScaleFactor * (SMAX_Node1 - SMAX_Node2);
 	double gradientUpperBand = (upperBand_y2 - upperBand_y1) / (upperBand_x2 - upperBand_x1);
 	std::string upperBandLine = Form("(%f * (fatJetA_softDropMass - %f) + %f)", gradientUpperBand, upperBand_x1, upperBand_y1);
 	
@@ -98,8 +100,8 @@ void MassRegionCuts::make_cuts()
 	// work out the coords for upper corner of upper segement 1
 	double yValue_S1UpperLeft = SN_Nodes[0];
 	double xValue_S1UpperLeft = yValue(SN_Nodes[0], gradientLowerSignalLine, S1_Node1, S1_Node2);
-	double upperBand_x1U = xValue_S1UpperLeft - 0.5 * (yValue_S1UpperLeft - xValue_S1UpperLeft);
-	double upperBand_y1U = yValue_S1UpperLeft + 0.5 * (yValue_S1UpperLeft - xValue_S1UpperLeft);
+	double upperBand_x1U = xValue_S1UpperLeft - sideBandScaleFactor * (yValue_S1UpperLeft - xValue_S1UpperLeft);
+	double upperBand_y1U = yValue_S1UpperLeft + sideBandScaleFactor * (yValue_S1UpperLeft - xValue_S1UpperLeft);
 	double gradientUpperSegment1LowerBound = (S1_Node1 - upperBand_y1U) / (S1_Node2 - upperBand_x1U);
 
 	std::vector<std::string> additionalUpperBandCuts(SN_Nodes.size()+1, upperBandBaseLineCuts);
