@@ -18,59 +18,47 @@ function_1d = {}
 
 # FUNCTIONS #
 # all these functions are 'normalised', by which we do not mean that the area under the function is unity...
-# ...instead we mean that all the functions come from normalised histograms with the same binning (40 bins between 0 and 200 GeV)
-# 'fullCutsData' means that the cuts were: preSel + 2*fatJet300 + 1*ak4pt300 + GIVEN_DBT_REGION + GIVEN_HT_BIN, preformed on Data
-# 'fullCutsMC' means that the cuts were: preSel + 2*fatJet300 + 1*ak4pt300 + GIVEN_DBT_REGION + GIVEN_HT_BIN, preformed on MC
+# ...instead we mean that all the functions come from normalised histograms with the same binning (50 bins between 0 and 250 GeV)
+# 'ttCutsMC' means that the cuts were: preSel + 2*fatJet300 + ht1500toInf + GIVEN_DBT_REGION, preformed on MC
+# nb, 'tag' means DBT = LooseMaxLooseMax
 # fits valid between 50 and 250 GeV
 
-def f1d_fullCutsData_anti_ht1500toInf(x):
-	p0 = -1.01714e-02
-	p1 =  2.82119e+00
-	p2 = -2.32503e-03
-	p3 =  2.41542e+01
-	p4 = -3.62807e-02
-	p5 = -1.12862e+04
-	p6 = -1.44878e-03
-	p7 =  3.41173e+05
-	p8 = -2.56284e-01
+def f1d_ttCutsMC_anti_ht1500toInf(x):
+	p0 = -1.88014e-02
+	p1 =  1.38181e+01
+	p2 = -2.27749e+02
+	p3 = -8.92609e+02
+	p4 = -1.66956e+02
+	p5 = -6.93759e+03
+	p6 = -1.45877e+02
+	p7 =  7.12169e+05
+	p8 = -5.14805e+01
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
-function_1d["fullCutsData_anti_ht1500toInf"] = f1d_fullCutsData_anti_ht1500toInf
+function_1d["ttCutsMC_anti_ht1500toInf"] = f1d_ttCutsMC_anti_ht1500toInf
 
-def f1d_fullCutsMC_anti_ht1500toInf(x):
-	p0 = -1.05506e-02
-	p1 =  3.09793e+00
-	p2 = -3.11320e-03
-	p3 =  2.30161e+00
-	p4 = -3.59524e-02
-	p5 = -1.22350e+04
-	p6 = -2.26181e-03
-	p7 =  4.15630e+05
-	p8 = -2.47028e-01
-	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
-function_1d["fullCutsMC_anti_ht1500toInf"] = f1d_fullCutsMC_anti_ht1500toInf
-
-def f1d_fullCutsMC_tag_ht1500toInf(x):
-	p0 = -1.08150e-02
-	p1 =  3.05618e+00
-	p2 = -2.76424e-03
-	p3 =  1.21268e+01
-	p4 = -3.78982e-02
-	p5 = -1.24147e+04
-	p6 = -1.35383e-03
-	p7 =  4.16109e+05
-	p8 = -2.56256e-01
+def f1d_ttCutsMC_tag_ht1500toInf(x):
+	p0 = -4.39770e-03
+	p1 =  1.94919e+00
+	p2 = -3.68410e-03
+	p3 = -1.55113e+01
+	p4 = -1.41220e-02
+	p5 = -3.95634e+03
+	p6 = -1.41532e-03
+	p7 =  1.35418e+05
+	p8 = -7.52039e-02
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))	
-function_1d["fullCutsMC_tag_ht1500toInf"] = f1d_fullCutsMC_tag_ht1500toInf
+function_1d["ttCutsMC_tag_ht1500toInf"] = f1d_ttCutsMC_tag_ht1500toInf
 
 ####################
 ####################
 ####################
 # MASS REGION CUTS #
-S1_Node1 = 195.0;
-S1_Node2 = 100.0;
-SMAX_Node1 = 201.0;
-SMAX_Node2 = 170.0;
-SN_Nodes = [197.0, 199.0];
+S1_Node1 = 195.0
+S1_Node2 = 100.0
+SMAX_Node1 = 201.0
+SMAX_Node2 = 170.0
+sideBandScaleFactor = 1.0
+SN_Nodes = [197.0, 199.0]
 
 #################################################################################################
 #################################################################################################
@@ -104,10 +92,10 @@ def yValue(x, lineInfo):
 
 gradientUpperSignalLine = (SMAX_Node1 - S1_Node1) / (SMAX_Node2 - S1_Node2)
 gradientLowerSignalLine = 1 / gradientUpperSignalLine
-upperBand_x1 = S1_Node2 - 0.5 * (S1_Node1 - S1_Node2)
-upperBand_y1 = S1_Node1 + 0.5 * (S1_Node1 - S1_Node2)
-upperBand_x2 = SMAX_Node2 - 0.5 * (SMAX_Node1 - SMAX_Node2)
-upperBand_y2 = SMAX_Node1 + 0.5 * (SMAX_Node1 - SMAX_Node2)
+upperBand_x1 = S1_Node2 - sideBandScaleFactor * (S1_Node1 - S1_Node2)
+upperBand_y1 = S1_Node1 + sideBandScaleFactor * (S1_Node1 - S1_Node2)
+upperBand_x2 = SMAX_Node2 - sideBandScaleFactor * (SMAX_Node1 - SMAX_Node2)
+upperBand_y2 = SMAX_Node1 + sideBandScaleFactor * (SMAX_Node1 - SMAX_Node2)
 gradientUpperBand = (upperBand_y2 - upperBand_y1) / (upperBand_x2 - upperBand_x1)
 
 lineInfo_lowerSignal = [S1_Node1, S1_Node2, gradientLowerSignalLine]
@@ -122,7 +110,7 @@ three_x_points_vec.append([-99999, S1_Node2, S1_Node1]) # using the dummy value 
 for SN_Node in SN_Nodes:
 	x2 = SN_Node
 	x1 = yValue(SN_Node, lineInfo_lowerSignal)
-	x0 = x1 - 0.5 * (x2 - x1)
+	x0 = x1 - sideBandScaleFactor * (x2 - x1)
 	three_x_points_vec.append([x0, x1, x2])
 
 three_x_points_vec.append([upperBand_x2, SMAX_Node2, SMAX_Node1])
@@ -148,15 +136,6 @@ for i in range(0, len(three_x_points_vec)-1):
 		return [yValue(x,lineInfo_negLow), yValue(x,lineInfo_negHigh)]
 	def bounds_y_u3(x):
 		return [yValue(x,lineInfo_upperSignal), yValue(x,lineInfo_negHigh)]
-
-	# define the integration bounds for x in the three U integral segments (last bin)
-	bounds_x_u1_last = [three_x_points_vec[i][0], three_x_points_vec[i][1]]
-	bounds_x_u2_last = [three_x_points_vec[i][1], three_x_points_vec[i+1][0]]
-	bounds_x_u3_last = [three_x_points_vec[i+1][0], three_x_points_vec[i+1][1]]
-
-	# define the integration bounds for y in the three U integral segments (last bin)
-	def bounds_y_u2_last(x):
-		return [yValue(x,lineInfo_upperSignal), yValue(x,lineInfo_upperBand)]
 
 	# define the integration bounds for x in the three S integral segments
 	bounds_x_s1 = [three_x_points_vec[i][1], three_x_points_vec[i+1][1]]
@@ -184,17 +163,11 @@ for i in range(0, len(three_x_points_vec)-1):
 			integral_U[ keys[iK] ] += integrate.nquad(function_2d[keys[iK]], [bounds_y_uSpec, bounds_x_u2])[0]
 			integral_U[ keys[iK] ] += integrate.nquad(function_2d[keys[iK]], [bounds_y_u3, bounds_x_u3])[0]
 
-	if (i==1):
+	else:
 		for iK in range (0, len(keys)):
 			integral_U[ keys[iK] ] += integrate.nquad(function_2d[keys[iK]], [bounds_y_u1, bounds_x_u1])[0]
 			integral_U[ keys[iK] ] += integrate.nquad(function_2d[keys[iK]], [bounds_y_u2, bounds_x_u2])[0]
 			integral_U[ keys[iK] ] += integrate.nquad(function_2d[keys[iK]], [bounds_y_u3, bounds_x_u3])[0]
-
-	if (i==2):
-		for iK in range (0, len(keys)):
-			integral_U[ keys[iK] ] += integrate.nquad(function_2d[keys[iK]], [bounds_y_u1, bounds_x_u1_last])[0]
-			integral_U[ keys[iK] ] += integrate.nquad(function_2d[keys[iK]], [bounds_y_u2_last, bounds_x_u2_last])[0]
-			integral_U[ keys[iK] ] += integrate.nquad(function_2d[keys[iK]], [bounds_y_u3, bounds_x_u3_last])[0]
 
 	for iK in range (0, len(keys)):
 		integral_S[ keys[iK] ] = integrate.nquad(function_2d[keys[iK]], [bounds_y_s1, bounds_x_s1])[0]
@@ -212,11 +185,9 @@ for i in range(0, len(three_x_points_vec)-1):
 	##### #### ### ## # CALCULATIONS AND OUTPUT # ## ### #### #####
 
 	# Do calculations with the total counts in each 2d mass segment
-	ratio__antiS_over_antiUnD__fullCuts_anti_ht1500toInf = integral_S["fullCutsMC_anti_ht1500toInf"] / (2 * integral_U["fullCutsMC_anti_ht1500toInf"])
-	print "data A_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht1500toInf)
-	ratio__antiS_over_antiUnD__fullCuts_anti_ht1500toInf = integral_S["fullCutsData_anti_ht1500toInf"] / (2 * integral_U["fullCutsData_anti_ht1500toInf"])
-	print "mc A_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht1500toInf)
-	correctionFactor_ht1500toInf = (integral_S["fullCutsMC_tag_ht1500toInf"] / integral_S["fullCutsMC_anti_ht1500toInf"]) * (integral_U["fullCutsMC_anti_ht1500toInf"] / integral_U["fullCutsMC_tag_ht1500toInf"])
+	ratio__antiS_over_antiUnD__ttCuts_anti_ht1500toInf = integral_S["ttCutsMC_anti_ht1500toInf"] / (2 * integral_U["ttCutsMC_anti_ht1500toInf"])
+	print "A_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__ttCuts_anti_ht1500toInf)
+	correctionFactor_ht1500toInf = (integral_S["ttCutsMC_tag_ht1500toInf"] / integral_S["ttCutsMC_anti_ht1500toInf"]) * (integral_U["ttCutsMC_anti_ht1500toInf"] / integral_U["ttCutsMC_tag_ht1500toInf"])
 	print "correction factor C_" + str(iMR) + " = " + str(correctionFactor_ht1500toInf)
 	print
 	###############################################################
