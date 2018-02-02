@@ -25,17 +25,17 @@ int main(int argc, char** argv){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2017_10_02/triggerEff/2016_PFHT900_and_AK8PFJet450_v2/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/triggerEff/2016_PFHT900_and_AK8PFJet450/coarseBinning/"; // where we are going to save the output plots (should include the samples name, and any important features)
 
     // TWO: plot histogram settings
     // TH1D hTemplate("hTemplate", ";offline H_{T} (GeV);efficiency", 100, 0, 5000);
     std::vector<double> customBinning;
-    // customBinning = {0, 1500, 10000};
-    for(double binLowerEdge=  0.0; binLowerEdge< 1500.0; binLowerEdge+= 50.0) customBinning.push_back(binLowerEdge);
-    for(double binLowerEdge=  1500.0; binLowerEdge< 2000.0; binLowerEdge+= 100.0) customBinning.push_back(binLowerEdge);
-    for(double binLowerEdge=  2000.0; binLowerEdge< 2800.0; binLowerEdge+= 200.0) customBinning.push_back(binLowerEdge);
-    for(double binLowerEdge=  2800.0; binLowerEdge< 4000.0; binLowerEdge+= 400.0) customBinning.push_back(binLowerEdge);
-    for(double binLowerEdge=  4000.0; binLowerEdge< 5000.1; binLowerEdge+= 500.0) customBinning.push_back(binLowerEdge);
+    customBinning = {0, 1500, 10000};
+    // for(double binLowerEdge=  0.0; binLowerEdge< 1500.0; binLowerEdge+= 50.0) customBinning.push_back(binLowerEdge);
+    // for(double binLowerEdge=  1500.0; binLowerEdge< 2000.0; binLowerEdge+= 100.0) customBinning.push_back(binLowerEdge);
+    // for(double binLowerEdge=  2000.0; binLowerEdge< 2800.0; binLowerEdge+= 200.0) customBinning.push_back(binLowerEdge);
+    // for(double binLowerEdge=  2800.0; binLowerEdge< 4000.0; binLowerEdge+= 400.0) customBinning.push_back(binLowerEdge);
+    // for(double binLowerEdge=  4000.0; binLowerEdge< 5000.1; binLowerEdge+= 500.0) customBinning.push_back(binLowerEdge);
     TH1D hTemplate("hTemplate", ";offline H_{T} (GeV);efficiency", customBinning.size()-1, &(customBinning)[0]);
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ int main(int argc, char** argv){
     plotVec.push_back(plot_ratio1);
 
     PlotEntry plot_ratio2 = PlotEntry("Run2016H", hTemplate, "ht");
-    plot_ratio2.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_27_CMSSW_8_0_29_dbtV4/data/SingleMuon_Run2016H-03Feb2017_ver2-v1/flatTree.root", "", "trgDecision==1");
+    plot_ratio2.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_27_CMSSW_8_0_29_dbtV4/data/SingleMuon_Run2016H-03Feb2017_bothVersionsCombined/flatTree.root", "", "trgDecision==1");
     plotVec.push_back(plot_ratio2);
 
     // PlotEntry plot_ratio5 = PlotEntry("WJets", hTemplate, "ht");
