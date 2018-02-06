@@ -38,7 +38,7 @@ int main(){
     std::string dirExistCommand = "test -e " + outputDir;
     std::string makeDirCommand = "mkdir -p " + outputDir;
     if (std::system(dirExistCommand.c_str()) != 0) std::system(makeDirCommand.c_str());
-    std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/histos_plot.cc %s/%s__histos_plot.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
+    std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/histos_plot_special.cc %s/%s__histos_plot_special.cc", outputDir.c_str(), TimeStamp::GetTimeStamp().c_str()));
 
 
     std::map<std::string, TH1D*> h_;
