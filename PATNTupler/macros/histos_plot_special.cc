@@ -32,7 +32,7 @@ int main(){
 
 
     // ONE: save info & luminosity
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/testing_TTJets_MC/1d_represent/withAK4_LooseLoose/TTJetsCompareV2/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/testing_TTJets_MC/1d_represent/withAK4_LooseLoose/backgroundStack/UnD_tag/"; // where we are going to save the output plots (should include the samples name, and any important features)
     double luminosity = 35.867; // NB this is just a label for the plot. It should match the lumi of the histograms!
     
     std::string dirExistCommand = "test -e " + outputDir;
@@ -68,38 +68,39 @@ int main(){
     // hA_noMC->Divide(h_["UnD_anti_data"]);
     // hA_noMC->GetYaxis()->SetTitle("A_{i}");
 
-    TH1D * h_QCD = (TH1D*)h_["UnD_tag_data"]->Clone();
-    h_QCD->Add(h_["UnD_tag_TTJets"], -1);
-    h_QCD->Add(h_["UnD_tag_WJets"], -1);
-    h_QCD->Add(h_["UnD_tag_ZJets"], -1);
-    h_QCD->Multiply(hA_withMC);
+    TH1D * h_ddQCD = (TH1D*)h_["UnD_tag_data"]->Clone();
+    h_ddQCD->Add(h_["UnD_tag_TTJets"], -1);
+    h_ddQCD->Add(h_["UnD_tag_WJets"], -1);
+    h_ddQCD->Add(h_["UnD_tag_ZJets"], -1);
+    h_ddQCD->Multiply(hA_withMC);
 
-    TH1D * h_TTDD = (TH1D*)h_["S_tag_data"]->Clone();
-    h_TTDD->Add(h_QCD, -1);
-    h_TTDD->Add(h_["S_tag_ZJets"], -1);
-    h_TTDD->Add(h_["S_tag_WJets"], -1);
+    TH1D * h_ddTT = (TH1D*)h_["S_tag_data"]->Clone();
+    h_ddTT->Add(h_ddQCD, -1);
+    h_ddTT->Add(h_["S_tag_ZJets"], -1);
+    h_ddTT->Add(h_["S_tag_WJets"], -1);
 
 
     // TWO: make plot aesthetics and saving
-    std::vector<TH1D*> indiHistoVec = {h_TTDD, h_["S_tag_TTJets"]};
+    // std::vector<TH1D*> indiHistoVec = {h_ddTT, h_["S_tag_TTJets"]};
+    std::vector<TH1D*> stackHistoVec = {h_["UnD_tag_WJets"], h_["UnD_tag_ZJets"], h_["UnD_tag_TTJets"], h_["UnD_tag_QCD"]};
 
-    Plotter plot = Plotter(indiHistoVec);
+    // Plotter plot = Plotter(indiHistoVec);
+    Plotter plot = Plotter({}, stackHistoVec);
 
-    std::vector<std::string> legendNames = {"data driven", "MC"};
+    std::vector<std::string> legendNames = {"WJets", "ZJets", "TTJets", "QCD"};
 
-    plot.AddLegend(legendNames, 0.68, 0.88, 0.70, 0.86, 0.045);
+    plot.AddLegend(legendNames, 0.70, 0.88, 0.68, 0.86, 0.045);
     
-    // plot.AddLatex(luminosity);
-    plot.AddLatex(luminosity, "#it{Data} 2016");
+    plot.AddLatex(luminosity);
+    // plot.AddLatex(luminosity, "#it{Data} 2016");
     
-    plot.AddRatioBox(0.40, 1.60, "data / MC", true);
+    // plot.AddRatioBox(0.40, 1.60, "data / MC", true);
     
     plot.SetErrors();
 
     std::vector<std::string> stringVec = {""};
     std::string plotName = "linear";
     plot.SaveSpec01(Form("%s/%s.pdf", outputDir.c_str(), plotName.c_str()), stringVec);
-   
     
     return 0;
 }
@@ -116,6 +117,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
 
     std::vector<std::string> histoNameVec;
     histoNameVec.push_back("data");
+    histoNameVec.push_back("QCD");
     histoNameVec.push_back("TTJets");
     histoNameVec.push_back("ZJets");
     histoNameVec.push_back("WJets");
