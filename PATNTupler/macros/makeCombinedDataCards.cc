@@ -52,18 +52,17 @@ int main(){
 
 
     // ONE: save info (signal specific directories beneath this)
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2017_12_07/firstPlay/fullCuts_v2/"; // where we are going to save the output cards (should include the samples name, and any important features)
+    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing4/"; // where we are going to save the output cards (should include the samples name, and any important features)
   
 
-    // TWO: physics info
+    // TWO: physics info - to match the histograms that you use
     const unsigned int numberOfBins = 30;
     const unsigned int numberOfHtDivisions = 3;
 
 
-    // THREE: Samples to Use
-    const std::string dataSample = "Data_JetHt2016_goldenJson";
-    std::vector<std::string> signalVec = {"mH30_mSusy1600", "mH50_mSusy1600", "mH70_mSusy1600", "mH90_mSusy1600", "mH30_mSusy2000", "mH50_mSusy2000", "mH70_mSusy2000", "mH90_mSusy2000"}; // the different signal samples you wish to use
-    // std::vector<std::string> signalVec = {"mH70_mSusy1600", "mH70_mSusy2000"}; // the different signal samples you wish to use
+    // THREE: Samples To Use (different project for each signal sample)
+    const std::string dataSample = "data";
+    std::vector<std::string> signalVec = {"mH30_mSusy2200", "mH50_mSusy2200", "mH70_mSusy2200", "mH90_mSusy2200"}; // the different signal samples you wish to use
     const std::vector<std::string> mcbkVec = {"TTJets", "ZJets", "WJets"};
     const std::string qcdName = "QCD"; // this is just a label as QCD contribution is driven during the fit
 
@@ -73,18 +72,18 @@ int main(){
     const unsigned int otherColSize = 20;
 
 
-    // FIVE: common systematics 
-    // nb, make the sure the sample names match to the above
-    // ("SIGNAL" refers to the signal sample and qcdName is used for qcd)
+    // FIVE: common systematics (statistical error systematics automatically taken care of)
+    // NB1 - make the sure the sample names match to the above
+    // NB2 - "SIGNAL" refers all signal samples and std::string qcdName is used for qcd
     std::vector<CommonSystematic> CommonSystematicVec;
-    CommonSystematicVec.push_back( CommonSystematic("luminosity lnN", 1.025, {"SIGNAL", "TTJets_NOAK4", "ZJets_NOAK4", "WJets_NOAK4"}) );
-    CommonSystematicVec.push_back( CommonSystematic("XS_Signal lnN", 1.6, {"SIGNAL"}) );
+    CommonSystematicVec.push_back( CommonSystematic("luminosity lnN", 1.025, {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("XS_Signal lnN", 1.050, {"SIGNAL"}) );
     CommonSystematicVec.push_back( CommonSystematic("XS_TTJets lnN", 1.5, {"TTJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("XS_ZJets lnN", 1.4, {"ZJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("XS_WJets lnN", 1.3, {"WJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("XS_ZJets lnN", 1.5, {"ZJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("XS_WJets lnN", 1.5, {"WJets"}) );
 
 
-    // SIX: are we blinded ? use data_obs_UnD as a dummy for data_obs_S
+    // SIX: are we blinded ? if true, uses Ai * data_obs_UnD as a dummy for data_obs_S
     bool areWeBlinded = true;
 
 
@@ -131,7 +130,7 @@ int main(){
         for (unsigned int iBin = 1; iBin < numberOfBins + 1; ++iBin){
 
             unsigned int data_obs_S = hOriginal_[Form("S_tag_%s", dataSample.c_str())]->GetBinContent(iBin);
-            if (areWeBlinded) data_obs_S = hOriginal_[Form("UnD_tag_%s", dataSample.c_str())]->GetBinContent(iBin); // to get a non zero and roughly realistic value whilst we are blinded
+            if (areWeBlinded) data_obs_S = ceil( QcdSidebandCorr::GetCorr(iBin) * hOriginal_[Form("UnD_tag_%s", dataSample.c_str())]->GetBinContent(iBin) ); // use to get a non zero and roughly realistic value whilst we are blinded
             const unsigned int data_obs_UnD = hOriginal_[Form("UnD_tag_%s", dataSample.c_str())]->GetBinContent(iBin);
             const double rate_signal_S = hOriginal_[Form("S_tag_%s", signal.c_str())]->GetBinContent(iBin);
             const double rate_signal_UnD = hOriginal_[Form("UnD_tag_%s", signal.c_str())]->GetBinContent(iBin);;
@@ -175,7 +174,7 @@ int main(){
             WriteBlock("mass_S", otherColSize, dataCard);
             WriteBlock("mass_UnD", otherColSize, dataCard, true);
             WriteBlock("observation", firstColSize, dataCard);
-            WriteBlock(data_obs_S_str, otherColSize, dataCard); // in function. make it a template object to write...
+            WriteBlock(data_obs_S_str, otherColSize, dataCard);
             WriteBlock(data_obs_UnD_str, otherColSize, dataCard, true);
             dataCard << "------------------------------\n";
             WriteBlock("bin", firstColSize, dataCard);
@@ -274,14 +273,17 @@ int main(){
             
             dataCard << "\n# estimate QCD\n";
             double corrRatio = QcdSidebandCorr::GetCorr(iBin);
-            double corrRatioError = 0.1 * corrRatio;
+            double corrRatioError = QcdSidebandCorr::GetCorrErr(iBin);
             WriteBlock(Form("ch%d_R", iBin), otherColSize, dataCard);
             dataCard << "param " << std::to_string(corrRatio) << " " << std::to_string(corrRatioError) << "\n";
             WriteBlock(Form("ch%d_alpha", iBin), otherColSize, dataCard);
             dataCard << "rateParam mass_UnD " << qcdName << " ";
             double qcdInitialEstimate = data_obs_UnD;
             for (auto rate_mcbk_UnD : rate_mcbkVec_UnD) qcdInitialEstimate = qcdInitialEstimate - rate_mcbk_UnD;
-            if (qcdInitialEstimate < 0) qcdInitialEstimate = 0.0;
+            if (qcdInitialEstimate < 0){
+                qcdInitialEstimate = 0.0;
+                std::cout << "WARNING: qcd estimate of zero!" << std::endl;
+            }
             double qcdUpperLimit = data_obs_UnD + 3.0 * sqrt(data_obs_UnD + 1);
             dataCard << std::to_string(qcdInitialEstimate) << " " << "[0," << std::to_string(qcdUpperLimit) << "]\n";
             WriteBlock(Form("ch%d_beta", iBin), otherColSize, dataCard);
@@ -303,11 +305,11 @@ int main(){
 void GetHistograms(std::map<std::string,TH1D*>& h_)
 {
     // histos locations
-    std::string preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2017_09_28_CMSSW_8_0_29_dbtV4/MassCutsV04/";
+    std::string preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_01_11_CMSSW_8_0_29_dbtV4/MassCutsV05/";
     
-    std::string postamble = "MassCutsV04_ak8pt300_ht1500x2500x3500x_ak4pt250n250_lumi37.root";
+    std::string postamble = "MassCutsV05_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
     std::vector<std::string> histoNameVec;
-    histoNameVec.push_back("Data_JetHt2016_goldenJson"); // comment out when working on MC
+    histoNameVec.push_back("data"); // comment out when working on MC
     histoNameVec.push_back("QCD");
     histoNameVec.push_back("TTJets");
     histoNameVec.push_back("ZJets");
@@ -316,52 +318,49 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
     histoNameVec.push_back("mH50_mSusy800");
     histoNameVec.push_back("mH70_mSusy800");
     histoNameVec.push_back("mH90_mSusy800");
+    histoNameVec.push_back("mH125_mSusy800");
     histoNameVec.push_back("mH30_mSusy1200");
     histoNameVec.push_back("mH50_mSusy1200");
     histoNameVec.push_back("mH70_mSusy1200");
     histoNameVec.push_back("mH90_mSusy1200");
+    histoNameVec.push_back("mH125_mSusy1200");
     histoNameVec.push_back("mH30_mSusy1600");
     histoNameVec.push_back("mH50_mSusy1600");
     histoNameVec.push_back("mH70_mSusy1600");
     histoNameVec.push_back("mH90_mSusy1600");
+    histoNameVec.push_back("mH125_mSusy1600");
     histoNameVec.push_back("mH30_mSusy2000");
     histoNameVec.push_back("mH50_mSusy2000");
     histoNameVec.push_back("mH70_mSusy2000");
     histoNameVec.push_back("mH90_mSusy2000");
+    histoNameVec.push_back("mH125_mSusy2000");
+    histoNameVec.push_back("mH30_mSusy2200");
+    histoNameVec.push_back("mH50_mSusy2200");
+    histoNameVec.push_back("mH70_mSusy2200");
+    histoNameVec.push_back("mH90_mSusy2200");
+    histoNameVec.push_back("mH125_mSusy2200");
+    histoNameVec.push_back("mH30_mSusy2400");
+    histoNameVec.push_back("mH50_mSusy2400");
+    histoNameVec.push_back("mH70_mSusy2400");
+    histoNameVec.push_back("mH90_mSusy2400");
+    histoNameVec.push_back("mH125_mSusy2400");
+    histoNameVec.push_back("mH30_mSusy2600");
+    histoNameVec.push_back("mH50_mSusy2600");
+    histoNameVec.push_back("mH70_mSusy2600");
+    histoNameVec.push_back("mH90_mSusy2600");
+    histoNameVec.push_back("mH125_mSusy2600");
 
-    std::string postamble_noAk4 = "MassCutsV04_ak8pt300_ht1500x2500x3500x_ak4pt-1n-1_lumi37.root";
-    std::vector<std::string> histoNameVec_noAk4;
-    histoNameVec_noAk4.push_back("Data_JetHt2016_goldenJson_NOAK4"); // comment out when working on MC
-    histoNameVec_noAk4.push_back("QCD_NOAK4");
-    histoNameVec_noAk4.push_back("TTJets_NOAK4");
-    histoNameVec_noAk4.push_back("ZJets_NOAK4");
-    histoNameVec_noAk4.push_back("WJets_NOAK4");
-    histoNameVec_noAk4.push_back("mH70_mSusy800_NOAK4");
-    histoNameVec_noAk4.push_back("mH70_mSusy1200_NOAK4");
-    histoNameVec_noAk4.push_back("mH70_mSusy1600_NOAK4");
-    histoNameVec_noAk4.push_back("mH70_mSusy2000_NOAK4");
+    for (size_t iH = 0; iH < histoNameVec.size(); ++iH){
 
-    for (size_t iH = 0; iH < (histoNameVec.size() + histoNameVec_noAk4.size()); ++iH){
-
-        std::string postambleToUse;
-        std::string histoToUse;
-        if (iH < histoNameVec.size()){
-            postambleToUse = postamble;
-            histoToUse = histoNameVec[iH];
-        }
-        else {
-            postambleToUse = postamble_noAk4;
-            histoToUse = histoNameVec_noAk4[iH - histoNameVec.size()];
-        }
-
-        TFile * f = new TFile(Form("%s/%s/%s", preamble.c_str(), histoToUse.c_str(), postambleToUse.c_str()));
+        std::string histoToUse = histoNameVec[iH];
+        TFile * f = new TFile(Form("%s/%s/%s", preamble.c_str(), histoToUse.c_str(), postamble.c_str()));
         // explanation of terminology
         // 1. S, U, D --> refers to mass space. pred is the prediction of S. UnD is the sum U+D.
         // 2. tag, anti, control --> refers to 2*DBT space
         // 3. sample name on the end
-        h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtMed2MaxAndMed2Max");
-        h_[Form("UnD_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtMed2MaxAndMed2Max");
-        h_[Form("UnD_tag_%s", histoToUse.c_str())]->Add((TH1D*)f->Get("D_dbtMed2MaxAndMed2Max"));
+        h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtDiagUpLoose");
+        h_[Form("UnD_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtDiagUpLoose");
+        h_[Form("UnD_tag_%s", histoToUse.c_str())]->Add((TH1D*)f->Get("D_dbtDiagUpLoose"));
 
     } // closes loop through histoNameVec
 } // closes function GetHistograms
@@ -413,7 +412,13 @@ double GetEventWeight(const std::string& histogramName, std::map<std::string,TH1
 
 
 std::vector<int> GetStatErrorLogic(const std::string& histogramName, std::map<std::string,TH1D*>& hOriginal_, const unsigned int& numberOfBins, const unsigned int& numberOfHtDivisions){
-
+/*
+returns a vector of integers - one for each sample
+there is an entry corresponding to each search region bin
+returns '1' if there is an entry in S_tag or UnD_tag for a given ht region 
+returns '0' if not
+use this object to see whether we should give a bin with zero entries an error
+*/
     std::vector<int> StatErrorLogic(numberOfBins,0);
     const unsigned int numberOfBinsPerHtDivision = numberOfBins / numberOfHtDivisions;
 
