@@ -12,6 +12,8 @@
 #include <TTree.h>
 #include <TH1F.h>
 #include <TH2F.h>
+#include <TGraphAsymmErrors.h>
+#include <TMultiGraph.h>
 #include <TStyle.h>
 #include <TLegend.h>
 #include <TLatex.h>
@@ -40,6 +42,7 @@ plotWithErrorsIndi(false),
 plotWithErrorsStack(false),
 setYValueMin(false),
 yValueMin(0.0),
+useObservedPlot(false),
 tdrStyle(TDRStyle())
 {
 	if (histoIndiDummy.empty()) std::cout << "Plotter WARNING: no plot entries handed to plotter!" << std::endl;
@@ -70,6 +73,7 @@ plotWithErrorsIndi(false),
 plotWithErrorsStack(false),
 setYValueMin(false),
 yValueMin(0.0),
+useObservedPlot(false),
 tdrStyle(TDRStyle())
 {
 	if (histoIndiDummy.empty()) std::cout << "Plotter Message: first constructor argument std::vector<PlotEntry> is empty" << std::endl;
@@ -111,6 +115,7 @@ plotWithErrorsIndi(false),
 plotWithErrorsStack(false),
 setYValueMin(false),
 yValueMin(0.0),
+useObservedPlot(false),
 tdrStyle(TDRStyle())
 {
 	if (dummyHistos2D.empty()) std::cout << "Plotter Message: constructor argument std::vector<PlotEntry2D> is empty" << std::endl;
@@ -136,6 +141,7 @@ plotWithErrorsIndi(false),
 plotWithErrorsStack(false),
 setYValueMin(false),
 yValueMin(0.0),
+useObservedPlot(false),
 tdrStyle(TDRStyle())
 {
 	if (th1IndiDummy.empty()) std::cout << "Plotter Message: no histograms handed to plotter!" << std::endl;
@@ -163,6 +169,7 @@ plotWithErrorsIndi(false),
 plotWithErrorsStack(false),
 setYValueMin(false),
 yValueMin(0.0),
+useObservedPlot(false),
 tdrStyle(TDRStyle())
 {
 	if (th1IndiDummy.empty()) std::cout << "Plotter Message: first constructor argument std::vector<TH1D*> is empty" << std::endl;
@@ -185,6 +192,57 @@ tdrStyle(TDRStyle())
 		th1Stack[iTh1S]->GetXaxis()->SetLabelSize(0.04);
 		th1Stack[iTh1S]->GetYaxis()->SetTitleSize(0.05);
 		th1Stack[iTh1S]->GetYaxis()->SetLabelSize(0.04);
+	}
+}
+
+
+Plotter::Plotter(std::vector<TGraphAsymmErrors*> graphVecDummy, const bool& useObservedPlotDummy) :
+addRatioBox(false),
+addRatioBoxUnityLine(false),
+leg(0),
+leg2Cols(0),
+addLatex(false),
+useLogY(false),
+useLogZ(false),
+plotWithErrorsIndi(false),
+plotWithErrorsStack(false),
+setYValueMin(false),
+yValueMin(0.0),
+useObservedPlot(useObservedPlotDummy),
+tdrStyle(TDRStyle())
+{
+	if (graphVecDummy.size() != 4){
+		std::cout << std::endl;
+		std::cout << "WARNING: you have not provided a four element std::vector<TGraphAsymmErrors*>" << std::endl;
+		std::cout << "Not using the object in the Plotter" << std::endl;
+		std::cout << std::endl;
+	}
+
+	else {
+		// the vector order goes: observed, expected, 1sigma, 2sigma
+		graphVec = graphVecDummy;
+
+		graphVec[0]->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
+		graphVec[0]->GetXaxis()->SetLabelSize(0.04);
+		graphVec[0]->GetYaxis()->SetTitleSize(0.05);
+		graphVec[0]->GetYaxis()->SetLabelSize(0.04);
+
+	    graphVec[0]->SetLineWidth(2);
+	    graphVec[0]->SetMarkerSize(0.6);
+	    graphVec[0]->SetMarkerStyle(8);
+
+	    graphVec[1]->SetLineWidth(2);
+	    graphVec[1]->SetLineStyle(2);
+	    graphVec[1]->SetMarkerSize(0);
+	    graphVec[1]->SetMarkerStyle(8);
+
+	    graphVec[2]->SetLineWidth(0);
+	    graphVec[2]->SetFillColor(kYellow);
+	    graphVec[2]->SetFillStyle(1001);
+	    
+	    graphVec[3]->SetLineWidth(0);
+	    graphVec[3]->SetFillColor(kGreen);
+	    graphVec[3]->SetFillStyle(1001);
 	}
 }
 
@@ -302,6 +360,16 @@ void Plotter::AddLegend(const double& x1, const double& x2, const double& y1, co
 
 	for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
 		leg->AddEntry(iIndi->GetHistogram(), iIndi->GetPlotEntryName().c_str(), "L");	
+
+	// additional section for the brazil plots - the vector order goes: observed, expected, 1sigma, 2sigma
+	for (size_t iG = 0; iG < graphVec.size(); ++iG){
+		
+	   // if (iG == 0 && useObservedPlot) leg->AddEntry(graphVec[0], "Observed", "l");
+	   if (iG == 0) leg->AddEntry(graphVec[0], "Observed", "l");
+	   if (iG == 1) leg->AddEntry(graphVec[1], "Expected", "l");
+	   if (iG == 2) leg->AddEntry(graphVec[2], "#pm 1 #sigma", "f");
+	   if (iG == 3) leg->AddEntry(graphVec[3], "#pm 2 #sigma", "f");
+	}
 
 	return;
 }
@@ -1235,6 +1303,41 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 	std::cout << std::endl;
 	return;
 }
+
+
+void Plotter::SaveBrazil(const std::string& saveName, const double& min, const double& max){
+	if (graphVec.empty()){
+		std::cout << "Plotter::SaveBrazil @@@ Exiting without saving... no brazil graphs @@@" << std::endl;
+		return;
+	}
+	tdrStyle->cd();
+	TCanvas * c = new TCanvas("c","c");
+
+	if (useLogY) gPad->SetLogy();
+
+	// the vector order goes: observed, expected, 1sigma, 2sigma
+    TMultiGraph * brazil = new TMultiGraph();
+    brazil->Add(graphVec[3]);
+    brazil->Add(graphVec[2]);
+    brazil->Add(graphVec[1]);
+    if (useObservedPlot) brazil->Add(graphVec[0]);
+
+    brazil->Draw("a3LP");
+    brazil->GetYaxis()->SetRangeUser(min, max);
+    brazil->GetXaxis()->SetTitle(graphVec[0]->GetXaxis()->GetTitle());
+    brazil->GetYaxis()->SetTitle(graphVec[0]->GetYaxis()->GetTitle());
+    brazil->Draw("a3LP");
+
+	if (addLatex) DrawLatex();
+	if (leg != NULL) leg->Draw("same");
+	gPad->RedrawAxis();
+
+	c->SaveAs(saveName.c_str());
+	c->Close();
+	std::cout << std::endl;
+
+	return;
+} // closes function SaveBrazil
 
 
 //-----------private----------//

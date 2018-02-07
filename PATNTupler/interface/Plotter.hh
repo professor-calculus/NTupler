@@ -14,6 +14,7 @@ public:
 	Plotter(std::vector<PlotEntry2D>);
 	Plotter(std::vector<TH1D*>);
 	Plotter(std::vector<TH1D*>, std::vector<TH1D*>);
+	Plotter(std::vector<TGraphAsymmErrors*>, const bool&); // the vector order goes: observed, expected, 1sigma, 2sigma
 
 	void AddRatioBox(const std::string& = "ratio", const bool& = false);
 	void AddRatioBox(const double&, const double&, const std::string& = "ratio", const bool& = false);
@@ -33,6 +34,7 @@ public:
 	void Save2D(const std::string&);
 	void Save2D(const std::string&, const MassRegionCuts&);
 	void SaveSpec01(const std::string& saveName, const std::vector<std::string>);
+	void SaveBrazil(const std::string& saveName, const double&, const double&);
 
 private:
 	std::vector<PlotEntry> histoIndi;
@@ -40,6 +42,7 @@ private:
 	std::vector<PlotEntry2D> histos2D;
 	std::vector<TH1D*> th1Indi;
 	std::vector<TH1D*> th1Stack;
+	std::vector<TGraphAsymmErrors*> graphVec;
 	bool addRatioBox;
 	bool addRatioBoxUnityLine;
 	std::string addRatioBoxInfo;
@@ -56,6 +59,7 @@ private:
 	bool plotWithErrorsStack;
 	bool setYValueMin;
 	double yValueMin;
+	bool useObservedPlot;
 	void DrawLatex(const unsigned int& = 1);	
 	int SetColor_mellow(int, int);
 	int SetColor_stark(const int&);
