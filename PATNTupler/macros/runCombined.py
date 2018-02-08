@@ -11,9 +11,6 @@ import re
 #############################
 ### ## # USER INPUTS # ## ###
 
-# the directory where the different signal dirs live 
-inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2017_12_07/firstPlay/fullCuts_v2/"
-
 # the combined process you desire
 combinedMethod = "AsymptoticLimits"
 
@@ -21,6 +18,8 @@ combinedMethod = "AsymptoticLimits"
 #############################
 #############################
 #############################
+
+inputDir = os.getcwd()
 
 signalDirs = os.popen("ls %s" % inputDir, "r").readlines()
 
