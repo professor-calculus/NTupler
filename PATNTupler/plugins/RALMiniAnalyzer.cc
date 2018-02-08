@@ -57,6 +57,10 @@
 #include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 
+#include "JetMETCorrections/Modules/interface/JetResolution.h"
+#include "JetMETCorrections/Objects/interface/JetCorrectionsRecord.h"
+#include "CondFormats/JetMETObjects/src/classes.h"
+#include "CondFormats/JetMETObjects/interface/JetCorrectionUncertainty.h"
 
 #include "TH1D.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
@@ -124,15 +128,15 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       void ReadInMuons(const edm::Event&);
 
       ///For reading in the Jet information, and dumping it into ran::Event class ...
-      void ReadInJets(const edm::Event&);
+      void ReadInJets(const edm::Event&, const edm::EventSetup&);
 
       ///For reading in the Fat Jet information, and dumping it into ran::Event class ...
-      void ReadInFatJets(const edm::Event&);
+      void ReadInFatJets(const edm::Event&, const edm::EventSetup&);
 
       ///For reading in the Met information, and dumping it into ran::Event class ...
       void ReadInMets(const edm::Event&);
 
-      
+
 
       // ----------member data ---------------------------
 
@@ -302,10 +306,10 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
      ReadInElectrons(iEvent);
 
      //Read in Jets
-     ReadInJets(iEvent);
+     ReadInJets(iEvent, iSetup);
 
      //Read in Jets
-     ReadInFatJets(iEvent);
+     ReadInFatJets(iEvent, iSetup);
 
      //Read in Met
      ReadInMets(iEvent);
@@ -649,8 +653,13 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
   }
 }
 //Read in jet vars
-void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent)
+void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
+    edm::ESHandle<JetCorrectorParametersCollection> JetCorParColl;
+    iSetup.get<JetCorrectionsRecord>().get("AK4PFchs", JetCorParColl); 
+    JetCorrectorParameters const & JetCorPar = (*JetCorParColl)["Uncertainty"];
+    JetCorrectionUncertainty *jecUncObj = new JetCorrectionUncertainty(JetCorPar);
+
     edm::Handle<pat::JetCollection> jets;
     iEvent.getByToken(jetToken_, jets);
     for (const pat::Jet &iJet: *jets) {
@@ -672,9 +681,12 @@ void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent)
       ithJet.neutralEmEnergyFraction = iJet.neutralEmEnergyFraction();
       ithJet.chargedEmEnergyFraction = iJet.chargedEmEnergyFraction();
       ithJet.chargedHadronEnergyFraction = iJet.chargedHadronEnergyFraction();
+      ithJet.userFloat_pileupJetId_fullDiscriminant = iJet.userFloat("pileupJetId:fullDiscriminant");
 
       ithJet.jecFactor_unCorrected = iJet.jecFactor("Uncorrected");
-      ithJet.userFloat_pileupJetId_fullDiscriminant = iJet.userFloat("pileupJetId:fullDiscriminant");
+      jecUncObj->setJetEta( iJet.eta() );
+      jecUncObj->setJetPt( iJet.pt() ); // here you use the CORRECTED jet pt
+      ithJet.jecUncertainty = float(jecUncObj->getUncertainty(true));
 
       //Assign the btag discriminators
       ///cvmfs/cms.cern.ch/slc6_amd64_gcc530/cms/cmssw/CMSSW_8_0_20/src/PhysicsTools/PatAlgos/python/producersLayer1/jetProducer_cfi.py
@@ -695,8 +707,13 @@ void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent)
 }
 
 //Read in fat jet vars
-void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent)
+void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
+    edm::ESHandle<JetCorrectorParametersCollection> JetCorParColl;
+    iSetup.get<JetCorrectionsRecord>().get("AK8PFchs", JetCorParColl); 
+    JetCorrectorParameters const & JetCorPar = (*JetCorParColl)["Uncertainty"];
+    JetCorrectionUncertainty *jecUncObj = new JetCorrectionUncertainty(JetCorPar);
+
     edm::Handle<pat::JetCollection> jets;
     iEvent.getByToken(fatjetToken_, jets);
     for (const pat::Jet &iJet: *jets) {
@@ -720,6 +737,9 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent)
       ithJet.chargedHadronEnergyFraction = iJet.chargedHadronEnergyFraction();
 
       ithJet.jecFactor_unCorrected = iJet.jecFactor("Uncorrected");
+      jecUncObj->setJetEta( iJet.eta() );
+      jecUncObj->setJetPt( iJet.pt() ); // here you use the CORRECTED jet pt
+      ithJet.jecUncertainty = float(jecUncObj->getUncertainty(true));
 
       ithJet.NjettinessAK8_tau1 = iJet.userFloat("NjettinessAK8:tau1");    //
       ithJet.NjettinessAK8_tau2 = iJet.userFloat("NjettinessAK8:tau2");    //  Access the n-subjettiness variables

@@ -24,6 +24,7 @@ namespace ran{
     float pfCombinedInclusiveSecondaryVertexV2BJetTags;///< pfCombinedInclusiveSecondaryVertexV2BJetTags b tag discriminator
     float pfCombinedMVAV2BJetTags;///<  pfCombinedMVABJetTags b tag discriminator
     float jecFactor_unCorrected;///<factor applied to jet pt to get uncorrect jet pt
+    float jecUncertainty;///<the uncertainty in the JEC applied
     float userFloat_pileupJetId_fullDiscriminant;///< userFloat pileup jet ID
     float numberOfDaughters;///< Number of Jet daughters
     int chargedMultiplicity;///< charged multiplicity
