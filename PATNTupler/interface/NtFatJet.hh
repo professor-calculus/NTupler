@@ -38,6 +38,7 @@ namespace ran{
     double NjettinessAK8_tau3() const {return jet->NjettinessAK8_tau3;}///<  Access the n-subjettiness variables
     double CHSsoftdrop_mass() const {return jet->CHSsoftdrop_mass;}// access to soft drop mass
     double CHSpruned_mass() const {return jet->CHSpruned_mass;}// access to pruned mass
+    double PUPPIsoftdrop_mass() const {return jet->CHSsoftdrop_mass;}// access to soft drop mass (calc uses PUPPI)
 
     /*double puppi_pt() const {return jet->puppi_pt;}
     double puppi_mass() const {return jet->puppi_mass;}

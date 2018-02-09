@@ -37,6 +37,7 @@ namespace ran{
     double NjettinessAK8_tau3;///<  Access the n-subjettiness variables
     double CHSsoftdrop_mass;// access to soft drop mass
     double CHSpruned_mass;// access to pruned mass
+    double PUPPIsoftdrop_mass;// access to soft drop mass (calc uses PUPPI)
     /*double puppi_pt;
     double puppi_mass;
     double puppi_eta;

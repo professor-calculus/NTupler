@@ -80,6 +80,7 @@
 
 //ROOT HEADERS
 #include "TTree.h"
+#include "TF1.h"
 
 //NTuple object headers
 #include "NTupler/PATNTupler/interface/EventInfo.hh"
@@ -108,6 +109,9 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       //virtual void endRun(edm::Run const&, edm::EventSetup const&) override;
       //virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) override;
       //virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) override;
+
+      //For getting the correction factor for the PUPPI softDropMass 
+      float getPUPPIweight(const double&, const double& puppieta);
 
       //Did event pass specified trigger
       bool passedTrigger(const edm::Event&);
@@ -281,7 +285,7 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
 
    if (triggerOfInterest || isMC_){ // default
-   // if (true){ // use this option if running on data and want all events in the dataset
+   // if (true){ // use this option if running on data and want all events in the dataset (trigger studies only)
 
      electronCollection_ = new std::vector<ran::ElectronStruct>();
      muonCollection_ = new std::vector<ran::MuonStruct>();
@@ -416,6 +420,38 @@ void RALMiniAnalyzer::ResetEventByEventVariables(){
 	evtInfo.lumiSec = 0;
 
 	lheHT_ = 0.0;
+}
+
+//------------ For getting the correction factor for the PUPPI softDropMass -------------
+float RALMiniAnalyzer::getPUPPIweight(const double& puppipt, const double& puppieta){
+
+  TFile* file = TFile::Open("puppiCorr.root", "READ");
+
+  TF1 * puppisd_corrGEN      = (TF1*)file->Get("puppiJECcorr_gen");
+  TF1 * puppisd_corrRECO_cen = (TF1*)file->Get("puppiJECcorr_reco_0eta1v3");
+  TF1 * puppisd_corrRECO_for = (TF1*)file->Get("puppiJECcorr_reco_1v3eta2v5");
+
+  double genCorr  = 1.;
+  double recoCorr = 1.;
+  double totalWeight = 1.;
+
+  genCorr =  puppisd_corrGEN->Eval( puppipt );
+
+  if( fabs(puppieta)  <= 1.3 ){
+    recoCorr = puppisd_corrRECO_cen->Eval( puppipt );
+  }
+  else{
+    recoCorr = puppisd_corrRECO_for->Eval( puppipt );
+  }
+
+  totalWeight = genCorr * recoCorr;
+
+  delete file;
+  delete puppisd_corrGEN;
+  delete puppisd_corrRECO_cen;
+  delete puppisd_corrRECO_for;
+
+  return totalWeight;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -749,19 +785,26 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, const edm::EventSe
       ithJet.CHSpruned_mass = iJet.userFloat("ak8PFJetsCHSPrunedMass");     // access to pruned mass
 
       ithJet.pfBoostedDoubleSecondaryVertexAK8BJetTags =  iJet.bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags");// Double b-tag
-
-      /*ithJet.puppi_pt = iJet.userFloat("ak8PFJetsPuppiValueMap:pt");
-      ithJet.puppi_mass = iJet.userFloat("ak8PFJetsPuppiValueMap:mass");
-      ithJet.puppi_eta = iJet.userFloat("ak8PFJetsPuppiValueMap:eta");
-      ithJet.puppi_phi = iJet.userFloat("ak8PFJetsPuppiValueMap:phi");
-      ithJet.puppi_tau1 = iJet.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau1");
-      ithJet.puppi_tau2 = iJet.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau2");
-      ithJet.puppi_tau3 = iJet.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau3");*/
-
-
-      
-
       ithJet.partonFlavour = iJet.partonFlavour();
+
+      // softDropMass with PUPPI
+      double puppi_pt             = iJet.userFloat("ak8PFJetsPuppiValueMap:pt");
+      double puppi_eta           = iJet.userFloat("ak8PFJetsPuppiValueMap:eta");
+      // double puppi_phi           = iJet.userFloat("ak8PFJetsPuppiValueMap:phi");
+      // double puppi_mass       = iJet.userFloat("ak8PFJetsPuppiValueMap:mass");
+      // double puppi_tau1         = iJet.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau1");
+      // double puppi_tau2         = iJet.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau2");
+
+      TLorentzVector puppi_softdrop, puppi_softdrop_subjet;
+      auto const & sdSubjetsPuppi = iJet.subjets("SoftDropPuppi");
+      for ( auto const & it : sdSubjetsPuppi ) {
+        puppi_softdrop_subjet.SetPtEtaPhiM(it->correctedP4(0).pt(), it->correctedP4(0).eta(), it->correctedP4(0).phi(), it->correctedP4(0).mass());
+        puppi_softdrop += puppi_softdrop_subjet;
+      }
+
+      float puppiCorr = getPUPPIweight( puppi_pt , puppi_eta );
+      float puppi_softdrop_masscorr = puppi_softdrop.M() * puppiCorr;
+      ithJet.PUPPIsoftdrop_mass = puppi_softdrop_masscorr;
 
     }
 
