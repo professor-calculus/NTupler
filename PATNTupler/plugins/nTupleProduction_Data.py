@@ -2,6 +2,7 @@
 # 1. Global Tag
 # 2. dataset (for local running only)
 # 3. HLT trigger path
+# 4. puppiCorr.root file
 
 import FWCore.ParameterSet.Config as cms
 

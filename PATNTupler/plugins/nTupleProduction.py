@@ -3,6 +3,7 @@
 # 2. dataset (for local running only)
 # 3. HLT trigger path
 # 4. LHE calculation properties
+# 5. puppiCorr.root file
 
 import FWCore.ParameterSet.Config as cms
 
