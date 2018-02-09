@@ -15,6 +15,7 @@ config.General.transferOutputs = True
 config.General.transferLogs = True
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'nTupleProduction_Data.py'
+config.JobType.inputFiles = 'puppiCorr.root'
 
 #################################################################################################
 # DATASETS --------------------------------------------------------------------------------------
