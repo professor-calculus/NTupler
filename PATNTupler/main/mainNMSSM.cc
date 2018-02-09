@@ -160,6 +160,7 @@ private:
 	Double_t treeVar_fatJetA_doubleBtagDiscrim_;
 	Double_t treeVar_fatJetA_mass_;
 	Double_t treeVar_fatJetA_softDropMass_;
+	Double_t treeVar_fatJetA_softDropMassPuppi_;
 	Double_t treeVar_fatJetA_prunedMass_;
 	Float_t treeVar_fatJetA_electronEnergyFraction_;
 	Float_t treeVar_fatJetA_muonEnergyFraction_;
@@ -168,6 +169,7 @@ private:
 	Double_t treeVar_fatJetB_doubleBtagDiscrim_;
 	Double_t treeVar_fatJetB_mass_;
 	Double_t treeVar_fatJetB_softDropMass_;
+	Double_t treeVar_fatJetB_softDropMassPuppi_;
 	Double_t treeVar_fatJetB_prunedMass_;
 	Float_t treeVar_fatJetB_electronEnergyFraction_;
 	Float_t treeVar_fatJetB_muonEnergyFraction_;
@@ -240,6 +242,9 @@ public:
 		mainAnaTree_->Branch("fatJetA_softDropMass", &treeVar_fatJetA_softDropMass_,   "fatJetA_softDropMass/D");
 		mainAnaTree_->Branch("fatJetB_softDropMass", &treeVar_fatJetB_softDropMass_,   "fatJetB_softDropMass/D");
 
+		mainAnaTree_->Branch("fatJetA_softDropMassPuppi", &treeVar_fatJetA_softDropMassPuppi_,   "fatJetA_softDropMassPuppi/D");
+		mainAnaTree_->Branch("fatJetB_softDropMassPuppi", &treeVar_fatJetB_softDropMassPuppi_,   "fatJetB_softDropMassPuppi/D");
+
 		mainAnaTree_->Branch("fatJetA_electronEnergyFraction", &treeVar_fatJetA_electronEnergyFraction_, "fatJetA_electronEnergyFraction/F");
 		mainAnaTree_->Branch("fatJetB_electronEnergyFraction", &treeVar_fatJetB_electronEnergyFraction_, "fatJetB_electronEnergyFraction/F");
 
@@ -303,6 +308,9 @@ public:
 
 		treeVar_fatJetA_softDropMass_ = fatJetA.CHSsoftdrop_mass();
 		treeVar_fatJetB_softDropMass_ = fatJetB.CHSsoftdrop_mass();
+
+		treeVar_fatJetA_softDropMassPuppi_ = fatJetA.PUPPIsoftdrop_mass();
+		treeVar_fatJetB_softDropMassPuppi_ = fatJetB.PUPPIsoftdrop_mass();
 
 		treeVar_fatJetA_nSubjettinessTau1_ = fatJetA.NjettinessAK8_tau1();
 		treeVar_fatJetA_nSubjettinessTau2_ = fatJetA.NjettinessAK8_tau2();
