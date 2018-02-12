@@ -147,6 +147,10 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       bool isMC_;
       const bool inputContainsLHE_;
       const bool ignoreTopInLheHtCalculation_;
+      TF1 * puppisd_corrGEN_;
+      TF1 * puppisd_corrRECO_cen_;
+      TF1 * puppisd_corrRECO_for_;
+
       edm::EDGetTokenT<LHEEventProduct> lheToken_;
       edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
       edm::EDGetTokenT<pat::MuonCollection> muonToken_;
@@ -250,6 +254,13 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
 
     triggerPaths_ = new std::vector<std::string>();
     triggerPaths_->insert(triggerPaths_->begin(),targetTriggerPaths_.begin(), targetTriggerPaths_.end());
+
+    // Load functions for PUPPI softDrop
+    TFile* file = TFile::Open("puppiCorr.root", "READ");
+    puppisd_corrGEN_      = (TF1*)file->Get("puppiJECcorr_gen");
+    puppisd_corrRECO_cen_ = (TF1*)file->Get("puppiJECcorr_reco_0eta1v3");
+    puppisd_corrRECO_for_ = (TF1*)file->Get("puppiJECcorr_reco_1v3eta2v5");
+
 }
 
 
@@ -425,31 +436,20 @@ void RALMiniAnalyzer::ResetEventByEventVariables(){
 //------------ For getting the correction factor for the PUPPI softDropMass -------------
 float RALMiniAnalyzer::getPUPPIweight(const double& puppipt, const double& puppieta){
 
-  TFile* file = TFile::Open("puppiCorr.root", "READ");
-
-  TF1 * puppisd_corrGEN      = (TF1*)file->Get("puppiJECcorr_gen");
-  TF1 * puppisd_corrRECO_cen = (TF1*)file->Get("puppiJECcorr_reco_0eta1v3");
-  TF1 * puppisd_corrRECO_for = (TF1*)file->Get("puppiJECcorr_reco_1v3eta2v5");
-
   double genCorr  = 1.;
   double recoCorr = 1.;
   double totalWeight = 1.;
 
-  genCorr =  puppisd_corrGEN->Eval( puppipt );
+  genCorr =  puppisd_corrGEN_->Eval( puppipt );
 
   if( fabs(puppieta)  <= 1.3 ){
-    recoCorr = puppisd_corrRECO_cen->Eval( puppipt );
+    recoCorr = puppisd_corrRECO_cen_->Eval( puppipt );
   }
   else{
-    recoCorr = puppisd_corrRECO_for->Eval( puppipt );
+    recoCorr = puppisd_corrRECO_for_->Eval( puppipt );
   }
 
   totalWeight = genCorr * recoCorr;
-
-  delete file;
-  delete puppisd_corrGEN;
-  delete puppisd_corrRECO_cen;
-  delete puppisd_corrRECO_for;
 
   return totalWeight;
 }
