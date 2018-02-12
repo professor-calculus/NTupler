@@ -31,14 +31,14 @@ int main(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // ONE: input directory (where the combined root files are)
-    const std::string inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing6/";
+    const std::string inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing5/";
 
     // TWO: plot output directory
-    const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing6/brazilplots_70/";
+    const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing5/brazilplots_2200_v2/";
 
     // THREE: higgs and SUSY masses (one of which should have a single entry)
-    const std::vector<int> higgsMasses = {70};
-    const std::vector<int> susyMasses = {1200, 1600, 2000, 2200};
+    const std::vector<int> higgsMasses = {30, 50, 70, 90, 125};
+    const std::vector<int> susyMasses = {2200};
 
     // FOUR: luminosity label
     const double luminosity = 35.867;
@@ -130,14 +130,15 @@ int main(){
 
     TGraphAsymmErrors * g_obs = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(yObs_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]));
     g_obs->GetXaxis()->SetTitle(xAxisTitle.c_str());
-    g_obs->GetYaxis()->SetTitle("r");
+    g_obs->GetYaxis()->SetTitle("95% upper CL of r");
     TGraphAsymmErrors * g_exp = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(y_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]), &(null_vec[0]));
     TGraphAsymmErrors * g_expErr1Sig = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(y_vec[0]), &(null_vec[0]), &(null_vec[0]), &(yErrDown1Sig_vec[0]), &(yErrUp1Sig_vec[0]));
     TGraphAsymmErrors * g_expErr2Sig = new TGraphAsymmErrors(nEntries, &(x_vec[0]), &(y_vec[0]), &(null_vec[0]), &(null_vec[0]), &(yErrDown2Sig_vec[0]), &(yErrUp2Sig_vec[0]));
 
     // the vector order goes: observed, expected, 1sigma, 2sigma
     Plotter brazilPlot = Plotter({g_obs, g_exp, g_expErr1Sig, g_expErr2Sig}, plotObserved);
-    brazilPlot.AddLegend(0.65, 0.88, 0.65, 0.88);
+    // brazilPlot.AddLegend(0.20, 0.45, 0.63, 0.86);
+    brazilPlot.AddLegend(0.60, 0.85, 0.63, 0.86);
     brazilPlot.AddLatex(luminosity, "#it{Data} 2016");
     brazilPlot.SaveBrazil(Form("%s/linear_fixedMass%d.pdf", outputDir.c_str(), fixedMass), 0.0, 1.05 * maxLimitValue);
     brazilPlot.SetLogY();
