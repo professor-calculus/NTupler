@@ -132,10 +132,10 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       void ReadInMuons(const edm::Event&);
 
       ///For reading in the Jet information, and dumping it into ran::Event class ...
-      void ReadInJets(const edm::Event&, const edm::EventSetup&);
+      void ReadInJets(const edm::Event&, JetCorrectionUncertainty*);
 
       ///For reading in the Fat Jet information, and dumping it into ran::Event class ...
-      void ReadInFatJets(const edm::Event&, const edm::EventSetup&);
+      void ReadInFatJets(const edm::Event&, JetCorrectionUncertainty*);
 
       ///For reading in the Met information, and dumping it into ran::Event class ...
       void ReadInMets(const edm::Event&);
@@ -260,7 +260,7 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     puppisd_corrGEN_      = (TF1*)file->Get("puppiJECcorr_gen");
     puppisd_corrRECO_cen_ = (TF1*)file->Get("puppiJECcorr_reco_0eta1v3");
     puppisd_corrRECO_for_ = (TF1*)file->Get("puppiJECcorr_reco_1v3eta2v5");
-
+    delete file;
 }
 
 
@@ -270,7 +270,10 @@ RALMiniAnalyzer::~RALMiniAnalyzer()
    // do anything here that needs to be done at desctruction time
    // (e.g. close files, deallocate resources etc.)
   delete hltTriggers_;
-  //should delete triggerPaths_;
+  delete triggerPaths_;
+  delete puppisd_corrGEN_;
+  delete puppisd_corrRECO_cen_;
+  delete puppisd_corrRECO_for_;
 }
 
 
@@ -304,6 +307,17 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
      fatjetCollection_ = new std::vector<ran::FatJetStruct>();
      metCollection_ = new std::vector<ran::MetStruct>();
     
+    ESHandle<JetCorrectorParametersCollection> JetCorParColl_AK4;
+    iSetup.get<JetCorrectionsRecord>().get("AK4PFchs", JetCorParColl_AK4); 
+    JetCorrectorParameters const & JetCorPar_AK4 = (*JetCorParColl_AK4)["Uncertainty"];
+    JetCorrectionUncertainty *jecUncObj_AK4 = new JetCorrectionUncertainty(JetCorPar_AK4);
+
+    ESHandle<JetCorrectorParametersCollection> JetCorParColl_AK8;
+    iSetup.get<JetCorrectionsRecord>().get("AK8PFchs", JetCorParColl_AK8); 
+    JetCorrectorParameters const & JetCorPar_AK8 = (*JetCorParColl_AK8)["Uncertainty"];
+    JetCorrectionUncertainty *jecUncObj_AK8 = new JetCorrectionUncertainty(JetCorPar_AK8);
+
+
      //Clearing contents/setting default values of variables that should get new values in each event...
      ResetEventByEventVariables();
 
@@ -321,10 +335,10 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
      ReadInElectrons(iEvent);
 
      //Read in Jets
-     ReadInJets(iEvent, iSetup);
+     ReadInJets(iEvent, jecUncObj_AK4);
 
      //Read in Jets
-     ReadInFatJets(iEvent, iSetup);
+     ReadInFatJets(iEvent, jecUncObj_AK8);
 
      //Read in Met
      ReadInMets(iEvent);
@@ -333,6 +347,9 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
      EventDataTree->Fill();	
 
      //delete event_;
+     delete jecUncObj_AK4;
+     delete jecUncObj_AK8;
+
      delete electronCollection_;
      delete muonCollection_;
      delete fatjetCollection_;
@@ -689,12 +706,12 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
   }
 }
 //Read in jet vars
-void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent, const edm::EventSetup& iSetup)
+void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent, JetCorrectionUncertainty * jecUncObj)
 {
-    edm::ESHandle<JetCorrectorParametersCollection> JetCorParColl;
-    iSetup.get<JetCorrectionsRecord>().get("AK4PFchs", JetCorParColl); 
-    JetCorrectorParameters const & JetCorPar = (*JetCorParColl)["Uncertainty"];
-    JetCorrectionUncertainty *jecUncObj = new JetCorrectionUncertainty(JetCorPar);
+    // edm::ESHandle<JetCorrectorParametersCollection> JetCorParColl;
+    // iSetup.get<JetCorrectionsRecord>().get("AK4PFchs", JetCorParColl); 
+    // JetCorrectorParameters const & JetCorPar = (*JetCorParColl)["Uncertainty"];
+    // JetCorrectionUncertainty *jecUncObj = new JetCorrectionUncertainty(JetCorPar);
 
     edm::Handle<pat::JetCollection> jets;
     iEvent.getByToken(jetToken_, jets);
@@ -743,12 +760,12 @@ void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent, const edm::EventSetup
 }
 
 //Read in fat jet vars
-void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, const edm::EventSetup& iSetup)
+void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncertainty * jecUncObj)
 {
-    edm::ESHandle<JetCorrectorParametersCollection> JetCorParColl;
-    iSetup.get<JetCorrectionsRecord>().get("AK8PFchs", JetCorParColl); 
-    JetCorrectorParameters const & JetCorPar = (*JetCorParColl)["Uncertainty"];
-    JetCorrectionUncertainty *jecUncObj = new JetCorrectionUncertainty(JetCorPar);
+    // edm::ESHandle<JetCorrectorParametersCollection> JetCorParColl;
+    // iSetup.get<JetCorrectionsRecord>().get("AK8PFchs", JetCorParColl); 
+    // JetCorrectorParameters const & JetCorPar = (*JetCorParColl)["Uncertainty"];
+    // JetCorrectionUncertainty *jecUncObj = new JetCorrectionUncertainty(JetCorPar);
 
     edm::Handle<pat::JetCollection> jets;
     iEvent.getByToken(fatjetToken_, jets);
