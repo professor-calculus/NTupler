@@ -1513,6 +1513,7 @@ TStyle * Plotter::TDRStyle()
 	// tdrStyle->SetTitleXSize(0.06); // Another way to set the size?
 	tdrStyle->SetTitleXOffset(1.00);//EDITFROM 0.9
 	tdrStyle->SetTitleYOffset(1.25); // original
+	tdrStyle->SetTitleYOffset(1.10); // edit
 	// tdrStyle->SetTitleOffset(1.1, "Y"); // Another way to set the Offset
 
 	// For the axis labels:
