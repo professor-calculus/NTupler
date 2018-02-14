@@ -5,7 +5,7 @@ class MassRegionCuts{
 
 public:
     // constructor
-    MassRegionCuts(const std::string&, const double&, const double&, const double&, const double&, const std::vector<double>&, const double& = 0.50);
+    MassRegionCuts(const std::string&, const double&, const double&, const double&, const double&, const std::vector<double>&, const std::string& = "fatJetA_softDropMass", const std::string& = "fatJetB_softDropMass", const double& = 0.50);
 
     std::string GetName() const;
     double Get_S1_Node1() const;
@@ -22,6 +22,8 @@ public:
 private:
 	std::string MassRegionCutName; // name to identify the set of mass cuts
     double sideBandScaleFactor; // sideband size as a fraction of signal region, default is 0.50
+    std::string fatJetA_mass; // name for the type of mass to use for fatJetA
+    std::string fatJetB_mass; // name for the type of mass to use for fatJetB
     double S1_Node1; // first signal region start point node (1of2). the coords are symmetric, but this is the larger one.
     double S1_Node2; // first signal region start point node (2of2). the coords are symmetric, but this is the smaller one.
     double SMAX_Node1;// final signal region end point node (1of2). the coords are symmetric, but this is the larger one.
