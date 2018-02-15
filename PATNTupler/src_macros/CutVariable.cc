@@ -24,7 +24,7 @@ listOfSystematics(listOfSystematicsDummy)
 //-----------public-----------//
 std::string CutVariable::GetCutVariableName(const std::string& appendSystematic)
 {
-	if (appendSystematic == "NO_SYS") return defaultVariableName;
+	if (appendSystematic == "NOSYS") return defaultVariableName;
 
 	bool doesVariableGetAppended = false;
 	for (auto systematic : listOfSystematics){
