@@ -19,7 +19,7 @@
 #include "GoodLumiChecker.hh"
 #include "TriggerPathToIndex.hh"
 #include "deltaR.h"
-
+#include "DoubleBTagSF.h"
 
 using std::cout;
 using std::ifstream;
@@ -138,9 +138,10 @@ private:
 	// PRIVATE MEMBERS
 
 	// For the event & kinematic branches ...
-	Double_t treeVar_weight_;
-	Double_t treeVar_genWeight_;
-	Double_t treeVar_puWeight_;
+	Double_t treeVar_weight_combined_;
+	Double_t treeVar_weight_dbtLoose_;
+	Double_t treeVar_weight_dbtLooseUp_;
+	Double_t treeVar_weight_dbtLooseDown_;
 
 	UInt_t treeVar_runNum_;
 	UInt_t treeVar_lumiSec_;
@@ -211,9 +212,10 @@ public:
 		treeVar_jetB_p4Ptr_jecUncUp_( &treeVar_jetB_p4_jecUncUp_ ),
 		treeVar_jetB_p4Ptr_jecUncDown_( &treeVar_jetB_p4_jecUncDown_ )
 	{
-		mainAnaTree_->Branch("weight",     &treeVar_weight_,     "weight/D");
-		mainAnaTree_->Branch("genWeight",  &treeVar_genWeight_,  "genWeight/D");
-		mainAnaTree_->Branch("puWeight",   &treeVar_puWeight_,   "puWeight/D");
+		mainAnaTree_->Branch("weight_combined",     &treeVar_weight_combined_,     "weight_combined/D");
+		mainAnaTree_->Branch("weight_dbtLoose",     &treeVar_weight_dbtLoose_,     "weight_dbtLoose/D");
+		mainAnaTree_->Branch("weight_dbtLooseUp",   &treeVar_weight_dbtLooseUp_,   "weight_dbtLooseUp/D");
+		mainAnaTree_->Branch("weight_dbtLooseDown", &treeVar_weight_dbtLooseDown_, "weight_dbtLooseDown/D");
 
 		mainAnaTree_->Branch("run",    &treeVar_runNum_,   "run/i");
 		mainAnaTree_->Branch("lumi",   &treeVar_lumiSec_,   "lumi/i");
@@ -273,12 +275,16 @@ public:
 
 	~FatDoubleBJetPairTree(){}
 
-	void fillTree(const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp, const float& ht_jecUncDown, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision)
+	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp, const float& ht_jecUncDown, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision)
 	{
-		// FIXME : Fill in weights with actual values
-		treeVar_weight_ = 1.0;
-		treeVar_genWeight_ = 1.0;
-		treeVar_puWeight_ = 1.0;
+		std::vector<double> looseScaleFactorVec = DoubleBTagSF::GetLooseScaleFactors(sampleType.c_str(), fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
+		treeVar_weight_dbtLooseDown_ = looseScaleFactorVec[0];
+		treeVar_weight_dbtLoose_ = looseScaleFactorVec[1];
+		treeVar_weight_dbtLooseUp_ = looseScaleFactorVec[2];
+		
+		// multiply all nominal Scale Factors
+		treeVar_weight_combined_ = treeVar_weight_dbtLoose_;
+
 
 		treeVar_runNum_ = evtInfo.runNum;
 		treeVar_lumiSec_ = evtInfo.lumiSec;
@@ -408,9 +414,9 @@ int main(int argc, char** argv){
     ///////////////////////////////////////////////////
 
     // Initial setup from command line inputs /////////
-    if (argc < 4 || argc > 5){
+    if (argc != 5){
         std::cout << "Provided wrong number of arguments, the format should be:" << std::endl;
-        std::cout << argv[0] << " <outputRootFilename> <pathToListOfInputFiles> <runInstructionString> <lumiJson>(optional)" << std::endl;
+        std::cout << argv[0] << " <outputRootFilename> <pathToListOfInputFiles> <sampleType> <runInstructionString>" << std::endl;
         std::cout << "Exiting..." << std::endl;
         return -1;
     }
@@ -419,7 +425,7 @@ int main(int argc, char** argv){
 
     // Determine whether we are running locally or on batch system
     bool batchMode;
-    std::string runInstructions(argv[3]);
+    std::string runInstructions(argv[4]);
     if (runInstructions == "local") batchMode = false;
     else if (runInstructions == "batch") batchMode = true;
     else {
@@ -433,6 +439,15 @@ int main(int argc, char** argv){
     std::string listFilename(argv[2]);
     if (!does_file_exist(listFilename)){
         std::cout << "File provided containing list of input files,  " + listFilename + "  does not exist" << std::endl;
+        std::cout << "Exiting..." << std::endl;
+        return -1;
+    }
+
+    // Check you have provided a valid sample type - used for different scale factors
+    std::string sampleType(argv[3]);
+    if (sampleType != "DATA" && sampleType != "SIGNAL" && sampleType != "TTJETS" && sampleType != "VJETS"){
+        std::cout << "SampleType provided is not valid" << std::endl;
+        std::cout << "Use either DATA, SIGNAL, TTJETS, VJETS" << std::endl;
         std::cout << "Exiting..." << std::endl;
         return -1;
     }
@@ -457,22 +472,6 @@ int main(int argc, char** argv){
         std::system(Form("cp $CMSSW_BASE/src/NTupler/PATNTupler/main/mainNMSSM.cc %s",outputDirectory.c_str()));
         std::system(Form("cp %s %s",listFilename.c_str(),outputDirectory.c_str()));
     }
-
-    // Get jsonFile info if it is provided (do so when running on data)
-    bool isMC(true);
-    std::string jsonFile;
-    if (argc == 5){
-        isMC = false;
-        isMC = isMC;
-        jsonFile = string(argv[4]);
-        // exit if the json file does not exist
-        if (!does_file_exist(jsonFile)){
-            std::cout << "Json file,  " + jsonFile + "  does not exist" << std::endl;
-            std::cout << "Exiting..." << std::endl;
-            return -1;
-        }
-    }
-    // GoodLumiChecker glc(jsonFile); //object to check if event passed certification
 
     // find number of files that we are running over
 	ifstream totalFileCount(argv[2]);
@@ -594,11 +593,11 @@ int main(int argc, char** argv){
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, slimJets, doesEventPassTrigger);
-				else doubleBFatJetPairTree.fillTree(*evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, slimJets, doesEventPassTrigger);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, slimJets, doesEventPassTrigger);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, slimJets, doesEventPassTrigger);
 
 				// Fat Jets ordered by DBT discriminator score
-				// doubleBFatJetPairTree.fillTree(*evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, slimJets, doesEventPassTrigger);
+				// doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, slimJets, doesEventPassTrigger);
 			}
 			// event counter
             if (outputEvery!=0 ? (evtIdx % outputEvery == 0) : false){

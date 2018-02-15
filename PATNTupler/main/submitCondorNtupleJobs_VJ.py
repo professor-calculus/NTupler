@@ -20,10 +20,10 @@ import datetime
 
 executable = "nTupAnaNMSSM" # wrt 'main' directory
 code = "mainNMSSM.cc" # wrt 'main' directory
-inputFileListPath = "/opt/ppd/scratch/xap79297/CMSSW_8_0_29/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4/JetHT_Run2016B-03Feb2017_ver2-v2.list"
-outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_27_CMSSW_8_0_29_dbtV4/data/JetHt_Run2016B-03Feb2017_ver2-v2/" # has to be the full path
-filesPerJob = 5
-jsonFile = ""
+inputFileListPath = "/opt/ppd/scratch/xap79297/CMSSW_8_0_29/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4_SysExtra/mH70p0_mSusy2200p0_ratio0p99_splitting0p1.list"
+outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_27_CMSSW_8_0_29_dbtV4/mc_SysExtra/mH70p0_mSusy2200p0_ratio0p99_splitting0p1/" # has to be the full path
+sampleType = "SIGNAL" # choose from SIGNAL, DATA, TTJETS, VJETS
+filesPerJob = 10
 logDirectoryBase = "/opt/ppd/scratch/xap79297/jobLogs/flatTrees/"
 
 ###########################################################################################################
@@ -34,6 +34,9 @@ logDirectoryBase = "/opt/ppd/scratch/xap79297/jobLogs/flatTrees/"
 ###########################################################################################################
 ###########################################################################################################
 
+if (sampleType != "SIGNAL" and sampleType != "DATA" and sampleType != "TTJETS" and sampleType != "VJETS"):
+    print "you have not provided a valid sample type bro, exiting..."
+    sys.exit()
 
 if outputDirectory[-1] == "/":
     outputDirectory = outputDirectory[:-1]
@@ -114,7 +117,7 @@ for jobList in filesPerJobList:
     shellJob = open(shellJobName,"w")
 
     cmd = "#!/bin/bash\n"
-    cmd += baseDir + "/src/NTupler/PATNTupler/main/" + executable + " flatTree_" + str(jobNum) + ".root " + jobListFileName + " batch " + jsonFile + "\n"
+    cmd += baseDir + "/src/NTupler/PATNTupler/main/" + executable + " flatTree_" + str(jobNum) + ".root " + jobListFileName + " " + sampleType + " batch\n"
     cmd += "if [ $? -eq 0 ]\n"
     cmd += "then\n"
     cmd += "    echo\n"
