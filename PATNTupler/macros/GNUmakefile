@@ -50,7 +50,7 @@ plotting_triggerEff: plotting_triggerEff.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
 table_investigateEventSelectionCuts: table_investigateEventSelectionCuts.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
-histos_create: histos_create.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+histos_create: histos_create.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${SRCMACDIR}/CutVariable.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
 histos_plot: histos_plot.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
