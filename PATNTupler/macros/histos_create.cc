@@ -37,7 +37,8 @@ void CreateHistograms(std::map<std::string,TH1D*>& h_, const std::vector<std::ve
             std::string histogramName = "";
             if (cut2_ak8Dbt[iCut2].size() == 4) histogramName += "dbt" + cut2_ak8Dbt[iCut2][0] + cut2_ak8Dbt[iCut2][1] + "And" + cut2_ak8Dbt[iCut2][2] + cut2_ak8Dbt[iCut2][3];
             if (cut2_ak8Dbt[iCut2].size() == 2 && cut2_ak8Dbt[iCut2][0] == "DIAG_UP") histogramName += "dbtDiagUp" + cut2_ak8Dbt[iCut2][1];
-            histogramName += "_" + systematicName;
+            if (systematicName.substr(0,3) == "SF_") histogramName += "_" + systematicName.substr(3);
+            else histogramName += "_" + systematicName;
 
             h_[Form("S_%s", histogramName.c_str())] = new TH1D(Form("S_%s", histogramName.c_str()), ";Search Region Bin Number;Events", numberOfBins, 0, numberOfBins);
             h_[Form("U_%s", histogramName.c_str())] = new TH1D(Form("U_%s", histogramName.c_str()), ";Search Region Bin Number;Events", numberOfBins, 0, numberOfBins);
@@ -66,7 +67,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_01_11_CMSSW_8_0_29_dbtV4/TESTING_NEW_7/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_01_11_CMSSW_8_0_29_dbtV4/TESTING_SYS/"; // where we are going to save the output plots (should include the samples name + binning maybe)
 
 
     // TWO: set the cut params.
@@ -103,11 +104,11 @@ int main(int argc, char** argv){
     const double luminosity = 35.867; // 2016 DATASET
 
 
-    // FIVE: systematics to run over - only need to use them for TAG dbt
-    const std::vector<std::string> systematicNameVec = {"NOSYS", "jecUncUp", "jecUncDown"};
+    // FIVE: systematics to run over. only need to use them for TAG dbt. start with 'SF_' for scale factors.
+    const std::vector<std::string> systematicNameVec = {"NOSYS", "jecUncUp", "jecUncDown", "SF_dbtLooseUp", "SF_dbtLooseDown"};
 
 
-    // SIX: variables to use AND the systematics that affect them
+    // SIX: variables to use AND the systematics that affect their distributions
     CutVariable fatJetA_pt_CV = CutVariable("fatJetA_p4.Pt()", {"jecUncUp", "jecUncDown"});
     CutVariable fatJetB_pt_CV = CutVariable("fatJetB_p4.Pt()", {"jecUncUp", "jecUncDown"});
     CutVariable fatJetA_mass_CV = CutVariable("fatJetA_softDropMass", {});
@@ -182,6 +183,18 @@ int main(int argc, char** argv){
         MassRegionCuts MassCutsObject = MassRegionCuts(massCutObjectName.c_str(), S1_Node1, S1_Node2, SMAX_Node1, SMAX_Node2, SN_Nodes, fatJetA_mass_name, fatJetB_mass_name);
         // MassRegionCuts MassCutsObject = MassRegionCuts(massCutObjectName.c_str(), S1_Node1, S1_Node2, SMAX_Node1, SMAX_Node2, SN_Nodes, fatJetA_mass_name, fatJetB_mass_name, sideBandScaleFactor);
 
+        std::string SF_weight = "DUMMY";
+        if (systematicName.substr(0,3) != "SF_") SF_weight = "(weight_combined)";
+        else{
+            std::string SF_name = systematicName.substr(3);
+            if ( SF_name.substr(SF_name.size()-2) == "Up") SF_weight = Form("(weight_combined * (weight_%s / weight_%s) )", SF_name.c_str(), SF_name.substr(0, SF_name.size()-2).c_str());
+            else if ( SF_name.substr(SF_name.size()-4) == "Down") SF_weight = Form("(weight_combined * (weight_%s / weight_%s) )", SF_name.c_str(), SF_name.substr(0, SF_name.size()-4).c_str());
+            else {
+                std::cout << "ERROR: scale factor systematic " << systematicName << " is not Up or Down... NOT DOIN IT..." << std::endl;
+                continue;
+            }
+        } 
+
         const unsigned int numberOfCutsForCodeTodo = (MassCutsObject.Get_SN_Nodes().size() + 1) * cut4_ht.size() * cut2_ak8Dbt.size() * 3;
         unsigned int counter = 1;
         for (size_t iCut2 = 0; iCut2 < cut2_ak8Dbt.size(); ++iCut2){
@@ -195,7 +208,8 @@ int main(int argc, char** argv){
                 if (iMassRegion < numberOfSegments) histogramName = "S_" + histogramName;
                 else if (iMassRegion < 2*numberOfSegments) histogramName = "U_" + histogramName;
                 else histogramName = "D_" + histogramName;
-                histogramName += "_" + systematicName;
+                if (systematicName.substr(0,3) == "SF_") histogramName += "_" + systematicName.substr(3);
+                else histogramName += "_" + systematicName;
 
                 for (size_t iCut4 = 0; iCut4 < cut4_ht.size(); ++iCut4){
 
@@ -207,6 +221,7 @@ int main(int argc, char** argv){
                     std::string cutToApply = Form("%s && %s>%d && %s>%d && %s>=%d && %s<%d && %s>%d && %s>%d", dbtCut.c_str(), fatJetA_pt_name.c_str(), cut3_ak8Pt, fatJetB_pt_name.c_str(), cut3_ak8Pt, ht_name.c_str(), cut4_ht[iCut4][0], ht_name.c_str(), cut4_ht[iCut4][1], slimJetA_pt_name.c_str(), cut5_ak4Pt[0], slimJetB_pt_name.c_str(), cut5_ak4Pt[1]);
 
                     cutToApply += " && " + MassCutsObject.GetAllCuts()[iMassRegion];
+                    cutToApply = SF_weight + " * (   " + cutToApply + "   )";
                     TH2D hTemplate = TH2D("hTemplate", ";fatJetA_MassType (GeV);fatJetB_MassType (GeV)", 400, 0, 200, 400, 0, 200);
                     // TH2D hTemplate = TH2D("hTemplate", ";fatJetA_MassType (GeV);fatJetB_MassType (GeV)", 600, 0, 300, 600, 0, 300);
                     std::string varToPlot = fatJetB_mass_name + ":" + fatJetA_mass_name;
@@ -270,7 +285,8 @@ int main(int argc, char** argv){
                     // 2016 GOLDEN JSON DATASET
                     // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_27_CMSSW_8_0_29_dbtV4/data/JetHT2016_ht1500plus/flatTree.root", cutToApply.c_str());
 
-plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_27_CMSSW_8_0_29_dbtV4/mc_SysExtra/mH70p0_mSusy2200p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.0036780*0.85*0.85);
+                    // flatTree with SYS
+                    plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_27_CMSSW_8_0_29_dbtV4/mc_SysExtra/mH70p0_mSusy2200p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.0036780*0.85*0.85);
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -282,10 +298,10 @@ plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTre
 
 
                     // // this section creates plots to check we trust what is going on
-                    std::string plotSaveName = outputDir + "/plot_" + histogramName + "_binNum" + std::to_string(binToFill) + ".pdf";
-                    Plotter plot = Plotter({plotEntry});
-                    plot.AddLatex(luminosity);
-                    plot.Save2D(plotSaveName.c_str(), MassCutsObject); // with the grid
+                    // std::string plotSaveName = outputDir + "/plot_" + histogramName + "_binNum" + std::to_string(binToFill) + ".pdf";
+                    // Plotter plot = Plotter({plotEntry});
+                    // plot.AddLatex(luminosity);
+                    // plot.Save2D(plotSaveName.c_str(), MassCutsObject); // with the grid
                     
 
                     std::cout << "Systematic " << iSys+1 << " of " << systematicNameVec.size() << " ::: DONE " << counter << " of " << numberOfCutsForCodeTodo << " fills" << std::endl;
