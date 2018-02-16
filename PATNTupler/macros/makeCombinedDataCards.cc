@@ -65,7 +65,7 @@ int main(){
     // THREE: Samples To Use (different project for each signal sample)
     const std::string dataSample = "data";
     std::vector<std::string> signalVec = {"mH30_mSusy2200", "mH50_mSusy2200", "mH70_mSusy2200", "mH90_mSusy2200"}; // the different signal samples you wish to use
-    const std::vector<std::string> mcbkVec = {"TTJets", "ZJets", "WJets"};
+    const std::vector<std::string> mcbkVec = {"TTJets", "ZJets", "WJets"}; // the mc background samples
     const std::string qcdName = "QCD"; // this is just a label as QCD contribution is driven during the fit
 
 
@@ -83,6 +83,8 @@ int main(){
     CommonSystematicVec.push_back( CommonSystematic("XS_TTJets lnN", 1.5, {"TTJets"}) );
     CommonSystematicVec.push_back( CommonSystematic("XS_ZJets lnN", 1.5, {"ZJets"}) );
     CommonSystematicVec.push_back( CommonSystematic("XS_WJets lnN", 1.5, {"WJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("jecUnc lnN", "jecUnc", {"SIGNAL"}) );
+    CommonSystematicVec.push_back( CommonSystematic("dbtLoose lnN", "dbtLoose", {"SIGNAL"}) );
 
 
     // SIX: are we blinded ? if true, uses Ai * data_obs_UnD as a dummy for data_obs_S
@@ -131,11 +133,11 @@ int main(){
 
         for (unsigned int iBin = 1; iBin < numberOfBins + 1; ++iBin){
 
-            unsigned int data_obs_S = hOriginal_[Form("S_tag_%s", dataSample.c_str())]->GetBinContent(iBin);
-            if (areWeBlinded) data_obs_S = ceil( QcdSidebandCorr::GetCorr(iBin) * hOriginal_[Form("UnD_tag_%s", dataSample.c_str())]->GetBinContent(iBin) ); // use to get a non zero and roughly realistic value whilst we are blinded
-            const unsigned int data_obs_UnD = hOriginal_[Form("UnD_tag_%s", dataSample.c_str())]->GetBinContent(iBin);
-            const double rate_signal_S = hOriginal_[Form("S_tag_%s", signal.c_str())]->GetBinContent(iBin);
-            const double rate_signal_UnD = hOriginal_[Form("UnD_tag_%s", signal.c_str())]->GetBinContent(iBin);;
+            unsigned int data_obs_S = hOriginal_[Form("S_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
+            if (areWeBlinded) data_obs_S = ceil( QcdSidebandCorr::GetCorr(iBin) * hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin) ); // use to get a non zero and roughly realistic value whilst we are blinded
+            const unsigned int data_obs_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
+            const double rate_signal_S = hOriginal_[Form("S_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);
+            const double rate_signal_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);;
             const std::string data_obs_S_str = std::to_string(data_obs_S);
             const std::string data_obs_UnD_str = std::to_string(data_obs_UnD);
             const std::string rate_signal_S_str = std::to_string(rate_signal_S);
@@ -145,8 +147,8 @@ int main(){
             std::vector<std::string> rate_mcbkVec_S_str;
             std::vector<std::string> rate_mcbkVec_UnD_str;
             for (auto mcbk : mcbkVec){
-                double rate_S = hOriginal_[Form("S_tag_%s", mcbk.c_str())]->GetBinContent(iBin);
-                double rate_UnD = hOriginal_[Form("UnD_tag_%s", mcbk.c_str())]->GetBinContent(iBin);
+                double rate_S = hOriginal_[Form("S_tag_%s_NOSYS", mcbk.c_str())]->GetBinContent(iBin);
+                double rate_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", mcbk.c_str())]->GetBinContent(iBin);
                 rate_mcbkVec_S.push_back(rate_S);
                 rate_mcbkVec_UnD.push_back(rate_UnD);
                 rate_mcbkVec_S_str.push_back( std::to_string(rate_S) );
@@ -407,7 +409,7 @@ std::vector<std::string> CommonSystematic::GetSystematicProcesses() const {retur
 
 std::string CommonSystematic::GetSystematicValue(const std::string& fullHistogramName, const unsigned int& iBin, std::map<std::string,TH1D*>& hOriginal_) 
 {
-    if (systematicHistoTag.empty() == false) return systematicValue;
+    if (systematicHistoTag.empty() == true) return systematicValue;
     
     else{
         double count_nominal = hOriginal_[Form("%s_NOSYS", fullHistogramName.c_str())]->GetBinContent(iBin); 
@@ -428,13 +430,13 @@ double GetEventWeight(const std::string& histogramName, std::map<std::string,TH1
     std::vector<double> eventWeightVec;
 
     for (unsigned int iBin = 1; iBin < numberOfBins + 1; ++iBin){
-    
-        double binContent_S = hOriginal_[Form("S_tag_%s", histogramName.c_str())]->GetBinContent(iBin);
-        double binError_S = hOriginal_[Form("S_tag_%s", histogramName.c_str())]->GetBinError(iBin);
+
+        double binContent_S = hOriginal_[Form("S_tag_%s_NOSYS", histogramName.c_str())]->GetBinContent(iBin);
+        double binError_S = hOriginal_[Form("S_tag_%s_NOSYS", histogramName.c_str())]->GetBinError(iBin);
         if (binContent_S != 0) eventWeightVec.push_back(binError_S * binError_S / binContent_S);
 
-        double binContent_UnD = hOriginal_[Form("UnD_tag_%s", histogramName.c_str())]->GetBinContent(iBin);
-        double binError_UnD = hOriginal_[Form("UnD_tag_%s", histogramName.c_str())]->GetBinError(iBin);
+        double binContent_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", histogramName.c_str())]->GetBinContent(iBin);
+        double binError_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", histogramName.c_str())]->GetBinError(iBin);
         if (binContent_UnD != 0) eventWeightVec.push_back(binError_UnD * binError_UnD / binContent_UnD);        
     }
 
@@ -474,8 +476,8 @@ use this object to see whether we should give a bin with zero entries an error
         const unsigned int iBin = iVec + 1;
         const unsigned int htDivisionIndex = floor(iVec / numberOfBinsPerHtDivision);
 
-        double binContent_S = hOriginal_[Form("S_tag_%s", histogramName.c_str())]->GetBinContent(iBin);
-        double binContent_UnD = hOriginal_[Form("UnD_tag_%s", histogramName.c_str())]->GetBinContent(iBin);
+        double binContent_S = hOriginal_[Form("S_tag_%s_NOSYS", histogramName.c_str())]->GetBinContent(iBin);
+        double binContent_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", histogramName.c_str())]->GetBinContent(iBin);
 
         if (binContent_S > 0 || binContent_UnD > 0){
             for (unsigned int c = 0; c < numberOfBinsPerHtDivision * (htDivisionIndex + 1); ++c){
