@@ -27,13 +27,15 @@ void GetHistograms(std::map<std::string,TH1D*>&); // NEED TO CHANGE THE FILE PAT
 class CommonSystematic{
 public:
     CommonSystematic(const std::string&, const double&, const std::vector<std::string>&);    
+    CommonSystematic(const std::string&, const std::string&, const std::vector<std::string>&);    
     std::string GetSystematicName() const;
-    std::string GetSystematicValue() const;
     std::vector<std::string> GetSystematicProcesses() const;
+    std::string GetSystematicValue(const std::string&, const unsigned int&, std::map<std::string,TH1D*>&);
 private:
     std::string systematicName;
     std::string systematicValue;
-    std::vector<std::string> systematicProcesses;        
+    std::string systematicHistoTag;
+    std::vector<std::string> systematicProcesses; 
 };
 
 double GetEventWeight(const std::string&, std::map<std::string,TH1D*>&, const unsigned int&);
@@ -207,25 +209,35 @@ int main(){
 
                 for (int c = 0; c < 2; c++){
 
-                    const std::string systematicValue = CommonSystematic.GetSystematicValue();
+                    std::string histoPreamble = "";
+                    if (c == 0) histoPreamble = "S_tag_";
+                    else histoPreamble = "UnD_tag_";
                     const std::vector<std::string> systematicProcesses = CommonSystematic.GetSystematicProcesses();
 
                     // signal
                     if (std::find(systematicProcesses.begin(), systematicProcesses.end(), "SIGNAL") != systematicProcesses.end()) {
+                        const std::string fullHistogramName = histoPreamble + signal;
+                        const std::string systematicValue = CommonSystematic.GetSystematicValue(fullHistogramName.c_str(), iBin, hOriginal_);
                         WriteBlock(systematicValue, otherColSize, dataCard);
                     } else {
                         WriteBlock("-", otherColSize, dataCard);
                     }
+
                     // monte carlo background
                     for (auto mcbk : mcbkVec){
                         if (std::find(systematicProcesses.begin(), systematicProcesses.end(), mcbk) != systematicProcesses.end()) {
+                            const std::string fullHistogramName = histoPreamble + mcbk;
+                            const std::string systematicValue = CommonSystematic.GetSystematicValue(fullHistogramName.c_str(), iBin, hOriginal_);
                             WriteBlock(systematicValue, otherColSize, dataCard);
                         } else {
                             WriteBlock("-", otherColSize, dataCard);
                         }                   
                     }
+
                     // QCD
                     if (std::find(systematicProcesses.begin(), systematicProcesses.end(), qcdName) != systematicProcesses.end()) {
+                        const std::string fullHistogramName = histoPreamble + qcdName;
+                        const std::string systematicValue = CommonSystematic.GetSystematicValue(fullHistogramName.c_str(), iBin, hOriginal_);
                         WriteBlock(systematicValue, otherColSize, dataCard);
                     } else {
                         WriteBlock("-", otherColSize, dataCard);
@@ -350,30 +362,65 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
     histoNameVec.push_back("mH90_mSusy2600");
     histoNameVec.push_back("mH125_mSusy2600");
 
-    for (size_t iH = 0; iH < histoNameVec.size(); ++iH){
+    std::vector<std::string> nonTrivialSysVec;
+    nonTrivialSysVec.push_back("NOSYS");
+    nonTrivialSysVec.push_back("dbtLooseDown");
+    nonTrivialSysVec.push_back("dbtLooseUp");
+    nonTrivialSysVec.push_back("jecUncUp");
+    nonTrivialSysVec.push_back("jecUncDown");
 
-        std::string histoToUse = histoNameVec[iH];
-        TFile * f = new TFile(Form("%s/%s/%s", preamble.c_str(), histoToUse.c_str(), postamble.c_str()));
-        // explanation of terminology
-        // 1. S, U, D --> refers to mass space. pred is the prediction of S. UnD is the sum U+D.
-        // 2. tag, anti, control --> refers to 2*DBT space
-        // 3. sample name on the end
-        h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtDiagUpLoose");
-        h_[Form("UnD_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtDiagUpLoose");
-        h_[Form("UnD_tag_%s", histoToUse.c_str())]->Add((TH1D*)f->Get("D_dbtDiagUpLoose"));
+    for (auto nonTrivialSys : nonTrivialSysVec){
+        for (size_t iH = 0; iH < histoNameVec.size(); ++iH){
 
-    } // closes loop through histoNameVec
+            std::string histoToUse = histoNameVec[iH];
+            TFile * f = new TFile(Form("%s/%s/%s", preamble.c_str(), histoToUse.c_str(), postamble.c_str()));
+            // explanation of terminology
+            // 1. S, U, D --> refers to mass space. pred is the prediction of S. UnD is the sum U+D.
+            // 2. tag, anti, control --> refers to 2*DBT space
+            // 3. sample name on the end
+            h_[Form("S_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*)f->Get(Form("S_dbtDiagUpLoose_%s", nonTrivialSys.c_str()));
+            h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*)f->Get(Form("U_dbtDiagUpLoose_%s", nonTrivialSys.c_str()));
+            h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->Add((TH1D*)f->Get(Form("D_dbtDiagUpLoose_%s", nonTrivialSys.c_str())));
+
+        } // closes loop through histoNameVec
+    } // closes loop through nonTrivialSysVec
+
 } // closes function GetHistograms
 
 
 CommonSystematic::CommonSystematic(const std::string& systematicNameDummy, const double& systematicValueNumber, const std::vector<std::string>& systematicProcessesDummy) :
 systematicName(systematicNameDummy),
 systematicValue(std::to_string(systematicValueNumber)),
+systematicHistoTag(""),
 systematicProcesses(systematicProcessesDummy)
 {};
+
+CommonSystematic::CommonSystematic(const std::string& systematicNameDummy, const std::string& systematicHistoTagDummy, const std::vector<std::string>& systematicProcessesDummy) :
+systematicName(systematicNameDummy),
+systematicValue(""),
+systematicHistoTag(systematicHistoTagDummy),
+systematicProcesses(systematicProcessesDummy)
+{};
+
 std::string CommonSystematic::GetSystematicName() const {return systematicName;}
-std::string CommonSystematic::GetSystematicValue() const {return systematicValue;}
 std::vector<std::string> CommonSystematic::GetSystematicProcesses() const {return systematicProcesses;}
+
+std::string CommonSystematic::GetSystematicValue(const std::string& fullHistogramName, const unsigned int& iBin, std::map<std::string,TH1D*>& hOriginal_) 
+{
+    if (systematicHistoTag.empty() == false) return systematicValue;
+    
+    else{
+        double count_nominal = hOriginal_[Form("%s_NOSYS", fullHistogramName.c_str())]->GetBinContent(iBin); 
+        double count_sysUp = hOriginal_[Form("%s_%sUp", fullHistogramName.c_str(), systematicHistoTag.c_str())]->GetBinContent(iBin);
+        double count_sysDown = hOriginal_[Form("%s_%sDown", fullHistogramName.c_str(), systematicHistoTag.c_str())]->GetBinContent(iBin);
+
+        double k_down = count_sysDown / count_nominal;
+        double k_up = count_sysUp / count_nominal;
+
+        std::string systenaticValueSpec = std::to_string(k_down) + "/" + std::to_string(k_up);
+        return systenaticValueSpec;
+    }
+}
 
 
 double GetEventWeight(const std::string& histogramName, std::map<std::string,TH1D*>& hOriginal_, const unsigned int& numberOfBins){
