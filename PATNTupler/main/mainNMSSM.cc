@@ -375,7 +375,7 @@ public:
 			treeVar_fatJetB_p4_jecUncDown_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
 
 			treeVar_ht_jecUncUp_ = ht;
-			treeVar_ht_jecUncUp_ = ht;
+			treeVar_ht_jecUncDown_ = ht;
 
 			if (slimJets.size() > 1){
 				treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
@@ -497,9 +497,9 @@ int main(int argc, char** argv){
 
     // Check you have provided a valid sample type - used for different scale factors
     std::string sampleType(argv[3]);
-    if (sampleType != "DATA" && sampleType != "SIGNAL" && sampleType != "TTJETS" && sampleType != "VJETS"){
+    if (sampleType != "DATA" && sampleType != "SIGNAL" && sampleType != "TTJETS" && sampleType != "OTHER_MC"){
         std::cout << "SampleType provided is not valid" << std::endl;
-        std::cout << "Use either DATA, SIGNAL, TTJETS, VJETS" << std::endl;
+        std::cout << "Use either DATA, SIGNAL, TTJETS, OTHER_MC" << std::endl;
         std::cout << "Exiting..." << std::endl;
         return -1;
     }
