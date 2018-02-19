@@ -20,10 +20,10 @@ import datetime
 
 executable = "nTupAnaNMSSM" # wrt 'main' directory
 code = "mainNMSSM.cc" # wrt 'main' directory
-inputFileListPath = "/opt/ppd/scratch/xap79297/CMSSW_8_0_29/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4_SysExtra/mH70p0_mSusy2200p0_ratio0p99_splitting0p1.list"
-outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_27_CMSSW_8_0_29_dbtV4/mc_SysExtra/mH70p0_mSusy2200p0_ratio0p99_splitting0p1/" # has to be the full path
-sampleType = "SIGNAL" # choose from SIGNAL, DATA, TTJETS, VJETS
-filesPerJob = 10
+inputFileListPath = "/opt/ppd/scratch/xap79297/CMSSW_8_0_29/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4_SysExtra/TTJets.list"
+outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_09_27_CMSSW_8_0_29_dbtV4/mc_SysExtra/TTJets_ht1200plus/" # has to be the full path
+sampleType = "TTJETS" # choose from SIGNAL, DATA, TTJETS, VJETS
+filesPerJob = 5
 logDirectoryBase = "/opt/ppd/scratch/xap79297/jobLogs/flatTrees/"
 
 ###########################################################################################################
@@ -34,7 +34,7 @@ logDirectoryBase = "/opt/ppd/scratch/xap79297/jobLogs/flatTrees/"
 ###########################################################################################################
 ###########################################################################################################
 
-if (sampleType != "SIGNAL" and sampleType != "DATA" and sampleType != "TTJETS" and sampleType != "VJETS"):
+if (sampleType != "SIGNAL" and sampleType != "DATA" and sampleType != "TTJETS" and sampleType != "OTHER_MC"):
     print "you have not provided a valid sample type bro, exiting..."
     sys.exit()
 
