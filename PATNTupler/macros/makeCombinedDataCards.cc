@@ -38,7 +38,8 @@ private:
     std::vector<std::string> systematicProcesses; 
 };
 
-double GetEventWeight(const std::string&, std::map<std::string,TH1D*>&, const unsigned int&);
+std::vector<double> GetEventWeightVec_S(const std::string&, std::map<std::string,TH1D*>&, const unsigned int&);
+std::vector<double> GetEventWeightVec_UnD(const std::string&, std::map<std::string,TH1D*>&, const unsigned int&);
 std::vector<int> GetStatErrorLogic(const std::string&, std::map<std::string,TH1D*>&, const unsigned int&, const unsigned int&);
 
 void WriteBlock(const std::string&, const unsigned int&, std::ofstream&, const bool = false);
@@ -54,7 +55,7 @@ int main(){
 
 
     // ONE: save info (signal specific directories beneath this)
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing1000/"; // where we are going to save the output cards (should include the samples name, and any important features)
+    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing1001/"; // where we are going to save the output cards (should include the samples name, and any important features)
   
 
     // TWO: physics info - to match the histograms that you use
@@ -106,17 +107,25 @@ int main(){
     GetHistograms(hOriginal_);
     
     // get event weightings and see whether we want to set stat errors for mc bkgrd in a ht division
-    std::vector<double> signalWeightVec;
-    std::vector<double> mcbkWeightVec;
+    std::vector<std::vector<double>> signalWeightVec_S;
+    std::vector<std::vector<double>> signalWeightVec_UnD;
+
+    std::vector<std::vector<double>> mcbkWeightVec_S;
+    std::vector<std::vector<double>> mcbkWeightVec_UnD;
     std::vector<std::vector<int>>  mcbkStatErrorLogicVec;
 
     for (auto signal : signalVec){
-        double eventWeight = GetEventWeight(signal, hOriginal_, numberOfBins);
-        signalWeightVec.push_back(eventWeight);
+        std::vector<double> eventWeightVec_S = GetEventWeightVec_S(signal, hOriginal_, numberOfBins);
+        signalWeightVec_S.push_back(eventWeightVec_S);
+        std::vector<double> eventWeightVec_UnD = GetEventWeightVec_UnD(signal, hOriginal_, numberOfBins);
+        signalWeightVec_UnD.push_back(eventWeightVec_UnD);
     }
+
     for (auto mcbk : mcbkVec){
-        double eventWeight = GetEventWeight(mcbk, hOriginal_, numberOfBins);
-        mcbkWeightVec.push_back(eventWeight);
+        std::vector<double> eventWeightVec_S = GetEventWeightVec_S(mcbk, hOriginal_, numberOfBins);
+        mcbkWeightVec_S.push_back(eventWeightVec_S);
+        std::vector<double> eventWeightVec_UnD = GetEventWeightVec_UnD(mcbk, hOriginal_, numberOfBins);
+        mcbkWeightVec_UnD.push_back(eventWeightVec_UnD);
         mcbkStatErrorLogicVec.push_back( GetStatErrorLogic(mcbk, hOriginal_, numberOfBins, numberOfHtDivisions) );
     }
 
@@ -252,9 +261,22 @@ int main(){
             for (size_t iMC = 0; iMC < mcbkVec.size(); ++iMC){
                 const unsigned int iVec = iBin - 1;
                 if (mcbkStatErrorLogicVec[iMC][iVec] == 1){
-                    const int rawCount =  round(rate_mcbkVec_S[iMC] / mcbkWeightVec[iMC]);
+                    
+                    double mcbkWeight_S = mcbkWeightVec_S[iMC][iVec];
+                    
+                    if (mcbkWeight_S == 0){
+                        std::vector<double> nonZeroWeightVec;
+                        for (auto weight : mcbkWeightVec_S[iMC])
+                            if (weight > 0) nonZeroWeightVec.push_back(weight);
+                        for (auto weight : mcbkWeightVec_UnD[iMC])
+                            if (weight > 0) nonZeroWeightVec.push_back(weight);
+                        for (auto nonZeroWeight : nonZeroWeightVec)
+                            mcbkWeight_S += nonZeroWeight / nonZeroWeightVec.size();
+                    }
+
+                    const int rawCount =  round(rate_mcbkVec_S[iMC] / mcbkWeight_S);
                     const std::string statSysName = "ch" + std::to_string(iBin) + "_" + mcbkVec[iMC] + "_S_stats gmN " + std::to_string(rawCount);
-                    const std::string mcbkWeightStr = std::to_string(mcbkWeightVec[iMC]);
+                    const std::string mcbkWeightStr = std::to_string(mcbkWeight_S);
                     WriteBlock(statSysName, firstColSize, dataCard);
                     WriteBlock("-", otherColSize, dataCard);
 
@@ -269,9 +291,22 @@ int main(){
             for (size_t iMC = 0; iMC < mcbkVec.size(); ++iMC){
                 const unsigned int iVec = iBin - 1;
                 if (mcbkStatErrorLogicVec[iMC][iVec] == 1){
-                    const int rawCount =  round(rate_mcbkVec_UnD[iMC] / mcbkWeightVec[iMC]);
+                    
+                    double mcbkWeight_UnD = mcbkWeightVec_UnD[iMC][iVec];
+                    
+                    if (mcbkWeight_UnD == 0){
+                        std::vector<double> nonZeroWeightVec;
+                        for (auto weight : mcbkWeightVec_S[iMC])
+                            if (weight > 0) nonZeroWeightVec.push_back(weight);
+                        for (auto weight : mcbkWeightVec_UnD[iMC])
+                            if (weight > 0) nonZeroWeightVec.push_back(weight);
+                        for (auto nonZeroWeight : nonZeroWeightVec)
+                            mcbkWeight_UnD += nonZeroWeight / nonZeroWeightVec.size();
+                    }
+                    
+                    const int rawCount =  round(rate_mcbkVec_UnD[iMC] / mcbkWeight_UnD);
                     const std::string statSysName = "ch" + std::to_string(iBin) + "_" + mcbkVec[iMC] + "_UnD_stats gmN " + std::to_string(rawCount);
-                    const std::string mcbkWeightStr = std::to_string(mcbkWeightVec[iMC]);
+                    const std::string mcbkWeightStr = std::to_string(mcbkWeight_UnD);
                     WriteBlock(statSysName, firstColSize, dataCard);
                     WriteBlock("-", otherColSize, dataCard);
 
@@ -432,7 +467,7 @@ std::string CommonSystematic::GetSystematicValue(const std::string& fullHistogra
 }
 
 
-double GetEventWeight(const std::string& histogramName, std::map<std::string,TH1D*>& hOriginal_, const unsigned int& numberOfBins){
+std::vector<double> GetEventWeightVec_S(const std::string& histogramName, std::map<std::string,TH1D*>& hOriginal_, const unsigned int& numberOfBins){
 
     std::vector<double> eventWeightVec;
 
@@ -441,29 +476,24 @@ double GetEventWeight(const std::string& histogramName, std::map<std::string,TH1
         double binContent_S = hOriginal_[Form("S_tag_%s_NOSYS", histogramName.c_str())]->GetBinContent(iBin);
         double binError_S = hOriginal_[Form("S_tag_%s_NOSYS", histogramName.c_str())]->GetBinError(iBin);
         if (binContent_S != 0) eventWeightVec.push_back(binError_S * binError_S / binContent_S);
-
-        double binContent_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", histogramName.c_str())]->GetBinContent(iBin);
-        double binError_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", histogramName.c_str())]->GetBinError(iBin);
-        if (binContent_UnD != 0) eventWeightVec.push_back(binError_UnD * binError_UnD / binContent_UnD);        
+        else eventWeightVec.push_back(0.0);
     }
+    return eventWeightVec;
+}
 
-    if (eventWeightVec.size() == 0){
-        std::cout << "Not a single entry in S or UnD for the process " << histogramName;
-        std::cout << "! Returning a dummy event weighting of -1234.0" << std::endl;
-        return -1234.0;
-    }
 
-    // check that all event weights for a given process are the same
-    double eventWeight = -9876.0;
-    for (size_t iEW = 0; iEW < eventWeightVec.size(); ++iEW){
-        if (iEW == 0) eventWeight = eventWeightVec[0];
-        if (iEW != 0 && float(eventWeightVec[iEW]) != float(eventWeightVec[iEW-1]) ){
-            std::cout << "WARNING: The event weights are not the same for process " << histogramName;
-            std::cout << "! Returning a dummy event weighting of -9876.0" << std::endl;
-            return eventWeight;
-        }
+std::vector<double> GetEventWeightVec_UnD(const std::string& histogramName, std::map<std::string,TH1D*>& hOriginal_, const unsigned int& numberOfBins){
+
+    std::vector<double> eventWeightVec;
+
+    for (unsigned int iBin = 1; iBin < numberOfBins + 1; ++iBin){
+
+        double binContent_S = hOriginal_[Form("UnD_tag_%s_NOSYS", histogramName.c_str())]->GetBinContent(iBin);
+        double binError_S = hOriginal_[Form("UnD_tag_%s_NOSYS", histogramName.c_str())]->GetBinError(iBin);
+        if (binContent_S != 0) eventWeightVec.push_back(binError_S * binError_S / binContent_S);
+        else eventWeightVec.push_back(0.0);
     }
-    return eventWeight;
+    return eventWeightVec;
 }
 
 
