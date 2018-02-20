@@ -88,7 +88,7 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 	std::cout << std::endl;
 }
 
-void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& selectionCut, const double& crossSection, const bool& addNumEventsBeforeCutsToTotal)
+void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& selectionCut, const double& crossSection)
 {
 	TFile * f = TFile::Open(flatTreeAddress.c_str());
     TTree * evT = (TTree*)f->Get("eventCountTree");
@@ -104,7 +104,7 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
         nEvtsRunOverForInputTotal += nEvtsRunOverForInputEntry;
         numberOfEventsAfterPreSelection += nEvtsAfterPreSelForInputEntry;
     }
-    if (addNumEventsBeforeCutsToTotal) numberOfEventsBeforeCuts += 1000.0 * crossSection * luminosity;
+    numberOfEventsBeforeCuts += 1000.0 * crossSection * luminosity;
     double eventWeighting = 1000.0 * crossSection * luminosity / nEvtsRunOverForInputTotal;
 
 	TTree * T = (TTree*)f->Get("doubleBFatJetPairTree");
