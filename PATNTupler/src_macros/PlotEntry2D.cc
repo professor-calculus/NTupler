@@ -118,7 +118,8 @@ void PlotEntry2D::AddInput(const std::string& flatTreeAddress, const std::string
 	if (!scaleFactorWeightStr.empty()) drawStringB += Form("*(%s)", scaleFactorWeightStr.c_str());
     std::cout << "Filling for TTree: " << flatTreeAddress << std::endl;
 	std::cout << "Variables used: " << variablesToPlot << std::endl;
-	if (!scaleFactorWeightStr.empty()) std::cout << "nb: Using Scale Factor Weights" << std::endl;
+	if (!scaleFactorWeightStr.empty()) std::cout << ">>> Using Scale Factor Weights" << std::endl;
+	else std::cout << ">>> NOT Using Scale Factor Weights" << std::endl;
 	if (!selectionCut.empty()) std::cout << "Event Weighting * Cut applied: " << drawStringB << std::endl;
 	else std::cout << "Event Weighting: " << drawStringB << "\nNB: no cut applied." << std::endl;
 	T->Draw(drawStringA.c_str(), drawStringB.c_str(), "");
