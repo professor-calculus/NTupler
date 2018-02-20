@@ -54,7 +54,7 @@ int main(){
 
 
     // ONE: save info (signal specific directories beneath this)
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing4/"; // where we are going to save the output cards (should include the samples name, and any important features)
+    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing1000/"; // where we are going to save the output cards (should include the samples name, and any important features)
   
 
     // TWO: physics info - to match the histograms that you use
@@ -64,7 +64,7 @@ int main(){
 
     // THREE: Samples To Use (different project for each signal sample)
     const std::string dataSample = "data";
-    std::vector<std::string> signalVec = {"mH30_mSusy2200", "mH50_mSusy2200", "mH70_mSusy2200", "mH90_mSusy2200"}; // the different signal samples you wish to use
+    std::vector<std::string> signalVec = {"mH70_mSusy2400"}; // the different signal samples you wish to use
     const std::vector<std::string> mcbkVec = {"TTJets", "ZJets", "WJets"}; // the mc background samples
     const std::string qcdName = "QCD"; // this is just a label as QCD contribution is driven during the fit
 
@@ -83,8 +83,8 @@ int main(){
     CommonSystematicVec.push_back( CommonSystematic("XS_TTJets lnN", 1.5, {"TTJets"}) );
     CommonSystematicVec.push_back( CommonSystematic("XS_ZJets lnN", 1.5, {"ZJets"}) );
     CommonSystematicVec.push_back( CommonSystematic("XS_WJets lnN", 1.5, {"WJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("jecUnc lnN", "jecUnc", {"SIGNAL"}) );
-    CommonSystematicVec.push_back( CommonSystematic("dbtLoose lnN", "dbtLoose", {"SIGNAL"}) );
+    CommonSystematicVec.push_back( CommonSystematic("jecUnc lnN", "jecUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("dbtLoose lnN", "dbtLoose", {"SIGNAL", "TTJets"}) );
 
 
     // SIX: are we blinded ? if true, uses Ai * data_obs_UnD as a dummy for data_obs_S
@@ -147,7 +147,7 @@ int main(){
             std::vector<std::string> rate_mcbkVec_S_str;
             std::vector<std::string> rate_mcbkVec_UnD_str;
             for (auto mcbk : mcbkVec){
-                double rate_S = hOriginal_[Form("S_tag_%s_NOSYS", mcbk.c_str())]->GetBinContent(iBin);
+                double rate_S = hOriginal_[Form("S_tag_%s_NOSYS", mcbk.c_str())]->GetBinContent(iBin);               
                 double rate_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", mcbk.c_str())]->GetBinContent(iBin);
                 rate_mcbkVec_S.push_back(rate_S);
                 rate_mcbkVec_UnD.push_back(rate_UnD);
@@ -319,50 +319,50 @@ int main(){
 void GetHistograms(std::map<std::string,TH1D*>& h_)
 {
     // histos locations
-    std::string preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_01_11_CMSSW_8_0_29_dbtV4/MassCutsV05/";
+    std::string preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_01_11_CMSSW_8_0_29_dbtV4/TESTING_SYS/";
     
     std::string postamble = "MassCutsV05_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
     std::vector<std::string> histoNameVec;
     histoNameVec.push_back("data"); // comment out when working on MC
-    histoNameVec.push_back("QCD");
+    // histoNameVec.push_back("QCD");
     histoNameVec.push_back("TTJets");
     histoNameVec.push_back("ZJets");
     histoNameVec.push_back("WJets");
-    histoNameVec.push_back("mH30_mSusy800");
-    histoNameVec.push_back("mH50_mSusy800");
-    histoNameVec.push_back("mH70_mSusy800");
-    histoNameVec.push_back("mH90_mSusy800");
-    histoNameVec.push_back("mH125_mSusy800");
-    histoNameVec.push_back("mH30_mSusy1200");
-    histoNameVec.push_back("mH50_mSusy1200");
-    histoNameVec.push_back("mH70_mSusy1200");
-    histoNameVec.push_back("mH90_mSusy1200");
-    histoNameVec.push_back("mH125_mSusy1200");
-    histoNameVec.push_back("mH30_mSusy1600");
-    histoNameVec.push_back("mH50_mSusy1600");
-    histoNameVec.push_back("mH70_mSusy1600");
-    histoNameVec.push_back("mH90_mSusy1600");
-    histoNameVec.push_back("mH125_mSusy1600");
-    histoNameVec.push_back("mH30_mSusy2000");
-    histoNameVec.push_back("mH50_mSusy2000");
-    histoNameVec.push_back("mH70_mSusy2000");
-    histoNameVec.push_back("mH90_mSusy2000");
-    histoNameVec.push_back("mH125_mSusy2000");
-    histoNameVec.push_back("mH30_mSusy2200");
-    histoNameVec.push_back("mH50_mSusy2200");
-    histoNameVec.push_back("mH70_mSusy2200");
-    histoNameVec.push_back("mH90_mSusy2200");
-    histoNameVec.push_back("mH125_mSusy2200");
-    histoNameVec.push_back("mH30_mSusy2400");
-    histoNameVec.push_back("mH50_mSusy2400");
+    // histoNameVec.push_back("mH30_mSusy800");
+    // histoNameVec.push_back("mH50_mSusy800");
+    // histoNameVec.push_back("mH70_mSusy800");
+    // histoNameVec.push_back("mH90_mSusy800");
+    // histoNameVec.push_back("mH125_mSusy800");
+    // histoNameVec.push_back("mH30_mSusy1200");
+    // histoNameVec.push_back("mH50_mSusy1200");
+    // histoNameVec.push_back("mH70_mSusy1200");
+    // histoNameVec.push_back("mH90_mSusy1200");
+    // histoNameVec.push_back("mH125_mSusy1200");
+    // histoNameVec.push_back("mH30_mSusy1600");
+    // histoNameVec.push_back("mH50_mSusy1600");
+    // histoNameVec.push_back("mH70_mSusy1600");
+    // histoNameVec.push_back("mH90_mSusy1600");
+    // histoNameVec.push_back("mH125_mSusy1600");
+    // histoNameVec.push_back("mH30_mSusy2000");
+    // histoNameVec.push_back("mH50_mSusy2000");
+    // histoNameVec.push_back("mH70_mSusy2000");
+    // histoNameVec.push_back("mH90_mSusy2000");
+    // histoNameVec.push_back("mH125_mSusy2000");
+    // histoNameVec.push_back("mH30_mSusy2200");
+    // histoNameVec.push_back("mH50_mSusy2200");
+    // histoNameVec.push_back("mH70_mSusy2200");
+    // histoNameVec.push_back("mH90_mSusy2200");
+    // histoNameVec.push_back("mH125_mSusy2200");
+    // histoNameVec.push_back("mH30_mSusy2400");
+    // histoNameVec.push_back("mH50_mSusy2400");
     histoNameVec.push_back("mH70_mSusy2400");
-    histoNameVec.push_back("mH90_mSusy2400");
-    histoNameVec.push_back("mH125_mSusy2400");
-    histoNameVec.push_back("mH30_mSusy2600");
-    histoNameVec.push_back("mH50_mSusy2600");
-    histoNameVec.push_back("mH70_mSusy2600");
-    histoNameVec.push_back("mH90_mSusy2600");
-    histoNameVec.push_back("mH125_mSusy2600");
+    // histoNameVec.push_back("mH90_mSusy2400");
+    // histoNameVec.push_back("mH125_mSusy2400");
+    // histoNameVec.push_back("mH30_mSusy2600");
+    // histoNameVec.push_back("mH50_mSusy2600");
+    // histoNameVec.push_back("mH70_mSusy2600");
+    // histoNameVec.push_back("mH90_mSusy2600");
+    // histoNameVec.push_back("mH125_mSusy2600");
 
     std::vector<std::string> nonTrivialSysVec;
     nonTrivialSysVec.push_back("NOSYS");
@@ -371,21 +371,24 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
     nonTrivialSysVec.push_back("jecUncUp");
     nonTrivialSysVec.push_back("jecUncDown");
 
-    for (auto nonTrivialSys : nonTrivialSysVec){
-        for (size_t iH = 0; iH < histoNameVec.size(); ++iH){
+    for (size_t iH = 0; iH < histoNameVec.size(); ++iH){
 
-            std::string histoToUse = histoNameVec[iH];
-            TFile * f = new TFile(Form("%s/%s/%s", preamble.c_str(), histoToUse.c_str(), postamble.c_str()));
+        std::string histoToUse = histoNameVec[iH];
+        TFile * f = new TFile(Form("%s/%s/%s", preamble.c_str(), histoToUse.c_str(), postamble.c_str()));
+
+        for (auto nonTrivialSys : nonTrivialSysVec){
+
             // explanation of terminology
             // 1. S, U, D --> refers to mass space. pred is the prediction of S. UnD is the sum U+D.
             // 2. tag, anti, control --> refers to 2*DBT space
             // 3. sample name on the end
+            if ( (TH1D*)f->Get(Form("S_dbtDiagUpLoose_%s", nonTrivialSys.c_str())) == NULL ) continue;
             h_[Form("S_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*)f->Get(Form("S_dbtDiagUpLoose_%s", nonTrivialSys.c_str()));
             h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())] = (TH1D*)f->Get(Form("U_dbtDiagUpLoose_%s", nonTrivialSys.c_str()));
             h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->Add((TH1D*)f->Get(Form("D_dbtDiagUpLoose_%s", nonTrivialSys.c_str())));
 
-        } // closes loop through histoNameVec
-    } // closes loop through nonTrivialSysVec
+        } // closes loop through nonTrivialSysVec
+    } // closes loop through histoNameVec
 
 } // closes function GetHistograms
 
@@ -413,11 +416,15 @@ std::string CommonSystematic::GetSystematicValue(const std::string& fullHistogra
     
     else{
         double count_nominal = hOriginal_[Form("%s_NOSYS", fullHistogramName.c_str())]->GetBinContent(iBin); 
+        if (count_nominal == 0) return "-";
+
         double count_sysUp = hOriginal_[Form("%s_%sUp", fullHistogramName.c_str(), systematicHistoTag.c_str())]->GetBinContent(iBin);
         double count_sysDown = hOriginal_[Form("%s_%sDown", fullHistogramName.c_str(), systematicHistoTag.c_str())]->GetBinContent(iBin);
 
         double k_down = count_sysDown / count_nominal;
         double k_up = count_sysUp / count_nominal;
+        if (k_down == 0) k_down = 0.01;
+        if (k_up == 0) k_up = 0.01;
 
         std::string systenaticValueSpec = std::to_string(k_down) + "/" + std::to_string(k_up);
         return systenaticValueSpec;
