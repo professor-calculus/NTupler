@@ -71,7 +71,7 @@ int main(){
 
 
     // FOUR: data card layout info
-    const unsigned int firstColSize = 30;
+    const unsigned int firstColSize = 35;
     const unsigned int otherColSize = 20;
 
 
@@ -82,8 +82,8 @@ int main(){
     CommonSystematicVec.push_back( CommonSystematic("luminosity lnN", 1.025, {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
     CommonSystematicVec.push_back( CommonSystematic("XS_Signal lnN", 1.050, {"SIGNAL"}) );
     CommonSystematicVec.push_back( CommonSystematic("XS_TTJets lnN", 1.5, {"TTJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("XS_ZJets lnN", 1.5, {"ZJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("XS_WJets lnN", 1.5, {"WJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("XS_ZJets lnN", 1.4, {"ZJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("XS_WJets lnN", 1.3, {"WJets"}) );
     CommonSystematicVec.push_back( CommonSystematic("jecUnc lnN", "jecUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
     CommonSystematicVec.push_back( CommonSystematic("dbtLoose lnN", "dbtLoose", {"SIGNAL", "TTJets"}) );
 
@@ -130,7 +130,8 @@ int main(){
     }
 
     // loop through the different signal sample references
-    for (auto signal : signalVec){
+    for (size_t iSig = 0; iSig < signalVec.size(); ++iSig){
+        const std::string signal = signalVec[iSig];
 
         const std::string outputDir = outputDirGeneral + "/" + signal + "/";
         const std::string dirExistCommand = "test -e " + outputDir;
@@ -258,6 +259,18 @@ int main(){
             }
 
             dataCard << "\n# unique systematics\n";
+            if (rate_signal_S > 0){
+                const unsigned int iVec = iBin - 1;
+                double signalWeight_S = signalWeightVec_S[iSig][iVec];
+                const int rawCount = round(rate_signal_S / signalWeight_S);
+                const std::string statSysName = "ch" + std::to_string(iBin) + "_SIG_S_stats gmN " + std::to_string(rawCount);
+                const std::string signalWeightStr = std::to_string(signalWeight_S);
+                WriteBlock(statSysName, firstColSize, dataCard);
+                WriteBlock(signalWeightStr, otherColSize, dataCard);
+                for (unsigned int c = 0; c < 2 * mcbkVec.size() + 3; ++c) WriteBlock("-", otherColSize, dataCard);
+                dataCard << "\n";
+            }
+
             for (size_t iMC = 0; iMC < mcbkVec.size(); ++iMC){
                 const unsigned int iVec = iBin - 1;
                 if (mcbkStatErrorLogicVec[iMC][iVec] == 1){
@@ -274,7 +287,7 @@ int main(){
                             mcbkWeight_S += nonZeroWeight / nonZeroWeightVec.size();
                     }
 
-                    const int rawCount =  round(rate_mcbkVec_S[iMC] / mcbkWeight_S);
+                    const int rawCount = round(rate_mcbkVec_S[iMC] / mcbkWeight_S);
                     const std::string statSysName = "ch" + std::to_string(iBin) + "_" + mcbkVec[iMC] + "_S_stats gmN " + std::to_string(rawCount);
                     const std::string mcbkWeightStr = std::to_string(mcbkWeight_S);
                     WriteBlock(statSysName, firstColSize, dataCard);
@@ -288,6 +301,20 @@ int main(){
                     dataCard << "\n";
                 }
             }
+
+            if (rate_signal_UnD > 0){
+                const unsigned int iVec = iBin - 1;
+                double signalWeight_UnD = signalWeightVec_UnD[iSig][iVec];
+                const int rawCount = round(rate_signal_UnD / signalWeight_UnD);
+                const std::string statSysName = "ch" + std::to_string(iBin) + "_SIG_UnD_stats gmN " + std::to_string(rawCount);
+                const std::string signalWeightStr = std::to_string(signalWeight_UnD);
+                WriteBlock(statSysName, firstColSize, dataCard);
+                for (unsigned int c = 0; c < mcbkVec.size() + 2; ++c) WriteBlock("-", otherColSize, dataCard);
+                WriteBlock(signalWeightStr, otherColSize, dataCard);
+                for (unsigned int c = 0; c < mcbkVec.size() + 1; ++c) WriteBlock("-", otherColSize, dataCard);
+                dataCard << "\n";
+            }
+
             for (size_t iMC = 0; iMC < mcbkVec.size(); ++iMC){
                 const unsigned int iVec = iBin - 1;
                 if (mcbkStatErrorLogicVec[iMC][iVec] == 1){
@@ -304,7 +331,7 @@ int main(){
                             mcbkWeight_UnD += nonZeroWeight / nonZeroWeightVec.size();
                     }
                     
-                    const int rawCount =  round(rate_mcbkVec_UnD[iMC] / mcbkWeight_UnD);
+                    const int rawCount = round(rate_mcbkVec_UnD[iMC] / mcbkWeight_UnD);
                     const std::string statSysName = "ch" + std::to_string(iBin) + "_" + mcbkVec[iMC] + "_UnD_stats gmN " + std::to_string(rawCount);
                     const std::string mcbkWeightStr = std::to_string(mcbkWeight_UnD);
                     WriteBlock(statSysName, firstColSize, dataCard);
