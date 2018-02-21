@@ -4,6 +4,7 @@
 
 from scipy import interpolate
 import numpy as np
+matplotlib.use('agg')
 import matplotlib
 from matplotlib import rc
 matplotlib.rcParams['mathtext.fontset'] = 'custom'
@@ -22,10 +23,10 @@ import sys
 import argparse as a
 
 #Get options
-parser=a.ArgumentParser(description='Pheno Limit Plot')
-parser.add_argument('-o','--observed',required=True)
-parser.add_argument('-e','--expected')
-parser.add_argument('-t','--title',default='Limit Plot')
+parser=a.ArgumentParser(description='NMSSM Limit Plot')
+parser.add_argument('-o', '--observed', required=True)
+parser.add_argument('-e', '--expected')
+parser.add_argument('-t', '--title', default='')
 args=parser.parse_args()
 
 obs = np.loadtxt(args.observed)
@@ -34,6 +35,7 @@ exp = np.loadtxt(args.expected)
 points = np.unique(obs[:,0])
 npoints = points.size
 print(npoints)
+
 
 def interp(data, method='linear'):
     x = data[:,0]
@@ -45,7 +47,6 @@ def interp(data, method='linear'):
     zi = mlab.griddata(x, y, z, xi, yi, interp=method)
     
     return xi, yi, zi
-
 
 
 def interp2(data, method='linear', n_p=10):
@@ -66,7 +67,6 @@ def interp2(data, method='linear', n_p=10):
     #zi = np.clip(zi, None, 6.)
     
     return xi, yi, zi
-
 
 
 def interp3(data, method='linear'):
@@ -114,16 +114,16 @@ v = np.logspace(-2, 3, 500)
 xi, yi, zi = interp2(obs, 'linear', 24*npoints)
 xj, yj, zj = interp2(obs, 'linear', 3*npoints)
 xk, yk, zk = interp2(exp, 'linear', 3*npoints)
+
 plt.contour(xk, yk, zk, [1.0], colors='r')
 plt.contour(xj, yj, zj, [1.0], colors='k')
 plt.contourf(xi, yi, zi, levels=v, norm=mcol.LogNorm(vmin=0.1, vmax=100), cmap='PuBu_r')
-plt.xlabel('$M_{Squark}$ [GeV]')
-plt.ylabel('$M_{LSP}$ [GeV]')
+plt.xlabel('$M_{XXX}$ [GeV]')
+plt.ylabel('$M_{YYY}$ [GeV]')
 cbar = plt.colorbar()
-#cbar.set_ticks([0,1,2,3,4,5,6])
-#cbar.set_ticklabels([0,1,2,3,4,5,6])
-cbar.set_ticks([0.01,0.1,1,10,100,1000])
-cbar.set_ticklabels([0.01,0.1,1,10,100,1000])
-cbar.set_label(r'Upper Limit $\dfrac{\sigma_{_{Max}}}{\sigma_{_{Theory}}}$ at $95\%$ CL', rotation=90, fontsize=8, labelpad=5)
+ticks = [0.01, 0.1, 1, 10, 100, 1000]
+cbar.set_ticks(ticks)
+cbar.set_ticklabels(ticks)
+cbar.set_label(r'Upper Limit $\dfrac{\sigma_{_{Obs}}}{\sigma_{_{Theory}}}$ at $95\%$ CL', rotation=90, fontsize=8, labelpad=5)
 plt.title(args.title)
 plt.show()
