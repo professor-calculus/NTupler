@@ -34,7 +34,10 @@ mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600]
 mHiggsVec = [30, 50, 70, 90, 125]
 inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing2000/"
 outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing2000/limitPlot/"
+
 plotObserved = True
+minMu = -1.7
+maxMu = 1.2
 
 #############################
 #############################
@@ -162,8 +165,9 @@ if (plotObserved):
 
 
 # Plotting & Aesthetics
-v = np.logspace(-3, 1.2, 100) # z axis: min_base10, max_base_10, number of samples
-ticks = [0.01, 0.1, 1, 10] # z axis color chart
+
+v = np.logspace(minMu, maxMu, 100) # z axis: min_base10, max_base10, number of samples (squeeze to the point of black spaces)
+ticks = [0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000, 100000] # z axis color chart, it should span the above
 
 
 stops = [0.0000, 0.1250, 0.2500, 0.3750, 0.5000, 0.6250, 0.7500, 0.8750, 1.0000]
@@ -194,13 +198,12 @@ bird = mcol.LinearSegmentedColormap('bird', cdict)
 if (plotObserved):
     plt.contour(xk, yk, zk, [1.0], colors='r')
 plt.contour(xj, yj, zj, [1.0], colors='k')
-plt.contourf(xi, yi, zi, levels=v, norm=mcol.LogNorm(vmin=0.1, vmax=20), cmap='PuBu_r')
+plt.contourf(xi, yi, zi, levels=v, norm=mcol.LogNorm(vmin=10**minMu, vmax=10**maxMu), cmap=bird)
 
 plt.xlabel('M$_{SUSY}}$ (GeV)', fontsize=16)
 plt.ylabel('M$_{H}$ (GeV)', fontsize=16)
 cbar = plt.colorbar()
 cbar.set_ticks(ticks)
-cbar.set_ticklabels(ticks)
 cbar.set_label('Upper Limit $\sigma_{TODO}/\sigma_{theory}$ at $95\%$ CL', rotation=90, fontsize=16, labelpad=14)
 # plt.title("")
 plt.show()
