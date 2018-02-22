@@ -21,12 +21,14 @@ import matplotlib.colors as mcol
 import sys
 import argparse as a
 
+
 # Get options
 parser=a.ArgumentParser(description='NMSSM Limit Plot')
 parser.add_argument('-o', '--observed', required=True)
 parser.add_argument('-e', '--expected')
 parser.add_argument('-t', '--title', default='')
 args=parser.parse_args()
+
 
 obs = np.loadtxt(args.observed)
 exp = []
@@ -138,6 +140,6 @@ cbar = plt.colorbar()
 ticks = [0.01, 0.1, 1, 10, 100, 1000]
 cbar.set_ticks(ticks)
 cbar.set_ticklabels(ticks)
-cbar.set_label(r'Upper Limit $\sigma_{obs}/\sigma_{theory}$ at $95\%$ CL', rotation=90, fontsize=15, labelpad=5)
+cbar.set_label(r'Upper Limit $\sigma_{obs}/\sigma_{theory}$ at $95\%$ CL', rotation=90, fontsize=15, labelpad=14)
 plt.title(args.title)
 plt.show()
