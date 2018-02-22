@@ -1,10 +1,13 @@
-# fancy limit plotter from Alex T
+# fancy limit plotter from Alex Titterton
 # run with
-# $ python limits2d.py -o /path/to/observed.txt -e /path/to/expected.txt -t <whatever title you like>
+# $ python $CMSSW_BASE/src/NTupler/PATNTupler/macros/limits_2d.py
 
+import os
+import ROOT
 from scipy import interpolate
 import numpy as np
 import matplotlib
+matplotlib.use('agg')
 from matplotlib import rc
 matplotlib.rcParams['mathtext.fontset'] = 'custom'
 matplotlib.rcParams['mathtext.rm'] = 'Bitstream Vera Sans'
@@ -22,42 +25,96 @@ import sys
 import argparse as a
 
 
-# Get options
-parser=a.ArgumentParser(description='NMSSM Limit Plot')
-parser.add_argument('-o', '--observed', required=True)
-parser.add_argument('-e', '--expected')
-parser.add_argument('-t', '--title', default='')
-args=parser.parse_args()
+#############################
+#############################
+#############################
+### ## # USER INPUTS # ## ###
+
+mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600]
+mHiggsVec = [30, 50, 70, 90, 125]
+inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing2000/"
+outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing2000/limitPlot/"
+plotObserved = True
+
+#############################
+#############################
+#############################
+#############################
+
+os.system("mkdir -p %s" % outputDir)
+
+f_2p5 = open("tmpLimits_2p5.txt", 'w')
+f_16p0 = open("tmpLimits_16p0.txt", 'w')
+f_50p0 = open("tmpLimits_50p0.txt", 'w')
+f_84p0 = open("tmpLimits_84p0.txt", 'w')
+f_97p5 = open("tmpLimits_97p5.txt", 'w')
+f_obs = open("tmpLimits_obs.txt", 'w')
+
+for mSusy in mSusyVec:
+    for mHiggs in mHiggsVec:
+
+        rootFile = "higgsCombineTest.AsymptoticLimits.mH" + str(mHiggs) + ".mSusy" + str(mSusy) + ".root"
+        rootFile = os.path.join(inputDir, rootFile)
+        if os.path.isfile(rootFile) == False:
+            continue
+        f = ROOT.TFile(rootFile)
+        T = f.Get("limit")
+
+        T.GetEntry(0)
+        f_2p5.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
+
+        T.GetEntry(1)
+        f_16p0.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
+
+        T.GetEntry(2)
+        f_50p0.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
+
+        T.GetEntry(3)
+        f_84p0.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
+
+        T.GetEntry(4)
+        f_97p5.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
+        
+        T.GetEntry(5)
+        if (mSusy > 1200): # HACK
+            f_obs.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
+
+f_2p5.close()
+f_16p0.close()
+f_50p0.close()
+f_84p0.close()
+f_97p5.close()
+f_obs.close()
+
+exp_2p5 = np.loadtxt("tmpLimits_2p5.txt")
+exp_16p0 = np.loadtxt("tmpLimits_16p0.txt")
+exp_50p0 = np.loadtxt("tmpLimits_50p0.txt")
+exp_84p0 = np.loadtxt("tmpLimits_84p0.txt")
+exp_97p5 = np.loadtxt("tmpLimits_97p5.txt")
+obs = np.loadtxt("tmpLimits_obs.txt")
+
+os.system("rm tmpLimits_2p5.txt")
+os.system("rm tmpLimits_16p0.txt")
+os.system("rm tmpLimits_50p0.txt")
+os.system("rm tmpLimits_84p0.txt")
+os.system("rm tmpLimits_97p5.txt")
+os.system("rm tmpLimits_obs.txt")
 
 
-obs = np.loadtxt(args.observed)
-exp = []
-doWeHaveExpected = False
-if (args.expected is not None):
-    doWeHaveExpected = True
-    exp = np.loadtxt(args.expected)
 
-# how many points on the grid
-pointsX = np.unique(obs[:,0])
-npointsX = pointsX.size
-pointsY = np.unique(obs[:,1])
-npointsY = pointsY.size
-print "Maximal Mass Grid = " + str(npointsX) + "(x-axis) by " + str(npointsY) + "(y-axis)"
-
-
-# def interp(data, method='linear'):
-#     x = data[:,0]
-#     y = data[:,1]
-#     z = data[:,2]
+def interp(data, method='linear'):
+    x = data[:,0]
+    y = data[:,1]
+    z = data[:,2]
     
-#     xi = np.linspace(x.min(), x.max(), 100)
-#     yi = np.linspace(y.min(), y.max(), 100)
-#     zi = mlab.griddata(x, y, z, xi, yi, interp=method)
+    xi = np.linspace(x.min(), x.max(), 100)
+    yi = np.linspace(y.min(), y.max(), 100)
+    zi = mlab.griddata(x, y, z, xi, yi, interp=method)
     
-#     return xi, yi, zi
+    return xi, yi, zi
 
 
-# THIS IS THE FUCTION VERSION BJOERN HAD BEEN USING
+# nb, THIS IS THE FUCTION VERSION BJOERN HAD BEEN USING
 def interp2(data, method='linear', n_p=10):
     x = data[:,0]
     y = data[:,1]
@@ -78,7 +135,7 @@ def interp2(data, method='linear', n_p=10):
     return xi, yi, zi
 
 
-# def interp3(data, method='linear'):
+# def interp3(data, method='linear'): # currently does not work :(
 #     x = data[:,0]
 #     y = data[:,1]
 #     z = data[:,2]
@@ -86,22 +143,29 @@ def interp2(data, method='linear', n_p=10):
 #     xi = np.linspace(x.min(), x.max(), 100)
 #     yi = np.linspace(y.min(), y.max(), 100)
 #     xi, yi = np.meshgrid(xi,yi)
-#     zi = interpolate.LinearNDInterpolator(x, y, z, method=method)(xi, yi)
+#     # zi = interpolate.LinearNDInterpolator(x, y, z, method=method)(xi, yi)
     
 #     return xi, yi, zi
 
 
 
-# >>> The Linear Interpolation <<<
-xi, yi, zi = interp2(obs, 'linear', 30*npointsX) # expected grid
-xj, yj, zj = interp2(obs, 'linear', 3*npointsX) # expected line
-xk, yk, zk = 0, 0, 0 # observed line
-if (doWeHaveExpected):
-    xk, yk, zk = interp2(exp, 'linear', 3*npointsX)
+####################################
+# >>> The Linear Interpolation <<< #
 
+xi, yi, zi = interp2(exp_50p0, 'linear', 1000) # expected grid
+xj, yj, zj = interp2(exp_50p0, 'linear', 200) # expected line
+xk, yk, zk = 0, 0, 0 # observed line
+if (plotObserved):
+    xk, yk, zk = interp2(obs, 'linear', 200) # observed line
+
+####################################
 
 
 # Plotting & Aesthetics
+v = np.logspace(-3, 1.2, 100) # z axis: min_base10, max_base_10, number of samples
+ticks = [0.01, 0.1, 1, 10] # z axis color chart
+
+
 stops = [0.0000, 0.1250, 0.2500, 0.3750, 0.5000, 0.6250, 0.7500, 0.8750, 1.0000]
 red   = [0.2082, 0.0592, 0.0780, 0.0232, 0.1802, 0.5301, 0.8186, 0.9956, 0.9764]
 green = [0.1664, 0.3599, 0.5041, 0.6419, 0.7178, 0.7492, 0.7328, 0.7862, 0.9832]
@@ -126,20 +190,18 @@ for i, stop in enumerate(stops):
 cdict = {'red': ered, 'green': egreen, 'blue': eblue}
 
 bird = mcol.LinearSegmentedColormap('bird', cdict)
-bird.set_over("yellow")
 
-v = np.logspace(-2, 3, 500)
-
-if (doWeHaveExpected):
+if (plotObserved):
     plt.contour(xk, yk, zk, [1.0], colors='r')
 plt.contour(xj, yj, zj, [1.0], colors='k')
-plt.contourf(xi, yi, zi, levels=v, norm=mcol.LogNorm(vmin=0.1, vmax=100), cmap='PuBu_r')
-plt.xlabel('$M_{SUSY}$ (GeV)')
-plt.ylabel('$M_{H}$ (GeV)')
+plt.contourf(xi, yi, zi, levels=v, norm=mcol.LogNorm(vmin=0.1, vmax=20), cmap='PuBu_r')
+
+plt.xlabel('M$_{SUSY}}$ (GeV)', fontsize=16)
+plt.ylabel('M$_{H}$ (GeV)', fontsize=16)
 cbar = plt.colorbar()
-ticks = [0.01, 0.1, 1, 10, 100, 1000]
 cbar.set_ticks(ticks)
 cbar.set_ticklabels(ticks)
-cbar.set_label(r'Upper Limit $\sigma_{obs}/\sigma_{theory}$ at $95\%$ CL', rotation=90, fontsize=15, labelpad=14)
-plt.title(args.title)
+cbar.set_label('Upper Limit $\sigma_{TODO}/\sigma_{theory}$ at $95\%$ CL', rotation=90, fontsize=16, labelpad=14)
+# plt.title("")
 plt.show()
+plt.savefig("%s/limit_plot.pdf" % outputDir)
