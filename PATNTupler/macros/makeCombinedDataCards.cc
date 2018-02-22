@@ -55,7 +55,7 @@ int main(){
 
 
     // ONE: save info (signal specific directories beneath this)
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing1001/"; // where we are going to save the output cards (should include the samples name, and any important features)
+    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing2000/"; // where we are going to save the output cards (should include the samples name, and any important features)
   
 
     // TWO: physics info - to match the histograms that you use
@@ -65,7 +65,15 @@ int main(){
 
     // THREE: Samples To Use (different project for each signal sample)
     const std::string dataSample = "data";
-    std::vector<std::string> signalVec = {"mH70_mSusy2400"}; // the different signal samples you wish to use
+    std::vector<std::string> signalVec = { // the different signal samples you wish to use
+                                            "mH30_mSusy800", "mH50_mSusy800", "mH70_mSusy800", "mH90_mSusy800", "mH125_mSusy800",
+                                            "mH30_mSusy1200", "mH50_mSusy1200", "mH70_mSusy1200", "mH90_mSusy1200", "mH125_mSusy1200",
+                                            "mH30_mSusy1600", "mH50_mSusy1600", "mH70_mSusy1600", "mH90_mSusy1600", "mH125_mSusy1600",
+                                            "mH30_mSusy2000", "mH50_mSusy2000", "mH70_mSusy2000", "mH90_mSusy2000", "mH125_mSusy2000",
+                                            "mH30_mSusy2200", "mH50_mSusy2200", "mH70_mSusy2200", "mH90_mSusy2200", "mH125_mSusy2200",
+                                            "mH30_mSusy2400", "mH50_mSusy2400", "mH70_mSusy2400", "mH90_mSusy2400", "mH125_mSusy2400",
+                                            "mH30_mSusy2600", "mH50_mSusy2600", "mH70_mSusy2600", "mH90_mSusy2600", "mH125_mSusy2600", 
+                                        };
     const std::vector<std::string> mcbkVec = {"TTJets", "ZJets", "WJets"}; // the mc background samples
     const std::string qcdName = "QCD"; // this is just a label as QCD contribution is driven during the fit
 
@@ -386,45 +394,44 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
     std::string postamble = "MassCutsV05_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
     std::vector<std::string> histoNameVec;
     histoNameVec.push_back("data"); // comment out when working on MC
-    // histoNameVec.push_back("QCD");
     histoNameVec.push_back("TTJets");
     histoNameVec.push_back("ZJets");
     histoNameVec.push_back("WJets");
-    // histoNameVec.push_back("mH30_mSusy800");
-    // histoNameVec.push_back("mH50_mSusy800");
-    // histoNameVec.push_back("mH70_mSusy800");
-    // histoNameVec.push_back("mH90_mSusy800");
-    // histoNameVec.push_back("mH125_mSusy800");
-    // histoNameVec.push_back("mH30_mSusy1200");
-    // histoNameVec.push_back("mH50_mSusy1200");
-    // histoNameVec.push_back("mH70_mSusy1200");
-    // histoNameVec.push_back("mH90_mSusy1200");
-    // histoNameVec.push_back("mH125_mSusy1200");
-    // histoNameVec.push_back("mH30_mSusy1600");
-    // histoNameVec.push_back("mH50_mSusy1600");
-    // histoNameVec.push_back("mH70_mSusy1600");
-    // histoNameVec.push_back("mH90_mSusy1600");
-    // histoNameVec.push_back("mH125_mSusy1600");
-    // histoNameVec.push_back("mH30_mSusy2000");
-    // histoNameVec.push_back("mH50_mSusy2000");
-    // histoNameVec.push_back("mH70_mSusy2000");
-    // histoNameVec.push_back("mH90_mSusy2000");
-    // histoNameVec.push_back("mH125_mSusy2000");
-    // histoNameVec.push_back("mH30_mSusy2200");
-    // histoNameVec.push_back("mH50_mSusy2200");
-    // histoNameVec.push_back("mH70_mSusy2200");
-    // histoNameVec.push_back("mH90_mSusy2200");
-    // histoNameVec.push_back("mH125_mSusy2200");
-    // histoNameVec.push_back("mH30_mSusy2400");
-    // histoNameVec.push_back("mH50_mSusy2400");
+    histoNameVec.push_back("mH30_mSusy800");
+    histoNameVec.push_back("mH50_mSusy800");
+    histoNameVec.push_back("mH70_mSusy800");
+    histoNameVec.push_back("mH90_mSusy800");
+    histoNameVec.push_back("mH125_mSusy800");
+    histoNameVec.push_back("mH30_mSusy1200");
+    histoNameVec.push_back("mH50_mSusy1200");
+    histoNameVec.push_back("mH70_mSusy1200");
+    histoNameVec.push_back("mH90_mSusy1200");
+    histoNameVec.push_back("mH125_mSusy1200");
+    histoNameVec.push_back("mH30_mSusy1600");
+    histoNameVec.push_back("mH50_mSusy1600");
+    histoNameVec.push_back("mH70_mSusy1600");
+    histoNameVec.push_back("mH90_mSusy1600");
+    histoNameVec.push_back("mH125_mSusy1600");
+    histoNameVec.push_back("mH30_mSusy2000");
+    histoNameVec.push_back("mH50_mSusy2000");
+    histoNameVec.push_back("mH70_mSusy2000");
+    histoNameVec.push_back("mH90_mSusy2000");
+    histoNameVec.push_back("mH125_mSusy2000");
+    histoNameVec.push_back("mH30_mSusy2200");
+    histoNameVec.push_back("mH50_mSusy2200");
+    histoNameVec.push_back("mH70_mSusy2200");
+    histoNameVec.push_back("mH90_mSusy2200");
+    histoNameVec.push_back("mH125_mSusy2200");
+    histoNameVec.push_back("mH30_mSusy2400");
+    histoNameVec.push_back("mH50_mSusy2400");
     histoNameVec.push_back("mH70_mSusy2400");
-    // histoNameVec.push_back("mH90_mSusy2400");
-    // histoNameVec.push_back("mH125_mSusy2400");
-    // histoNameVec.push_back("mH30_mSusy2600");
-    // histoNameVec.push_back("mH50_mSusy2600");
-    // histoNameVec.push_back("mH70_mSusy2600");
-    // histoNameVec.push_back("mH90_mSusy2600");
-    // histoNameVec.push_back("mH125_mSusy2600");
+    histoNameVec.push_back("mH90_mSusy2400");
+    histoNameVec.push_back("mH125_mSusy2400");
+    histoNameVec.push_back("mH30_mSusy2600");
+    histoNameVec.push_back("mH50_mSusy2600");
+    histoNameVec.push_back("mH70_mSusy2600");
+    histoNameVec.push_back("mH90_mSusy2600");
+    histoNameVec.push_back("mH125_mSusy2600");
 
     std::vector<std::string> nonTrivialSysVec;
     nonTrivialSysVec.push_back("NOSYS");
