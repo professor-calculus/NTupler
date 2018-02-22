@@ -36,6 +36,7 @@ inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_0
 outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing2000/limitPlot/"
 
 plotObserved = True
+# maximally squeeze the z-axis
 minMu = -1.7
 maxMu = 1.2
 
@@ -105,16 +106,16 @@ os.system("rm tmpLimits_obs.txt")
 
 
 
-def interp(data, method='linear'):
-    x = data[:,0]
-    y = data[:,1]
-    z = data[:,2]
+# def interp(data, method='linear'):
+#     x = data[:,0]
+#     y = data[:,1]
+#     z = data[:,2]
     
-    xi = np.linspace(x.min(), x.max(), 100)
-    yi = np.linspace(y.min(), y.max(), 100)
-    zi = mlab.griddata(x, y, z, xi, yi, interp=method)
+#     xi = np.linspace(x.min(), x.max(), 100)
+#     yi = np.linspace(y.min(), y.max(), 100)
+#     zi = mlab.griddata(x, y, z, xi, yi, interp=method)
     
-    return xi, yi, zi
+#     return xi, yi, zi
 
 
 # nb, THIS IS THE FUCTION VERSION BJOERN HAD BEEN USING
@@ -166,7 +167,7 @@ if (plotObserved):
 
 # Plotting & Aesthetics
 
-v = np.logspace(minMu, maxMu, 100) # z axis: min_base10, max_base10, number of samples (squeeze to the point of black spaces)
+v = np.logspace(minMu, maxMu, 500) # z axis: min_base10, max_base10, number of samples (squeeze to the point of black spaces)
 ticks = [0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000, 100000] # z axis color chart, it should span the above
 
 
@@ -198,7 +199,10 @@ bird = mcol.LinearSegmentedColormap('bird', cdict)
 if (plotObserved):
     plt.contour(xk, yk, zk, [1.0], colors='r')
 plt.contour(xj, yj, zj, [1.0], colors='k')
-plt.contourf(xi, yi, zi, levels=v, norm=mcol.LogNorm(vmin=10**minMu, vmax=10**maxMu), cmap=bird)
+dummy = plt.contourf(xi, yi, zi, levels=v, norm=mcol.LogNorm(vmin=10**minMu, vmax=10**maxMu), cmap=bird)
+
+for d in dummy.collections:
+    d.set_edgecolor("face")
 
 plt.xlabel('M$_{SUSY}}$ (GeV)', fontsize=16)
 plt.ylabel('M$_{H}$ (GeV)', fontsize=16)
