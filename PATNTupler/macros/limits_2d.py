@@ -35,7 +35,7 @@ mHiggsVec = [30, 50, 70, 90, 125]
 inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing2000/"
 outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing2000/limitPlot/"
 
-plotObserved = True
+plotObserved = False
 # maximally squeeze the z-axis
 minMu = -1.7
 maxMu = 1.2
@@ -158,6 +158,8 @@ def interp2(data, method='linear', n_p=10):
 
 xi, yi, zi = interp2(exp_50p0, 'linear', 1000) # expected grid
 xj, yj, zj = interp2(exp_50p0, 'linear', 200) # expected line
+xj16, yj16, zj16 = interp2(exp_16p0, 'linear', 200) # expected line (-1 sigma)
+xj84, yj84, zj84 = interp2(exp_84p0, 'linear', 200) # expected line (+1 sigma)
 xk, yk, zk = 0, 0, 0 # observed line
 if (plotObserved):
     xk, yk, zk = interp2(obs, 'linear', 200) # observed line
@@ -197,8 +199,16 @@ cdict = {'red': ered, 'green': egreen, 'blue': eblue}
 bird = mcol.LinearSegmentedColormap('bird', cdict)
 
 if (plotObserved):
-    plt.contour(xk, yk, zk, [1.0], colors='r')
-plt.contour(xj, yj, zj, [1.0], colors='k')
+    plt_obs = plt.contour(xk, yk, zk, [1.0], colors='r')
+    plt_obs.collections[0].set_label('Observed')
+else:
+    plt_obs = plt.contour(xj, yj, zj, [1.0], colors='r')
+    plt_obs.collections[0].set_label('Observed')
+plt_exp = plt.contour(xj, yj, zj, [1.0], colors='k')
+plt_exp.collections[0].set_label('Expected')
+plt_exp16 = plt.contour(xj16, yj16, zj16, [1.0], colors='k', linestyles='--', label='qwert')
+plt_exp16.collections[0].set_label('$\pm1\sigma$')
+plt_exp84 = plt.contour(xj84, yj84, zj84, [1.0], colors='k', linestyles='--')
 dummy = plt.contourf(xi, yi, zi, levels=v, norm=mcol.LogNorm(vmin=10**minMu, vmax=10**maxMu), cmap=bird)
 
 for d in dummy.collections:
@@ -208,7 +218,11 @@ plt.xlabel('M$_{SUSY}}$ (GeV)', fontsize=16)
 plt.ylabel('M$_{H}$ (GeV)', fontsize=16)
 cbar = plt.colorbar()
 cbar.set_ticks(ticks)
-cbar.set_label('Upper Limit $\sigma_{TODO}/\sigma_{theory}$ at $95\%$ CL', rotation=90, fontsize=16, labelpad=14)
-# plt.title("")
+cbar.set_label('95% CL Upper Limit on $\sigma/\sigma_{theory}$', rotation=90, fontsize=16, labelpad=14)
+plt.title('CMS $Data \ 2016$', loc='left', fontsize=17, fontweight='bold')
+plt.title('35.87fb$^{-1}$ (13 TeV)', loc='right', fontsize=17)
+plt.legend(loc='upper left')
+
+
 plt.show()
 plt.savefig("%s/limit_plot.pdf" % outputDir)
