@@ -61,6 +61,8 @@
 #include "JetMETCorrections/Objects/interface/JetCorrectionsRecord.h"
 #include "CondFormats/JetMETObjects/src/classes.h"
 #include "CondFormats/JetMETObjects/interface/JetCorrectionUncertainty.h"
+#include "CondFormats/JetMETObjects/interface/JetResolutionObject.h"
+#include "CondFormats/JetMETObjects/interface/JetResolution.h"
 
 #include "TH1D.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
@@ -132,7 +134,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       void ReadInMuons(const edm::Event&);
 
       ///For reading in the Jet information, and dumping it into ran::Event class ...
-      void ReadInJets(const edm::Event&, JetCorrectionUncertainty*);
+      void ReadInJets(const edm::Event&, JetCorrectionUncertainty*, JME::JetResolution&, JME::JetResolutionScaleFactor&);
 
       ///For reading in the Fat Jet information, and dumping it into ran::Event class ...
       void ReadInFatJets(const edm::Event&, JetCorrectionUncertainty*);
@@ -158,6 +160,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
   //edm::EDGetTokenT<edm::ValueMap<int> > heepIdToken_;
       edm::EDGetTokenT<pat::JetCollection> jetToken_;
       edm::EDGetTokenT<pat::JetCollection> fatjetToken_;
+      edm::EDGetTokenT<reco::GenJetCollection> genjetToken_;
       edm::EDGetTokenT<pat::METCollection> metToken_;
   edm::EDGetTokenT<edm::View<reco::GsfElectron> > eleAODToken_;//delete this
   edm::EDGetTokenT<edm::View<reco::GsfElectron> > eleMiniAODToken_;//delete this
@@ -169,6 +172,8 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       edm::EDGetTokenT<pat::PackedTriggerPrescales> triggerPrescales_;
       std::vector<std::string> targetTriggerPaths_;
 
+      edm::EDGetTokenT<double> rhoToken_;
+      
       //Ntuple Tree
       edm::Service<TFileService> fHistos;
       TTree* EventDataTree;
@@ -213,6 +218,7 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     electronToken_(consumes<edm::View<reco::GsfElectron> >(iConfig.getParameter<edm::InputTag>("electrons"))),
     jetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jets"))),
     fatjetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"))),
+    genjetToken_(consumes<reco::GenJetCollection>(iConfig.getParameter<edm::InputTag>("genjets"))),
     metToken_(consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets"))),
     vidToken_(consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("vid"))),
     trkIsolMapToken_(consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("trkIsolMap"))),
@@ -222,7 +228,9 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     triggerBits_(consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("bits"))),
     triggerObjects_(consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("objects"))),
     triggerPrescales_(consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("prescales"))),
-    targetTriggerPaths_(iConfig.getParameter<std::vector<std::string> >("selectedTriggerPaths"))
+    targetTriggerPaths_(iConfig.getParameter<std::vector<std::string> >("selectedTriggerPaths")),
+
+    rhoToken_(consumes<double>(iConfig.getParameter<edm::InputTag>("rho")))
     //cuts_(iConfig)
 {
 
@@ -317,6 +325,10 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     JetCorrectorParameters const & JetCorPar_AK8 = (*JetCorParColl_AK8)["Uncertainty"];
     JetCorrectionUncertainty *jecUncObj_AK8 = new JetCorrectionUncertainty(JetCorPar_AK8);
 
+    JME::JetResolution resolution_AK4 = JME::JetResolution::get(iSetup, "AK4PFchs_pt");
+    JME::JetResolutionScaleFactor resolutionSF_AK4 = JME::JetResolutionScaleFactor::get(iSetup, "AK4PFchs");
+    // JME::JetResolution resolution_AK8 = JME::JetResolution::get(iSetup, "AK8PFchs_pt");
+    // JME::JetResolutionScaleFactor resolutionSF_AK8 = JME::JetResolutionScaleFactor::get(iSetup, "AK8PFchs");
 
      //Clearing contents/setting default values of variables that should get new values in each event...
      ResetEventByEventVariables();
@@ -335,7 +347,7 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
      ReadInElectrons(iEvent);
 
      //Read in Jets
-     ReadInJets(iEvent, jecUncObj_AK4);
+     ReadInJets(iEvent, jecUncObj_AK4, resolution_AK4, resolutionSF_AK4);
 
      //Read in Jets
      ReadInFatJets(iEvent, jecUncObj_AK8);
@@ -706,15 +718,17 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
   }
 }
 //Read in jet vars
-void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent, JetCorrectionUncertainty * jecUncObj)
+void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent, JetCorrectionUncertainty * jecUncObj, JME::JetResolution& resolution, JME::JetResolutionScaleFactor& resolutionSF)
 {
-    // edm::ESHandle<JetCorrectorParametersCollection> JetCorParColl;
-    // iSetup.get<JetCorrectionsRecord>().get("AK4PFchs", JetCorParColl); 
-    // JetCorrectorParameters const & JetCorPar = (*JetCorParColl)["Uncertainty"];
-    // JetCorrectionUncertainty *jecUncObj = new JetCorrectionUncertainty(JetCorPar);
-
     edm::Handle<pat::JetCollection> jets;
     iEvent.getByToken(jetToken_, jets);
+
+    edm::Handle<reco::GenJetCollection> genjets;
+    iEvent.getByToken(genjetToken_, genjets);
+
+    edm::Handle<double> rho;
+    iEvent.getByToken(rhoToken_, rho);
+
     for (const pat::Jet &iJet: *jets) {
       jetCollection_->push_back(ran::JetStruct{});
 
@@ -741,6 +755,76 @@ void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent, JetCorrectionUncertai
       jecUncObj->setJetPt( iJet.pt() ); // here you use the CORRECTED jet pt
       ithJet.jecUncertainty = float(jecUncObj->getUncertainty(true));
 
+
+      JME::JetParameters parameters;
+      parameters.setJetEta( iJet.eta() );
+      parameters.setJetPt( iJet.pt() );
+      parameters.setRho( *rho );
+      
+      // JER smearing procedure: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetResolution
+
+      double c_nom(1.0), c_up(1.0), c_down(1.0);
+
+      if (isMC_){
+
+        float jer = resolution.getResolution(parameters);
+        float jerSF_nom = resolutionSF.getScaleFactor(parameters);
+        float jerSF_up = resolutionSF.getScaleFactor(parameters, Variation::UP);
+        float jerSF_down = resolutionSF.getScaleFactor(parameters, Variation::DOWN);
+        
+        bool haveGenMatch = false;
+        double dR_matchedGenJet = 9999.99;
+        double pt_matchedGenJet = -9999.99;
+        for (const reco::GenJet &iGenJet : *genjets){
+          
+          double dR = sqrt( deltaR2(iGenJet.eta(), iGenJet.phi(), iJet.eta(), iJet.phi()) );
+          double dPT = fabs( iGenJet.pt() - iJet.pt() );
+          if ( dR < 0.4/2 && dR < dR_matchedGenJet && dPT < 3*jer*iJet.pt() ){
+            haveGenMatch = true;
+            dR_matchedGenJet = dR;
+            pt_matchedGenJet = iGenJet.pt();
+          }
+        }
+        
+        if (haveGenMatch){
+        
+          c_nom = 1.0 + (jerSF_nom - 1.0) * (iJet.pt() - pt_matchedGenJet) / (iJet.pt());
+          c_up = 1.0 + (jerSF_up - 1.0) * (iJet.pt() - pt_matchedGenJet) / (iJet.pt());
+          c_down = 1.0 + (jerSF_down - 1.0) * (iJet.pt() - pt_matchedGenJet) / (iJet.pt());
+        
+        }
+        
+        else{
+        
+          std::random_device rd;
+          std::mt19937 e2(rd());
+          std::normal_distribution<> dist(0, jer);
+          double gaussRandom = dist(e2);
+
+          if (jerSF_nom > 1.0) c_nom = 1.0 + gaussRandom * sqrt(jerSF_nom * jerSF_nom - 1);
+          if (jerSF_up > 1.0) c_up = 1.0 + gaussRandom * sqrt(jerSF_up * jerSF_up - 1);
+          if (jerSF_down > 1.0) c_down = 1.0 + gaussRandom * sqrt(jerSF_down * jerSF_down - 1);
+        
+        }
+        
+        if (c_nom < 0) c_nom = 0.0;
+        if (c_up < 0) c_up = 0.0;
+        if (c_down < 0) c_down = 0.0;
+      
+      } // closes 'if' MC
+
+      // TODO: think how you want to put into the workflow
+      // also probs want to to it before JECUNC and such like...
+      // need to do an equivalent for AK8JETS
+      std::cout << c_down << "  " << c_nom << "  " << c_up << std::endl;
+
+
+
+
+
+// std::cout << "JetPT: " << iJet.pt() << "   JetETA: " << iJet.eta() << "   JER: " << jer << " JER_SF: " << jerSF_down << " " << jerSF << " " << jerSF_up << std::endl;
+
+
       //Assign the btag discriminators
       ///cvmfs/cms.cern.ch/slc6_amd64_gcc530/cms/cmssw/CMSSW_8_0_20/src/PhysicsTools/PatAlgos/python/producersLayer1/jetProducer_cfi.py
       ithJet.pfJetProbabilityBJetTags =  iJet.bDiscriminator("pfJetProbabilityBJetTags");//
@@ -756,17 +840,13 @@ void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent, JetCorrectionUncertai
       ithJet.partonFlavour = iJet.partonFlavour();
 
     }
-
+std::cout << std::endl;
+std::cout << std::endl;
 }
 
 //Read in fat jet vars
 void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncertainty * jecUncObj)
 {
-    // edm::ESHandle<JetCorrectorParametersCollection> JetCorParColl;
-    // iSetup.get<JetCorrectionsRecord>().get("AK8PFchs", JetCorParColl); 
-    // JetCorrectorParameters const & JetCorPar = (*JetCorParColl)["Uncertainty"];
-    // JetCorrectionUncertainty *jecUncObj = new JetCorrectionUncertainty(JetCorPar);
-
     edm::Handle<pat::JetCollection> jets;
     iEvent.getByToken(fatjetToken_, jets);
     for (const pat::Jet &iJet: *jets) {
