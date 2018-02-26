@@ -36,7 +36,7 @@ from Configuration.AlCa.autoCond import autoCond
 process.GlobalTag = GlobalTag(process.GlobalTag, '80X_mcRun2_asymptotic_2016_TrancheIV_v8', '') #
 
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(2000) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10) )
 process.source = cms.Source ("PoolSource",fileNames = cms.untracked.vstring(
         'root://dcap.pp.rl.ac.uk:1094/pnfs/pp.rl.ac.uk/data/cms/store/mc/RunIISummer16MiniAODv2/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/0693E0E7-97BE-E611-B32F-0CC47A78A3D8.root'
 )
@@ -79,6 +79,7 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        electrons = cms.InputTag("slimmedElectrons"),
                                        jets = cms.InputTag("slimmedJets"),
                                        fatjets = cms.InputTag("slimmedJetsAK8"),
+                                       genjets = cms.InputTag("slimmedGenJets"),
                                        mets = cms.InputTag("slimmedMETs"),       
                                        bits = cms.InputTag("TriggerResults","","HLT"),
                                        prescales = cms.InputTag("patTrigger"),
@@ -87,7 +88,8 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        elesAOD=cms.InputTag("gedGsfElectrons"),
                                        elesMiniAOD=cms.InputTag("slimmedElectrons"),
                                        trkIsolMap=cms.InputTag("heepIDVarValueMaps","eleTrkPtIso"),
-                                       vid=cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV70")
+                                       vid=cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV70"),
+                                       rho=cms.InputTag("fixedGridRhoAll")
                                        )
 
 process.p = cms.Path(
