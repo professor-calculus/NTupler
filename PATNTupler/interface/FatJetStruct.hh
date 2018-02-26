@@ -16,6 +16,8 @@ namespace ran{
     float phi;/// < phi
     float jecFactor_unCorrected;///<factor applied to jet pt to get uncorrect jet pt
     float jecUncertainty;///<the uncertainty in the JEC applied
+    float jerUncUp;///<the uncertainty in the JER (up)
+    float jerUncDown;///<the uncertainty in the JER (down)
     float userFloat_ak8PFJets_CHSPrunedLinks;///< Pruned jets
     float userFloat_ak8PFJets_CHSTrimmedLinks;///< Trimed jets
     float userFloat_ak8PFJets_CHSFilteredLinks;///< Filtered jets

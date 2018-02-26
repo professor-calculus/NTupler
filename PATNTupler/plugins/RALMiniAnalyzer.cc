@@ -137,7 +137,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       void ReadInJets(const edm::Event&, JetCorrectionUncertainty*, JME::JetResolution&, JME::JetResolutionScaleFactor&);
 
       ///For reading in the Fat Jet information, and dumping it into ran::Event class ...
-      void ReadInFatJets(const edm::Event&, JetCorrectionUncertainty*);
+      void ReadInFatJets(const edm::Event&, JetCorrectionUncertainty*, JME::JetResolution&, JME::JetResolutionScaleFactor&);
 
       ///For reading in the Met information, and dumping it into ran::Event class ...
       void ReadInMets(const edm::Event&);
@@ -161,6 +161,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       edm::EDGetTokenT<pat::JetCollection> jetToken_;
       edm::EDGetTokenT<pat::JetCollection> fatjetToken_;
       edm::EDGetTokenT<reco::GenJetCollection> genjetToken_;
+      edm::EDGetTokenT<reco::GenJetCollection> genjetAK8Token_;
       edm::EDGetTokenT<pat::METCollection> metToken_;
   edm::EDGetTokenT<edm::View<reco::GsfElectron> > eleAODToken_;//delete this
   edm::EDGetTokenT<edm::View<reco::GsfElectron> > eleMiniAODToken_;//delete this
@@ -219,6 +220,7 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     jetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jets"))),
     fatjetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"))),
     genjetToken_(consumes<reco::GenJetCollection>(iConfig.getParameter<edm::InputTag>("genjets"))),
+    genjetAK8Token_(consumes<reco::GenJetCollection>(iConfig.getParameter<edm::InputTag>("genjetsAK8"))),
     metToken_(consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets"))),
     vidToken_(consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("vid"))),
     trkIsolMapToken_(consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("trkIsolMap"))),
@@ -327,8 +329,8 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
     JME::JetResolution resolution_AK4 = JME::JetResolution::get(iSetup, "AK4PFchs_pt");
     JME::JetResolutionScaleFactor resolutionSF_AK4 = JME::JetResolutionScaleFactor::get(iSetup, "AK4PFchs");
-    // JME::JetResolution resolution_AK8 = JME::JetResolution::get(iSetup, "AK8PFchs_pt");
-    // JME::JetResolutionScaleFactor resolutionSF_AK8 = JME::JetResolutionScaleFactor::get(iSetup, "AK8PFchs");
+    JME::JetResolution resolution_AK8 = JME::JetResolution::get(iSetup, "AK8PFchs_pt");
+    JME::JetResolutionScaleFactor resolutionSF_AK8 = JME::JetResolutionScaleFactor::get(iSetup, "AK8PFchs");
 
      //Clearing contents/setting default values of variables that should get new values in each event...
      ResetEventByEventVariables();
@@ -350,7 +352,7 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
      ReadInJets(iEvent, jecUncObj_AK4, resolution_AK4, resolutionSF_AK4);
 
      //Read in Jets
-     ReadInFatJets(iEvent, jecUncObj_AK8);
+     ReadInFatJets(iEvent, jecUncObj_AK8, resolution_AK8, resolutionSF_AK8);
 
      //Read in Met
      ReadInMets(iEvent);
@@ -731,7 +733,7 @@ void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent, JetCorrectionUncertai
 
     for (const pat::Jet &iJet: *jets) {
     
-    
+
       // JER smearing procedure: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetResolution
       double c_nom(1.0), c_up(1.0), c_down(1.0);
 
@@ -815,8 +817,14 @@ void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent, JetCorrectionUncertai
       jecUncObj->setJetPt( iJet.pt() ); // here you use the CORRECTED jet pt
       ithJet.jecUncertainty = float(jecUncObj->getUncertainty(true));
 
-      ithJet.jerUncUp = c_up / c_nom;
-      ithJet.jerUncDown = c_down / c_nom;
+      if (c_nom != 0){
+        ithJet.jerUncUp = c_up / c_nom;
+        ithJet.jerUncDown = c_down / c_nom;
+      }
+      else{
+        ithJet.jerUncUp = 1.0;
+        ithJet.jerUncDown = 1.0;              
+      }
 
       //Assign the btag discriminators
       ///cvmfs/cms.cern.ch/slc6_amd64_gcc530/cms/cmssw/CMSSW_8_0_20/src/PhysicsTools/PatAlgos/python/producersLayer1/jetProducer_cfi.py
@@ -837,15 +845,82 @@ void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent, JetCorrectionUncertai
 }
 
 //Read in fat jet vars
-void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncertainty * jecUncObj)
+void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncertainty * jecUncObj, JME::JetResolution& resolution, JME::JetResolutionScaleFactor& resolutionSF)
 {
     edm::Handle<pat::JetCollection> jets;
     iEvent.getByToken(fatjetToken_, jets);
+
+    edm::Handle<reco::GenJetCollection> genjets;
+    iEvent.getByToken(genjetAK8Token_, genjets);
+
+    edm::Handle<double> rho;
+    iEvent.getByToken(rhoToken_, rho);
+
     for (const pat::Jet &iJet: *jets) {
+      
+
+      // JER smearing procedure: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetResolution
+      double c_nom(1.0), c_up(1.0), c_down(1.0);
+
+      if (isMC_){
+
+        JME::JetParameters parameters;
+        parameters.setJetEta( iJet.eta() );
+        parameters.setJetPt( iJet.pt() );
+        parameters.setRho( *rho );
+
+        float jer = resolution.getResolution(parameters);
+        float jerSF_nom = resolutionSF.getScaleFactor(parameters);
+        float jerSF_up = resolutionSF.getScaleFactor(parameters, Variation::UP);
+        float jerSF_down = resolutionSF.getScaleFactor(parameters, Variation::DOWN);
+
+        bool haveGenMatch = false;
+        double dR_matchedGenJet = 9999.99;
+        double pt_matchedGenJet = -9999.99;
+        for (const reco::GenJet &iGenJet : *genjets){
+          
+          double dR = sqrt( deltaR2(iGenJet.eta(), iGenJet.phi(), iJet.eta(), iJet.phi()) );
+          double dPT = fabs( iGenJet.pt() - iJet.pt() );
+          const double conesize = 0.8;
+          if ( dR < conesize/2 && dR < dR_matchedGenJet && dPT < 3*jer*iJet.pt() ){
+            haveGenMatch = true;
+            dR_matchedGenJet = dR;
+            pt_matchedGenJet = iGenJet.pt();
+          }
+        }
+        
+        if (haveGenMatch){
+        
+          c_nom = 1.0 + (jerSF_nom - 1.0) * (iJet.pt() - pt_matchedGenJet) / (iJet.pt());
+          c_up = 1.0 + (jerSF_up - 1.0) * (iJet.pt() - pt_matchedGenJet) / (iJet.pt());
+          c_down = 1.0 + (jerSF_down - 1.0) * (iJet.pt() - pt_matchedGenJet) / (iJet.pt());
+        
+        }
+        
+        else{
+        
+          std::random_device rd;
+          std::mt19937 e2(rd());
+          std::normal_distribution<> dist(0, jer);
+          double gaussRandom = dist(e2);
+
+          if (jerSF_nom > 1.0) c_nom = 1.0 + gaussRandom * sqrt(jerSF_nom * jerSF_nom - 1);
+          if (jerSF_up > 1.0) c_up = 1.0 + gaussRandom * sqrt(jerSF_up * jerSF_up - 1);
+          if (jerSF_down > 1.0) c_down = 1.0 + gaussRandom * sqrt(jerSF_down * jerSF_down - 1);
+        
+        }
+        
+        if (c_nom < 0) c_nom = 0.0;
+        if (c_up < 0) c_up = 0.0;
+        if (c_down < 0) c_down = 0.0;
+
+      } // closes 'if' MC
+
+
       fatjetCollection_->push_back(ran::FatJetStruct{});
 
       ran::FatJetStruct &ithJet = fatjetCollection_->back();
-      ithJet.pt = iJet.pt();
+      ithJet.pt = iJet.pt() * c_nom;
       ithJet.et = iJet.et();
       ithJet.eta = iJet.eta();
       ithJet.phi = iJet.phi();
@@ -876,6 +951,15 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncer
       ithJet.pfBoostedDoubleSecondaryVertexAK8BJetTags =  iJet.bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags");// Double b-tag
       ithJet.partonFlavour = iJet.partonFlavour();
 
+      if (c_nom != 0){
+        ithJet.jerUncUp = c_up / c_nom;
+        ithJet.jerUncDown = c_down / c_nom;
+      }
+      else{
+        ithJet.jerUncUp = 1.0;
+        ithJet.jerUncDown = 1.0;              
+      }
+
       // softDropMass with PUPPI
       double puppi_pt             = iJet.userFloat("ak8PFJetsPuppiValueMap:pt");
       double puppi_eta           = iJet.userFloat("ak8PFJetsPuppiValueMap:eta");
@@ -895,7 +979,7 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncer
       float puppi_softdrop_masscorr = puppi_softdrop.M() * puppiCorr;
       ithJet.PUPPIsoftdrop_mass = puppi_softdrop_masscorr;
 
-    }
+    } // closes loop through fatJets
 
 }
 

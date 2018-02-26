@@ -16,6 +16,8 @@ namespace ran{
     
     float jecFactor_unCorrected() const {return jet->jecFactor_unCorrected;}///< factor applied to jet pt to get uncorrect jet pt
     float jecUncertainty() const {return jet->jecUncertainty;}///< the uncertainty in the JEC applied
+    float jerUncUp() const {return jet->jerUncUp;}///< the uncertainty in the JER (up)
+    float jerUncDown() const {return jet->jerUncDown;}///< the uncertainty in the JER (down)
     float userFloat_ak8PFJets_CHSPrunedLinks() const {return jet->userFloat_ak8PFJets_CHSPrunedLinks;}///< Pruned jets
     float userFloat_ak8PFJets_CHSTrimmedLinks() const {return jet-> userFloat_ak8PFJets_CHSTrimmedLinks;}///< Trimed jets
     float userFloat_ak8PFJets_CHSFilteredLinks() const {return jet->userFloat_ak8PFJets_CHSFilteredLinks;}///< Filtered jets
