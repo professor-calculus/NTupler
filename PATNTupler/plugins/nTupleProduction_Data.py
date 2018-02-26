@@ -75,6 +75,7 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        electrons = cms.InputTag("slimmedElectrons"),
                                        jets = cms.InputTag("slimmedJets"),
                                        fatjets = cms.InputTag("slimmedJetsAK8"),
+                                       genjets = cms.InputTag("slimmedGenJets"),
                                        mets = cms.InputTag("slimmedMETs"),       
                                        bits = cms.InputTag("TriggerResults","","HLT"),
                                        prescales = cms.InputTag("patTrigger"),
@@ -83,7 +84,8 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        elesAOD=cms.InputTag("gedGsfElectrons"),
                                        elesMiniAOD=cms.InputTag("slimmedElectrons"),
                                        trkIsolMap=cms.InputTag("heepIDVarValueMaps","eleTrkPtIso"),
-                                       vid=cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV70")
+                                       vid=cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV70"),
+                                       rho=cms.InputTag("fixedGridRhoAll")
                                        )
 
 process.p = cms.Path(
