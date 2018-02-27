@@ -76,6 +76,7 @@
 //... for accessing generator information (GenEventInfoProduct & LHE)
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 #include "SimDataFormats/GeneratorProducts/interface/LHEEventProduct.h"
+#include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 
 //...for histograms creation
 #include "FWCore/ServiceRegistry/interface/Service.h"
@@ -127,6 +128,9 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       ///For reading the LHE information, and dumping it into ran::Event class ...
       void ReadInLheInfo(const edm::Event&);
 
+      ///For reading the Vertex/PU information, and dumping it into ran::Event class ...
+      void ReadInVertexInfo(const edm::Event&);
+
       ///For reading in the electron information, and dumping it into ran::Event class ...
       void ReadInElectrons(const edm::Event&);
   
@@ -154,6 +158,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       TF1 * puppisd_corrRECO_for_;
 
       edm::EDGetTokenT<LHEEventProduct> lheToken_;
+      edm::EDGetTokenT<std::vector<PileupSummaryInfo>> puInfoToken_;
       edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
       edm::EDGetTokenT<pat::MuonCollection> muonToken_;
       edm::EDGetTokenT<edm::View<reco::GsfElectron> > electronToken_;
@@ -184,6 +189,8 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       //ran::Event* event_;
       ran::EventInfo evtInfo{};
       float lheHT_;
+      float nTrueInt_;
+      unsigned int nPU_;
       std::vector<ran::ElectronStruct>* electronCollection_;
       std::vector<ran::MuonStruct>* muonCollection_;
       std::vector<ran::JetStruct>* jetCollection_;
@@ -214,6 +221,7 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     inputContainsLHE_(iConfig.getParameter<bool>("containsLHE")),
     ignoreTopInLheHtCalculation_(inputContainsLHE_ ? iConfig.getParameter<bool>("ignoreTopInLheHtCalculation") : false),
     lheToken_(consumes<LHEEventProduct>(iConfig.getParameter<edm::InputTag>("lhe"))),
+    puInfoToken_(consumes<std::vector<PileupSummaryInfo>>(iConfig.getParameter<edm::InputTag>("puInfo"))),
     vtxToken_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
     muonToken_(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
     electronToken_(consumes<edm::View<reco::GsfElectron> >(iConfig.getParameter<edm::InputTag>("electrons"))),
@@ -245,6 +253,8 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     if (inputContainsLHE_) {
       EventDataTree->Branch("lheHT", &lheHT_, "lheHT/F");
     }
+    EventDataTree->Branch("nTrueInt", &nTrueInt_, "nTrueInt/F");
+    EventDataTree->Branch("nPU", &nPU_, "nPU/I");
     EventDataTree->Branch("electronCollection","std::vector<ran::ElectronStruct>", &electronCollection_, 64000, 1); 
     EventDataTree->Branch("muonCollection","std::vector<ran::MuonStruct>", &muonCollection_, 64000, 1); 
     EventDataTree->Branch("jetCollection","std::vector<ran::JetStruct>", &jetCollection_, 64000, 1);
@@ -341,6 +351,10 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
      // Read in LHE event product (if present)
      if (inputContainsLHE_)
        ReadInLheInfo(iEvent);
+
+     // Read in PU info
+     if (isMC_)
+       ReadInVertexInfo(iEvent);
 
      //Read in muons
      ReadInMuons(iEvent);
@@ -462,6 +476,8 @@ void RALMiniAnalyzer::ResetEventByEventVariables(){
 	evtInfo.lumiSec = 0;
 
 	lheHT_ = 0.0;
+  nTrueInt_ = 0.0;
+  nPU_ = 0;
 }
 
 //------------ For getting the correction factor for the PUPPI softDropMass -------------
@@ -575,6 +591,17 @@ void RALMiniAnalyzer::ReadInLheInfo(const edm::Event& iEvent)
   }
   else 
     throw std::runtime_error("Could not read LHE information");
+}
+
+
+void RALMiniAnalyzer::ReadInVertexInfo(const edm::Event& iEvent)
+{
+  edm::Handle<std::vector<PileupSummaryInfo>> puHandle;
+  iEvent.getByToken(puInfoToken_, puHandle);
+
+  nTrueInt_ = puHandle->begin()->getTrueNumInteractions();
+  nPU_ = puHandle->begin()->getPU_NumInteractions();
+
 }
 
 

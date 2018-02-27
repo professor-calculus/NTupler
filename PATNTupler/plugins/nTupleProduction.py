@@ -75,6 +75,7 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        ignoreTopInLheHtCalculation = cms.bool(False), # if true will ignore top quarks and daughter particles in the ht calculation (also does so for W, Z, H)
                                        heepId = cms.InputTag("heepId"),
                                        vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+                                       puInfo = cms.InputTag("slimmedAddPileupInfo"),
                                        muons = cms.InputTag("slimmedMuons"),
                                        electrons = cms.InputTag("slimmedElectrons"),
                                        jets = cms.InputTag("slimmedJets"),
