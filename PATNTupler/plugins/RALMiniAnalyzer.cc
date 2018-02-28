@@ -190,7 +190,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       ran::EventInfo evtInfo{};
       float lheHT_;
       float nTrueInt_;
-      unsigned int nPU_;
+      int nPU_;
       std::vector<ran::ElectronStruct>* electronCollection_;
       std::vector<ran::MuonStruct>* muonCollection_;
       std::vector<ran::JetStruct>* jetCollection_;
