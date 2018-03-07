@@ -823,7 +823,7 @@ void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent, JetCorrectionUncertai
       
       ran::JetStruct &ithJet = jetCollection_->back();
       ithJet.pt = iJet.pt() * c_nom;
-      ithJet.et = iJet.et();
+      ithJet.et = iJet.et() * c_nom;
       ithJet.eta = iJet.eta();
       ithJet.phi = iJet.phi();
       ithJet.mass = iJet.mass();
@@ -948,7 +948,7 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncer
 
       ran::FatJetStruct &ithJet = fatjetCollection_->back();
       ithJet.pt = iJet.pt() * c_nom;
-      ithJet.et = iJet.et();
+      ithJet.et = iJet.et() * c_nom;
       ithJet.eta = iJet.eta();
       ithJet.phi = iJet.phi();
       ithJet.mass = iJet.mass();
