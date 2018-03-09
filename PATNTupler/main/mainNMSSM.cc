@@ -20,6 +20,7 @@
 #include "TriggerPathToIndex.hh"
 #include "deltaR.h"
 #include "DoubleBTagSF.h"
+#include "SoftDropPuppiSF.h"
 
 using std::cout;
 using std::ifstream;
@@ -33,7 +34,7 @@ within main directory run
 $ gmake -j 8 <executableNameSetInGNUmakefile>
 
 Executing:
-./<executableNameSetInGNUmakefile> <outputRootFilename> <pathToListOfInputFiles> <runInstructions> <lumiJson>
+./<executableNameSetInGNUmakefile> <outputRootFilename> <pathToListOfInputFiles> <sampleType> <runInstructions> <lumiJson>
 
 NB:
 runInstructions = "local" (for local runs)
@@ -166,6 +167,10 @@ private:
 	Double_t treeVar_fatJetA_mass_;
 	Double_t treeVar_fatJetA_softDropMass_;
 	Double_t treeVar_fatJetA_softDropMassPuppi_;
+	Double_t treeVar_fatJetA_softDropMassPuppi_jmsUncUp_;
+	Double_t treeVar_fatJetA_softDropMassPuppi_jmsUncDown_;
+	Double_t treeVar_fatJetA_softDropMassPuppi_jmrUncUp_;
+	Double_t treeVar_fatJetA_softDropMassPuppi_jmrUncDown_;
 	Double_t treeVar_fatJetA_prunedMass_;
 	Float_t treeVar_fatJetA_electronEnergyFraction_;
 	Float_t treeVar_fatJetA_muonEnergyFraction_;
@@ -175,6 +180,10 @@ private:
 	Double_t treeVar_fatJetB_mass_;
 	Double_t treeVar_fatJetB_softDropMass_;
 	Double_t treeVar_fatJetB_softDropMassPuppi_;
+	Double_t treeVar_fatJetB_softDropMassPuppi_jmsUncUp_;
+	Double_t treeVar_fatJetB_softDropMassPuppi_jmsUncDown_;
+	Double_t treeVar_fatJetB_softDropMassPuppi_jmrUncUp_;
+	Double_t treeVar_fatJetB_softDropMassPuppi_jmrUncDown_;
 	Double_t treeVar_fatJetB_prunedMass_;
 	Float_t treeVar_fatJetB_electronEnergyFraction_;
 	Float_t treeVar_fatJetB_muonEnergyFraction_;
@@ -267,7 +276,16 @@ public:
 		mainAnaTree_->Branch("fatJetB_softDropMass", &treeVar_fatJetB_softDropMass_,   "fatJetB_softDropMass/D");
 
 		mainAnaTree_->Branch("fatJetA_softDropMassPuppi", &treeVar_fatJetA_softDropMassPuppi_,   "fatJetA_softDropMassPuppi/D");
+		mainAnaTree_->Branch("fatJetA_softDropMassPuppi_jmsUncUp", &treeVar_fatJetA_softDropMassPuppi_jmsUncUp_,   "fatJetA_softDropMassPuppi_jmsUncUp/D");
+		mainAnaTree_->Branch("fatJetA_softDropMassPuppi_jmsUncDown", &treeVar_fatJetA_softDropMassPuppi_jmsUncDown_,   "fatJetA_softDropMassPuppi_jmsUncDown/D");
+		mainAnaTree_->Branch("fatJetA_softDropMassPuppi_jmrUncUp", &treeVar_fatJetA_softDropMassPuppi_jmrUncUp_,   "fatJetA_softDropMassPuppi_jmrUncUp/D");
+		mainAnaTree_->Branch("fatJetA_softDropMassPuppi_jmrUncDown", &treeVar_fatJetA_softDropMassPuppi_jmrUncDown_,   "fatJetA_softDropMassPuppi_jmrUncDown/D");
+		
 		mainAnaTree_->Branch("fatJetB_softDropMassPuppi", &treeVar_fatJetB_softDropMassPuppi_,   "fatJetB_softDropMassPuppi/D");
+		mainAnaTree_->Branch("fatJetB_softDropMassPuppi_jmsUncUp", &treeVar_fatJetB_softDropMassPuppi_jmsUncUp_,   "fatJetB_softDropMassPuppi_jmsUncUp/D");
+		mainAnaTree_->Branch("fatJetB_softDropMassPuppi_jmsUncDown", &treeVar_fatJetB_softDropMassPuppi_jmsUncDown_,   "fatJetB_softDropMassPuppi_jmsUncDown/D");
+		mainAnaTree_->Branch("fatJetB_softDropMassPuppi_jmrUncUp", &treeVar_fatJetB_softDropMassPuppi_jmrUncUp_,   "fatJetB_softDropMassPuppi_jmrUncUp/D");
+		mainAnaTree_->Branch("fatJetB_softDropMassPuppi_jmrUncDown", &treeVar_fatJetB_softDropMassPuppi_jmrUncDown_,   "fatJetB_softDropMassPuppi_jmrUncDown/D");
 
 		mainAnaTree_->Branch("fatJetA_electronEnergyFraction", &treeVar_fatJetA_electronEnergyFraction_, "fatJetA_electronEnergyFraction/F");
 		mainAnaTree_->Branch("fatJetB_electronEnergyFraction", &treeVar_fatJetB_electronEnergyFraction_, "fatJetB_electronEnergyFraction/F");
@@ -305,22 +323,21 @@ public:
 
 	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp, const float& ht_jecUncDown, const float& ht_jerUncUp, const float& ht_jerUncDown, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision, const int& nPU)
 	{
-		std::vector<double> looseScaleFactorVec = DoubleBTagSF::GetLooseScaleFactors(sampleType.c_str(), fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
-		treeVar_weight_dbtLooseDown_ = looseScaleFactorVec[0];
-		treeVar_weight_dbtLoose_ = looseScaleFactorVec[1];
-		treeVar_weight_dbtLooseUp_ = looseScaleFactorVec[2];
+		// std::vector<double> scaleFactorVec = DoubleBTagSF::GetLooseScaleFactors(sampleType.c_str(), fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
+		std::vector<double> scaleFactorVec = DoubleBTagSF::GetCustomScaleFactors(sampleType.c_str(), fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
+		treeVar_weight_dbtLooseDown_ = scaleFactorVec[0];
+		treeVar_weight_dbtLoose_ = scaleFactorVec[1];
+		treeVar_weight_dbtLooseUp_ = scaleFactorVec[2];
 		
-		// multiply all nominal Scale Factors
+		// multiply all nominal Scale Factor Weights
 		treeVar_weight_combined_ = treeVar_weight_dbtLoose_;
-
 
 		treeVar_runNum_ = evtInfo.runNum;
 		treeVar_lumiSec_ = evtInfo.lumiSec;
 		treeVar_evtNum_ = evtInfo.evtNum;
 
 		treeVar_trgDecision_ = trigDecision;
-		treeVar_nVtx_  = nPU;
-
+		// treeVar_nVtx_  = nPU;
 
 		treeVar_fatJetA_p4_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
 		treeVar_fatJetB_p4_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
@@ -336,9 +353,6 @@ public:
 
 		treeVar_fatJetA_softDropMass_ = fatJetA.CHSsoftdrop_mass();
 		treeVar_fatJetB_softDropMass_ = fatJetB.CHSsoftdrop_mass();
-
-		treeVar_fatJetA_softDropMassPuppi_ = fatJetA.PUPPIsoftdrop_mass();
-		treeVar_fatJetB_softDropMassPuppi_ = fatJetB.PUPPIsoftdrop_mass();
 
 		treeVar_fatJetA_nSubjettinessTau1_ = fatJetA.NjettinessAK8_tau1();
 		treeVar_fatJetA_nSubjettinessTau2_ = fatJetA.NjettinessAK8_tau2();
@@ -408,8 +422,77 @@ public:
 				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
-			}			
-		
+			}
+
+			// fatJetA SoftDropMass+PUPPI
+			std::random_device rdA;
+			std::mt19937 e2A(rdA());
+			std::normal_distribution<> distA(0, SoftDropPuppiSF::get_mcMassResolution());
+			double gaussRandomA = distA(e2A);
+			// nominal and JMS
+			if (SoftDropPuppiSF::get_jetMassResolutionSF() > 1.0){
+				double smearingValue = gaussRandomA * sqrt(SoftDropPuppiSF::get_jetMassResolutionSF() * SoftDropPuppiSF::get_jetMassResolutionSF() - 1);
+				treeVar_fatJetA_softDropMassPuppi_ = fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() + smearingValue > 0.0 ? fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() + smearingValue : 0.0;
+				treeVar_fatJetA_softDropMassPuppi_jmsUncUp_ = fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFUp() + smearingValue > 0.0 ? fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFUp() + smearingValue : 0.0;
+				treeVar_fatJetA_softDropMassPuppi_jmsUncDown_ = fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFDown() + smearingValue > 0.0 ? fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFDown() + smearingValue : 0.0;
+			}
+			else {
+				treeVar_fatJetA_softDropMassPuppi_ = fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() > 0.0 ? fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() : 0.0;
+				treeVar_fatJetA_softDropMassPuppi_jmsUncUp_ = fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFUp() > 0.0 ? fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFUp() : 0.0;
+				treeVar_fatJetA_softDropMassPuppi_jmsUncDown_ = fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFDown() > 0.0 ? fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFDown() : 0.0;
+			}
+			// JMR_UP
+			if (SoftDropPuppiSF::get_jetMassResolutionSFUp() > 1.0){
+				double smearingValue = gaussRandomA * sqrt(SoftDropPuppiSF::get_jetMassResolutionSFUp() * SoftDropPuppiSF::get_jetMassResolutionSFUp() - 1);
+				treeVar_fatJetA_softDropMassPuppi_jmrUncUp_ = fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() + smearingValue > 0.0 ? fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() + smearingValue : 0.0;
+			}
+			else {
+				treeVar_fatJetA_softDropMassPuppi_jmrUncUp_ = fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() > 0.0 ? fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() > 0.0 : 0.0;
+			}
+			// JMR_DOWN
+			if (SoftDropPuppiSF::get_jetMassResolutionSFDown() > 1.0){
+				double smearingValue = gaussRandomA * sqrt(SoftDropPuppiSF::get_jetMassResolutionSFDown() * SoftDropPuppiSF::get_jetMassResolutionSFDown() - 1);
+				treeVar_fatJetA_softDropMassPuppi_jmrUncDown_ = fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() + smearingValue > 0.0 ? fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() + smearingValue : 0.0;
+			}
+			else {
+				treeVar_fatJetA_softDropMassPuppi_jmrUncDown_ = fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() > 0.0 ? fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() : 0.0;
+			}
+
+			// fatJetB SoftDropMass+PUPPI
+			std::random_device rdB;
+			std::mt19937 e2B(rdB());
+			std::normal_distribution<> distB(0, SoftDropPuppiSF::get_mcMassResolution());
+			double gaussRandomB = distB(e2B);
+			// nominal and JMS
+			if (SoftDropPuppiSF::get_jetMassResolutionSF() > 1.0){
+				double smearingValue = gaussRandomB * sqrt(SoftDropPuppiSF::get_jetMassResolutionSF() * SoftDropPuppiSF::get_jetMassResolutionSF() - 1);
+				treeVar_fatJetB_softDropMassPuppi_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() + smearingValue > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() + smearingValue : 0.0;
+				treeVar_fatJetB_softDropMassPuppi_jmsUncUp_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFUp() + smearingValue > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFUp() + smearingValue : 0.0;
+				treeVar_fatJetB_softDropMassPuppi_jmsUncDown_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFDown() + smearingValue > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFDown() + smearingValue : 0.0;
+			}
+			else {
+				treeVar_fatJetB_softDropMassPuppi_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() : 0.0;
+				treeVar_fatJetB_softDropMassPuppi_jmsUncUp_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFUp() > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFUp() : 0.0;
+				treeVar_fatJetB_softDropMassPuppi_jmsUncDown_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFDown() > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFDown() : 0.0;
+			}
+			// JMR_UP
+			if (SoftDropPuppiSF::get_jetMassResolutionSFUp() > 1.0){
+				double smearingValue = gaussRandomB * sqrt(SoftDropPuppiSF::get_jetMassResolutionSFUp() * SoftDropPuppiSF::get_jetMassResolutionSFUp() - 1);
+				treeVar_fatJetB_softDropMassPuppi_jmrUncUp_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() + smearingValue > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() + smearingValue : 0.0;
+			}
+			else {
+				treeVar_fatJetB_softDropMassPuppi_jmrUncUp_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() > 0.0 : 0.0;
+			}
+			// JMR_DOWN
+			if (SoftDropPuppiSF::get_jetMassResolutionSFDown() > 1.0){
+				double smearingValue = gaussRandomB * sqrt(SoftDropPuppiSF::get_jetMassResolutionSFDown() * SoftDropPuppiSF::get_jetMassResolutionSFDown() - 1);
+				treeVar_fatJetB_softDropMassPuppi_jmrUncDown_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() + smearingValue > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() + smearingValue : 0.0;
+			}
+			else {
+				treeVar_fatJetB_softDropMassPuppi_jmrUncDown_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF() : 0.0;
+			}
+
+
 		} // closes 'if' sampleType does not equal DATA
 		
 		else {
@@ -467,6 +550,9 @@ public:
 				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
 			}		
+
+			treeVar_fatJetA_softDropMassPuppi_ = fatJetA.PUPPIsoftdrop_mass() > 0.0 ? fatJetA.PUPPIsoftdrop_mass() : 0.0;
+			treeVar_fatJetB_softDropMassPuppi_ = fatJetB.PUPPIsoftdrop_mass() > 0.0 ? fatJetB.PUPPIsoftdrop_mass() : 0.0;
 
 		} // closes 'else' sampleType does not equal DATA
 
@@ -638,7 +724,7 @@ int main(int argc, char** argv){
 
 		TTreeReaderValue<std::vector<unsigned int>> recordedTriggerValue(treeReader, "recordedTriggers");
 
-		TTreeReaderValue<int> nPU_tree(treeReader, "nPU");
+		// TTreeReaderValue<int> nPU_tree(treeReader, "nPU");
 
 		// TTree * T = (TTree*)inputFile->Get("demo/EventDataTree");
 		// float lheHT = -1.0;
@@ -672,7 +758,8 @@ int main(int argc, char** argv){
 			}
 
 			// if (doesNtupleHaveLheHt) T->GetEntry(fileEvtIdx);
-			const int nPU = *nPU_tree;
+			// const int nPU = *nPU_tree;
+			const int nPU = 0;
 
 			// HT calculation: Only consider jets with |eta| < 3.0, pt > 40.0
 			double ht = 0.0;
