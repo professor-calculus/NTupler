@@ -1150,10 +1150,12 @@ void Plotter::Save2D(const std::string& saveName){
 	tdrStyle->cd();
 	double default_PadRightMargin = tdrStyle->GetPadRightMargin();
 	double default_PadLeftMargin = tdrStyle->GetPadLeftMargin();
+	double default_CanvasHeight = tdrStyle->GetCanvasDefH();
 	// std::cout << default_PadLeftMargin << " " << default_PadRightMargin << std::endl;
 
-	tdrStyle->SetPadRightMargin(0.11);
-	tdrStyle->SetPadLeftMargin(0.11);
+	tdrStyle->SetPadRightMargin(0.13);
+	tdrStyle->SetPadLeftMargin(0.13);
+	tdrStyle->SetCanvasDefH(700);
 
 	TCanvas * c = new TCanvas("c","c");
 	if (useLogZ) gPad->SetLogz();
@@ -1162,7 +1164,7 @@ void Plotter::Save2D(const std::string& saveName){
 
 		iHistos2D->GetHistogram()->SetEntries(1);
 		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.0);
-		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.09);
+		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.20);
 		iHistos2D->GetHistogram()->Draw("colz, same");
 		// iHistos2D->GetHistogram()->Draw("colz, same, text");
 	}
@@ -1173,6 +1175,7 @@ void Plotter::Save2D(const std::string& saveName){
 	
 	tdrStyle->SetPadRightMargin(default_PadRightMargin);
 	tdrStyle->SetPadRightMargin(default_PadLeftMargin);
+	tdrStyle->SetCanvasDefH(default_CanvasHeight);
 	std::cout << std::endl;
 	return;
 }
@@ -1190,9 +1193,11 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 	tdrStyle->cd();
 	double default_PadRightMargin = tdrStyle->GetPadRightMargin();
 	double default_PadLeftMargin = tdrStyle->GetPadLeftMargin();
+	double default_CanvasHeight = tdrStyle->GetCanvasDefH();
 	// std::cout << default_PadLeftMargin << " " << default_PadRightMargin << std::endl;
-	tdrStyle->SetPadRightMargin(0.11);
-	tdrStyle->SetPadLeftMargin(0.11);
+	tdrStyle->SetPadRightMargin(0.13);
+	tdrStyle->SetPadLeftMargin(0.13);
+	tdrStyle->SetCanvasDefH(700);
 
 	TCanvas * c = new TCanvas("c","c");
 	if (useLogZ) gPad->SetLogz();
@@ -1201,7 +1206,7 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 		
 		iHistos2D->GetHistogram()->SetEntries(1);
 		iHistos2D->GetHistogram()->GetXaxis()->SetTitleOffset(1.0);
-		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.09);
+		iHistos2D->GetHistogram()->GetYaxis()->SetTitleOffset(1.20);
 		// iHistos2D->GetHistogram()->Draw("same");
 		iHistos2D->GetHistogram()->Draw("colz, same");
 		// iHistos2D->GetHistogram()->Draw("colz, same, text");
@@ -1300,6 +1305,7 @@ void Plotter::Save2D(const std::string& saveName, const MassRegionCuts& MassCuts
 	
 	tdrStyle->SetPadRightMargin(default_PadRightMargin);
 	tdrStyle->SetPadRightMargin(default_PadLeftMargin);
+	tdrStyle->SetCanvasDefH(default_CanvasHeight);
 	std::cout << std::endl;
 	return;
 }
