@@ -165,7 +165,7 @@ private:
 
 	Double_t treeVar_fatJetA_doubleBtagDiscrim_;
 	Double_t treeVar_fatJetA_mass_;
-	Double_t treeVar_fatJetA_softDropMass_;
+	Double_t treeVar_fatJetA_softDropMassCHS_;
 	Double_t treeVar_fatJetA_softDropMassPuppi_;
 	Double_t treeVar_fatJetA_softDropMassPuppi_jmsUncUp_;
 	Double_t treeVar_fatJetA_softDropMassPuppi_jmsUncDown_;
@@ -178,7 +178,7 @@ private:
 	Float_t treeVar_fatJetA_nSubjettinessTau2_;
 	Double_t treeVar_fatJetB_doubleBtagDiscrim_;
 	Double_t treeVar_fatJetB_mass_;
-	Double_t treeVar_fatJetB_softDropMass_;
+	Double_t treeVar_fatJetB_softDropMassCHS_;
 	Double_t treeVar_fatJetB_softDropMassPuppi_;
 	Double_t treeVar_fatJetB_softDropMassPuppi_jmsUncUp_;
 	Double_t treeVar_fatJetB_softDropMassPuppi_jmsUncDown_;
@@ -272,8 +272,8 @@ public:
 		mainAnaTree_->Branch("fatJetA_prunedMass", &treeVar_fatJetA_prunedMass_,   "fatJetA_prunedMass/D");
 		mainAnaTree_->Branch("fatJetB_prunedMass", &treeVar_fatJetB_prunedMass_,   "fatJetB_prunedMass/D");
 
-		mainAnaTree_->Branch("fatJetA_softDropMass", &treeVar_fatJetA_softDropMass_,   "fatJetA_softDropMass/D");
-		mainAnaTree_->Branch("fatJetB_softDropMass", &treeVar_fatJetB_softDropMass_,   "fatJetB_softDropMass/D");
+		mainAnaTree_->Branch("fatJetA_softDropMassCHS", &treeVar_fatJetA_softDropMassCHS_,   "fatJetA_softDropMassCHS/D");
+		mainAnaTree_->Branch("fatJetB_softDropMassCHS", &treeVar_fatJetB_softDropMassCHS_,   "fatJetB_softDropMassCHS/D");
 
 		mainAnaTree_->Branch("fatJetA_softDropMassPuppi", &treeVar_fatJetA_softDropMassPuppi_,   "fatJetA_softDropMassPuppi/D");
 		mainAnaTree_->Branch("fatJetA_softDropMassPuppi_jmsUncUp", &treeVar_fatJetA_softDropMassPuppi_jmsUncUp_,   "fatJetA_softDropMassPuppi_jmsUncUp/D");
@@ -351,8 +351,8 @@ public:
 		treeVar_fatJetA_prunedMass_ = fatJetA.CHSpruned_mass();
 		treeVar_fatJetB_prunedMass_ = fatJetB.CHSpruned_mass();
 
-		treeVar_fatJetA_softDropMass_ = fatJetA.CHSsoftdrop_mass();
-		treeVar_fatJetB_softDropMass_ = fatJetB.CHSsoftdrop_mass();
+		treeVar_fatJetA_softDropMassCHS_ = fatJetA.CHSsoftdrop_mass();
+		treeVar_fatJetB_softDropMassCHS_ = fatJetB.CHSsoftdrop_mass();
 
 		treeVar_fatJetA_nSubjettinessTau1_ = fatJetA.NjettinessAK8_tau1();
 		treeVar_fatJetA_nSubjettinessTau2_ = fatJetA.NjettinessAK8_tau2();
