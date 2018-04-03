@@ -146,6 +146,8 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       ///For reading in the Met information, and dumping it into ran::Event class ...
       void ReadInMets(const edm::Event&);
 
+      ///For reading in the ISR information
+      void ReadInIsrInfo(const edm::Event&);
 
 
       // ----------member data ---------------------------
@@ -167,6 +169,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       edm::EDGetTokenT<pat::JetCollection> fatjetToken_;
       edm::EDGetTokenT<reco::GenJetCollection> genjetToken_;
       edm::EDGetTokenT<reco::GenJetCollection> genjetAK8Token_;
+      edm::EDGetTokenT<reco::GenParticleCollection> genParticleToken_;
       edm::EDGetTokenT<pat::METCollection> metToken_;
   edm::EDGetTokenT<edm::View<reco::GsfElectron> > eleAODToken_;//delete this
   edm::EDGetTokenT<edm::View<reco::GsfElectron> > eleMiniAODToken_;//delete this
@@ -229,6 +232,7 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     fatjetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"))),
     genjetToken_(consumes<reco::GenJetCollection>(iConfig.getParameter<edm::InputTag>("genjets"))),
     genjetAK8Token_(consumes<reco::GenJetCollection>(iConfig.getParameter<edm::InputTag>("genjetsAK8"))),
+    genParticleToken_(consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("genParticles"))),
     metToken_(consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("mets"))),
     vidToken_(consumes<edm::ValueMap<bool> >(iConfig.getParameter<edm::InputTag>("vid"))),
     trkIsolMapToken_(consumes<edm::ValueMap<float> >(iConfig.getParameter<edm::InputTag>("trkIsolMap"))),
@@ -370,6 +374,9 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
      //Read in Met
      ReadInMets(iEvent);
+
+     //Read in ISR info
+     ReadInIsrInfo(iEvent);
 
      //Fill Ntuple
      EventDataTree->Fill();	
@@ -1040,6 +1047,30 @@ void RALMiniAnalyzer::ReadInMets(const edm::Event& iEvent)
       } else {
 	ithMet.genMet_pt = -99999.9;
       }
+
+    }
+
+}
+
+void RALMiniAnalyzer::ReadInIsrInfo(const edm::Event& iEvent)
+{
+    if (isMC_){
+
+      edm::Handle<reco::GenParticleCollection> genParticles;
+      iEvent.getByToken(genParticleToken_, genParticles);
+
+      for (const reco::GenParticle &iGenParticle: *genParticles) {
+
+std::cout << iGenParticle.pdgId() << std::endl;
+
+
+      }
+
+std::cout << std::endl;
+std::cout << std::endl;
+std::cout << std::endl;
+std::cout << std::endl;
+std::cout << std::endl;
 
     }
 

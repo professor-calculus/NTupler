@@ -9,6 +9,7 @@
 <use   name="DataFormats/EcalRecHit"/>
 <use   name="DataFormats/EgammaCandidates"/>
 <use   name="DataFormats/PatCandidates"/>
+<use   name="DataFormats/HepMCCandidate"/>
 <use   name="Geometry/CaloGeometry"/>
 <use   name="Geometry/CaloTopology"/>
 <use   name="DataFormats/L1GlobalTrigger"/>
