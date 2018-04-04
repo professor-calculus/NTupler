@@ -194,6 +194,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       float lheHT_;
       float nTrueInt_;
       int nPU_;
+      int nISR_;
       std::vector<ran::ElectronStruct>* electronCollection_;
       std::vector<ran::MuonStruct>* muonCollection_;
       std::vector<ran::JetStruct>* jetCollection_;
@@ -259,6 +260,7 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     }
     EventDataTree->Branch("nTrueInt", &nTrueInt_, "nTrueInt/F");
     EventDataTree->Branch("nPU", &nPU_, "nPU/I");
+    EventDataTree->Branch("nISR", &nISR_, "nISR/I");
     EventDataTree->Branch("electronCollection","std::vector<ran::ElectronStruct>", &electronCollection_, 64000, 1); 
     EventDataTree->Branch("muonCollection","std::vector<ran::MuonStruct>", &muonCollection_, 64000, 1); 
     EventDataTree->Branch("jetCollection","std::vector<ran::JetStruct>", &jetCollection_, 64000, 1);
@@ -376,7 +378,8 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
      ReadInMets(iEvent);
 
      //Read in ISR info
-     ReadInIsrInfo(iEvent);
+     if (isMC_)
+       ReadInIsrInfo(iEvent);
 
      //Fill Ntuple
      EventDataTree->Fill();	
@@ -485,6 +488,7 @@ void RALMiniAnalyzer::ResetEventByEventVariables(){
 	lheHT_ = 0.0;
   nTrueInt_ = 0.0;
   nPU_ = 0;
+  nISR_ = 0;
 }
 
 //------------ For getting the correction factor for the PUPPI softDropMass -------------
@@ -1054,27 +1058,81 @@ void RALMiniAnalyzer::ReadInMets(const edm::Event& iEvent)
 
 void RALMiniAnalyzer::ReadInIsrInfo(const edm::Event& iEvent)
 {
-    if (isMC_){
+    edm::Handle<reco::GenParticleCollection> genParticles;
+    iEvent.getByToken(genParticleToken_, genParticles);
 
-      edm::Handle<reco::GenParticleCollection> genParticles;
-      iEvent.getByToken(genParticleToken_, genParticles);
-
-      for (const reco::GenParticle &iGenParticle: *genParticles) {
-
-std::cout << iGenParticle.pdgId() << std::endl;
+    edm::Handle<pat::JetCollection> jets;
+    iEvent.getByToken(jetToken_, jets);
 
 
+    // method 1 - count extra partons in matrix element (DO NOT USE)
+    // unsigned int nisr_me = 0;
+    
+    // for (const reco::GenParticle &iGenParticle: *genParticles){
+
+    //   // we require a hard outgoing quark or gluon
+    //   if (iGenParticle.status()!=23 || (abs(iGenParticle.pdgId())>5 && iGenParticle.pdgId()!=21) ) continue;
+      
+    //   // we require that the mother is from a parton
+    //   unsigned int momid = abs(iGenParticle.mother()->pdgId());
+    //   if (momid <= 5 || momid == 21){
+
+    //     nisr_me++;
+    //     std::cout << "Additional Parton (pt,eta,phi): " << iGenParticle.pt() << " " << iGenParticle.eta() << " " << iGenParticle.phi() << std::endl;
+    //   }
+
+    // } // closes loop through genParticles
+
+
+    // method 2 - https://github.com/manuelfs/babymaker/blob/0136340602ee28caab14e3f6b064d1db81544a0a/bmaker/plugins/bmaker_full.cc#L1268-L1295
+    // count the number of jets that do NOT match to the hard partons (more specifically, their daughters) coming from the MC feynman diagrams
+    // this is the number of ISR jets
+    unsigned int nisr = 0;
+
+    for (const pat::Jet &iJet: *jets){
+
+      // only consider the jets like we do in the analysis
+      if (iJet.pt() < 40.0 || fabs(iJet.eta()) > 3.0) continue;
+
+      bool matched = false;
+  
+      for (const reco::GenParticle &iGenParticle: *genParticles){
+        if (matched) break;
+    
+        // we require hard outgoing quarks
+        if (iGenParticle.status()!=23 || abs(iGenParticle.pdgId())>5) continue;
+    
+        // we require that the mother IS from t,Z,W,h,H,SUSY
+        unsigned int momid = abs(iGenParticle.mother()->pdgId());
+        if ( !(momid==6 || momid==23 || momid==24 || momid==25 || momid==35 || momid>1e6) ) continue; 
+        
+        // check against daughter in case of hard initial splitting
+        for (size_t idau(0); idau < iGenParticle.numberOfDaughters(); ++idau) {
+          float dR = deltaR(iJet.p4(), iGenParticle.daughter(idau)->p4());
+          if (dR < 0.3){
+            matched = true;
+            break;
+          }
+        } // closes loop through daughter particles
+      
+      } // closes loop over MC particles
+  
+      // if there are no matches, it is an ISR jet
+      if (matched == false){
+        nisr++;
+        // std::cout << "ISR Jet (pt,eta,phi):           " << iJet.pt() << " " << iJet.eta() << " " << iJet.phi() << std::endl;
       }
 
-std::cout << std::endl;
-std::cout << std::endl;
-std::cout << std::endl;
-std::cout << std::endl;
-std::cout << std::endl;
+    } // closes loop over jets
 
-    }
+    // Event ISR Info
+    // std::cout << "Method 1 isr count: " << nisr_me << std::endl;
+    // std::cout << "Method 2 isr count: " << nisr << std::endl;
+    // std::cout << std::endl;
 
+    nISR_ = nisr;
 }
+
 
 //------------ method for reading in the values of the standard GSF electron variables ---------------
 //----------------------------------------------------------------------------------------------------
