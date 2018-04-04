@@ -6,7 +6,7 @@ config = config()
 # EDIT the following:
 # uniqueName, config.Data.inputDataset, config.Data.inputDBS, config.Data.unitsPerJob
 
-uniqueName = 'mH70p0_mSusy2200p0_ratio0p99_splitting0p1_CMSSW8029wDBTV4_977fb56_jecUncAndPUPPISD' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+uniqueName = 'QCD_HT2000toInf_CMSSW8029wDBTV4_e6de69_v2' # name for this ntuple production (include commit hash so it is unique and can be traced) 
 
 config.General.requestName = uniqueName # name of the crab job project (eg on dashboard)
 config.General.workArea = 'crab_projects' # name of directory where crab project info is stored
@@ -42,7 +42,7 @@ config.JobType.inputFiles = ['puppiCorr.root']
 # MORIOND2017_QCD_HT2000toInf_v1: 2.0M events, 36 files = 55K events (use three units per job)
 # config.Data.inputDataset = '/QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'
 # MORIOND2017_QCD_HT2000toInf_v2: 4.0M events, 86 files = 46K events (use three units per job)
-# config.Data.inputDataset = '/QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
+config.Data.inputDataset = '/QCD_HT2000toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
 
 # MORIOND2017_ZJets_HT600toInf: 1.0M events, 28 files = 37K events (use three units per job)
 # config.Data.inputDataset = '/ZJetsToQQ_HT600toInf_13TeV-madgraph/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'
@@ -77,7 +77,7 @@ config.JobType.inputFiles = ['puppiCorr.root']
 
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH30p0_mSusy2200p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH30p0_mSusy2200p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH50p0_mSusy2200p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH50p0_mSusy2200p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
-config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH70p0_mSusy2200p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v6_mH70p0_mSusy2200p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+# config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH70p0_mSusy2200p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v6_mH70p0_mSusy2200p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH90p0_mSusy2200p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH90p0_mSusy2200p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH125p0_mSusy2200p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH125p0_mSusy2200p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 
@@ -94,14 +94,14 @@ config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH70p0_mSusy2200p0_rati
 # config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH125p0_mSusy2600p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH125p0_mSusy2600p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 
 #################################################################################################
-# config.Data.inputDBS = 'global' # for centrally produced data
-config.Data.inputDBS = 'phys03' # for personal simulation
-config.Data.unitsPerJob = 1
+config.Data.inputDBS = 'global' # for centrally produced data
+# config.Data.inputDBS = 'phys03' # for personal simulation
+config.Data.unitsPerJob = 3
 #################################################################################################
 
 config.Data.totalUnits = -1 # '-1' does them all
 config.Data.splitting = 'FileBased'
 config.Data.publication = False
-config.Data.outLFNDirBase = '/store/user/taylor/ntuples_MC' # Wherever you want the ntuples to go on the RAL T2
+config.Data.outLFNDirBase = '/store/user/taylor/ntuples_MC_Apr2018' # Wherever you want the ntuples to go on the RAL T2
 
 config.Site.storageSite = 'T2_UK_SGrid_RALPP'

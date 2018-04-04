@@ -6,7 +6,8 @@ config = config()
 # EDIT the following:
 # uniqueName, config.Data.lumiMask, config.Data.inputDataset, config.Data.unitsPerJob
 
-uniqueName = 'JetHt_Run2016F-03Feb2017-v1_CMSSW8029wDBTV4_1bec5005_sub2' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+uniqueName = 'JetHt_Run2016H-03Feb2017_ver3-v1_CMSSW8029wDBTV4_e6de69' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+
 config.Data.lumiMask = 'Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
 
 config.General.requestName = uniqueName # name of the crab job project (eg on dashboard)
@@ -26,10 +27,10 @@ config.JobType.inputFiles = ['puppiCorr.root']
 # config.Data.inputDataset = '/JetHT/Run2016C-03Feb2017-v1/MINIAOD'
 # config.Data.inputDataset = '/JetHT/Run2016D-03Feb2017-v1/MINIAOD'
 # config.Data.inputDataset = '/JetHT/Run2016E-03Feb2017-v1/MINIAOD'
-config.Data.inputDataset = '/JetHT/Run2016F-03Feb2017-v1/MINIAOD'
+# config.Data.inputDataset = '/JetHT/Run2016F-03Feb2017-v1/MINIAOD'
 # config.Data.inputDataset = '/JetHT/Run2016G-03Feb2017-v1/MINIAOD'
 # config.Data.inputDataset = '/JetHT/Run2016H-03Feb2017_ver2-v1/MINIAOD'
-# config.Data.inputDataset = '/JetHT/Run2016H-03Feb2017_ver3-v1/MINIAOD'
+config.Data.inputDataset = '/JetHT/Run2016H-03Feb2017_ver3-v1/MINIAOD'
 
 # SingleMuon 2016 - 03Feb2017: ~ 150k events/file (SETUP TO SELECT ALL EVENTS IN SOURCE CODE, use one unit per job)
 # config.Data.inputDataset = '/SingleMuon/Run2016B-03Feb2017_ver1-v1/MINIAOD' # might not be any runs here in that pass masking
@@ -50,6 +51,6 @@ config.Data.inputDBS = 'global' # for centrally produced data
 config.Data.totalUnits = -1 # '-1' does them all
 config.Data.splitting = 'FileBased'
 config.Data.publication = False
-config.Data.outLFNDirBase = '/store/user/taylor/ntuples_DATA' # Wherever you want the ntuples to go on the RAL T2
+config.Data.outLFNDirBase = '/store/user/taylor/ntuples_DATA_Apr2018' # Wherever you want the ntuples to go on the RAL T2
 
 config.Site.storageSite = 'T2_UK_SGrid_RALPP'
