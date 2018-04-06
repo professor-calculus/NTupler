@@ -5,170 +5,468 @@
 
 // Enter the fatJet's info and get the DBT SF info back
 // info from https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation80XReReco
-// Custom = Med1 SF's, if need be increase errors to span Loose & Med2 SF's
+
+// TODO: need to put in REAL fractions fX_* fY_*
 
 namespace DoubleBTagSF{
 
-
-	// void editLooseSfSignal(std::vector<double>& looseScaleFactorVec, const double& fatJet_pt){
-
-	// 	if (fatJet_pt < 250.0){
-	// 		looseScaleFactorVec[0] *= (0.96 - 2 * 0.02);
-	// 		looseScaleFactorVec[1] *= (0.96);
-	// 		looseScaleFactorVec[2] *= (0.96 + 2 * 0.03);
-	// 	}
-	// 	else if (fatJet_pt < 350.0){
-	// 		looseScaleFactorVec[0] *= (0.96 - 0.02);
-	// 		looseScaleFactorVec[1] *= (0.96);
-	// 		looseScaleFactorVec[2] *= (0.96 + 0.03);
-	// 	}
-	// 	else if (fatJet_pt < 430.0){
-	// 		looseScaleFactorVec[0] *= (1.00 - 0.03);
-	// 		looseScaleFactorVec[1] *= (1.00);
-	// 		looseScaleFactorVec[2] *= (1.00 + 0.04);
-	// 	}
-	// 	else if (fatJet_pt < 840.0){
-	// 		looseScaleFactorVec[0] *= (1.01 - 0.04);
-	// 		looseScaleFactorVec[1] *= (1.01);
-	// 		looseScaleFactorVec[2] *= (1.01 + 0.02);
-	// 	}
-	// 	else{
-	// 		looseScaleFactorVec[0] *= (1.01 - 2 * 0.04);
-	// 		looseScaleFactorVec[1] *= (1.01);
-	// 		looseScaleFactorVec[2] *= (1.01 + 2 * 0.02);
-	// 	}
-	// } // closes function 'editLooseSfSignal'
+	// DBT Tag area = DIAG_UP{Loose,1.0 <-> 1.0,Loose}
+	
+	// if within the Med1 * Med1 square that is simple
+	// if not, need to do claire's ides
 
 
-	// void editLooseSfTTJets(std::vector<double>& looseScaleFactorVec, const double& fatJet_pt){
+	// :::claire's idea:::
 
-	// 	if (fatJet_pt < 250.0){
-	// 		looseScaleFactorVec[0] *= (1.044 - 2 * 0.028);
-	// 		looseScaleFactorVec[1] *= (1.044);
-	// 		looseScaleFactorVec[2] *= (1.044 + 2 * 0.028);
-	// 	}
-	// 	else if (fatJet_pt < 350.0){
-	// 		looseScaleFactorVec[0] *= (1.044 - 0.028);
-	// 		looseScaleFactorVec[1] *= (1.044);
-	// 		looseScaleFactorVec[2] *= (1.044 + 0.028);
-	// 	}
-	// 	else if (fatJet_pt < 430.0){
-	// 		looseScaleFactorVec[0] *= (1.074 - 0.052);
-	// 		looseScaleFactorVec[1] *= (1.074);
-	// 		looseScaleFactorVec[2] *= (1.074 + 0.052);
-	// 	}
-	// 	else if (fatJet_pt < 700.0){
-	// 		looseScaleFactorVec[0] *= (1.119 - 0.079);
-	// 		looseScaleFactorVec[1] *= (1.119);
-	// 		looseScaleFactorVec[2] *= (1.119 + 0.079);
-	// 	}
-	// 	else{
-	// 		looseScaleFactorVec[0] *= (1.119 - 2 * 0.079);
-	// 		looseScaleFactorVec[1] *= (1.119);
-	// 		looseScaleFactorVec[2] *= (1.119 + 2 * 0.079);
-	// 	}
-	// } // closes function 'editLooseSfTTJets'
+	// DBT area X = dbtA > 0.8 (Med2) && dbtB > 0.6 (Med1)
+	// DBT area Y = dbtA > 0.8 (Med2) && 0.3 (Loose) < dbtB < 0.6 (Med1)
+	// DBT area Z = X + Y
+
+	// use the following fractional distributions (for a given sample)
+	// fX = X / (X + Y)
+	// fY = Y / (X + Y)
+	// note: derived for ht1500+, fatJet*2 pt > 300, 1 isoAk4 pt > 300
+
+	// for scale factors sX, sY, sZ
+	// sZ = fX * sX + fY * sY
+	// then the scale factor for region Y is
+	// sY = (sZ - fX * sX) / fY
+
+	double fX_signal = 0.8;
+	double fY_signal = 0.2;
+	double fX_ttbar = 0.8;
+	double fY_ttbar = 0.2;
+
+	// ----------------------------------------------------------//
+	// ----------------------------------------------------------//
+	// ----------------------------------------------------------//
+
+	double getLooseScaleFactor_signal(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return 0.96;
+		else if (fatJet_pt < 350.0)
+			return 0.96;
+		else if (fatJet_pt < 430.0)
+			return 1.00;
+		else if (fatJet_pt < 840.0)
+			return 1.01;
+		else
+			return 1.01;
+	}
+
+	double getLooseScaleFactorUp_signal(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (0.96 + 2 * 0.03);
+		else if (fatJet_pt < 350.0)
+			return (0.96 + 0.03);
+		else if (fatJet_pt < 430.0)
+			return (1.00 + 0.04);
+		else if (fatJet_pt < 840.0)
+			return (1.01 + 0.02);
+		else
+			return (1.01 + 2 * 0.02);
+	}
+
+	double getLooseScaleFactorDown_signal(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (0.96 - 2 * 0.02);
+		else if (fatJet_pt < 350.0)
+			return (0.96 - 0.02);
+		else if (fatJet_pt < 430.0)
+			return (1.00 - 0.03);
+		else if (fatJet_pt < 840.0)
+			return (1.01 - 0.04);
+		else
+			return (1.01 - 2 * 0.04);
+	}
+
+	// ----------------------------------------------------------//
+
+	double getMed1ScaleFactor_signal(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return 0.93;
+		else if (fatJet_pt < 350.0)
+			return 0.93;
+		else if (fatJet_pt < 430.0)
+			return 1.01;
+		else if (fatJet_pt < 840.0)
+			return 0.99;
+		else
+			return 0.99;
+	}
+
+	double getMed1ScaleFactorUp_signal(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (0.93 + 2 * 0.03);
+		else if (fatJet_pt < 350.0)
+			return (0.93 + 0.03);
+		else if (fatJet_pt < 430.0)
+			return (1.01 + 0.03);
+		else if (fatJet_pt < 840.0)
+			return (0.99 + 0.02);
+		else
+			return (0.99 + 2 * 0.02);
+	}
+
+	double getMed1ScaleFactorDown_signal(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (0.93 - 2 * 0.02);
+		else if (fatJet_pt < 350.0)
+			return (0.93 - 0.02);
+		else if (fatJet_pt < 430.0)
+			return (1.01 - 0.03);
+		else if (fatJet_pt < 840.0)
+			return (0.99 - 0.04);
+		else
+			return (0.99 - 2 * 0.04);
+	}
+
+	// ----------------------------------------------------------//
+
+	double getMed2ScaleFactor_signal(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return 0.92;
+		else if (fatJet_pt < 350.0)
+			return 0.92;
+		else if (fatJet_pt < 430.0)
+			return 1.01;
+		else if (fatJet_pt < 840.0)
+			return 0.92;
+		else
+			return 0.92;
+	}
+
+	double getMed2ScaleFactorUp_signal(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (0.92 + 2 * 0.03);
+		else if (fatJet_pt < 350.0)
+			return (0.92 + 0.03);
+		else if (fatJet_pt < 430.0)
+			return (1.01 + 0.03);
+		else if (fatJet_pt < 840.0)
+			return (0.92 + 0.03);
+		else
+			return (0.92 + 2 * 0.03);
+	}
+
+	double getMed2ScaleFactorDown_signal(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (0.92 - 2 * 0.03);
+		else if (fatJet_pt < 350.0)
+			return (0.92 - 0.03);
+		else if (fatJet_pt < 430.0)
+			return (1.01 - 0.04);
+		else if (fatJet_pt < 840.0)
+			return (0.92 - 0.05);
+		else
+			return (0.92 - 2 * 0.05);
+	}
+
+	// ----------------------------------------------------------//
+	// ----------------------------------------------------------//
+	// ----------------------------------------------------------//
+
+	double getLooseScaleFactor_ttbar(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return 1.044;
+		else if (fatJet_pt < 350.0)
+			return 1.044;
+		else if (fatJet_pt < 430.0)
+			return 1.074;
+		else if (fatJet_pt < 700.0)
+			return 1.119;
+		else
+			return 1.119;
+	}
+
+	double getLooseScaleFactorUp_ttbar(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (1.044 + 2 * 0.028);
+		else if (fatJet_pt < 350.0)
+			return (1.044 + 0.028);
+		else if (fatJet_pt < 430.0)
+			return (1.074 + 0.052);
+		else if (fatJet_pt < 700.0)
+			return (1.119 + 0.079);
+		else
+			return (1.119 + 2 * 0.079);
+	}
+
+	double getLooseScaleFactorDown_ttbar(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (1.044 - 2 * 0.028);
+		else if (fatJet_pt < 350.0)
+			return (1.044 - 0.028);
+		else if (fatJet_pt < 430.0)
+			return (1.074 - 0.052);
+		else if (fatJet_pt < 700.0)
+			return (1.119 - 0.079);
+		else
+			return (1.119 - 2 * 0.079);
+	}
+
+	// ----------------------------------------------------------//
+
+	double getMed1ScaleFactor_ttbar(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return 1.029;
+		else if (fatJet_pt < 350.0)
+			return 1.029;
+		else if (fatJet_pt < 700.0)
+			return 1.156;
+		else
+			return 1.156;
+	}
+
+	double getMed1ScaleFactorUp_ttbar(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (1.029 + 2 * 0.034);
+		else if (fatJet_pt < 350.0)
+			return (1.029 + 0.034);
+		else if (fatJet_pt < 700.0)
+			return (1.156 + 0.064);
+		else
+			return (1.156 + 2 * 0.064);
+	}
+
+	double getMed1ScaleFactorDown_ttbar(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (1.029 - 2 * 0.034);
+		else if (fatJet_pt < 350.0)
+			return (1.029 - 0.034);
+		else if (fatJet_pt < 700.0)
+			return (1.156 - 0.064);
+		else
+			return (1.156 - 2 * 0.064);
+	}
+
+	// ----------------------------------------------------------//
+
+	double getMed2ScaleFactor_ttbar(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return 1.050;
+		else if (fatJet_pt < 350.0)
+			return 1.050;
+		else if (fatJet_pt < 700.0)
+			return 1.086;
+		else
+			return 1.086;
+	}
+
+	double getMed2ScaleFactorUp_ttbar(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (1.050 + 2 * 0.044);
+		else if (fatJet_pt < 350.0)
+			return (1.050 + 0.044);
+		else if (fatJet_pt < 700.0)
+			return (1.086 + 0.078);
+		else
+			return (1.086 + 2 * 0.078);
+	}
+
+	double getMed2ScaleFactorDown_ttbar(const double& fatJet_pt)
+	{
+		if (fatJet_pt < 250.0)
+			return (1.050 - 2 * 0.044);
+		else if (fatJet_pt < 350.0)
+			return (1.050 - 0.044);
+		else if (fatJet_pt < 700.0)
+			return (1.086 - 0.078);
+		else
+			return (1.086 - 2 * 0.078);
+	}
+
+	// ----------------------------------------------------------//
+	// ----------------------------------------------------------//
+	// ----------------------------------------------------------//
 
 
-	void editCustomSfSignal(std::vector<double>& customScaleFactorVec, const double& fatJet_pt){
+	double getDbtTagScaleFactor_signal(const double& fatJetA_pt, const double& fatJetA_dbt, const double& fatJetB_pt, const double& fatJetB_dbt)
+	{
+		// check fatJets are in the TAG dbt region
+		if (fatJetA_dbt < (-1.0 * fatJetB_dbt + 1.0 + DoubleBTagWPs::dbtNameToDouble("Loose"))) return 1.0;
 
-		if (fatJet_pt < 250.0){
-			customScaleFactorVec[0] *= 0.89;
-			customScaleFactorVec[1] *= 0.93;
-			customScaleFactorVec[2] *= 0.99;
-		}
-		else if (fatJet_pt < 350.0){
-			customScaleFactorVec[0] *= 0.91;
-			customScaleFactorVec[1] *= 0.93;
-			customScaleFactorVec[2] *= 0.96;
-		}
-		else if (fatJet_pt < 430.0){
-			customScaleFactorVec[0] *= 0.98;
-			customScaleFactorVec[1] *= 1.01;
-			customScaleFactorVec[2] *= 1.04;
-		}
-		else if (fatJet_pt < 840.0){
-			customScaleFactorVec[0] *= 0.92;
-			customScaleFactorVec[1] *= 0.99;
-			customScaleFactorVec[2] *= 1.01;
-		}
+		// are fatJets in the Med1 * Med1 square?
+		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Med1") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Med1"))
+			return getMed1ScaleFactor_signal(fatJetA_pt) * getMed1ScaleFactor_signal(fatJetB_pt);
+
+		// otherwise, need to do claires trick
 		else{
-			customScaleFactorVec[0] *= 0.91;
-			customScaleFactorVec[1] *= 0.99;
-			customScaleFactorVec[2] *= 1.03;
-		}
-	} // closes function 'editCustomSfSignal'
 
+			double fatJetSpecA_pt, fatJetSpecB_pt;
+			if (fatJetA_dbt > fatJetB_dbt){
+				fatJetSpecA_pt = fatJetA_pt;
+				fatJetSpecB_pt = fatJetB_pt;
+			}
+			else{
+				fatJetSpecA_pt = fatJetB_pt;
+				fatJetSpecB_pt = fatJetA_pt;
+			}
 
-	void editCustomSfTTJets(std::vector<double>& customScaleFactorVec, const double& fatJet_pt){
+			double sX = getMed2ScaleFactor_signal(fatJetSpecA_pt) * getMed1ScaleFactor_signal(fatJetSpecB_pt);
+			double sZ = getMed2ScaleFactor_signal(fatJetSpecA_pt) * getLooseScaleFactor_signal(fatJetSpecB_pt); 
+			return (sZ - fX_signal * sX) / fY_signal;
+		}
+	}
 
-		if (fatJet_pt < 250.0){
-			customScaleFactorVec[0] *= 0.961;
-			customScaleFactorVec[1] *= 1.029;
-			customScaleFactorVec[2] *= 1.097;
-		}
-		else if (fatJet_pt < 350.0){
-			customScaleFactorVec[0] *= 0.995;
-			customScaleFactorVec[1] *= 1.029;
-			customScaleFactorVec[2] *= 1.063;
-		}
-		else if (fatJet_pt < 700.0){
-			customScaleFactorVec[0] *= 1.074;
-			customScaleFactorVec[1] *= 1.156;
-			customScaleFactorVec[2] *= 1.220;
-		}
+	double getDbtTagScaleFactorUp_signal(const double& fatJetA_pt, const double& fatJetA_dbt, const double& fatJetB_pt, const double& fatJetB_dbt)
+	{
+		// check fatJets are in the TAG dbt region
+		if (fatJetA_dbt < (-1.0 * fatJetB_dbt + 1.0 + DoubleBTagWPs::dbtNameToDouble("Loose"))) return 1.0;
+
+		// are fatJets in the Med1 * Med1 square?
+		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Med1") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Med1"))
+			return getMed1ScaleFactorUp_signal(fatJetA_pt) * getMed1ScaleFactorUp_signal(fatJetB_pt);
+
+		// otherwise, need to do claires trick
 		else{
-			customScaleFactorVec[0] *= 1.028;
-			customScaleFactorVec[1] *= 1.156;
-			customScaleFactorVec[2] *= 1.284;
+
+			double fatJetSpecA_pt, fatJetSpecB_pt;
+			if (fatJetA_dbt > fatJetB_dbt){
+				fatJetSpecA_pt = fatJetA_pt;
+				fatJetSpecB_pt = fatJetB_pt;
+			}
+			else{
+				fatJetSpecA_pt = fatJetB_pt;
+				fatJetSpecB_pt = fatJetA_pt;
+			}
+
+			double sX = getMed2ScaleFactorUp_signal(fatJetSpecA_pt) * getMed1ScaleFactorUp_signal(fatJetSpecB_pt);
+			double sZ = getMed2ScaleFactorUp_signal(fatJetSpecA_pt) * getLooseScaleFactorUp_signal(fatJetSpecB_pt); 
+			return (sZ - fX_signal * sX) / fY_signal;
 		}
-	} // closes function 'editCustomSfTTJets'
+	}
 
+	double getDbtTagScaleFactorDown_signal(const double& fatJetA_pt, const double& fatJetA_dbt, const double& fatJetB_pt, const double& fatJetB_dbt)
+	{
+		// check fatJets are in the TAG dbt region
+		if (fatJetA_dbt < (-1.0 * fatJetB_dbt + 1.0 + DoubleBTagWPs::dbtNameToDouble("Loose"))) return 1.0;
 
-	// std::vector<double> GetLooseScaleFactors(const std::string& sampleType, const double& fatJetA_pt, const double& fatJetA_dbt, const double& fatJetB_pt, const double& fatJetB_dbt){
+		// are fatJets in the Med1 * Med1 square?
+		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Med1") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Med1"))
+			return getMed1ScaleFactorDown_signal(fatJetA_pt) * getMed1ScaleFactorDown_signal(fatJetB_pt);
 
-	// 	std::vector<double> looseScaleFactorVec = {1.0, 1.0, 1.0}; // dbtLooseDown, dbtLooseNominal, dbtLooseUp  
-	// 	double dbt_LooseWP = DoubleBTagWPs::dbtNameToDouble("Loose");
-	// 	if (sampleType != "SIGNAL" && sampleType != "TTJETS") return looseScaleFactorVec;
-	// 	if (fatJetA_dbt < dbt_LooseWP || fatJetB_dbt < dbt_LooseWP) return looseScaleFactorVec;
+		// otherwise, need to do claires trick
+		else{
 
-	// 	if (sampleType == "SIGNAL"){
-	// 		editLooseSfSignal(looseScaleFactorVec, fatJetA_pt);
-	// 		editLooseSfSignal(looseScaleFactorVec, fatJetB_pt);
-	// 	}
+			double fatJetSpecA_pt, fatJetSpecB_pt;
+			if (fatJetA_dbt > fatJetB_dbt){
+				fatJetSpecA_pt = fatJetA_pt;
+				fatJetSpecB_pt = fatJetB_pt;
+			}
+			else{
+				fatJetSpecA_pt = fatJetB_pt;
+				fatJetSpecB_pt = fatJetA_pt;
+			}
 
-	// 	if (sampleType == "TTJETS"){
-	// 		editLooseSfTTJets(looseScaleFactorVec, fatJetA_pt);
-	// 		editLooseSfTTJets(looseScaleFactorVec, fatJetB_pt);
-	// 	}
-
-	// 	return looseScaleFactorVec;
-
-	// } // closes function 'GetLooseScaleFactors'
-
-
-	std::vector<double> GetCustomScaleFactors(const std::string& sampleType, const double& fatJetA_pt, const double& fatJetA_dbt, const double& fatJetB_pt, const double& fatJetB_dbt){
-
-		std::vector<double> customScaleFactorVec = {1.0, 1.0, 1.0}; // dbtCustomDown, dbtCustomNominal, dbtCustomUp  
-
-		if (sampleType != "SIGNAL" && sampleType != "TTJETS") return customScaleFactorVec;
-
-		double dbtLooseWP = DoubleBTagWPs::dbtNameToDouble("Loose");
-		if ( fatJetA_dbt < (-1.0 * fatJetB_dbt + 1.0 + dbtLooseWP) ) return customScaleFactorVec;
-
-		if (sampleType == "SIGNAL"){
-			editCustomSfSignal(customScaleFactorVec, fatJetA_pt);
-			editCustomSfSignal(customScaleFactorVec, fatJetB_pt);
+			double sX = getMed2ScaleFactorDown_signal(fatJetSpecA_pt) * getMed1ScaleFactorDown_signal(fatJetSpecB_pt);
+			double sZ = getMed2ScaleFactorDown_signal(fatJetSpecA_pt) * getLooseScaleFactorDown_signal(fatJetSpecB_pt); 
+			return (sZ - fX_signal * sX) / fY_signal;
 		}
+	}
 
-		if (sampleType == "TTJETS"){
-			editCustomSfTTJets(customScaleFactorVec, fatJetA_pt);
-			editCustomSfTTJets(customScaleFactorVec, fatJetB_pt);
+	// ----------------------------------------------------------//
+
+	double getDbtTagScaleFactor_ttbar(const double& fatJetA_pt, const double& fatJetA_dbt, const double& fatJetB_pt, const double& fatJetB_dbt)
+	{
+		// check fatJets are in the TAG dbt region
+		if (fatJetA_dbt < (-1.0 * fatJetB_dbt + 1.0 + DoubleBTagWPs::dbtNameToDouble("Loose"))) return 1.0;
+
+		// are fatJets in the Med1 * Med1 square?
+		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Med1") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Med1"))
+			return getMed1ScaleFactor_ttbar(fatJetA_pt) * getMed1ScaleFactor_ttbar(fatJetB_pt);
+
+		// otherwise, need to do claires trick
+		else{
+
+			double fatJetSpecA_pt, fatJetSpecB_pt;
+			if (fatJetA_dbt > fatJetB_dbt){
+				fatJetSpecA_pt = fatJetA_pt;
+				fatJetSpecB_pt = fatJetB_pt;
+			}
+			else{
+				fatJetSpecA_pt = fatJetB_pt;
+				fatJetSpecB_pt = fatJetA_pt;
+			}
+
+			double sX = getMed2ScaleFactor_ttbar(fatJetSpecA_pt) * getMed1ScaleFactor_ttbar(fatJetSpecB_pt);
+			double sZ = getMed2ScaleFactor_ttbar(fatJetSpecA_pt) * getLooseScaleFactor_ttbar(fatJetSpecB_pt); 
+			return (sZ - fX_ttbar * sX) / fY_ttbar;
 		}
+	}
 
-		return customScaleFactorVec;
+	double getDbtTagScaleFactorUp_ttbar(const double& fatJetA_pt, const double& fatJetA_dbt, const double& fatJetB_pt, const double& fatJetB_dbt)
+	{
+		// check fatJets are in the TAG dbt region
+		if (fatJetA_dbt < (-1.0 * fatJetB_dbt + 1.0 + DoubleBTagWPs::dbtNameToDouble("Loose"))) return 1.0;
 
-	} // closes function 'GetCustomScaleFactors'
+		// are fatJets in the Med1 * Med1 square?
+		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Med1") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Med1"))
+			return getMed1ScaleFactorUp_ttbar(fatJetA_pt) * getMed1ScaleFactorUp_ttbar(fatJetB_pt);
+
+		// otherwise, need to do claires trick
+		else{
+
+			double fatJetSpecA_pt, fatJetSpecB_pt;
+			if (fatJetA_dbt > fatJetB_dbt){
+				fatJetSpecA_pt = fatJetA_pt;
+				fatJetSpecB_pt = fatJetB_pt;
+			}
+			else{
+				fatJetSpecA_pt = fatJetB_pt;
+				fatJetSpecB_pt = fatJetA_pt;
+			}
+
+			double sX = getMed2ScaleFactorUp_ttbar(fatJetSpecA_pt) * getMed1ScaleFactorUp_ttbar(fatJetSpecB_pt);
+			double sZ = getMed2ScaleFactorUp_ttbar(fatJetSpecA_pt) * getLooseScaleFactorUp_ttbar(fatJetSpecB_pt); 
+			return (sZ - fX_ttbar * sX) / fY_ttbar;
+		}
+	}
+
+	double getDbtTagScaleFactorDown_ttbar(const double& fatJetA_pt, const double& fatJetA_dbt, const double& fatJetB_pt, const double& fatJetB_dbt)
+	{
+		// check fatJets are in the TAG dbt region
+		if (fatJetA_dbt < (-1.0 * fatJetB_dbt + 1.0 + DoubleBTagWPs::dbtNameToDouble("Loose"))) return 1.0;
+
+		// are fatJets in the Med1 * Med1 square?
+		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Med1") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Med1"))
+			return getMed1ScaleFactorDown_ttbar(fatJetA_pt) * getMed1ScaleFactorDown_ttbar(fatJetB_pt);
+
+		// otherwise, need to do claires trick
+		else{
+
+			double fatJetSpecA_pt, fatJetSpecB_pt;
+			if (fatJetA_dbt > fatJetB_dbt){
+				fatJetSpecA_pt = fatJetA_pt;
+				fatJetSpecB_pt = fatJetB_pt;
+			}
+			else{
+				fatJetSpecA_pt = fatJetB_pt;
+				fatJetSpecB_pt = fatJetA_pt;
+			}
+
+			double sX = getMed2ScaleFactorDown_ttbar(fatJetSpecA_pt) * getMed1ScaleFactorDown_ttbar(fatJetSpecB_pt);
+			double sZ = getMed2ScaleFactorDown_ttbar(fatJetSpecA_pt) * getLooseScaleFactorDown_ttbar(fatJetSpecB_pt); 
+			return (sZ - fX_ttbar * sX) / fY_ttbar;
+		}
+	}
 
 
 } // closes namespace 'DoubleBTagSF'

@@ -143,9 +143,9 @@ private:
 	// For the event & kinematic branches ...
 	Double_t treeVar_weight_combined_;
 	
-	Double_t treeVar_weight_dbtLoose_;
-	Double_t treeVar_weight_dbtLooseUp_;
-	Double_t treeVar_weight_dbtLooseDown_;
+	Double_t treeVar_weight_dbtTag_;
+	Double_t treeVar_weight_dbtTagUp_;
+	Double_t treeVar_weight_dbtTagDown_;
 
 	Double_t treeVar_weight_isr_;
 	Double_t treeVar_weight_isrUp_;
@@ -249,9 +249,9 @@ public:
 	{
 		mainAnaTree_->Branch("weight_combined",     &treeVar_weight_combined_,     "weight_combined/D");
 		
-		mainAnaTree_->Branch("weight_dbtLoose",     &treeVar_weight_dbtLoose_,     "weight_dbtLoose/D");
-		mainAnaTree_->Branch("weight_dbtLooseUp",   &treeVar_weight_dbtLooseUp_,   "weight_dbtLooseUp/D");
-		mainAnaTree_->Branch("weight_dbtLooseDown", &treeVar_weight_dbtLooseDown_, "weight_dbtLooseDown/D");
+		mainAnaTree_->Branch("weight_dbtTag",     &treeVar_weight_dbtTag_,     "weight_dbtTag/D");
+		mainAnaTree_->Branch("weight_dbtTagUp",   &treeVar_weight_dbtTagUp_,   "weight_dbtTagUp/D");
+		mainAnaTree_->Branch("weight_dbtTagDown", &treeVar_weight_dbtTagDown_, "weight_dbtTagDown/D");
 
 		mainAnaTree_->Branch("weight_isr",     &treeVar_weight_isr_,     "weight_isr/D");
 		mainAnaTree_->Branch("weight_isrUp",   &treeVar_weight_isrUp_,   "weight_isrUp/D");
@@ -338,28 +338,13 @@ public:
 	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp, const float& ht_jecUncDown, const float& ht_jerUncUp, const float& ht_jerUncDown, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const double& D_factor)
 	{
 		
-		// DO THE WEIGHTS !!!
-		
-		// todo: put these into the signal and ttjets categories...
-		// std::vector<double> scaleFactorVec = DoubleBTagSF::GetLooseScaleFactors(sampleType.c_str(), fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
-		// std::vector<double> scaleFactorVec = DoubleBTagSF::GetCustomScaleFactors(sampleType.c_str(), fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
-		// treeVar_weight_dbtLooseDown_ = scaleFactorVec[0];
-		treeVar_weight_dbtLooseDown_ = 1.8;
-		// treeVar_weight_dbtLoose_ = scaleFactorVec[1];
-		treeVar_weight_dbtLoose_ = 2.0;
-		// treeVar_weight_dbtLooseUp_ = scaleFactorVec[2];
-		treeVar_weight_dbtLooseUp_ = 2.2;
+		// DO THE WEIGHTS
 
-		treeVar_weight_isr_ = 1.0;
-		treeVar_weight_isrDown_ = 1.0;
-		treeVar_weight_isrUp_ = 1.0;
-
-		
-		// multiply all nominal Scale Factor Weights
 		if (sampleType == "SIGNAL"){
 
-			// CALC DBT WEIGHTS signal - SPECIFICALLY FOR SIGNAL
-			// need to fill in, but not on this branch
+			treeVar_weight_dbtTag_ = DoubleBTagSF::getDbtTagScaleFactor_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
+			treeVar_weight_dbtTagUp_ = DoubleBTagSF::getDbtTagScaleFactorUp_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
+			treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
 
 			// calculate isr weights
 			if (nISR > 6) nISR = 6;
@@ -369,18 +354,32 @@ public:
 			treeVar_weight_isrDown_ = corr_isr - 0.5 * (corr_isr - 1);
 
 			// combined nominal scale factor weights
-			treeVar_weight_combined_ = treeVar_weight_dbtLoose_ * treeVar_weight_isr_;	
+			treeVar_weight_combined_ = treeVar_weight_dbtTag_ * treeVar_weight_isr_;	
 		}
 		
 		else if (sampleType == "TTJETS"){
-			// CALC DBT WEIGHTS ttbar - SPECIFICALLY FOR TTJETS
-			// need to fill in, but not on this branch
 
+			treeVar_weight_dbtTag_ = DoubleBTagSF::getDbtTagScaleFactor_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
+			treeVar_weight_dbtTagUp_ = DoubleBTagSF::getDbtTagScaleFactorUp_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
+			treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
+
+			treeVar_weight_isr_ = 1.0;
+			treeVar_weight_isrUp_ = 1.0;
+			treeVar_weight_isrDown_ = 1.0;
+			
 			// combined nominal scale factor weights
-			treeVar_weight_combined_ = treeVar_weight_dbtLoose_;
+			treeVar_weight_combined_ = treeVar_weight_dbtTag_;
 		}
 
 		else{
+			treeVar_weight_dbtTag_ = 1.0;
+			treeVar_weight_dbtTagUp_ = 1.0;
+			treeVar_weight_dbtTagDown_ = 1.0;
+
+			treeVar_weight_isr_ = 1.0;
+			treeVar_weight_isrUp_ = 1.0;
+			treeVar_weight_isrDown_ = 1.0;
+
 			// combined nominal scale factor weights
 			treeVar_weight_combined_ = 1.0;
 		}
