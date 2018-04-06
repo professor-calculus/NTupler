@@ -195,6 +195,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       float nTrueInt_;
       int nPU_;
       int nISR_;
+      int nGLUINO_;
       std::vector<ran::ElectronStruct>* electronCollection_;
       std::vector<ran::MuonStruct>* muonCollection_;
       std::vector<ran::JetStruct>* jetCollection_;
@@ -261,6 +262,7 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     EventDataTree->Branch("nTrueInt", &nTrueInt_, "nTrueInt/F");
     EventDataTree->Branch("nPU", &nPU_, "nPU/I");
     EventDataTree->Branch("nISR", &nISR_, "nISR/I");
+    EventDataTree->Branch("nGluino", &nGLUINO_, "nGluino/I");
     EventDataTree->Branch("electronCollection","std::vector<ran::ElectronStruct>", &electronCollection_, 64000, 1); 
     EventDataTree->Branch("muonCollection","std::vector<ran::MuonStruct>", &muonCollection_, 64000, 1); 
     EventDataTree->Branch("jetCollection","std::vector<ran::JetStruct>", &jetCollection_, 64000, 1);
@@ -489,6 +491,7 @@ void RALMiniAnalyzer::ResetEventByEventVariables(){
   nTrueInt_ = 0.0;
   nPU_ = 0;
   nISR_ = 0;
+  nGLUINO_ = 0;
 }
 
 //------------ For getting the correction factor for the PUPPI softDropMass -------------
@@ -1131,6 +1134,18 @@ void RALMiniAnalyzer::ReadInIsrInfo(const edm::Event& iEvent)
     // std::cout << std::endl;
 
     nISR_ = nisr;
+
+
+    // additional info for signal processes - count the number of gluinos in the event
+    unsigned int nGluino = 0;
+    for (const reco::GenParticle &iGenParticle: *genParticles){
+
+      if (iGenParticle.pdgId()==1000021 && iGenParticle.numberOfDaughters()==2)
+        nGluino++;
+
+    } // closes loop through genParticles
+    // std::cout << "number of gluinos: " << nGluino << "\n" << std::endl;
+    nGLUINO_ = nGluino;
 }
 
 
