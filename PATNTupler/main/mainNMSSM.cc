@@ -8,6 +8,7 @@
 
 //ROOT HEADERS
 #include <TFile.h>
+#include <TH1D.h>
 #include <TTree.h>
 #include <TString.h>
 #include <TLorentzVector.h> 
@@ -20,6 +21,7 @@
 #include "TriggerPathToIndex.hh"
 #include "deltaR.h"
 #include "DoubleBTagSF.h"
+#include "IsrWeights.h"
 #include "SoftDropPuppiSF.h"
 
 using std::cout;
@@ -140,16 +142,22 @@ private:
 
 	// For the event & kinematic branches ...
 	Double_t treeVar_weight_combined_;
+	
 	Double_t treeVar_weight_dbtLoose_;
 	Double_t treeVar_weight_dbtLooseUp_;
 	Double_t treeVar_weight_dbtLooseDown_;
+
+	Double_t treeVar_weight_isr_;
+	Double_t treeVar_weight_isrUp_;
+	Double_t treeVar_weight_isrDown_;
 
 	UInt_t treeVar_runNum_;
 	UInt_t treeVar_lumiSec_;
 	UInt_t treeVar_evtNum_;
 
 	Bool_t treeVar_trgDecision_;
-	UInt_t treeVar_nVtx_;
+	UInt_t treeVar_nPU_;
+	UInt_t treeVar_nGluino_;
 
 	TLorentzVector* treeVar_fatJetA_p4Ptr_; TLorentzVector treeVar_fatJetA_p4_;
 	TLorentzVector* treeVar_fatJetA_p4Ptr_jecUncUp_; TLorentzVector treeVar_fatJetA_p4_jecUncUp_;
@@ -240,16 +248,22 @@ public:
 		treeVar_jetB_p4Ptr_jerUncDown_( &treeVar_jetB_p4_jerUncDown_ )
 	{
 		mainAnaTree_->Branch("weight_combined",     &treeVar_weight_combined_,     "weight_combined/D");
+		
 		mainAnaTree_->Branch("weight_dbtLoose",     &treeVar_weight_dbtLoose_,     "weight_dbtLoose/D");
 		mainAnaTree_->Branch("weight_dbtLooseUp",   &treeVar_weight_dbtLooseUp_,   "weight_dbtLooseUp/D");
 		mainAnaTree_->Branch("weight_dbtLooseDown", &treeVar_weight_dbtLooseDown_, "weight_dbtLooseDown/D");
+
+		mainAnaTree_->Branch("weight_isr",     &treeVar_weight_isr_,     "weight_isr/D");
+		mainAnaTree_->Branch("weight_isrUp",   &treeVar_weight_isrUp_,   "weight_isrUp/D");
+		mainAnaTree_->Branch("weight_isrDown", &treeVar_weight_isrDown_, "weight_isrDown/D");
 
 		mainAnaTree_->Branch("run",    &treeVar_runNum_,   "run/i");
 		mainAnaTree_->Branch("lumi",   &treeVar_lumiSec_,   "lumi/i");
 		mainAnaTree_->Branch("evtNum", &treeVar_evtNum_,   "evtNum/i");
 
 		mainAnaTree_->Branch("trgDecision", &treeVar_trgDecision_, "trgDecision/O");
-		mainAnaTree_->Branch("nVtx", &treeVar_nVtx_, "nVtx/i");
+		mainAnaTree_->Branch("nPU", &treeVar_nPU_, "nPU/i");
+		mainAnaTree_->Branch("nGluino", &treeVar_nGluino_, "nGluino/i");
 
 		mainAnaTree_->Branch("fatJetA_p4", &treeVar_fatJetA_p4Ptr_);
 		mainAnaTree_->Branch("fatJetA_p4_jecUncUp", &treeVar_fatJetA_p4Ptr_jecUncUp_);
@@ -321,23 +335,66 @@ public:
 
 	~FatDoubleBJetPairTree(){}
 
-	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp, const float& ht_jecUncDown, const float& ht_jerUncUp, const float& ht_jerUncDown, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision, const int& nPU)
+	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp, const float& ht_jecUncDown, const float& ht_jerUncUp, const float& ht_jerUncDown, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const double& D_factor)
 	{
+		
+		// DO THE WEIGHTS !!!
+		
+		// todo: put these into the signal and ttjets categories...
 		// std::vector<double> scaleFactorVec = DoubleBTagSF::GetLooseScaleFactors(sampleType.c_str(), fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
-		std::vector<double> scaleFactorVec = DoubleBTagSF::GetCustomScaleFactors(sampleType.c_str(), fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
-		treeVar_weight_dbtLooseDown_ = scaleFactorVec[0];
-		treeVar_weight_dbtLoose_ = scaleFactorVec[1];
-		treeVar_weight_dbtLooseUp_ = scaleFactorVec[2];
+		// std::vector<double> scaleFactorVec = DoubleBTagSF::GetCustomScaleFactors(sampleType.c_str(), fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
+		// treeVar_weight_dbtLooseDown_ = scaleFactorVec[0];
+		treeVar_weight_dbtLooseDown_ = 1.8;
+		// treeVar_weight_dbtLoose_ = scaleFactorVec[1];
+		treeVar_weight_dbtLoose_ = 2.0;
+		// treeVar_weight_dbtLooseUp_ = scaleFactorVec[2];
+		treeVar_weight_dbtLooseUp_ = 2.2;
+
+		treeVar_weight_isr_ = 1.0;
+		treeVar_weight_isrDown_ = 1.0;
+		treeVar_weight_isrUp_ = 1.0;
+
 		
 		// multiply all nominal Scale Factor Weights
-		treeVar_weight_combined_ = treeVar_weight_dbtLoose_;
+		if (sampleType == "SIGNAL"){
+
+			// CALC DBT WEIGHTS signal - SPECIFICALLY FOR SIGNAL
+			// need to fill in, but not on this branch
+
+			// calculate isr weights
+			if (nISR > 6) nISR = 6;
+			double corr_isr = D_factor * IsrWeights::GetWeight(nISR);
+			treeVar_weight_isr_ = corr_isr;
+			treeVar_weight_isrUp_ = corr_isr + 0.5 * (corr_isr - 1);
+			treeVar_weight_isrDown_ = corr_isr - 0.5 * (corr_isr - 1);
+
+			// combined nominal scale factor weights
+			treeVar_weight_combined_ = treeVar_weight_dbtLoose_ * treeVar_weight_isr_;	
+		}
+		
+		else if (sampleType == "TTJETS"){
+			// CALC DBT WEIGHTS ttbar - SPECIFICALLY FOR TTJETS
+			// need to fill in, but not on this branch
+
+			// combined nominal scale factor weights
+			treeVar_weight_combined_ = treeVar_weight_dbtLoose_;
+		}
+
+		else{
+			// combined nominal scale factor weights
+			treeVar_weight_combined_ = 1.0;
+		}
+
+
+		// DO THE VARIABLES
 
 		treeVar_runNum_ = evtInfo.runNum;
 		treeVar_lumiSec_ = evtInfo.lumiSec;
 		treeVar_evtNum_ = evtInfo.evtNum;
 
 		treeVar_trgDecision_ = trigDecision;
-		// treeVar_nVtx_  = nPU;
+		treeVar_nPU_ = nPU;
+		treeVar_nGluino_ = nGluino;
 
 		treeVar_fatJetA_p4_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
 		treeVar_fatJetB_p4_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
@@ -741,21 +798,29 @@ int main(int argc, char** argv){
 
 		TTreeReaderValue<std::vector<unsigned int>> recordedTriggerValue(treeReader, "recordedTriggers");
 
-		// TTreeReaderValue<int> nPU_tree(treeReader, "nPU");
+		TTreeReaderValue<int> nPU_tree(treeReader, "nPU");
+		TTreeReaderValue<int> nISR_tree(treeReader, "nISR");
+		TTreeReaderValue<int> nGluino_tree(treeReader, "nGluino");
 
-		// TTree * T = (TTree*)inputFile->Get("demo/EventDataTree");
-		// float lheHT = -1.0;
-		// bool doesNtupleHaveLheHt;
-		// T->SetBranchAddress("lheHT", &lheHT);
-		// if (T->GetBranch("lheHT")) doesNtupleHaveLheHt = true;
-		// else{
-		// 	doesNtupleHaveLheHt = false;
-		// 	std::cout << "NB: no lheHT info in the ntuple, will fill flat tree with default of lheHT = -1" << std::endl;
-		// }
 
+		// Get the 'D' factor for ISR - NOTE THAT THIS IS PER INPUT FILE, NOT THE FULL SAMPLE !
+		double D_factor = 0.0;
+		if (sampleType == "SIGNAL"){
+			TTree * T = (TTree*)inputFile->Get("demo/EventDataTree");
+			TH1D * h_nISR = new TH1D("h_nISR", "", 6, 0, 6);
+			T->Draw("nISR>>h_nISR");
+			double D_numerator = h_nISR->GetEntries();
+			double D_denominator = 0.0;
+			for (unsigned int i = 0; i < 7; ++i){
+				unsigned int iBin = i + 1;
+				D_denominator += IsrWeights::GetWeight(i) * h_nISR->GetBinContent(iBin);
+			}
+			D_factor = D_numerator / D_denominator;
+			std::cout << "D_factor: " << D_factor << std::endl; 
+		}
+	
 
 		// Loop over the events
-		// unsigned int fileEvtIdx = 0;
 		while (treeReader.Next()) {
 
 			// const std::vector<ran::NtElectron> electronVec(eleBranchValue->begin(), eleBranchValue->end());
@@ -774,9 +839,9 @@ int main(int argc, char** argv){
 				}
 			}
 
-			// if (doesNtupleHaveLheHt) T->GetEntry(fileEvtIdx);
-			// const int nPU = *nPU_tree;
-			const int nPU = 0;
+			const int nPU = *nPU_tree;
+			const int nISR = *nISR_tree;
+			const int nGluino = *nGluino_tree;
 
 			// HT calculation: Only consider jets with |eta| < 3.0, pt > 40.0
 			double ht = 0.0;
@@ -820,18 +885,17 @@ int main(int argc, char** argv){
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, slimJets, doesEventPassTrigger, nPU);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, slimJets, doesEventPassTrigger, nPU);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, slimJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, slimJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
 
 				// Fat Jets ordered by DBT discriminator score
-				// doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, slimJets, doesEventPassTrigger, nPU);
+				// doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, slimJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
 			}
 			// event counter
             if (outputEvery!=0 ? (evtIdx % outputEvery == 0) : false){
 				std::cout << "  File " << fileCount << " of " << numberOfFiles;
 				std::cout << ": processing event: " << evtIdx << std::endl;
 			}
-			// fileEvtIdx++;
 			evtIdx++;
 		}
 
