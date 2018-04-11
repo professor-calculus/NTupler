@@ -799,7 +799,7 @@ int main(int argc, char** argv){
 
 		TTreeReaderValue<int> nPU_tree(treeReader, "nPU");
 		TTreeReaderValue<int> nISR_tree(treeReader, "nISR");
-		TTreeReaderValue<int> nGluino_tree(treeReader, "nGluino");
+		TTreeReaderValue<int> nGluino_tree(treeReader, "nGluino"); // HACK: need to comment out this line if working on DATA or QCD (the ntuples are missing nGluino info)
 
 
 		// Get the 'D' factor for ISR - NOTE THAT THIS IS PER INPUT FILE, NOT THE FULL SAMPLE !
@@ -840,6 +840,7 @@ int main(int argc, char** argv){
 
 			const int nPU = *nPU_tree;
 			const int nISR = *nISR_tree;
+			// const int nGluino = 0; // HACK: use this option if working on DATA or QCD (the ntuples are missing nGluino info)
 			const int nGluino = *nGluino_tree;
 
 			// HT calculation: Only consider jets with |eta| < 3.0, pt > 40.0
@@ -866,8 +867,8 @@ int main(int argc, char** argv){
 			}			
 
 			if (centralFatJetVec.size() >= 2) {
-			// if (centralFatJetVec.size() >= 2 && ht > 1200.0) { // HACK TO INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
-			// if (centralFatJetVec.size() >= 2 && ht > 1499.0) { // HACK TO INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
+			// if (centralFatJetVec.size() >= 2 && ht > 1200.0) { // HACK: INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
+			// if (centralFatJetVec.size() >= 2 && ht > 1499.0) { // HACK: INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
 				const ran::NtFatJet& fatJetA = centralFatJetVec.at(0);
 				const ran::NtFatJet& fatJetB = centralFatJetVec.at(1);
 
