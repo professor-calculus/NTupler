@@ -32,10 +32,10 @@ namespace DoubleBTagSF{
 	// then the scale factor for region Y is
 	// sY = (sZ - fX * sX) / fY
 
-	double fX_signal = 0.8;
-	double fY_signal = 0.2;
-	double fX_ttbar = 0.8;
-	double fY_ttbar = 0.2;
+	double fX_signal = 0.889808;
+	double fY_signal = 0.110192;
+	double fX_ttbar = 0.722863;
+	double fY_ttbar = 0.277137;
 
 	// ----------------------------------------------------------//
 	// ----------------------------------------------------------//
