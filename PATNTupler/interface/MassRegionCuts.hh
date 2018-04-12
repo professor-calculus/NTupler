@@ -5,7 +5,7 @@ class MassRegionCuts{
 
 public:
     // constructor
-    MassRegionCuts(const std::string&, const double&, const double&, const double&, const double&, const std::vector<double>&, const std::string& = "fatJetA_softDropMass", const std::string& = "fatJetB_softDropMass", const double& = 0.50);
+    MassRegionCuts(const std::string&, const double&, const double&, const double&, const double&, const std::vector<double>&, const std::string& = "fatJetA_softDropMassPuppi", const std::string& = "fatJetB_softDropMassPuppi", const double& = 0.50);
 
     std::string GetName() const;
     double Get_S1_Node1() const;
