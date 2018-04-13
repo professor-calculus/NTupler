@@ -299,16 +299,16 @@ int main(int argc, char** argv){
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                    // int binToFill = iCut4 * numberOfSegments + iMassRegion % numberOfSegments + 1;
-                    // h_[histogramName.c_str()]->SetBinContent(binToFill, plotEntry.GetNumberOfEventsAfterCuts());
-                    // h_[histogramName.c_str()]->SetBinError(binToFill, plotEntry.GetNumberOfEventsAfterCutsStatError());  
+                    int binToFill = iCut4 * numberOfSegments + iMassRegion % numberOfSegments + 1;
+                    h_[histogramName.c_str()]->SetBinContent(binToFill, plotEntry.GetNumberOfEventsAfterCuts());
+                    h_[histogramName.c_str()]->SetBinError(binToFill, plotEntry.GetNumberOfEventsAfterCutsStatError());  
 
 
-                    // this section creates plots to check we trust what is going on
-                    std::string plotSaveName = outputDir + "/plot_" + histogramName + "_binNum" + std::to_string(binToFill) + ".pdf";
-                    Plotter plot = Plotter({plotEntry});
-                    plot.AddLatex(luminosity);
-                    plot.Save2D(plotSaveName.c_str(), MassCutsObject); // with the grid
+                    // // this section creates plots to check we trust what is going on
+                    // std::string plotSaveName = outputDir + "/plot_" + histogramName + "_binNum" + std::to_string(binToFill) + ".pdf";
+                    // Plotter plot = Plotter({plotEntry});
+                    // plot.AddLatex(luminosity);
+                    // plot.Save2D(plotSaveName.c_str(), MassCutsObject); // with the grid
                     
 
                     std::cout << "Systematic " << iSys+1 << " of " << systematicNameVec.size() << " ::: DONE " << counter << " of " << numberOfCutsForCodeTodo << " fills" << std::endl;
