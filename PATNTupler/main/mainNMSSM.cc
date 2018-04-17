@@ -483,7 +483,9 @@ public:
 			// fatJetA SoftDropMass+PUPPI
 			std::random_device rdA;
 			std::mt19937 e2A(rdA());
-			std::normal_distribution<> distA(0, SoftDropPuppiSF::get_mcMassResolution());
+			double mcMassResolutionToUseA = SoftDropPuppiSF::get_mcMassResolution();
+			if (mcMassResolutionToUseA > 0.333333 * fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF()) mcMassResolutionToUseA = 0.333333 * fabs(fatJetA.PUPPIsoftdrop_mass()) * SoftDropPuppiSF::get_jetMassScaleSF();
+			std::normal_distribution<> distA(0, mcMassResolutionToUseA);
 			double gaussRandomA = distA(e2A);
 			
 			// nominal resolution and JMS
@@ -520,7 +522,9 @@ public:
 			// fatJetB SoftDropMass+PUPPI
 			std::random_device rdB;
 			std::mt19937 e2B(rdB());
-			std::normal_distribution<> distB(0, SoftDropPuppiSF::get_mcMassResolution());
+			double mcMassResolutionToUseB = SoftDropPuppiSF::get_mcMassResolution();
+			if (mcMassResolutionToUseB > 0.333333 * fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF()) mcMassResolutionToUseB = 0.333333 * fabs(fatJetB.PUPPIsoftdrop_mass()) * SoftDropPuppiSF::get_jetMassScaleSF();
+			std::normal_distribution<> distB(0, mcMassResolutionToUseB);
 			double gaussRandomB = distB(e2B);
 			
 			// nominal resolution and JMS
