@@ -1355,11 +1355,11 @@ void Plotter::DrawLatex(const unsigned int& dimensions)
 
     latex->SetTextAlign(11); // align from left
     if (dimensions == 1) latex->DrawLatex(0.15,0.92,Form("#bf{CMS} %s", lhsStringAfterCMS.c_str()));
-    else latex->DrawLatex(0.12,0.92,Form("#bf{CMS} %s", lhsStringAfterCMS.c_str()));
+    else latex->DrawLatex(0.14,0.92,Form("#bf{CMS} %s", lhsStringAfterCMS.c_str()));
 
     latex->SetTextAlign(31); // align from right
 	if (dimensions == 1) latex->DrawLatex(0.92,0.92,lumiLabel.c_str());
-	else latex->DrawLatex(0.90,0.92,lumiLabel.c_str());
+	else latex->DrawLatex(0.88,0.92,lumiLabel.c_str());
 
 	return;
 }
