@@ -68,7 +68,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_04_11_CMSSW_8_0_29_dbtV4/MassCutsV05/data/tag/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_04_11_CMSSW_8_0_29_dbtV4/MassCutsV07/data/tag/"; // where we are going to save the output plots (should include the samples name + binning maybe)
 
 
     // TWO: do we want to blind the S mass region? (true for data, false for everything else)
@@ -90,13 +90,14 @@ int main(int argc, char** argv){
 
 
     // FOUR: set the mass regions (use a KEYNAME and keep track of what means what!!!!)
-    const double S1_Node1 = 33.0;
-    const double S1_Node2 = 17.6;
-    const double SMAX_Node1 = 168.5;
-    const double SMAX_Node2 = 115.04;
-    const std::vector<double> SN_Nodes = {42.5, 52.9, 64.2, 76.4, 89.5, 103.5, 118.4, 134.2, 150.9};
+    double S1_Node1 = 40.0;
+    double S1_Node2 = 17.6;
+    double SMAX_Node1 = 173.2;
+    double SMAX_Node2 = 115.55;
+    std::vector<double> SN_Nodes = {52.0, 64.7, 78.1, 92.2, 107.0, 122.5, 138.7, 155.6};
+    MassRegionCuts MassCutsObject = MassRegionCuts("MassCutsV07", S1_Node1, S1_Node2, SMAX_Node1, SMAX_Node2, SN_Nodes);
     const double sideBandScaleFactor = 0.5;
-    const std::string massCutObjectName = "MassCutsV05";
+    const std::string massCutObjectName = "MassCutsV07";
 
     // const double S1_Node1 = 195.0;
     // const double S1_Node2 = 100.0;
@@ -232,7 +233,8 @@ int main(int argc, char** argv){
                     std::string cutToApply = Form("%s && %s>%d && %s>%d && %s>=%d && %s<%d && %s>%d && %s>%d", dbtCut.c_str(), fatJetA_pt_name.c_str(), cut3_ak8Pt, fatJetB_pt_name.c_str(), cut3_ak8Pt, ht_name.c_str(), cut4_ht[iCut4][0], ht_name.c_str(), cut4_ht[iCut4][1], slimJetA_pt_name.c_str(), cut5_ak4Pt[0], slimJetB_pt_name.c_str(), cut5_ak4Pt[1]);
 
                     cutToApply += " && " + MassCutsObject.GetAllCuts()[iMassRegion];
-                    TH2D hTemplate = TH2D("hTemplate", ";fatJetA_MassType (GeV);fatJetB_MassType (GeV)", 600, 0, 300, 600, 0, 300);
+                    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA_MassType (GeV);fatJetB_MassType (GeV)", 600, 0, 300, 600, 0, 300);
+                    TH2D hTemplate = TH2D("hTemplate", ";fatJetA_MassType (GeV);fatJetB_MassType (GeV)", 100, 0, 200, 100, 0, 200);
                     std::string varToPlot = fatJetB_mass_name + ":" + fatJetA_mass_name;
                     PlotEntry2D plotEntry = PlotEntry2D("plotEntry", hTemplate, varToPlot.c_str(), luminosity);
 
