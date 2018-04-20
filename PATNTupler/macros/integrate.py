@@ -21,149 +21,84 @@ function_1d = {}
 # 'fullCutsData' means that the cuts were: preSel + 2*fatJet300 + 1*ak4pt300 + GIVEN_DBT_REGION + GIVEN_HT_BIN, preformed on Data
 # 'fullCutsMC' means that the cuts were: preSel + 2*fatJet300 + 1*ak4pt300 + GIVEN_DBT_REGION + GIVEN_HT_BIN, preformed on MC
 # 'specCutsData' means that the cuts were: preSel + 2*fatJet300 + ht1500to2500 + GIVEN_DBT_REGION + fatJetB_DBT < 0.3, preformed on Data
-# fits valid between 13 and 200 GeV
+# fits valid between 15 and 200 GeV, softDropMassPUPPI is the mass used
 
 def f1d_specCutsData_anti(x):
-	p0 =  6.23732e-04
-	p1 =  1.45842e+00
-	p2 = -3.02985e+01
-	p3 = -1.37028e+01
-	p4 = -1.92197e+01
-	p5 =  1.43018e+02
-	p6 = -4.12636e+00
-	p7 =  4.08381e+03
-	p8 = -7.85760e+00
+	p0 = -3.63654e-03
+	p1 =  3.11147e+00
+	p2 = -1.04436e+02
+	p3 = -4.45789e+01
+	p4 = -1.22714e+02
+	p5 =  2.07740e+02
+	p6 = -3.38277e+00
+	p7 =  1.12255e+04
+	p8 = -2.29916e+01
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
 function_1d["specCutsData_anti"] = f1d_specCutsData_anti
 
 def f1d_specCutsData_tagLoose(x):
-	p0 = -8.14061e-04
-	p1 =  1.28698e+00
-	p2 = -2.86202e+01
-	p3 =  5.33883e-01
-	p4 = -3.16587e+00
-	p5 =  3.83283e+02
-	p6 = -6.10863e+00
-	p7 =  4.59101e+03
-	p8 = -3.14181e+01
+	p0 = -3.40747e-03
+	p1 =  2.05074e+00
+	p2 = -6.51921e+01
+	p3 = -6.77139e-01
+	p4 =  3.94987e+00
+	p5 =  6.39078e+02
+	p6 = -7.21613e+00
+	p7 =  1.15320e+04
+	p8 = -6.03416e+01
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
 function_1d["specCutsData_tagLoose"] = f1d_specCutsData_tagLoose
 
-def f1d_specCutsData_tagMed1(x):
-	p0 = -1.50863e-03
-	p1 =  1.54404e+00
-	p2 = -4.17752e+01
-	p3 =  4.22131e+00
-	p4 = -3.00526e+01
-	p5 =  5.62767e+02
-	p6 = -8.14877e+00
-	p7 =  7.08187e+03
-	p8 = -4.74834e+01
-	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
-function_1d["specCutsData_tagMed1"] = f1d_specCutsData_tagMed1
-
 def f1d_fullCutsData_anti_ht1500to2500(x):
-	p0 = -4.22179e-02
-	p1 =  1.92541e+01
-	p2 = -1.62503e+02
-	p3 = -7.18550e+02
-	p4 = -8.52301e+01
-	p5 =  4.72774e+03
-	p6 = -2.87152e+01
-	p7 =  1.69088e+05
-	p8 = -6.33536e+01
+	p0 = -1.88044e-02
+	p1 =  6.14545e+00
+	p2 = -5.97872e+01
+	p3 = -1.62308e+02
+	p4 = -3.59127e+01
+	p5 =  9.89394e+02
+	p6 = -1.44970e+01
+	p7 =  5.04702e+04
+	p8 = -2.50092e+01
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
 function_1d["fullCutsData_anti_ht1500to2500"] = f1d_fullCutsData_anti_ht1500to2500
 
 def f1d_fullCutsData_anti_ht2500to3500(x):
-	p0 = -1.74534e-02
-	p1 =  7.86667e+00
-	p2 = -1.27512e+02
-	p3 = -2.00748e+02
-	p4 = -6.79748e+01
-	p5 =  3.96031e+02
-	p6 = -1.96542e+01
-	p7 =  5.44686e+04
-	p8 = -1.60781e+01
+	p0 = -1.39902e-02
+	p1 =  5.47407e+00
+	p2 = -8.36004e+01
+	p3 = -1.24633e+02
+	p4 = -4.35109e+01
+	p5 =  1.15529e+02
+	p6 = -1.01950e+01
+	p7 =  4.47839e+04
+	p8 = -1.28801e+01
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
 function_1d["fullCutsData_anti_ht2500to3500"] = f1d_fullCutsData_anti_ht2500to3500
 
-def f1d_fullCutsMC_anti_ht1500to2500(x):
-	p0 = -4.94653e-02
-	p1 =  2.49991e+01
-	p2 = -1.96038e+02
-	p3 = -1.02717e+03
-	p4 = -1.01098e+02
-	p5 =  7.15767e+03
-	p6 = -3.51401e+01
-	p7 =  2.49535e+05
-	p8 = -1.00538e+02
-	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
-function_1d["fullCutsMC_anti_ht1500to2500"] = f1d_fullCutsMC_anti_ht1500to2500
-
-def f1d_fullCutsMC_anti_ht2500to3500(x):
-	p0 = -6.47232e-03
-	p1 =  2.97326e+00
-	p2 = -4.89351e+01
-	p3 = -5.79091e+01
-	p4 = -2.67790e+01
-	p5 =  3.45249e+02
-	p6 = -8.80802e+00
-	p7 =  2.13680e+04
-	p8 = -1.26207e+01
-	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
-function_1d["fullCutsMC_anti_ht2500to3500"] = f1d_fullCutsMC_anti_ht2500to3500
-
 def f1d_fullCutsMC_anti_ht3500toInf(x):
-	p0 =  1.22198e-03
-	p1 =  5.97083e-01
-	p2 =  4.98529e+00
-	p3 =  7.27657e+00
-	p4 =  1.05514e+00
-	p5 = -3.77587e+01
-	p6 =  2.78296e+00
-	p7 = -2.48275e+02
-	p8 = -2.33471e-01
+	p0 =  2.03640e-04
+	p1 =  6.73894e-01
+	p2 =  4.85309e+00
+	p3 =  6.23213e+00
+	p4 =  4.46446e-01
+	p5 = -3.32464e+01
+	p6 =  2.40795e+00
+	p7 = -3.76669e+02
+	p8 = -1.38015e+00
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
 function_1d["fullCutsMC_anti_ht3500toInf"] = f1d_fullCutsMC_anti_ht3500toInf
-
-def f1d_fullCutsMC_tag_ht1500to2500(x):
-	p0 = -3.98710e-02
-	p1 =  1.83449e+01
-	p2 = -1.64520e+02
-	p3 = -6.67720e+02
-	p4 = -8.75637e+01
-	p5 =  4.28107e+03
-	p6 = -2.71280e+01
-	p7 =  1.87972e+05
-	p8 = -7.22679e+01
-	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))	
-function_1d["fullCutsMC_tag_ht1500to2500"] = f1d_fullCutsMC_tag_ht1500to2500
-
-def f1d_fullCutsMC_tag_ht2500to3500(x):
-	p0 = -7.91664e-03
-	p1 =  3.88477e+00
-	p2 = -1.11492e+02
-	p3 = -4.29402e+01
-	p4 = -1.33364e+02
-	p5 =  6.47810e+02
-	p6 = -9.76258e+00
-	p7 =  3.16980e+04
-	p8 = -2.55109e+01
-	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
-function_1d["fullCutsMC_tag_ht2500to3500"] = f1d_fullCutsMC_tag_ht2500to3500
 
 ####################
 ####################
 ####################
 # MASS REGION CUTS #
 
-# MassCutsV05
-S1_Node1 = 33.0
+# MassCutsV07
+S1_Node1 = 40.0
 S1_Node2 = 17.6
-SMAX_Node1 = 168.5
-SMAX_Node2 = 115.04
-SN_Nodes = [42.5, 52.9, 64.2, 76.4, 89.5, 103.5, 118.4, 134.2, 150.9];
+SMAX_Node1 = 173.2
+SMAX_Node2 = 115.55
+SN_Nodes = [52.0, 64.7, 78.1, 92.2, 107.0, 122.5, 138.7, 155.6]
 
 #################################################################################################
 #################################################################################################
@@ -296,16 +231,9 @@ for i in range(0, len(three_x_points_vec)-1):
 	# print "A_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500)
 	# print "A_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf)
 
-	correctionFactor_ht1500to2500 = (integral_S["fullCutsMC_tag_ht1500to2500"] / integral_S["fullCutsMC_anti_ht1500to2500"]) * (integral_U["fullCutsMC_anti_ht1500to2500"] / integral_U["fullCutsMC_tag_ht1500to2500"])
-	correctionFactor_ht2500to3500 = (integral_S["fullCutsMC_tag_ht2500to3500"] / integral_S["fullCutsMC_anti_ht2500to3500"]) * (integral_U["fullCutsMC_anti_ht2500to3500"] / integral_U["fullCutsMC_tag_ht2500to3500"])
 	correctionFactor_specCutsDataLoose = (integral_S["specCutsData_tagLoose"] / integral_S["specCutsData_anti"]) * (integral_U["specCutsData_anti"] / integral_U["specCutsData_tagLoose"])
-	correctionFactor_specCutsDataMed1 = (integral_S["specCutsData_tagMed1"] / integral_S["specCutsData_anti"]) * (integral_U["specCutsData_anti"] / integral_U["specCutsData_tagMed1"])
-	# print "correction factor C_" + str(iMR) + " = " + str(correctionFactor_ht1500to2500)
-	# print "correction factor C_" + str(iMR) + " = " + str(correctionFactor_ht2500to3500)
-	# print "correction factor C_" + str(iMR) + " = " + str(correctionFactor_specCutsDataLoose)
-	print "correction factor C_" + str(iMR) + " = " + str(correctionFactor_specCutsDataMed1)
+	print "correction factor C_" + str(iMR) + " = " + str(correctionFactor_specCutsDataLoose)
 	
-	# print integral_S["fullCutsMC_tag_ht1500to2500"]
 	###############################################################
 	###############################################################
 	###############################################################
