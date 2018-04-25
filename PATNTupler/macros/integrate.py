@@ -76,15 +76,16 @@ def f1d_fullCutsData_anti_ht2500to3500(x):
 function_1d["fullCutsData_anti_ht2500to3500"] = f1d_fullCutsData_anti_ht2500to3500
 
 def f1d_fullCutsMC_anti_ht3500toInf(x):
-	p0 =  2.03640e-04
-	p1 =  6.73894e-01
-	p2 =  4.85309e+00
-	p3 =  6.23213e+00
-	p4 =  4.46446e-01
-	p5 = -3.32464e+01
-	p6 =  2.40795e+00
-	p7 = -3.76669e+02
-	p8 = -1.38015e+00
+	p0 = -1.15041e-02
+	p1 =  5.53766e+00
+	p2 = -1.53310e+02
+	p3 = -6.72066e+01
+	p4 = -2.94055e+01
+	p5 =  3.58214e+03
+	p6 = -1.79872e+01
+	p7 = -3.06273e+01
+	p8 = -1.67188e+02
+
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8))
 function_1d["fullCutsMC_anti_ht3500toInf"] = f1d_fullCutsMC_anti_ht3500toInf
 
@@ -227,9 +228,9 @@ for i in range(0, len(three_x_points_vec)-1):
 	ratio__antiS_over_antiUnD__fullCuts_anti_ht1500to2500 = integral_S["fullCutsData_anti_ht1500to2500"] / (2 * integral_U["fullCutsData_anti_ht1500to2500"])
 	ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500 = integral_S["fullCutsData_anti_ht2500to3500"] / (2 * integral_U["fullCutsData_anti_ht2500to3500"])
 	ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf = integral_S["fullCutsMC_anti_ht3500toInf"] / (2 * integral_U["fullCutsMC_anti_ht3500toInf"])	
-	# print "A_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht1500to2500)
-	# print "A_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500)
-	# print "A_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf)
+	# print "F_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht1500to2500)
+	# print "F_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500)
+	# print "F_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf)
 
 	correctionFactor_specCutsDataLoose = (integral_S["specCutsData_tagLoose"] / integral_S["specCutsData_anti"]) * (integral_U["specCutsData_anti"] / integral_U["specCutsData_tagLoose"])
 	print "correction factor C_" + str(iMR) + " = " + str(correctionFactor_specCutsDataLoose)
