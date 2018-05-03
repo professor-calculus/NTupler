@@ -96,7 +96,7 @@ int main(){
     CommonSystematicVec.push_back( CommonSystematic("dbtLoose lnN", "dbtLoose", {"SIGNAL", "TTJets"}) );
 
 
-    // SIX: are we blinded ? if true, uses Ai * data_obs_UnD as a dummy for data_obs_S
+    // SIX: are we blinded ? if true, uses Fi * data_obs_UnD as a dummy for data_obs_S
     bool areWeBlinded = true;
 
 
