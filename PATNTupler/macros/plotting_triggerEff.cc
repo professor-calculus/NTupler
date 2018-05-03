@@ -77,7 +77,7 @@ int main(int argc, char** argv){
     Plotter plot = Plotter(plotVec);
     plot.AddLegend(0.70, 0.88, 0.25, 0.40); // top right (extra wide 2)
     // plot.AddLatex(); // FOR SIMULATION
-    plot.AddLatex("#it{Data} 2016 (Single Muon)"); // FOR DATA
+    plot.AddLatex("#it{Preliminary} (Single Muon)"); // FOR DATA
 
 
     std::string saveName = "trigEff";

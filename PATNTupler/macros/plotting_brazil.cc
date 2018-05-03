@@ -139,7 +139,7 @@ int main(){
     Plotter brazilPlot = Plotter({g_obs, g_exp, g_expErr1Sig, g_expErr2Sig}, plotObserved);
     // brazilPlot.AddLegend(0.20, 0.45, 0.63, 0.86);
     brazilPlot.AddLegend(0.60, 0.85, 0.63, 0.86);
-    brazilPlot.AddLatex(luminosity, "#it{Data} 2016");
+    brazilPlot.AddLatex(luminosity, "#it{Preliminary}");
     brazilPlot.SaveBrazil(Form("%s/linear_fixedMass%d.pdf", outputDir.c_str(), fixedMass), 0.0, 1.05 * maxLimitValue);
     brazilPlot.SetLogY();
     brazilPlot.SaveBrazil(Form("%s/log_fixedMass%d.pdf", outputDir.c_str(), fixedMass), 0.85 * minLimitValue, 1.15 * maxLimitValue);

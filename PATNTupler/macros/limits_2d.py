@@ -219,7 +219,7 @@ plt.ylabel('M$_{H}$ (GeV)', fontsize=16)
 cbar = plt.colorbar()
 cbar.set_ticks(ticks)
 cbar.set_label('95% CL Upper Limit on $\sigma/\sigma_{theory}$', rotation=90, fontsize=16, labelpad=14)
-plt.title('CMS $Data \ 2016$', loc='left', fontsize=17, fontweight='bold')
+plt.title('CMS $Preliminary$', loc='left', fontsize=17, fontweight='bold')
 plt.title('35.87fb$^{-1}$ (13 TeV)', loc='right', fontsize=17)
 plt.legend(loc='upper left')
 
