@@ -88,12 +88,15 @@ int main(){
     // NB2 - "SIGNAL" refers all signal samples and std::string qcdName is used for qcd
     std::vector<CommonSystematic> CommonSystematicVec;
     CommonSystematicVec.push_back( CommonSystematic("luminosity lnN", 1.025, {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("XS_Signal lnN", 1.050, {"SIGNAL"}) );
     CommonSystematicVec.push_back( CommonSystematic("XS_TTJets lnN", 1.5, {"TTJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("XS_ZJets lnN", 1.4, {"ZJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("XS_WJets lnN", 1.3, {"WJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("XS_ZJets lnN", 1.5, {"ZJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("XS_WJets lnN", 1.5, {"WJets"}) );
     CommonSystematicVec.push_back( CommonSystematic("jecUnc lnN", "jecUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("dbtLoose lnN", "dbtLoose", {"SIGNAL", "TTJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("jerUnc lnN", "jerUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("jmsUnc lnN", "jmsUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("jmrUnc lnN", "jmrUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("dbtTag lnN", "dbtTag", {"SIGNAL", "TTJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("isr lnN", "isr", {"SIGNAL"}) );
 
 
     // SIX: are we blinded ? if true, uses Fi * data_obs_UnD as a dummy for data_obs_S
