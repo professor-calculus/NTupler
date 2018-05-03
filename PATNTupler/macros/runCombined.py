@@ -5,6 +5,7 @@ import re
 # run with
 # $ python $CMSSW_BASE/src/NTupler/PATNTupler/macros/runCombined.py
 # FROM THE LOCATION WHERE YOU WISH TO GET THE OUTPUT
+# runs on all mHXX_mSusyYYYY directories.
 
 #############################
 #############################
@@ -55,9 +56,9 @@ for signalDir in signalDirs:
 	susyMass = signalDir[c2:c3]
 	fileToUse = os.path.join(inputDir,signalDir,"allbins.root")
 
-	# print "combine -M %s --mass %s --keyword-value mSusy=%s %s" % (combinedMethod, higgsMass, susyMass, fileToUse)
 	
 	print "RUNNING COMBINE FOR mH" + higgsMass + " mSusy" + susyMass
+	# print "combine -M %s --mass %s --keyword-value mSusy=%s %s" % (combinedMethod, higgsMass, susyMass, fileToUse) # for testing
 	os.system("combine -M %s --mass %s --keyword-value mSusy=%s %s" % (combinedMethod, higgsMass, susyMass, fileToUse))
 	print ""
 	print ""
