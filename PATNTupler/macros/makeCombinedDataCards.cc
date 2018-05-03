@@ -392,9 +392,9 @@ int main(){
 void GetHistograms(std::map<std::string,TH1D*>& h_)
 {
     // histos locations
-    std::string preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_01_11_CMSSW_8_0_29_dbtV4/TESTING_SYS/";
+    std::string preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_04_11_CMSSW_8_0_29_dbtV4/MassCutsV08/";
     
-    std::string postamble = "MassCutsV05_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
+    std::string postamble = "MassCutsV08_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
     std::vector<std::string> histoNameVec;
     histoNameVec.push_back("data"); // comment out when working on MC
     histoNameVec.push_back("TTJets");
@@ -438,10 +438,18 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
 
     std::vector<std::string> nonTrivialSysVec;
     nonTrivialSysVec.push_back("NOSYS");
-    nonTrivialSysVec.push_back("dbtLooseDown");
-    nonTrivialSysVec.push_back("dbtLooseUp");
     nonTrivialSysVec.push_back("jecUncUp");
     nonTrivialSysVec.push_back("jecUncDown");
+    nonTrivialSysVec.push_back("jerUncUp");
+    nonTrivialSysVec.push_back("jerUncDown");
+    nonTrivialSysVec.push_back("jmsUncUp");
+    nonTrivialSysVec.push_back("jmsUncDown");
+    nonTrivialSysVec.push_back("jmrUncUp");
+    nonTrivialSysVec.push_back("jmrUncDown");
+    nonTrivialSysVec.push_back("dbtTagUp");
+    nonTrivialSysVec.push_back("dbtTagDown");
+    nonTrivialSysVec.push_back("isrUp");
+    nonTrivialSysVec.push_back("isrDown");
 
     for (size_t iH = 0; iH < histoNameVec.size(); ++iH){
 
