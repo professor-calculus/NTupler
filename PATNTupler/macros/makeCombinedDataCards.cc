@@ -371,7 +371,7 @@ int main(){
                 qcdInitialEstimate = 0.0;
                 std::cout << "WARNING: qcd estimate of zero!" << std::endl;
             }
-            double qcdUpperLimit = data_obs_UnD + 3.0 * sqrt(data_obs_UnD + 1);
+            double qcdUpperLimit = 2.0 * data_obs_UnD + 20.0;
             dataCard << std::to_string(qcdInitialEstimate) << " " << "[0," << std::to_string(qcdUpperLimit) << "]\n";
             WriteBlock(Form("ch%d_beta", iBin), otherColSize, dataCard);
             dataCard << "rateParam mass_S " << qcdName << " (@0*@1) ch" << iBin << "_R,ch" << iBin << "_alpha\n";
