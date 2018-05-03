@@ -40,8 +40,6 @@ private:
 
 std::vector<double> GetEventWeightVec_S(const std::string&, std::map<std::string,TH1D*>&, const unsigned int&);
 std::vector<double> GetEventWeightVec_UnD(const std::string&, std::map<std::string,TH1D*>&, const unsigned int&);
-std::vector<int> GetStatErrorLogic(const std::string&, std::map<std::string,TH1D*>&, const unsigned int&, const unsigned int&);
-
 void WriteBlock(const std::string&, const unsigned int&, std::ofstream&, const bool = false);
 
 
@@ -117,13 +115,12 @@ int main(){
     std::map<std::string, TH1D*> hOriginal_;
     GetHistograms(hOriginal_);
     
-    // get event weightings and see whether we want to set stat errors for mc bkgrd in a ht division
+    // get event weightings
     std::vector<std::vector<double>> signalWeightVec_S;
     std::vector<std::vector<double>> signalWeightVec_UnD;
 
     std::vector<std::vector<double>> mcbkWeightVec_S;
     std::vector<std::vector<double>> mcbkWeightVec_UnD;
-    std::vector<std::vector<int>>  mcbkStatErrorLogicVec;
 
     for (auto signal : signalVec){
         std::vector<double> eventWeightVec_S = GetEventWeightVec_S(signal, hOriginal_, numberOfBins);
@@ -137,7 +134,6 @@ int main(){
         mcbkWeightVec_S.push_back(eventWeightVec_S);
         std::vector<double> eventWeightVec_UnD = GetEventWeightVec_UnD(mcbk, hOriginal_, numberOfBins);
         mcbkWeightVec_UnD.push_back(eventWeightVec_UnD);
-        mcbkStatErrorLogicVec.push_back( GetStatErrorLogic(mcbk, hOriginal_, numberOfBins, numberOfHtDivisions) );
     }
 
     // loop through the different signal sample references
@@ -152,6 +148,7 @@ int main(){
 
         std::cout << "SIGNAL SAMPLE = " << signal << ": " << outputDir << std::endl;
 
+        // loop through each search region bin
         for (unsigned int iBin = 1; iBin < numberOfBins + 1; ++iBin){
 
             unsigned int data_obs_S = hOriginal_[Form("S_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
@@ -283,21 +280,12 @@ int main(){
             }
 
             for (size_t iMC = 0; iMC < mcbkVec.size(); ++iMC){
-                const unsigned int iVec = iBin - 1;
-                if (mcbkStatErrorLogicVec[iMC][iVec] == 1){
+                
+                if (rate_mcbkVec_S[iMC] > 0){
+                
+                    const unsigned int iVec = iBin - 1;
+                    const double mcbkWeight_S = mcbkWeightVec_S[iMC][iVec];
                     
-                    double mcbkWeight_S = mcbkWeightVec_S[iMC][iVec];
-                    
-                    if (mcbkWeight_S == 0){
-                        std::vector<double> nonZeroWeightVec;
-                        for (auto weight : mcbkWeightVec_S[iMC])
-                            if (weight > 0) nonZeroWeightVec.push_back(weight);
-                        for (auto weight : mcbkWeightVec_UnD[iMC])
-                            if (weight > 0) nonZeroWeightVec.push_back(weight);
-                        for (auto nonZeroWeight : nonZeroWeightVec)
-                            mcbkWeight_S += nonZeroWeight / nonZeroWeightVec.size();
-                    }
-
                     const int rawCount = round(rate_mcbkVec_S[iMC] / mcbkWeight_S);
                     const std::string statSysName = "ch" + std::to_string(iBin) + "_" + mcbkVec[iMC] + "_S_stats gmN " + std::to_string(rawCount);
                     const std::string mcbkWeightStr = std::to_string(mcbkWeight_S);
@@ -327,21 +315,12 @@ int main(){
             }
 
             for (size_t iMC = 0; iMC < mcbkVec.size(); ++iMC){
-                const unsigned int iVec = iBin - 1;
-                if (mcbkStatErrorLogicVec[iMC][iVec] == 1){
-                    
-                    double mcbkWeight_UnD = mcbkWeightVec_UnD[iMC][iVec];
-                    
-                    if (mcbkWeight_UnD == 0){
-                        std::vector<double> nonZeroWeightVec;
-                        for (auto weight : mcbkWeightVec_S[iMC])
-                            if (weight > 0) nonZeroWeightVec.push_back(weight);
-                        for (auto weight : mcbkWeightVec_UnD[iMC])
-                            if (weight > 0) nonZeroWeightVec.push_back(weight);
-                        for (auto nonZeroWeight : nonZeroWeightVec)
-                            mcbkWeight_UnD += nonZeroWeight / nonZeroWeightVec.size();
-                    }
-                    
+                
+                if (rate_mcbkVec_UnD[iMC] > 0){
+
+                    const unsigned int iVec = iBin - 1;                 
+                    const double mcbkWeight_UnD = mcbkWeightVec_UnD[iMC][iVec];
+
                     const int rawCount = round(rate_mcbkVec_UnD[iMC] / mcbkWeight_UnD);
                     const std::string statSysName = "ch" + std::to_string(iBin) + "_" + mcbkVec[iMC] + "_UnD_stats gmN " + std::to_string(rawCount);
                     const std::string mcbkWeightStr = std::to_string(mcbkWeight_UnD);
@@ -378,7 +357,7 @@ int main(){
 
             dataCard.close();
 
-        } // closes loop through the histogram bins
+        } // closes loop through the search region bins
 
     // combine the data cards into one
     std::system( Form("source %scomboCommand.sh", outputDir.c_str()) );
@@ -503,8 +482,8 @@ std::string CommonSystematic::GetSystematicValue(const std::string& fullHistogra
 
         double k_down = count_sysDown / count_nominal;
         double k_up = count_sysUp / count_nominal;
-        if (k_down == 0) k_down = 0.01;
-        if (k_up == 0) k_up = 0.01;
+        if (k_down == 0) k_down = 0.001;
+        if (k_up == 0) k_up = 0.001;
 
         std::string systenaticValueSpec = std::to_string(k_down) + "/" + std::to_string(k_up);
         return systenaticValueSpec;
@@ -540,36 +519,6 @@ std::vector<double> GetEventWeightVec_UnD(const std::string& histogramName, std:
     }
     return eventWeightVec;
 }
-
-
-std::vector<int> GetStatErrorLogic(const std::string& histogramName, std::map<std::string,TH1D*>& hOriginal_, const unsigned int& numberOfBins, const unsigned int& numberOfHtDivisions){
-/*
-returns a vector of integers - one for each sample
-there is an entry corresponding to each search region bin
-returns '1' if there is an entry in S_tag or UnD_tag for a given ht region 
-returns '0' if not
-use this object to see whether we should give a bin with zero entries an error
-*/
-    std::vector<int> StatErrorLogic(numberOfBins,0);
-    const unsigned int numberOfBinsPerHtDivision = numberOfBins / numberOfHtDivisions;
-
-    for (unsigned int iVec = 0; iVec < numberOfBins; ++iVec){
-    
-        const unsigned int iBin = iVec + 1;
-        const unsigned int htDivisionIndex = floor(iVec / numberOfBinsPerHtDivision);
-
-        double binContent_S = hOriginal_[Form("S_tag_%s_NOSYS", histogramName.c_str())]->GetBinContent(iBin);
-        double binContent_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", histogramName.c_str())]->GetBinContent(iBin);
-
-        if (binContent_S > 0 || binContent_UnD > 0){
-            for (unsigned int c = 0; c < numberOfBinsPerHtDivision * (htDivisionIndex + 1); ++c){
-                StatErrorLogic[c] = 1;
-            }
-        }
-    } // closes loop through the bins
-
-    return StatErrorLogic;
-} // closes the function GetStatErrorLogic
 
 
 void WriteBlock(const std::string& strToWrite, const unsigned int& numberOfBlockSpaces, std::ofstream& dataCard, const bool appendNewLine){
