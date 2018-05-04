@@ -40,10 +40,10 @@ def getAllRootFilesBeneathPaths(pathsSoFarVec, pathsToRootFiles):
 ###########################################################################################################
 
 # finds all the ROOT files beneath the following set of directories...
-motherDirs = ["/pnfs/pp.rl.ac.uk/data/cms/store/user/taylor/ntuples_DATA/JetHT/crab_JetHt_Run2016E-03Feb2017-v1_CMSSW8029wDBTV4_1bec5005/"]
+motherDirs = ["/pnfs/pp.rl.ac.uk/data/cms/store/user/taylor/ntuples_MC_Apr2018/nmssmSignalCascadeV05_13TeV_NAMEXYZ/"]
 
 # ...and puts the resulting list as stated here (adding on the 'dcap://dcap.pp.rl.ac.uk:22125/' bit)
-outputFileList = "/opt/ppd/scratch/xap79297/CMSSW_8_0_29/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4/PRACTISELIST.list"
+outputFileList = "/opt/ppd/scratch/xap79297/CMSSW_8_0_29/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4_wSys/NAMEXYZ.list"
 
 ###########################################################################################################
 ###########################################################################################################

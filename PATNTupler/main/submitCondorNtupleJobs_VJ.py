@@ -20,10 +20,10 @@ import datetime
 
 executable = "nTupAnaNMSSM" # wrt 'main' directory
 code = "mainNMSSM.cc" # wrt 'main' directory
-inputFileListPath = "/opt/ppd/scratch/xap79297/CMSSW_8_0_29/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4_wSys/JetHT_Run2016B-03Feb2017_ver2-v2.list"
-outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_04_11_CMSSW_8_0_29_dbtV4/data/JetHT_Run2016B-03Feb2017_ver2-v2_ht1499plus/" # has to be the full path
-sampleType = "DATA" # choose from SIGNAL, DATA, TTJETS, OTHER_MC
-filesPerJob = 5
+inputFileListPath = "/opt/ppd/scratch/xap79297/CMSSW_8_0_29/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4_wSys/NAMEXYZ.list"
+outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11_CMSSW_8_0_29_dbtV4/mc/NAMEXYZ/" # has to be the full path
+sampleType = "SIGNAL" # choose from SIGNAL, DATA, TTJETS, OTHER_MC
+filesPerJob = 30
 logDirectoryBase = "/opt/ppd/scratch/xap79297/jobLogs/flatTrees/"
 
 ###########################################################################################################
