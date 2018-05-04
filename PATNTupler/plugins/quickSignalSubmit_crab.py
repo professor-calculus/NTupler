@@ -14,7 +14,7 @@ for i in range (0, len(keys)):
 
 	os.system("cp crabConfig_nTupleProd_VJ.py TEMP_crabConfig_nTupleProd_VJ.py")
 	os.system("sed -i 's:NAMEXYZ:%s:g' TEMP_crabConfig_nTupleProd_VJ.py" % keys[i])
-	os.system("sed -i 's:DATASETXYZ:%s:g' TEMP_crabConfig_nTupleProd_VJ.py" % signalSamples[keys[i]])
+	os.system("sed -i 's:DATASETXYZ:%s:g' TEMP_crabConfig_nTupleProd_VJ.py" % signalSamples[keys[i]][1])
 	# os.system("cat TEMP_crabConfig_nTupleProd_VJ.py") # for testing
 	os.system("crab submit -c TEMP_crabConfig_nTupleProd_VJ.py") # for running
 	os.system("rm TEMP_crabConfig_nTupleProd_VJ.py")
