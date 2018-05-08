@@ -68,7 +68,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_04_11_CMSSW_8_0_29_dbtV4/MassCutsV08/SLIMXYZ/standardSys/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_04_11_CMSSW_8_0_29_dbtV4/MassCutsV08/SLIMXYZ/jetEnergySys/"; // where we are going to save the output plots (should include the samples name + binning maybe)
 
 
     // TWO: do we want to blind the S mass region? (true for data, false for everything else)
@@ -114,9 +114,10 @@ int main(int argc, char** argv){
 
     // SIX: systematics to run over. only need to use them for TAG dbt. start with 'SF_' for scale factors.
     // const std::vector<std::string> systematicNameVec = {"NOSYS"}; // >> data & no systematic
-    const std::vector<std::string> systematicNameVec = {"jecUncUp", "jecUncDown", "jerUncUp", "jerUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown"}; // >> all MC
-    // const std::vector<std::string> systematicNameVec = {"SF_dbtTagUp", "SF_dbtTagDown"}; // >> TTJets weights extra
-    // const std::vector<std::string> systematicNameVec = {"SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown"}; // >> SIGNAL weights extra
+    const std::vector<std::string> systematicNameVec = {"jecUncUp", "jecUncDown", "jerUncUp", "jerUncDown"}; // >> jet energy sys: all MC
+    // const std::vector<std::string> systematicNameVec = {"jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown"}; // >> jet mass sys: all MC
+    // const std::vector<std::string> systematicNameVec = {"SF_dbtTagUp", "SF_dbtTagDown"}; // >> TTJets sf weights extra
+    // const std::vector<std::string> systematicNameVec = {"SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown"}; // >> SIGNAL sf weights extra
 
 
     // SEVEN: variables to use AND the systematics that affect their distributions
