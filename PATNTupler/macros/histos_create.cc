@@ -289,4 +289,9 @@ int main(int argc, char** argv){
     for (size_t i = 0; i < cut4_ht.size(); ++i) saveName += Form("%dx", cut4_ht[i][0]);
     saveName += Form("_ak4pt%dn%d", cut5_ak4Pt[0], cut5_ak4Pt[1]);
     saveName += Form("_lumi%.0f", luminosity);
-    sav
+    saveName += ".root";
+    std::string outputFile = outputDir + "/" + saveName;
+    WriteHistograms(h_, outputFile);
+    std::cout << "OutputFile is here: " << outputFile << std::endl;
+    return 0;
+}
