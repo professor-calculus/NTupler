@@ -33,10 +33,8 @@ namespace MacrosOnCondor{
 		condorFile << Form("Output                 = %s/job.out\n", logDir.c_str());
 		condorFile << Form("Error                  = %s/job.err\n", logDir.c_str());
 		// condorFile << "Request_memory         = 1 GB\n";
-		condorFile << "Request_memory         = 3 GB\n";
-		// condorFile << "Request_memory         = 5 GB\n";
-		// condorFile << "Request_memory         = 10 GB\n";
-		// condorFile << "Request_memory         = 12 GB\n";
+		// condorFile << "Request_memory         = 3 GB\n";
+		condorFile << "Request_memory         = 5 GB\n";
 		condorFile << "Transfer_input_files   = job.sh, " << pathToTmpExe << "\n";
 		condorFile << "\n";
 		condorFile << "should_transfer_files	= YES\n";
