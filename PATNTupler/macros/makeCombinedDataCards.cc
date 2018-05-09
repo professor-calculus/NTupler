@@ -53,7 +53,7 @@ int main(){
 
 
     // ONE: save info (signal specific directories beneath this)
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing2000/"; // where we are going to save the output cards (should include the samples name, and any important features)
+    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_04_16/all_sys/";
   
 
     // TWO: physics info - to match the histograms that you use
@@ -64,7 +64,7 @@ int main(){
     // THREE: Samples To Use (different project for each signal sample)
     const std::string dataSample = "data";
     std::vector<std::string> signalVec = { // the different signal samples you wish to use
-                                            "mH30_mSusy800", "mH50_mSusy800", "mH70_mSusy800", "mH90_mSusy800", "mH125_mSusy800",
+                                            // "mH30_mSusy800", "mH50_mSusy800", "mH70_mSusy800", "mH90_mSusy800", "mH125_mSusy800",
                                             "mH30_mSusy1200", "mH50_mSusy1200", "mH70_mSusy1200", "mH90_mSusy1200", "mH125_mSusy1200",
                                             "mH30_mSusy1600", "mH50_mSusy1600", "mH70_mSusy1600", "mH90_mSusy1600", "mH125_mSusy1600",
                                             "mH30_mSusy2000", "mH50_mSusy2000", "mH70_mSusy2000", "mH90_mSusy2000", "mH125_mSusy2000",
@@ -83,7 +83,7 @@ int main(){
 
     // FIVE: common systematics (statistical error systematics automatically taken care of)
     // NB1 - make the sure the sample names match to the above
-    // NB2 - "SIGNAL" refers all signal samples and std::string qcdName is used for qcd
+    // NB2 - "SIGNAL" refers all signal samples
     std::vector<CommonSystematic> CommonSystematicVec;
     CommonSystematicVec.push_back( CommonSystematic("luminosity lnN", 1.025, {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
     CommonSystematicVec.push_back( CommonSystematic("XS_TTJets lnN", 1.5, {"TTJets"}) );
@@ -350,7 +350,7 @@ int main(){
                 qcdInitialEstimate = 0.0;
                 std::cout << "WARNING: qcd estimate of zero!" << std::endl;
             }
-            double qcdUpperLimit = 2.0 * data_obs_UnD + 20.0;
+            double qcdUpperLimit = 2.0 * data_obs_UnD + 30.0;
             dataCard << std::to_string(qcdInitialEstimate) << " " << "[0," << std::to_string(qcdUpperLimit) << "]\n";
             WriteBlock(Form("ch%d_beta", iBin), otherColSize, dataCard);
             dataCard << "rateParam mass_S " << qcdName << " (@0*@1) ch" << iBin << "_R,ch" << iBin << "_alpha\n";
