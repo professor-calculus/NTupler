@@ -48,6 +48,12 @@ PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1D& hTemplat
 	statErrorSquared = dummyStatError;
 }
 
+//---------destructor---------//
+PlotEntry::~PlotEntry()
+{
+	delete hTotal;
+	delete hEff;
+}
 
 //-----------public-----------//
 void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& selectionCut)
@@ -85,6 +91,9 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 		hTotal->AddBinContent(iBin, hContainer.GetBinContent(iBin));
 		statErrorSquared[iBin] += hContainer.GetBinContent(iBin);
 	}
+	delete T;
+	delete evT;
+	delete f;
 	std::cout << std::endl;
 }
 
@@ -127,6 +136,9 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 		hTotal->AddBinContent(iBin, hContainer.GetBinContent(iBin));
 		statErrorSquared[iBin] += hContainer.GetBinContent(iBin) * eventWeighting;
 	}
+	delete T;
+	delete evT;
+	delete f;
 	std::cout << std::endl;
 }
 
@@ -164,6 +176,8 @@ void PlotEntry::AddInputEfficiency(const std::string& flatTreeAddress, const std
 		hTotal->AddBinContent(iBin, hEffDummy->GetEfficiency(iBin));
 		// we don't set errors here as in general they are asymmetrical for effiencies
 	}
+	delete T;
+	delete f;
 	std::cout << std::endl;
 }
 

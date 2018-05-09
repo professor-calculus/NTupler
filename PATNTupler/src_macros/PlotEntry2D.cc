@@ -42,6 +42,11 @@ PlotEntry2D::PlotEntry2D(const std::string& plotEntryNameDummy, const TH2D& hTem
 	hTotal = new TH2D("hTotal", Form("%s;%s;%s", hTemplate.GetTitle(), hTemplate.GetXaxis()->GetTitle(), hTemplate.GetYaxis()->GetTitle()), nBinsX, hTemplate.GetXaxis()->GetBinLowEdge(1), hTemplate.GetXaxis()->GetBinLowEdge(nBinsX+1), nBinsY, hTemplate.GetYaxis()->GetBinLowEdge(1), hTemplate.GetYaxis()->GetBinLowEdge(nBinsY+1));
 }
 
+//---------destructor---------//
+PlotEntry2D::~PlotEntry2D()
+{
+	delete hTotal;
+}
 
 //-----------public-----------//
 void PlotEntry2D::AddInput(const std::string& flatTreeAddress, const std::string& selectionCut)
@@ -82,6 +87,9 @@ void PlotEntry2D::AddInput(const std::string& flatTreeAddress, const std::string
 			numberOfEventsAfterCuts_StatErrorSquared += hContainer.GetBinContent(binLabel);
 		}	
 	}
+	delete T;
+	delete evT;
+	delete f;
 	std::cout << std::endl;
 }
 
@@ -140,6 +148,9 @@ void PlotEntry2D::AddInput(const std::string& flatTreeAddress, const std::string
 			numberOfEventsAfterCuts_StatErrorSquared += hContainer.GetBinContent(binLabel) * eventWeighting * scaleFactorWeight;
 		}	
 	}
+	delete T;
+	delete evT;
+	delete f;
 	std::cout << std::endl;
 }
 
