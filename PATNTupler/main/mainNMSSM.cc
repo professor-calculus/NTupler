@@ -204,6 +204,12 @@ private:
 	Float_t treeVar_ht_jerUncUp_;
 	Float_t treeVar_ht_jerUncDown_;
 
+	Float_t treeVar_mht_;
+	Float_t treeVar_mht_jecUncUp_;
+	Float_t treeVar_mht_jecUncDown_;
+	Float_t treeVar_mht_jerUncUp_;
+	Float_t treeVar_mht_jerUncDown_;
+
 	UInt_t treeVar_nrSlimJets_;
 	
 	TLorentzVector* treeVar_jetA_p4Ptr_; TLorentzVector treeVar_jetA_p4_;
@@ -318,6 +324,12 @@ public:
 		mainAnaTree_->Branch("ht_jerUncUp", &treeVar_ht_jerUncUp_, "ht_jerUncUp/F");
 		mainAnaTree_->Branch("ht_jerUncDown", &treeVar_ht_jerUncDown_, "ht_jerUncDown/F");
 
+		mainAnaTree_->Branch("mht", &treeVar_mht_, "mht/F");
+		mainAnaTree_->Branch("mht_jecUncUp", &treeVar_mht_jecUncUp_, "mht_jecUncUp/F");
+		mainAnaTree_->Branch("mht_jecUncDown", &treeVar_mht_jecUncDown_, "mht_jecUncDown/F");
+		mainAnaTree_->Branch("mht_jerUncUp", &treeVar_mht_jerUncUp_, "mht_jerUncUp/F");
+		mainAnaTree_->Branch("mht_jerUncDown", &treeVar_mht_jerUncDown_, "mht_jerUncDown/F");
+
 		mainAnaTree_->Branch("nrSlimJets", &treeVar_nrSlimJets_, "nrSlimJets/i");
 		
 		mainAnaTree_->Branch("slimJetA_p4", &treeVar_jetA_p4Ptr_);
@@ -335,7 +347,7 @@ public:
 
 	~FatDoubleBJetPairTree(){}
 
-	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp, const float& ht_jecUncDown, const float& ht_jerUncUp, const float& ht_jerUncDown, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const double& D_factor)
+	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp, const float& ht_jecUncDown, const float& ht_jerUncUp, const float& ht_jerUncDown, const float& mht, const float& mht_jecUncUp, const float& mht_jecUncDown, const float& mht_jerUncUp, const float& mht_jerUncDown, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const double& D_factor)
 	{
 		
 		// DO THE WEIGHTS
@@ -439,6 +451,11 @@ public:
 			treeVar_ht_jecUncDown_ = ht_jecUncDown;
 			treeVar_ht_jerUncUp_ = ht_jerUncUp;
 			treeVar_ht_jerUncDown_ = ht_jerUncDown;
+
+			treeVar_mht_jecUncUp_ = mht_jecUncUp;
+			treeVar_mht_jecUncDown_ = mht_jecUncDown;
+			treeVar_mht_jerUncUp_ = mht_jerUncUp;
+			treeVar_mht_jerUncDown_ = mht_jerUncDown;
 
 			if (slimJets.size() > 1){
 				treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
@@ -865,6 +882,49 @@ int main(int argc, char** argv){
 				}
 			}
 
+			// Missing-HT calculation: Only consider jets with |eta| < 3.0, pt > 40.0 (Same jets as for scalar HT)
+			double mht_x = 0.0;
+			double mht_y = 0.0;
+			double mht_jecUncUp_x = 0.0;
+			double mht_jecUncUp_y = 0.0;
+			double mht_jecUncDown_x = 0.0;
+			double mht_jecUncDown_y = 0.0;
+			double mht_jerUncUp_x = 0.0;
+			double mht_jerUncUp_y = 0.0;
+			double mht_jerUncDown_x = 0.0;
+			double mht_jerUncDown_y = 0.0;
+
+			double mht = 0.0;
+			double mht_jecUncUp = 0.0;
+			double mht_jecUncDown = 0.0;
+			double mht_jerUncUp = 0.0;
+			double mht_jerUncDown = 0.0;
+
+			for (const ran::NtJet& jet : jetVec) {
+
+				if ( fabs(jet.eta()) <= 3.0 ){
+
+					if ( jet.pt() >= 40.0 ) mht_x += jet.pt() * -1 * TMath::Cos(jet.phi());
+					if ( jet.pt() * ( 1.0 + jet.jecUncertainty() ) >= 40.0 ) mht_jecUncUp_x += jet.pt() * -1 * TMath::Cos(jet.phi()) * ( 1.0 + jet.jecUncertainty() );
+					if ( jet.pt() * ( 1.0 - jet.jecUncertainty() ) >= 40.0 ) mht_jecUncDown_x += jet.pt() * -1 * TMath::Cos(jet.phi()) * ( 1.0 - jet.jecUncertainty() );
+					if ( jet.pt() * jet.jerUncUp() >= 40.0 ) mht_jerUncUp_x += jet.pt() * -1 * TMath::Cos(jet.phi()) * jet.jerUncUp();
+					if ( jet.pt() * jet.jerUncDown() >= 40.0 ) mht_jerUncDown_x += jet.pt() * -1 * TMath::Cos(jet.phi()) * jet.jerUncDown();
+
+					if ( jet.pt() >= 40.0 ) mht_y += jet.pt() * TMath::Cos(jet.phi());
+					if ( jet.pt() * ( 1.0 + jet.jecUncertainty() ) >= 40.0 ) mht_jecUncUp_y += jet.pt() * TMath::Sin(jet.phi()) * ( 1.0 + jet.jecUncertainty() );
+					if ( jet.pt() * ( 1.0 - jet.jecUncertainty() ) >= 40.0 ) mht_jecUncDown_y += jet.pt() * TMath::Sin(jet.phi()) * ( 1.0 - jet.jecUncertainty() );
+					if ( jet.pt() * jet.jerUncUp() >= 40.0 ) mht_jerUncUp_y += jet.pt() * TMath::Sin(jet.phi()) * jet.jerUncUp();
+					if ( jet.pt() * jet.jerUncDown() >= 40.0 ) mht_jerUncDown_y += jet.pt() * TMath::Sin(jet.phi()) * jet.jerUncDown();
+				}
+			}
+
+			mht = TMath::Atan2(mht_y, mht_x);
+			mht_jecUncUp = TMath::Atan2(mht_jecUncUp_y, mht_jecUncUp_x);
+			mht_jecUncDown = TMath::Atan2(mht_jecUncDown_y, mht_jecUncDown_x);
+			mht_jerUncUp = TMath::Atan2(mht_jerUncUp_y, mht_jerUncUp_x);
+			mht_jerUncDown = TMath::Atan2(mht_jerUncDown_y, mht_jerUncDown_x);
+
+
 			std::vector<ran::NtFatJet> centralFatJetVec; // get the *central* fatJets
 			for (const ran::NtFatJet& fatJet : fatJetVec) {
 				if (fabs(fatJet.eta()) < 2.4) centralFatJetVec.push_back(fatJet);
@@ -889,8 +949,8 @@ int main(int argc, char** argv){
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, slimJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, slimJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
 
 				// Fat Jets ordered by DBT discriminator score
 				// doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, slimJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
