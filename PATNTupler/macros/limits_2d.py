@@ -46,7 +46,7 @@ maxMu = 1.2
 #############################
 
 os.system("mkdir -p %s" % outputDir)
-os.system("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/limits_2d_overlay.py %s/limits_2d_latestCopy.py" % outputDir)
+os.system("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/limits_2d.py %s/limits_2d_latestCopy.py" % outputDir)
 
 f_2p5 = open("tmpLimits_2p5.txt", 'w')
 f_16p0 = open("tmpLimits_16p0.txt", 'w')
