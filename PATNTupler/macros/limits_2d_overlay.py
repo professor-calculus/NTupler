@@ -49,6 +49,7 @@ legendTextSize = 14.0
 #############################
 #############################
 
+
 # nb, THIS IS THE FUCTION VERSION BJOERN HAD BEEN USING
 def interp2(data, method='linear', n_p=10):
     x = data[:,0]
@@ -69,8 +70,8 @@ def interp2(data, method='linear', n_p=10):
     
     return xi, yi, zi
 
-
 os.system("mkdir -p %s" % outputDir)
+os.system("cp $CMSSW_BASE/src/NTupler/PATNTupler/macros/limits_2d_overlay.py %s/limits_2d_overlay_latestCopy.py" % outputDir)
 
 f_2p5 = open("tmpLimits_2p5.txt", 'w')
 f_16p0 = open("tmpLimits_16p0.txt", 'w')
