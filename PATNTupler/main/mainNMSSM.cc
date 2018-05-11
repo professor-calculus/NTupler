@@ -434,6 +434,7 @@ public:
 		treeVar_fatJetB_muonEnergyFraction_ = fatJetB.muonEnergyFraction();
 
 		treeVar_ht_ = ht;
+		treeVar_mht_ = mht;
 		treeVar_nrSlimJets_ = slimJets.size();
 
 		if (sampleType != "DATA"){
@@ -593,6 +594,11 @@ public:
 			treeVar_ht_jecUncDown_ = ht;
 			treeVar_ht_jerUncUp_ = ht;
 			treeVar_ht_jerUncDown_ = ht;
+
+			treeVar_mht_jecUncUp_ = mht;
+                        treeVar_mht_jecUncDown_ = mht;
+                        treeVar_mht_jerUncUp_ = mht;
+                        treeVar_mht_jerUncDown_ = mht;
 
 			if (slimJets.size() > 1){
 				treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
@@ -910,7 +916,7 @@ int main(int argc, char** argv){
 					if ( jet.pt() * jet.jerUncUp() >= 40.0 ) mht_jerUncUp_x += jet.pt() * -1 * TMath::Cos(jet.phi()) * jet.jerUncUp();
 					if ( jet.pt() * jet.jerUncDown() >= 40.0 ) mht_jerUncDown_x += jet.pt() * -1 * TMath::Cos(jet.phi()) * jet.jerUncDown();
 
-					if ( jet.pt() >= 40.0 ) mht_y += jet.pt() * TMath::Cos(jet.phi());
+					if ( jet.pt() >= 40.0 ) mht_y += jet.pt() * TMath::Sin(jet.phi());
 					if ( jet.pt() * ( 1.0 + jet.jecUncertainty() ) >= 40.0 ) mht_jecUncUp_y += jet.pt() * TMath::Sin(jet.phi()) * ( 1.0 + jet.jecUncertainty() );
 					if ( jet.pt() * ( 1.0 - jet.jecUncertainty() ) >= 40.0 ) mht_jecUncDown_y += jet.pt() * TMath::Sin(jet.phi()) * ( 1.0 - jet.jecUncertainty() );
 					if ( jet.pt() * jet.jerUncUp() >= 40.0 ) mht_jerUncUp_y += jet.pt() * TMath::Sin(jet.phi()) * jet.jerUncUp();
@@ -918,11 +924,12 @@ int main(int argc, char** argv){
 				}
 			}
 
-			mht = TMath::Atan2(mht_y, mht_x);
-			mht_jecUncUp = TMath::Atan2(mht_jecUncUp_y, mht_jecUncUp_x);
-			mht_jecUncDown = TMath::Atan2(mht_jecUncDown_y, mht_jecUncDown_x);
-			mht_jerUncUp = TMath::Atan2(mht_jerUncUp_y, mht_jerUncUp_x);
-			mht_jerUncDown = TMath::Atan2(mht_jerUncDown_y, mht_jerUncDown_x);
+			mht = TMath::Sqrt(mht_y*mht_y + mht_x*mht_x);
+			std::cout << mht << std::endl;
+			mht_jecUncUp = TMath::Sqrt(mht_jecUncUp_y*mht_jecUncUp_y + mht_jecUncUp_x*mht_jecUncUp_x);
+			mht_jecUncDown = TMath::Sqrt(mht_jecUncDown_y*mht_jecUncDown_y + mht_jecUncDown_x*mht_jecUncDown_x);
+			mht_jerUncUp = TMath::Sqrt(mht_jerUncUp_y*mht_jerUncUp_y + mht_jerUncUp_x*mht_jerUncUp_x);
+			mht_jerUncDown = TMath::Sqrt(mht_jerUncDown_y*mht_jerUncDown_y + mht_jerUncDown_x*mht_jerUncDown_x);
 
 
 			std::vector<ran::NtFatJet> centralFatJetVec; // get the *central* fatJets
