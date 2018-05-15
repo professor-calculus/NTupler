@@ -51,8 +51,8 @@ PlotEntry::PlotEntry(const std::string& plotEntryNameDummy, const TH1D& hTemplat
 //---------destructor---------//
 PlotEntry::~PlotEntry()
 {
-	delete hTotal;
-	delete hEff;
+	// delete hTotal;
+	// delete hEff;
 }
 
 //-----------public-----------//
