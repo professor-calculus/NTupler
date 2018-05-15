@@ -33,9 +33,9 @@ import argparse as a
 mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600]
 mHiggsVec = [30, 50, 70, 90, 125]
 inputDirStandard = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_04_16/all_sys/"
-inputDirComparison = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_04_16/no_WJetsXS/"
+inputDirComparison = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_04_16/no_jms/"
 standardLabel = ""
-comparsionLabel = "(No xsW Sys)"
+comparsionLabel = "(No JMS Sys)"
 outputDir = inputDirComparison + "/a_limit_plot/"
 
 # maximally squeeze the z-axis
@@ -43,6 +43,7 @@ minMu = -1.7
 maxMu = 1.4
 
 legendTextSize = 14.0
+plotObserved = False
 
 #############################
 #############################
@@ -78,6 +79,7 @@ f_16p0 = open("tmpLimits_16p0.txt", 'w')
 f_50p0 = open("tmpLimits_50p0.txt", 'w')
 f_84p0 = open("tmpLimits_84p0.txt", 'w')
 f_97p5 = open("tmpLimits_97p5.txt", 'w')
+f_obs = open("tmpLimits_obs.txt", 'w')
 
 for mSusy in mSusyVec:
     for mHiggs in mHiggsVec:
@@ -98,24 +100,30 @@ for mSusy in mSusyVec:
         f_84p0.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
         T.GetEntry(4)
         f_97p5.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
-        
+        T.GetEntry(5)
+        if (mSusy > 1200): # HACK
+            f_obs.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))        
+
 f_2p5.close()
 f_16p0.close()
 f_50p0.close()
 f_84p0.close()
 f_97p5.close()
+f_obs.close()
 
 exp_2p5 = np.loadtxt("tmpLimits_2p5.txt")
 exp_16p0 = np.loadtxt("tmpLimits_16p0.txt")
 exp_50p0 = np.loadtxt("tmpLimits_50p0.txt")
 exp_84p0 = np.loadtxt("tmpLimits_84p0.txt")
 exp_97p5 = np.loadtxt("tmpLimits_97p5.txt")
+obs = np.loadtxt("tmpLimits_obs.txt")
 
 os.system("rm tmpLimits_2p5.txt")
 os.system("rm tmpLimits_16p0.txt")
 os.system("rm tmpLimits_50p0.txt")
 os.system("rm tmpLimits_84p0.txt")
 os.system("rm tmpLimits_97p5.txt")
+os.system("rm tmpLimits_obs.txt")
 
 ####################################
 # >>> The Linear Interpolation <<< #
@@ -124,6 +132,8 @@ xi, yi, zi = interp2(exp_50p0, 'linear', 1000) # expected grid
 xj, yj, zj = interp2(exp_50p0, 'linear', 200) # expected line
 xj16, yj16, zj16 = interp2(exp_16p0, 'linear', 200) # expected line (-1 sigma)
 xj84, yj84, zj84 = interp2(exp_84p0, 'linear', 200) # expected line (+1 sigma)
+if (plotObserved):
+    xk, yk, zk = interp2(obs, 'linear', 200) # observed line
 
 ####################################
 
@@ -155,13 +165,17 @@ for i, stop in enumerate(stops):
 cdict = {'red': ered, 'green': egreen, 'blue': eblue}
 bird = mcol.LinearSegmentedColormap('bird', cdict)
 
-plt_exp = plt.contour(xj, yj, zj, [1.0], colors='k')
-plt_exp.collections[0].set_label('Expected %s' % standardLabel)
-plt_exp16 = plt.contour(xj16, yj16, zj16, [1.0], colors='k', linestyles='--', label='qwert')
-plt_exp16.collections[0].set_label('$\pm1\sigma$')
-plt_exp84 = plt.contour(xj84, yj84, zj84, [1.0], colors='k', linestyles='--')
-dummy = plt.contourf(xi, yi, zi, levels=v, norm=mcol.LogNorm(vmin=10**minMu, vmax=10**maxMu), cmap=bird)
+if (plotObserved):
+    plt_obs = plt.contour(xk, yk, zk, [1.0], colors='k')
+    plt_obs.collections[0].set_label('Observed')
+else:
+    plt_exp = plt.contour(xj, yj, zj, [1.0], colors='k')
+    plt_exp.collections[0].set_label('Expected %s' % standardLabel)
+    plt_exp16 = plt.contour(xj16, yj16, zj16, [1.0], colors='k', linestyles='--', label='qwert')
+    plt_exp16.collections[0].set_label('$\pm1\sigma$')
+    plt_exp84 = plt.contour(xj84, yj84, zj84, [1.0], colors='k', linestyles='--')
 
+dummy = plt.contourf(xi, yi, zi, levels=v, norm=mcol.LogNorm(vmin=10**minMu, vmax=10**maxMu), cmap=bird)
 for d in dummy.collections:
     d.set_edgecolor("face")
 
@@ -179,6 +193,7 @@ f_16p0 = open("tmpLimits_16p0.txt", 'w')
 f_50p0 = open("tmpLimits_50p0.txt", 'w')
 f_84p0 = open("tmpLimits_84p0.txt", 'w')
 f_97p5 = open("tmpLimits_97p5.txt", 'w')
+f_obs = open("tmpLimits_obs.txt", 'w')
 
 for mSusy in mSusyVec:
     for mHiggs in mHiggsVec:
@@ -199,35 +214,50 @@ for mSusy in mSusyVec:
         f_84p0.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
         T.GetEntry(4)
         f_97p5.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
+        T.GetEntry(5)
+        if (mSusy > 1200): # HACK
+            f_obs.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))   
         
 f_2p5.close()
 f_16p0.close()
 f_50p0.close()
 f_84p0.close()
 f_97p5.close()
+f_obs.close()
 
 exp_2p5 = np.loadtxt("tmpLimits_2p5.txt")
 exp_16p0 = np.loadtxt("tmpLimits_16p0.txt")
 exp_50p0 = np.loadtxt("tmpLimits_50p0.txt")
 exp_84p0 = np.loadtxt("tmpLimits_84p0.txt")
 exp_97p5 = np.loadtxt("tmpLimits_97p5.txt")
+obs = np.loadtxt("tmpLimits_obs.txt")
 
 os.system("rm tmpLimits_2p5.txt")
 os.system("rm tmpLimits_16p0.txt")
 os.system("rm tmpLimits_50p0.txt")
 os.system("rm tmpLimits_84p0.txt")
 os.system("rm tmpLimits_97p5.txt")
+os.system("rm tmpLimits_obs.txt")
 
 xj, yj, zj = interp2(exp_50p0, 'linear', 200) # expected line
 xj16, yj16, zj16 = interp2(exp_16p0, 'linear', 200) # expected line (-1 sigma)
 xj84, yj84, zj84 = interp2(exp_84p0, 'linear', 200) # expected line (+1 sigma)
+if (plotObserved):
+    xk, yk, zk = interp2(obs, 'linear', 200) # observed line
 
-plt_exp_comp = plt.contour(xj, yj, zj, [1.0], colors='r')
-plt_exp_comp.collections[0].set_label('Expected %s' % comparsionLabel)
-plt_exp16_comp = plt.contour(xj16, yj16, zj16, [1.0], colors='r', linestyles='--', label='qwert')
-plt_exp16_comp.collections[0].set_label('$\pm1\sigma$')
-plt_exp84_comp = plt.contour(xj84, yj84, zj84, [1.0], colors='r', linestyles='--')
+if (plotObserved):
+    plt_obs = plt.contour(xk, yk, zk, [1.0], colors='r')
+    plt_obs.collections[0].set_label('Observed %s' % comparsionLabel)
+else:
+    plt_exp_comp = plt.contour(xj, yj, zj, [1.0], colors='r')
+    plt_exp_comp.collections[0].set_label('Expected %s' % comparsionLabel)
+    plt_exp16_comp = plt.contour(xj16, yj16, zj16, [1.0], colors='r', linestyles='--', label='qwert')
+    plt_exp16_comp.collections[0].set_label('$\pm1\sigma$')
+    plt_exp84_comp = plt.contour(xj84, yj84, zj84, [1.0], colors='r', linestyles='--')
 
 plt.legend(loc='upper left', prop={'size': legendTextSize})
 plt.show()
-plt.savefig("%s/limit_plot_overlay.pdf" % outputDir)
+if (plotObserved):
+    plt.savefig("%s/limit_plot_overlay_observed.pdf" % outputDir)
+else:
+    plt.savefig("%s/limit_plot_overlay.pdf" % outputDir)
