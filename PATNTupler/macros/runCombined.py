@@ -26,6 +26,9 @@ signalDirs = os.popen("ls %s" % inputDir, "r").readlines()
 
 for signalDir in signalDirs:
 
+	# if (signalDir[0:4] != "mH40"):
+	# 	continue
+
 	signalDir = signalDir.rstrip()
 	c1 = -1
 	c2 = -1
