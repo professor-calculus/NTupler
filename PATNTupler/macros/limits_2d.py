@@ -31,14 +31,14 @@ import argparse as a
 ### ## # USER INPUTS # ## ###
 
 mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600]
-mHiggsVec = [30, 50, 70, 90, 125]
-inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing2000/"
-outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_01_08/combined/testing2000/limitPlot/"
+mHiggsVec = [30, 40, 50, 70, 90, 125]
+inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_04_16/all_sys/"
+outputDir = inputDir + "/a_limitPlot/"
 
 plotObserved = False
 # maximally squeeze the z-axis
 minMu = -1.7
-maxMu = 1.2
+maxMu = 1.3
 
 #############################
 #############################
@@ -107,19 +107,17 @@ os.system("rm tmpLimits_obs.txt")
 
 
 
-# def interp(data, method='linear'):
-#     x = data[:,0]
-#     y = data[:,1]
-#     z = data[:,2]
+def interp(data, method='linear'):
+    x = data[:,0]
+    y = data[:,1]
+    z = data[:,2]
     
-#     xi = np.linspace(x.min(), x.max(), 100)
-#     yi = np.linspace(y.min(), y.max(), 100)
-#     zi = mlab.griddata(x, y, z, xi, yi, interp=method)
+    xi = np.linspace(x.min(), x.max(), 100)
+    yi = np.linspace(y.min(), y.max(), 100)
+    zi = mlab.griddata(x, y, z, xi, yi, interp=method)
     
-#     return xi, yi, zi
+    return xi, yi, zi
 
-
-# nb, THIS IS THE FUCTION VERSION BJOERN HAD BEEN USING
 def interp2(data, method='linear', n_p=10):
     x = data[:,0]
     y = data[:,1]
@@ -139,7 +137,6 @@ def interp2(data, method='linear', n_p=10):
     
     return xi, yi, zi
 
-
 # def interp3(data, method='linear'): # currently does not work :(
 #     x = data[:,0]
 #     y = data[:,1]
@@ -157,6 +154,15 @@ def interp2(data, method='linear', n_p=10):
 ####################################
 # >>> The Linear Interpolation <<< #
 
+# xi, yi, zi = interp(exp_50p0, 'linear') # expected grid
+# xj, yj, zj = interp(exp_50p0, 'linear') # expected line
+# xj16, yj16, zj16 = interp(exp_16p0, 'linear') # expected line (-1 sigma)
+# xj84, yj84, zj84 = interp(exp_84p0, 'linear') # expected line (+1 sigma)
+# xk, yk, zk = 0, 0, 0 # observed line
+# if (plotObserved):
+#     xk, yk, zk = interp(obs, 'linear') # observed line
+
+# nb, THIS IS THE FUCTION VERSION BJOERN HAD BEEN USING
 xi, yi, zi = interp2(exp_50p0, 'linear', 1000) # expected grid
 xj, yj, zj = interp2(exp_50p0, 'linear', 200) # expected line
 xj16, yj16, zj16 = interp2(exp_16p0, 'linear', 200) # expected line (-1 sigma)
