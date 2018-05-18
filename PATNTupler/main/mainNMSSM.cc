@@ -768,9 +768,9 @@ int main(int argc, char** argv){
 
 		fileCount++;
 		// Set up TTreeReader for this input file
-		std::cout << std::endl << " *** NEW INPUT FILE: " << inputFilePath;
+		std::cout << std::endl << " *** NEW INPUT FILE: " << inputFilePath << std::endl;;
 		TFile* inputFile = TFile::Open(inputFilePath.c_str());
-		std::cout << "   [file has been loaded]" << std::endl;
+		std::cout << ">>> [file has been loaded]" << std::endl;
 		TTreeReader treeReader("demo/EventDataTree", inputFile);
 
 		TTreeReaderValue<ran::EventInfo> evtInfo(treeReader, "evtInfo");
@@ -843,6 +843,7 @@ int main(int argc, char** argv){
 			}
 
 			const int nPU = *nPU_tree;
+			// if (nPU < 28) continue; // if you only want to use a sample of particular PU
 			const int nISR = *nISR_tree;
 			// const int nGluino = 0; // HACK: use this option if working on DATA or QCD (the ntuples are missing nGluino info)
 			const int nGluino = *nGluino_tree;
@@ -904,6 +905,7 @@ int main(int argc, char** argv){
 		}
 
 		std::cout << "Out of the event loop for file '" << inputFilePath << "'" << std::endl;
+		delete inputFile;
 	}
 
 	std::cout << "Finished reading all input files now; processed " << evtIdx << " events in total" << std::endl;
