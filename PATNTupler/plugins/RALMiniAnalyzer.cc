@@ -252,6 +252,10 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     rhoToken_(consumes<double>(iConfig.getParameter<edm::InputTag>("rho")))
     //cuts_(iConfig)
 {
+    std::cout << "*,. *,. *,. *,. *,. *,. *,." << std::endl;
+    if (isThis2016_) std::cout << "Running on 2016 data (80X)" << std::endl; 
+    else std::cout << "Running on 2017 data (94X)" << std::endl; 
+    std::cout << "*,. *,. *,. *,. *,. *,. *,." << std::endl;
 
     EventDataTree = fHistos->make<TTree>("EventDataTree", "Event data tree");
     //EventDataTree = new TTree("EventDataTree","EventDataTree");
@@ -344,14 +348,24 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     JetCorrectionUncertainty *jecUncObj_AK4 = new JetCorrectionUncertainty(JetCorPar_AK4);
 
     ESHandle<JetCorrectorParametersCollection> JetCorParColl_AK8;
-    iSetup.get<JetCorrectionsRecord>().get("AK8PFchs", JetCorParColl_AK8); 
+    if (isThis2016_) iSetup.get<JetCorrectionsRecord>().get("AK8PFchs", JetCorParColl_AK8); 
+    else iSetup.get<JetCorrectionsRecord>().get("AK8PFPuppi", JetCorParColl_AK8); 
     JetCorrectorParameters const & JetCorPar_AK8 = (*JetCorParColl_AK8)["Uncertainty"];
     JetCorrectionUncertainty *jecUncObj_AK8 = new JetCorrectionUncertainty(JetCorPar_AK8);
 
     JME::JetResolution resolution_AK4 = JME::JetResolution::get(iSetup, "AK4PFchs_pt");
     JME::JetResolutionScaleFactor resolutionSF_AK4 = JME::JetResolutionScaleFactor::get(iSetup, "AK4PFchs");
-    JME::JetResolution resolution_AK8 = JME::JetResolution::get(iSetup, "AK8PFchs_pt");
-    JME::JetResolutionScaleFactor resolutionSF_AK8 = JME::JetResolutionScaleFactor::get(iSetup, "AK8PFchs");
+
+    JME::JetResolution resolution_AK8;
+    JME::JetResolutionScaleFactor resolutionSF_AK8;
+    if (isThis2016_){
+      resolution_AK8 = JME::JetResolution::get(iSetup, "AK8PFchs_pt");
+      resolutionSF_AK8 = JME::JetResolutionScaleFactor::get(iSetup, "AK8PFchs");
+    }
+    else{
+      resolution_AK8 = JME::JetResolution::get(iSetup, "AK8PFPuppi_pt");
+      resolutionSF_AK8 = JME::JetResolutionScaleFactor::get(iSetup, "AK8PFPuppi"); 
+    }
 
      //Clearing contents/setting default values of variables that should get new values in each event...
      ResetEventByEventVariables();
@@ -902,6 +916,7 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncer
 
     for (const pat::Jet &iJet: *jets) {
       
+      if (iJet.pt() <= 170.0) continue;
 
       // JER smearing procedure: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetResolution
       double c_nom(1.0), c_up(1.0), c_down(1.0);
@@ -969,22 +984,25 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncer
       ithJet.eta = iJet.eta();
       ithJet.phi = iJet.phi();
       ithJet.mass = iJet.mass();
+
       ithJet.numberOfDaughters = iJet.numberOfDaughters();
-      // ithJet.chargedMultiplicity = iJet.chargedMultiplicity();
-      // ithJet.neutralMultiplicity = iJet.neutralMultiplicity();
+      ithJet.chargedMultiplicity = iJet.chargedMultiplicity();
+      ithJet.neutralMultiplicity = iJet.neutralMultiplicity();
       ithJet.muonEnergyFraction = iJet.muonEnergyFraction();
       ithJet.electronEnergyFraction = iJet.electronEnergyFraction();
-      // ithJet.neutralHadronEnergyFraction = iJet.neutralHadronEnergyFraction();
+      ithJet.neutralHadronEnergyFraction = iJet.neutralHadronEnergyFraction();
       ithJet.HFHadronEnergyFraction = iJet.HFHadronEnergyFraction();
-      // ithJet.neutralEmEnergyFraction = iJet.neutralEmEnergyFraction();
-      // ithJet.chargedEmEnergyFraction = iJet.chargedEmEnergyFraction();
-      // ithJet.chargedHadronEnergyFraction = iJet.chargedHadronEnergyFraction();
+      ithJet.neutralEmEnergyFraction = iJet.neutralEmEnergyFraction();
+      ithJet.chargedEmEnergyFraction = iJet.chargedEmEnergyFraction();
+      ithJet.chargedHadronEnergyFraction = iJet.chargedHadronEnergyFraction();
 
       ithJet.jecFactor_unCorrected = iJet.jecFactor("Uncorrected");
       jecUncObj->setJetEta( iJet.eta() );
       jecUncObj->setJetPt( iJet.pt() ); // here you use the CORRECTED jet pt
       ithJet.jecUncertainty = float(jecUncObj->getUncertainty(true));
 
+
+      // 2016 specific fatJets
       if (isThis2016_){
       
         ithJet.NjettinessAK8_tau1 = iJet.userFloat("NjettinessAK8:tau1");    //
@@ -1012,8 +1030,9 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncer
         float puppiCorr = getPUPPIweight( puppi_pt , puppi_eta );
         float puppi_softdrop_masscorr = puppi_softdrop.M() * puppiCorr;
         ithJet.PUPPIsoftdrop_mass = puppi_softdrop_masscorr;
-      } // closes 2016 jet masses and n-jetiness
+      } // closes 2016 jet masses and nJettiness
 
+      // 2017 specific fatJets
       else{
       
         ithJet.NjettinessAK8_tau1 = iJet.userFloat("NjettinessAK8Puppi:tau1");    //
@@ -1024,7 +1043,9 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncer
         ithJet.CHSpruned_mass = iJet.userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSPrunedMass");     // access to pruned mass
       
         ithJet.PUPPIsoftdrop_mass = iJet.userFloat("ak8PFJetsPuppiSoftDropMass");
-      } // closes 2017 jet masses and n-jetiness
+
+      } // closes 2017 jet masses and nJettiness
+
 
       ithJet.pfBoostedDoubleSecondaryVertexAK8BJetTags =  iJet.bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags");// Double b-tag
       ithJet.partonFlavour = iJet.partonFlavour();
