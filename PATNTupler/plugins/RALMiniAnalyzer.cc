@@ -153,6 +153,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
 
       // ----------member data ---------------------------
 
+      bool isThis2016_;
       bool isMC_;
       const bool inputContainsLHE_;
       const bool ignoreTopInLheHtCalculation_;
@@ -223,6 +224,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
 //
 RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
    //now do what ever initialization is needed
+    isThis2016_(iConfig.getParameter<bool>("isThis2016")),
     isMC_(iConfig.getParameter<bool>("isThisMC")),
     inputContainsLHE_(iConfig.getParameter<bool>("containsLHE")),
     ignoreTopInLheHtCalculation_(inputContainsLHE_ ? iConfig.getParameter<bool>("ignoreTopInLheHtCalculation") : false),
@@ -672,7 +674,7 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
     //ithElec.pfIso_chgHad = iEle.pfIsolationVariables().chargedHadronIso;
     //ithElec.pfIso_neutHad = iEle.pfIsolationVariables().neutralHadronIso;
     //ithElec.pfIso_pht = iEle.pfIsolationVariables().photonIso;
-    ithElec.inner_missing_hits =  iEle.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
+    // ithElec.inner_missing_hits =  iEle.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
     ithElec.isEB = iEle.isEB();
     ithElec.isEE = iEle.isEE();
 
@@ -968,27 +970,61 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncer
       ithJet.phi = iJet.phi();
       ithJet.mass = iJet.mass();
       ithJet.numberOfDaughters = iJet.numberOfDaughters();
-      ithJet.chargedMultiplicity = iJet.chargedMultiplicity();
-      ithJet.neutralMultiplicity = iJet.neutralMultiplicity();
+      // ithJet.chargedMultiplicity = iJet.chargedMultiplicity();
+      // ithJet.neutralMultiplicity = iJet.neutralMultiplicity();
       ithJet.muonEnergyFraction = iJet.muonEnergyFraction();
       ithJet.electronEnergyFraction = iJet.electronEnergyFraction();
-      ithJet.neutralHadronEnergyFraction = iJet.neutralHadronEnergyFraction();
+      // ithJet.neutralHadronEnergyFraction = iJet.neutralHadronEnergyFraction();
       ithJet.HFHadronEnergyFraction = iJet.HFHadronEnergyFraction();
-      ithJet.neutralEmEnergyFraction = iJet.neutralEmEnergyFraction();
-      ithJet.chargedEmEnergyFraction = iJet.chargedEmEnergyFraction();
-      ithJet.chargedHadronEnergyFraction = iJet.chargedHadronEnergyFraction();
+      // ithJet.neutralEmEnergyFraction = iJet.neutralEmEnergyFraction();
+      // ithJet.chargedEmEnergyFraction = iJet.chargedEmEnergyFraction();
+      // ithJet.chargedHadronEnergyFraction = iJet.chargedHadronEnergyFraction();
 
       ithJet.jecFactor_unCorrected = iJet.jecFactor("Uncorrected");
       jecUncObj->setJetEta( iJet.eta() );
       jecUncObj->setJetPt( iJet.pt() ); // here you use the CORRECTED jet pt
       ithJet.jecUncertainty = float(jecUncObj->getUncertainty(true));
 
-      ithJet.NjettinessAK8_tau1 = iJet.userFloat("NjettinessAK8:tau1");    //
-      ithJet.NjettinessAK8_tau2 = iJet.userFloat("NjettinessAK8:tau2");    //  Access the n-subjettiness variables
-      ithJet.NjettinessAK8_tau3 = iJet.userFloat("NjettinessAK8:tau3");    // 
- 
-      ithJet.CHSsoftdrop_mass = iJet.userFloat("ak8PFJetsCHSSoftDropMass"); // access to soft drop mass
-      ithJet.CHSpruned_mass = iJet.userFloat("ak8PFJetsCHSPrunedMass");     // access to pruned mass
+      if (isThis2016_){
+      
+        ithJet.NjettinessAK8_tau1 = iJet.userFloat("NjettinessAK8:tau1");    //
+        ithJet.NjettinessAK8_tau2 = iJet.userFloat("NjettinessAK8:tau2");    //  Access the n-subjettiness variables
+        ithJet.NjettinessAK8_tau3 = iJet.userFloat("NjettinessAK8:tau3");    // 
+        
+        ithJet.CHSsoftdrop_mass = iJet.userFloat("ak8PFJetsCHSSoftDropMass"); // access to soft drop mass
+        ithJet.CHSpruned_mass = iJet.userFloat("ak8PFJetsCHSPrunedMass");     // access to pruned mass
+      
+        // softDropMass with PUPPI
+        double puppi_pt             = iJet.userFloat("ak8PFJetsPuppiValueMap:pt");
+        double puppi_eta           = iJet.userFloat("ak8PFJetsPuppiValueMap:eta");
+        // double puppi_phi           = iJet.userFloat("ak8PFJetsPuppiValueMap:phi");
+        // double puppi_mass       = iJet.userFloat("ak8PFJetsPuppiValueMap:mass");
+        // double puppi_tau1         = iJet.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau1");
+        // double puppi_tau2         = iJet.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau2");
+
+        TLorentzVector puppi_softdrop, puppi_softdrop_subjet;
+        auto const & sdSubjetsPuppi = iJet.subjets("SoftDropPuppi");
+        for ( auto const & it : sdSubjetsPuppi ) {
+          puppi_softdrop_subjet.SetPtEtaPhiM(it->correctedP4(0).pt(), it->correctedP4(0).eta(), it->correctedP4(0).phi(), it->correctedP4(0).mass());
+          puppi_softdrop += puppi_softdrop_subjet;
+        }
+
+        float puppiCorr = getPUPPIweight( puppi_pt , puppi_eta );
+        float puppi_softdrop_masscorr = puppi_softdrop.M() * puppiCorr;
+        ithJet.PUPPIsoftdrop_mass = puppi_softdrop_masscorr;
+      } // closes 2016 jet masses and n-jetiness
+
+      else{
+      
+        ithJet.NjettinessAK8_tau1 = iJet.userFloat("NjettinessAK8Puppi:tau1");    //
+        ithJet.NjettinessAK8_tau2 = iJet.userFloat("NjettinessAK8Puppi:tau2");    //  Access the n-subjettiness variables
+        ithJet.NjettinessAK8_tau3 = iJet.userFloat("NjettinessAK8Puppi:tau3");    // 
+        
+        ithJet.CHSsoftdrop_mass = iJet.userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSSoftDropMass"); // access to soft drop mass
+        ithJet.CHSpruned_mass = iJet.userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSPrunedMass");     // access to pruned mass
+      
+        ithJet.PUPPIsoftdrop_mass = iJet.userFloat("ak8PFJetsPuppiSoftDropMass");
+      } // closes 2017 jet masses and n-jetiness
 
       ithJet.pfBoostedDoubleSecondaryVertexAK8BJetTags =  iJet.bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags");// Double b-tag
       ithJet.partonFlavour = iJet.partonFlavour();
@@ -1002,24 +1038,7 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncer
         ithJet.jerUncDown = 1.0;              
       }
 
-      // softDropMass with PUPPI
-      double puppi_pt             = iJet.userFloat("ak8PFJetsPuppiValueMap:pt");
-      double puppi_eta           = iJet.userFloat("ak8PFJetsPuppiValueMap:eta");
-      // double puppi_phi           = iJet.userFloat("ak8PFJetsPuppiValueMap:phi");
-      // double puppi_mass       = iJet.userFloat("ak8PFJetsPuppiValueMap:mass");
-      // double puppi_tau1         = iJet.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau1");
-      // double puppi_tau2         = iJet.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau2");
 
-      TLorentzVector puppi_softdrop, puppi_softdrop_subjet;
-      auto const & sdSubjetsPuppi = iJet.subjets("SoftDropPuppi");
-      for ( auto const & it : sdSubjetsPuppi ) {
-        puppi_softdrop_subjet.SetPtEtaPhiM(it->correctedP4(0).pt(), it->correctedP4(0).eta(), it->correctedP4(0).phi(), it->correctedP4(0).mass());
-        puppi_softdrop += puppi_softdrop_subjet;
-      }
-
-      float puppiCorr = getPUPPIweight( puppi_pt , puppi_eta );
-      float puppi_softdrop_masscorr = puppi_softdrop.M() * puppiCorr;
-      ithJet.PUPPIsoftdrop_mass = puppi_softdrop_masscorr;
 
     } // closes loop through fatJets
 

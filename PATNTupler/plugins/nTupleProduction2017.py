@@ -33,12 +33,12 @@ process.TFileService = cms.Service("TFileService", fileName=cms.string('nTuple.r
 #setup global tag
 from Configuration.AlCa.GlobalTag import GlobalTag
 from Configuration.AlCa.autoCond import autoCond
-process.GlobalTag = GlobalTag(process.GlobalTag, '80X_mcRun2_asymptotic_2016_TrancheIV_v8', '') #
+process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v12', '') #
 
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(2000) )
 process.source = cms.Source ("PoolSource",fileNames = cms.untracked.vstring(
-        'root://dcap.pp.rl.ac.uk:1094/pnfs/pp.rl.ac.uk/data/cms/store/mc/RunIISummer16MiniAODv2/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/0693E0E7-97BE-E611-B32F-0CC47A78A3D8.root'
+        'root://dcap.pp.rl.ac.uk:1094/pnfs/pp.rl.ac.uk/data/cms/store/mc/RunIIFall17DRPremix/ZJetsToQQ_HT-800toInf_TuneCP5_13TeV-madgraphMLM-pythia8/AODSIM/94X_mc2017_realistic_v10-v1/40000/000A17B8-2D05-E811-87F8-0CC47AD98F74.root'
 )
                                        
 )
@@ -46,7 +46,8 @@ useMiniAOD=True
 
 if useMiniAOD==True:
     # process.source.fileNames=cms.untracked.vstring('/store/user/taylor/nmssmSignalCascadeV05_13TeV2017_mH70p0_mSusy2200p0_ratio0p99_splitting0p1/nmssmSignalCascadeV05_13TeV2017_processMc04_ed94Xv8_mH70p0_mSusy2200p0_ratio0p99_splitting0p1/180509_094757/0000/nmssmSignal_MINIAODSIM_1.root',)
-    process.source.fileNames=cms.untracked.vstring('file:/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/exampleMiniAOD/nmssmSignal_MINIAODSIM_94X.root')
+    # process.source.fileNames=cms.untracked.vstring('file:/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/exampleMiniAOD/nmssmSignal_MINIAODSIM_94X.root')
+    process.source.fileNames=cms.untracked.vstring('file:/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/exampleMiniAOD/TT_MINIAODSIM_94X.root')
 
 #setup the VID with HEEP 7.0
 from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
@@ -66,6 +67,7 @@ for idmod in my_id_modules:
 
 #this is our example analysis module reading the results
 process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
+                                       isThis2016 = cms.bool(False),
                                        isThisMC = cms.bool(True),
                                        #mcWeight = cms.double(MCWEIGHT_INSERTEDHERE),
                                        # containsLHE = cms.bool(True),
@@ -86,7 +88,8 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        bits = cms.InputTag("TriggerResults","","HLT"),
                                        prescales = cms.InputTag("patTrigger"),
                                        objects = cms.InputTag("selectedPatTrigger"),
-                                       selectedTriggerPaths = cms.vstring("HLT_PFHT900_v", "HLT_AK8PFJet450_v"),#matches triggers that *contain* the stated names, so finish with _v to make sure your trigger name isn't a subset of others
+                                       # selectedTriggerPaths = cms.vstring("HLT_PFHT900_v", "HLT_AK8PFJet450_v"),#matches triggers that *contain* the stated names, so finish with _v to make sure your trigger name isn't a subset of others
+                                       selectedTriggerPaths = cms.vstring(),#matches triggers that *contain* the stated names, so finish with _v to make sure your trigger name isn't a subset of others
                                        elesAOD=cms.InputTag("gedGsfElectrons"),
                                        elesMiniAOD=cms.InputTag("slimmedElectrons"),
                                        trkIsolMap=cms.InputTag("heepIDVarValueMaps","eleTrkPtIso"),
