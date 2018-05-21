@@ -672,7 +672,7 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
     //ithElec.pfIso_chgHad = iEle.pfIsolationVariables().chargedHadronIso;
     //ithElec.pfIso_neutHad = iEle.pfIsolationVariables().neutralHadronIso;
     //ithElec.pfIso_pht = iEle.pfIsolationVariables().photonIso;
-    // ithElec.inner_missing_hits =  iEle.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
+    ithElec.inner_missing_hits =  iEle.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
     ithElec.isEB = iEle.isEB();
     ithElec.isEE = iEle.isEE();
 
