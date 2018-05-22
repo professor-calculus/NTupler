@@ -44,7 +44,8 @@ process.source = cms.Source ("PoolSource",fileNames = cms.untracked.vstring(
 useMiniAOD=True
 
 if useMiniAOD==True:
-    process.source.fileNames=cms.untracked.vstring('/store/data/Run2017E/JetHT/MINIAOD/31Mar2018-v1/00000/00A450F8-2738-E811-8EF7-008CFAC93C0C.root',)
+    # process.source.fileNames=cms.untracked.vstring('/store/data/Run2017E/JetHT/MINIAOD/31Mar2018-v1/00000/00A450F8-2738-E811-8EF7-008CFAC93C0C.root',)
+    process.source.fileNames=cms.untracked.vstring('/store/data/Run2017F/JetHT/MINIAOD/31Mar2018-v1/80000/FE96BCE3-1737-E811-BF0B-A4BF0112BC1A.root',)
     # process.source.fileNames=cms.untracked.vstring('/store/data/Run2017E/SingleMuon/MINIAOD/31Mar2018-v1/00000/000D53C5-9D39-E811-A39C-0025905B85A0.root',)
 
 #setup the VID with HEEP 7.0
@@ -84,8 +85,7 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        bits = cms.InputTag("TriggerResults","","HLT"),
                                        prescales = cms.InputTag("patTrigger"),
                                        objects = cms.InputTag("selectedPatTrigger"),
-                                       # selectedTriggerPaths = cms.vstring("HLT_PFHT900_v", "HLT_AK8PFJet450_v"),#matches triggers that *contain* the stated names, so finish with _v to make sure your trigger name isn't a subset of others
-                                       selectedTriggerPaths = cms.vstring(),#matches triggers that *contain* the stated names, so finish with _v to make sure your trigger name isn't a subset of others
+                                       selectedTriggerPaths = cms.vstring("HLT_PFHT1050_v", "HLT_AK8PFJet500_v", "HLT_AK8PFJet550_v"),#matches triggers that *contain* the stated names, so finish with _v to make sure your trigger name isn't a subset of others
                                        elesAOD=cms.InputTag("gedGsfElectrons"),
                                        elesMiniAOD=cms.InputTag("slimmedElectrons"),
                                        trkIsolMap=cms.InputTag("heepIDVarValueMaps","eleTrkPtIso"),
