@@ -2,8 +2,8 @@
 # 1. Global Tag
 # 2. dataset (for local running only)
 # 3. HLT trigger path
-# 4. LHE calculation properties
-# 5. puppiCorr.root file
+# 4. LHE calculation properties (currently not using)
+# 5. puppiCorr.root file (currently not necessary for 2017)
 
 import FWCore.ParameterSet.Config as cms
 
@@ -46,8 +46,8 @@ useMiniAOD=True
 
 if useMiniAOD==True:
     # process.source.fileNames=cms.untracked.vstring('/store/user/taylor/nmssmSignalCascadeV05_13TeV2017_mH70p0_mSusy2200p0_ratio0p99_splitting0p1/nmssmSignalCascadeV05_13TeV2017_processMc04_ed94Xv8_mH70p0_mSusy2200p0_ratio0p99_splitting0p1/180509_094757/0000/nmssmSignal_MINIAODSIM_1.root',)
-    # process.source.fileNames=cms.untracked.vstring('file:/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/exampleMiniAOD/nmssmSignal_MINIAODSIM_94X.root')
-    process.source.fileNames=cms.untracked.vstring('file:/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/exampleMiniAOD/TT_MINIAODSIM_94X.root')
+    process.source.fileNames=cms.untracked.vstring('file:/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/exampleMiniAOD/nmssmSignal_MINIAODSIM_94X.root')
+    # process.source.fileNames=cms.untracked.vstring('file:/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/exampleMiniAOD/TT_MINIAODSIM_94X.root')
 
 #setup the VID with HEEP 7.0
 from PhysicsTools.SelectorUtils.tools.vid_id_tools import *

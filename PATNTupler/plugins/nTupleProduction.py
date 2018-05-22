@@ -2,7 +2,7 @@
 # 1. Global Tag
 # 2. dataset (for local running only)
 # 3. HLT trigger path
-# 4. LHE calculation properties
+# 4. LHE calculation properties (currently not using)
 # 5. puppiCorr.root file
 
 import FWCore.ParameterSet.Config as cms
@@ -67,6 +67,7 @@ for idmod in my_id_modules:
 
 #this is our example analysis module reading the results
 process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
+                                       isThis2016 = cms.bool(True),
                                        isThisMC = cms.bool(True),
                                        #mcWeight = cms.double(MCWEIGHT_INSERTEDHERE),
                                        # containsLHE = cms.bool(True),
