@@ -253,8 +253,10 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     //cuts_(iConfig)
 {
     std::cout << "*,. *,. *,. *,. *,. *,. *,." << std::endl;
-    if (isThis2016_) std::cout << "Running on 2016 data (80X)" << std::endl; 
-    else std::cout << "Running on 2017 data (94X)" << std::endl; 
+    if (isThis2016_ == true && isMC_ == false) std::cout << "Running on 2016 data (80X)" << std::endl; 
+    else if (isThis2016_ == true && isMC_ == true) std::cout << "Running on 2016 MC (80X)" << std::endl; 
+    else if (isThis2016_ == false && isMC_ == false) std::cout << "Running on 2017 data (94X)" << std::endl;
+    else if (isThis2016_ == false && isMC_ == true) std::cout << "Running on 2017 MC (94X)" << std::endl;
     std::cout << "*,. *,. *,. *,. *,. *,. *,." << std::endl;
 
     EventDataTree = fHistos->make<TTree>("EventDataTree", "Event data tree");
