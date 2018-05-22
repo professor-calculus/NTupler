@@ -65,6 +65,7 @@ for idmod in my_id_modules:
 
 #this is our example analysis module reading the results
 process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
+                                       isThis2016 = cms.bool(True),
                                        isThisMC = cms.bool(False),
                                        containsLHE = cms.bool(False), # data does not have lhe info
                                        lhe = cms.InputTag("externalLHEProducer"),
