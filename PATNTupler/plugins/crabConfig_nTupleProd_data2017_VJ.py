@@ -6,7 +6,7 @@ config = config()
 # EDIT the following:
 # uniqueName, config.Data.lumiMask, config.Data.inputDataset, config.Data.unitsPerJob
 
-uniqueName = 'JetHt_Run2017B_CMSSW947_COMMITHASH' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+uniqueName = 'JetHt_Run2017B_CMSSW947_6ad2add' # name for this ntuple production (include commit hash so it is unique and can be traced) 
 
 config.Data.lumiMask = 'Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_v1.txt'
 

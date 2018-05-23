@@ -6,7 +6,7 @@ config = config()
 # EDIT the following:
 # uniqueName, config.Data.inputDataset, config.Data.inputDBS, config.Data.unitsPerJob
 
-uniqueName = 'QCD_HT1000to1500_CMSSW947_COMMITHASH' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+uniqueName = 'QCD_HT1000to1500_CMSSW947_6ad2add' # name for this ntuple production (include commit hash so it is unique and can be traced) 
 
 config.General.requestName = uniqueName # name of the crab job project (eg on dashboard)
 config.General.workArea = 'crab_projects' # name of directory where crab project info is stored
