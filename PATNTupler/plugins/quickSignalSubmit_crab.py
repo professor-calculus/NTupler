@@ -12,7 +12,8 @@ from SignalMonteCarloDict import signalSamples
 keys = signalSamples.keys()
 for i in range (0, len(keys)):
 
-	os.system("cp crabConfig_nTupleProd_VJ.py TEMP_crabConfig_nTupleProd_VJ.py")
+    os.system("cp crabConfig_nTupleProd_VJ.py TEMP_crabConfig_nTupleProd_VJ.py") # 80X
+	# os.system("cp crabConfig_nTupleProd2017_VJ.py TEMP_crabConfig_nTupleProd_VJ.py") # 94X
 	os.system("sed -i 's:NAMEXYZ:%s:g' TEMP_crabConfig_nTupleProd_VJ.py" % keys[i])
 	os.system("sed -i 's:DATASETXYZ:%s:g' TEMP_crabConfig_nTupleProd_VJ.py" % signalSamples[keys[i]][1])
 	# os.system("cat TEMP_crabConfig_nTupleProd_VJ.py") # for testing
