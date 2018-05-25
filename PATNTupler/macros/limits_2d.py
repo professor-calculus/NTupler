@@ -31,14 +31,14 @@ import argparse as a
 ### ## # USER INPUTS # ## ###
 
 mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600]
-mHiggsVec = [30, 40, 50, 70, 90, 125]
+mHiggsVec = [30, 35, 40, 50, 70, 90, 125]
 inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_04_16/all_sys/"
 outputDir = inputDir + "/a_limitPlot/"
 
 plotObserved = False
 # maximally squeeze the z-axis
-minMu = -1.7
-maxMu = 1.3
+minMu = -1.52
+maxMu = 1.34
 
 #############################
 #############################
@@ -154,22 +154,21 @@ def interp2(data, method='linear', n_p=10):
 ####################################
 # >>> The Linear Interpolation <<< #
 
-# xi, yi, zi = interp(exp_50p0, 'linear') # expected grid
-# xj, yj, zj = interp(exp_50p0, 'linear') # expected line
-# xj16, yj16, zj16 = interp(exp_16p0, 'linear') # expected line (-1 sigma)
-# xj84, yj84, zj84 = interp(exp_84p0, 'linear') # expected line (+1 sigma)
-# xk, yk, zk = 0, 0, 0 # observed line
-# if (plotObserved):
-#     xk, yk, zk = interp(obs, 'linear') # observed line
-
-# nb, THIS IS THE FUCTION VERSION BJOERN HAD BEEN USING
-xi, yi, zi = interp2(exp_50p0, 'linear', 1000) # expected grid
-xj, yj, zj = interp2(exp_50p0, 'linear', 200) # expected line
-xj16, yj16, zj16 = interp2(exp_16p0, 'linear', 200) # expected line (-1 sigma)
-xj84, yj84, zj84 = interp2(exp_84p0, 'linear', 200) # expected line (+1 sigma)
+xi, yi, zi = interp(exp_50p0, 'linear') # expected grid
+xj, yj, zj = interp(exp_50p0, 'linear') # expected line
+xj16, yj16, zj16 = interp(exp_16p0, 'linear') # expected line (-1 sigma)
+xj84, yj84, zj84 = interp(exp_84p0, 'linear') # expected line (+1 sigma)
 xk, yk, zk = 0, 0, 0 # observed line
 if (plotObserved):
-    xk, yk, zk = interp2(obs, 'linear', 200) # observed line
+    xk, yk, zk = interp(obs, 'linear') # observed line
+
+# xi, yi, zi = interp2(exp_50p0, 'linear', 1000) # expected grid
+# xj, yj, zj = interp2(exp_50p0, 'linear', 200) # expected line
+# xj16, yj16, zj16 = interp2(exp_16p0, 'linear', 200) # expected line (-1 sigma)
+# xj84, yj84, zj84 = interp2(exp_84p0, 'linear', 200) # expected line (+1 sigma)
+# xk, yk, zk = 0, 0, 0 # observed line
+# if (plotObserved):
+#     xk, yk, zk = interp2(obs, 'linear', 200) # observed line
 
 ####################################
 
