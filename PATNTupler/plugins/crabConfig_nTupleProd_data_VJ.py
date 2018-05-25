@@ -44,12 +44,13 @@ config.Data.inputDataset = '/JetHT/Run2016H-03Feb2017_ver3-v1/MINIAOD'
 # config.Data.inputDataset = '/SingleMuon/Run2016H-03Feb2017_ver3-v1/MINIAOD'
 
 #################################################################################################
-config.Data.unitsPerJob = 5
+# config.Data.unitsPerJob = 5
+# config.Data.splitting = 'FileBased'
+config.Data.splitting = 'Automatic'
 #################################################################################################
 
 config.Data.inputDBS = 'global' # for centrally produced data
 config.Data.totalUnits = -1 # '-1' does them all
-config.Data.splitting = 'FileBased'
 config.Data.publication = False
 config.Data.outLFNDirBase = '/store/user/taylor/ntuples_DATA_Apr2018' # Wherever you want the ntuples to go on the RAL T2
 
