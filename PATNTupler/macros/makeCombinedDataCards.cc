@@ -53,7 +53,7 @@ int main(){
 
 
     // ONE: save info (signal specific directories beneath this)
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_04_16/all_sys/";
+    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_05_30/all_sys/";
   
 
     // TWO: physics info - to match the histograms that you use
@@ -93,7 +93,8 @@ int main(){
     CommonSystematicVec.push_back( CommonSystematic("jerUnc lnN", "jerUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
     CommonSystematicVec.push_back( CommonSystematic("jmsUnc lnN", "jmsUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
     CommonSystematicVec.push_back( CommonSystematic("jmrUnc lnN", "jmrUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("dbtTag lnN", "dbtTag", {"SIGNAL", "TTJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("SigDbtTag lnN", "dbtTag", {"SIGNAL"}) );
+    CommonSystematicVec.push_back( CommonSystematic("TtDbtTag lnN", "dbtTag", {"TTJets"}) );
     CommonSystematicVec.push_back( CommonSystematic("isr lnN", "isr", {"SIGNAL"}) );
 
 
