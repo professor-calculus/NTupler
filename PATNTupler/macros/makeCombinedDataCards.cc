@@ -65,12 +65,12 @@ int main(){
     const std::string dataSample = "data";
     std::vector<std::string> signalVec = { // the different signal samples you wish to use
                                             // "mH30_mSusy800", "mH50_mSusy800", "mH70_mSusy800", "mH90_mSusy800", "mH125_mSusy800",
-                                            "mH30_mSusy1200", "mH40_mSusy1200", "mH50_mSusy1200", "mH70_mSusy1200", "mH90_mSusy1200", "mH125_mSusy1200",
-                                            "mH30_mSusy1600", "mH40_mSusy1600", "mH50_mSusy1600", "mH70_mSusy1600", "mH90_mSusy1600", "mH125_mSusy1600",
-                                            "mH30_mSusy2000", "mH40_mSusy2000", "mH50_mSusy2000", "mH70_mSusy2000", "mH90_mSusy2000", "mH125_mSusy2000",
-                                            "mH30_mSusy2200", "mH40_mSusy2200", "mH50_mSusy2200", "mH70_mSusy2200", "mH90_mSusy2200", "mH125_mSusy2200",
-                                            "mH30_mSusy2400", "mH40_mSusy2400", "mH50_mSusy2400", "mH70_mSusy2400", "mH90_mSusy2400", "mH125_mSusy2400",
-                                            "mH30_mSusy2600", "mH40_mSusy2600", "mH50_mSusy2600", "mH70_mSusy2600", "mH90_mSusy2600", "mH125_mSusy2600", 
+                                            "mH30_mSusy1200", "mH35_mSusy1200", "mH40_mSusy1200", "mH50_mSusy1200", "mH70_mSusy1200", "mH90_mSusy1200", "mH125_mSusy1200",
+                                            "mH30_mSusy1600", "mH35_mSusy1600", "mH40_mSusy1600", "mH50_mSusy1600", "mH70_mSusy1600", "mH90_mSusy1600", "mH125_mSusy1600",
+                                            "mH30_mSusy2000", "mH35_mSusy2000", "mH40_mSusy2000", "mH50_mSusy2000", "mH70_mSusy2000", "mH90_mSusy2000", "mH125_mSusy2000",
+                                            "mH30_mSusy2200", "mH35_mSusy2200", "mH40_mSusy2200", "mH50_mSusy2200", "mH70_mSusy2200", "mH90_mSusy2200", "mH125_mSusy2200",
+                                            "mH30_mSusy2400", "mH35_mSusy2400", "mH40_mSusy2400", "mH50_mSusy2400", "mH70_mSusy2400", "mH90_mSusy2400", "mH125_mSusy2400",
+                                            "mH30_mSusy2600", "mH35_mSusy2600", "mH40_mSusy2600", "mH50_mSusy2600", "mH70_mSusy2600", "mH90_mSusy2600", "mH125_mSusy2600", 
                                         };
     const std::vector<std::string> mcbkVec = {"TTJets", "ZJets", "WJets"}; // the mc background samples
     const std::string qcdName = "QCD"; // this is just a label as QCD contribution is driven during the fit
@@ -386,36 +386,42 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
     histoNameVec.push_back("mH90_mSusy800");
     histoNameVec.push_back("mH125_mSusy800");
     histoNameVec.push_back("mH30_mSusy1200");
+    histoNameVec.push_back("mH35_mSusy1200");
     histoNameVec.push_back("mH40_mSusy1200");
     histoNameVec.push_back("mH50_mSusy1200");
     histoNameVec.push_back("mH70_mSusy1200");
     histoNameVec.push_back("mH90_mSusy1200");
     histoNameVec.push_back("mH125_mSusy1200");
     histoNameVec.push_back("mH30_mSusy1600");
+    histoNameVec.push_back("mH35_mSusy1600");
     histoNameVec.push_back("mH40_mSusy1600");
     histoNameVec.push_back("mH50_mSusy1600");
     histoNameVec.push_back("mH70_mSusy1600");
     histoNameVec.push_back("mH90_mSusy1600");
     histoNameVec.push_back("mH125_mSusy1600");
     histoNameVec.push_back("mH30_mSusy2000");
+    histoNameVec.push_back("mH35_mSusy2000");
     histoNameVec.push_back("mH40_mSusy2000");
     histoNameVec.push_back("mH50_mSusy2000");
     histoNameVec.push_back("mH70_mSusy2000");
     histoNameVec.push_back("mH90_mSusy2000");
     histoNameVec.push_back("mH125_mSusy2000");
     histoNameVec.push_back("mH30_mSusy2200");
+    histoNameVec.push_back("mH35_mSusy2200");
     histoNameVec.push_back("mH40_mSusy2200");
     histoNameVec.push_back("mH50_mSusy2200");
     histoNameVec.push_back("mH70_mSusy2200");
     histoNameVec.push_back("mH90_mSusy2200");
     histoNameVec.push_back("mH125_mSusy2200");
     histoNameVec.push_back("mH30_mSusy2400");
+    histoNameVec.push_back("mH35_mSusy2400");
     histoNameVec.push_back("mH40_mSusy2400");
     histoNameVec.push_back("mH50_mSusy2400");
     histoNameVec.push_back("mH70_mSusy2400");
     histoNameVec.push_back("mH90_mSusy2400");
     histoNameVec.push_back("mH125_mSusy2400");
     histoNameVec.push_back("mH30_mSusy2600");
+    histoNameVec.push_back("mH35_mSusy2600");
     histoNameVec.push_back("mH40_mSusy2600");
     histoNameVec.push_back("mH50_mSusy2600");
     histoNameVec.push_back("mH70_mSusy2600");
