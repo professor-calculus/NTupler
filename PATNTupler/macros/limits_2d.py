@@ -32,12 +32,12 @@ import argparse as a
 
 mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600]
 mHiggsVec = [30, 35, 40, 50, 70, 90, 125]
-inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_04_16/all_sys/"
-outputDir = inputDir + "/a_limitPlot/"
+inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_05_30/all_sys/"
+outputDir = inputDir + "/a_limitPlot_intp1/"
 
 plotObserved = False
 # maximally squeeze the z-axis
-minMu = -1.52
+minMu = -1.54
 maxMu = 1.34
 
 #############################
