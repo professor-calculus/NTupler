@@ -173,6 +173,8 @@ private:
 
 	Double_t treeVar_fatJetA_doubleBtagDiscrim_;
 	Double_t treeVar_fatJetA_mass_;
+	Double_t treeVar_fatJetA_eta_;
+	Double_t treeVar_fatJetA_phi_;
 	Double_t treeVar_fatJetA_softDropMassCHS_;
 	Double_t treeVar_fatJetA_softDropMassPuppi_;
 	Double_t treeVar_fatJetA_softDropMassPuppi_jmsUncUp_;
@@ -186,6 +188,8 @@ private:
 	Float_t treeVar_fatJetA_nSubjettinessTau2_;
 	Double_t treeVar_fatJetB_doubleBtagDiscrim_;
 	Double_t treeVar_fatJetB_mass_;
+	Double_t treeVar_fatJetB_eta_;
+	Double_t treeVar_fatJetB_phi_;
 	Double_t treeVar_fatJetB_softDropMassCHS_;
 	Double_t treeVar_fatJetB_softDropMassPuppi_;
 	Double_t treeVar_fatJetB_softDropMassPuppi_jmsUncUp_;
@@ -289,6 +293,12 @@ public:
 
 		mainAnaTree_->Branch("fatJetA_mass", &treeVar_fatJetA_mass_,   "fatJetA_mass/D");
 		mainAnaTree_->Branch("fatJetB_mass", &treeVar_fatJetB_mass_,   "fatJetB_mass/D");
+
+		mainAnaTree_->Branch("fatJetA_eta", &treeVar_fatJetA_eta_,   "fatJetA_eta/D");
+		mainAnaTree_->Branch("fatJetB_eta", &treeVar_fatJetB_eta_,   "fatJetB_eta/D");
+
+		mainAnaTree_->Branch("fatJetA_phi", &treeVar_fatJetA_phi_,   "fatJetA_phi/D");
+		mainAnaTree_->Branch("fatJetB_phi", &treeVar_fatJetB_phi_,   "fatJetB_phi/D");
 
 		mainAnaTree_->Branch("fatJetA_prunedMass", &treeVar_fatJetA_prunedMass_,   "fatJetA_prunedMass/D");
 		mainAnaTree_->Branch("fatJetB_prunedMass", &treeVar_fatJetB_prunedMass_,   "fatJetB_prunedMass/D");
@@ -417,6 +427,12 @@ public:
 
 		treeVar_fatJetA_mass_ = fatJetA.mass();
 		treeVar_fatJetB_mass_ = fatJetB.mass();
+
+		treeVar_fatJetA_eta_ = fatJetA.eta();
+		treeVar_fatJetB_eta_ = fatJetB.eta();
+
+		treeVar_fatJetA_phi_ = fatJetA.phi();
+		treeVar_fatJetB_phi_ = fatJetB.phi();
 
 		treeVar_fatJetA_prunedMass_ = fatJetA.CHSpruned_mass();
 		treeVar_fatJetB_prunedMass_ = fatJetB.CHSpruned_mass();
