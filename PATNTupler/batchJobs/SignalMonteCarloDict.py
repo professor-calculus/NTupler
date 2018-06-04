@@ -3,6 +3,13 @@
 
 signalSamples = {
 
+'P1_1200sq_1210go_130X2': [0.4969, '/nmssmP1SignalCascadeV01_13TeV2016_1200sq_1210go_130X2/atittert-nmssmP1SignalCascadeV01_13TeV2016_processMc04_ed80X_P1_v1_1200sq_1210go_130X2-26e5865c1eecbd2dc98b59f83d79606f/USER']
+
+}
+
+'''
+signalSamples = {
+
 'mH30p0_mSusy800p0_ratio0p99_splitting0p1':  [6.4720000*0.85*0.85, '/nmssmSignalCascadeV05_13TeV_mH30p0_mSusy800p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v9_mH30p0_mSusy800p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'],
 'mH50p0_mSusy800p0_ratio0p99_splitting0p1':  [6.4720000*0.85*0.85, '/nmssmSignalCascadeV05_13TeV_mH50p0_mSusy800p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v9_mH50p0_mSusy800p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'],
 'mH70p0_mSusy800p0_ratio0p99_splitting0p1':  [6.4720000*0.85*0.85, '/nmssmSignalCascadeV05_13TeV_mH70p0_mSusy800p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v9_mH70p0_mSusy800p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'],
@@ -46,6 +53,7 @@ signalSamples = {
 'mH125p0_mSusy2600p0_ratio0p99_splitting0p1':[0.0006167*0.58*0.58, '/nmssmSignalCascadeV05_13TeV_mH125p0_mSusy2600p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH125p0_mSusy2600p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'],
 
 }
+'''
 
 def slimSignalName(longName):
     slimName = longName.replace("p0_ratio0p99_splitting0p1", "")
