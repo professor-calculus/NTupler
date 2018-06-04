@@ -31,7 +31,7 @@ import argparse as a
 ### ## # USER INPUTS # ## ###
 
 mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600]
-mHiggsVec = [30, 40, 50, 70, 90, 125]
+mHiggsVec = [30, 35, 40, 50, 70, 90, 125]
 inputDirStandard = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_05_30/all_sys/"
 inputDirComparison = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_05_30/no_sigDbt/"
 standardLabel = ""
