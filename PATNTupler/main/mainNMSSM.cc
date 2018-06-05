@@ -881,7 +881,7 @@ int main(int argc, char** argv){
 
 			std::vector<ran::NtFatJet> centralFatJetVec; // get the *central* fatJets
 			for (const ran::NtFatJet& fatJet : fatJetVec) {
-				if (fabs(fatJet.eta()) < 2.4) centralFatJetVec.push_back(fatJet);
+				if (fabs(fatJet.eta()) < 2.4 && fatJet.PUPPIsoftdrop_mass() > -1.0) centralFatJetVec.push_back(fatJet);
 			}			
 
 			if (centralFatJetVec.size() >= 2) {
