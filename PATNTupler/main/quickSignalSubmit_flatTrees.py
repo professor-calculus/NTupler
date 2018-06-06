@@ -4,7 +4,7 @@ sys.path.insert(0, '../batchJobs')
 from SignalMonteCarloDict import *
 
 
-# run with $ python quickSignalSubmit_flatTrees.py from main directory
+# run with $ python quickSignalSubmit_flatTrees.py <yearOfRun> from main directory
 
 # make sure that in your submitCondorNtupleJobs_VJ.py...
 # inputFileListPath and outputDirectory contain NAMEXYZ

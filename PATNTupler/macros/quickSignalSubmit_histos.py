@@ -4,7 +4,7 @@ sys.path.insert(0, '../batchJobs')
 from SignalMonteCarloDict import *
 
 
-# run with $ python quickSignalSubmit_histos.py from macros directory
+# run with $ python quickSignalSubmit_histos.py <yearOfRun> from macros directory
 
 # make sure that in your histos_create.cc...
 # you use SLIMXYZ in outputdir

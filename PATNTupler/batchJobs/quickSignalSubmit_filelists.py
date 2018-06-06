@@ -3,7 +3,7 @@ import sys
 from SignalMonteCarloDict import *
 
 
-# run with $ python quickSignalSubmit_filelists.py from batchJobs directory
+# run with $ python quickSignalSubmit_filelists.py <yearOfRun> from batchJobs directory
 
 # make sure that in your makeFileLists.py...
 # motherDirs and outputFileList contain NAMEXYZ

@@ -4,7 +4,7 @@ sys.path.insert(0, '../batchJobs')
 from SignalMonteCarloDict import *
 
 
-# run with $ python quickSignalSubmit_crab.py from plugins directory
+# run with $ python quickSignalSubmit_crab.py <yearOfRun> from plugins directory
 
 # make sure that in your crabConfig_nTupleProd_VJ.py...
 # uniqueName = 'NAMEXYZ_CMSSW8029wDBTV4_9b0ff8' (or similar)
