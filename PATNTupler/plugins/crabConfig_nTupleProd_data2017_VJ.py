@@ -6,7 +6,7 @@ config = config()
 # EDIT the following:
 # uniqueName, config.Data.lumiMask, config.Data.inputDataset, config.Data.unitsPerJob
 
-uniqueName = 'JetHt_Run2017B_CMSSW947_6ad2add' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+uniqueName = 'JetHt_Run2017B_CMSSW947_b89f068' # name for this ntuple production (include commit hash so it is unique and can be traced) 
 
 config.Data.lumiMask = 'Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_v1.txt'
 
@@ -36,12 +36,13 @@ config.Data.inputDataset = '/JetHT/Run2017B-31Mar2018-v1/MINIAOD'
 # config.Data.inputDataset = '/SingleMuon/Run2017F-31Mar2018-v1/MINIAOD'
 
 #################################################################################################
-config.Data.unitsPerJob = 5
+config.Data.splitting = 'Automatic'
+# config.Data.splitting = 'FileBased'
+# config.Data.unitsPerJob = 5
 #################################################################################################
 
 config.Data.inputDBS = 'global' # for centrally produced data
 config.Data.totalUnits = -1 # '-1' does them all
-config.Data.splitting = 'FileBased'
 config.Data.publication = False
 config.Data.outLFNDirBase = '/store/user/taylor/ntuples_DATA17_May2018' # Wherever you want the ntuples to go on the RAL T2
 

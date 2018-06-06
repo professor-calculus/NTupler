@@ -6,7 +6,7 @@ config = config()
 # EDIT the following:
 # uniqueName, config.Data.inputDataset, config.Data.inputDBS, config.Data.unitsPerJob
 
-uniqueName = 'QCD_HT1000to1500_CMSSW947_6ad2add' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+uniqueName = 'QCD_HT1000to1500_CMSSW947_b89f068' # name for this ntuple production (include commit hash so it is unique and can be traced) 
 
 config.General.requestName = uniqueName # name of the crab job project (eg on dashboard)
 config.General.workArea = 'crab_projects' # name of directory where crab project info is stored
@@ -52,11 +52,12 @@ config.Data.inputDataset = '/QCD_HT1000to1500_TuneCP5_13TeV-madgraph-pythia8/Run
 #################################################################################################
 config.Data.inputDBS = 'global' # for centrally produced data
 # config.Data.inputDBS = 'phys03' # for personal simulation
-config.Data.unitsPerJob = 3
+config.Data.splitting = 'Automatic'
+# config.Data.splitting = 'FileBased'
+# config.Data.unitsPerJob = 3
 #################################################################################################
 
 config.Data.totalUnits = -1 # '-1' does them all
-config.Data.splitting = 'FileBased'
 config.Data.publication = False
 config.Data.outLFNDirBase = '/store/user/taylor/ntuples_MC17_May2018' # Wherever you want the ntuples to go on the RAL T2
 

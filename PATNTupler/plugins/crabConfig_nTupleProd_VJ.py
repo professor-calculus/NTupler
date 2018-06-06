@@ -6,7 +6,7 @@ config = config()
 # EDIT the following:
 # uniqueName, config.Data.inputDataset, config.Data.inputDBS, config.Data.unitsPerJob
 
-uniqueName = 'NAMEXYZ_CMSSW8029wDBTV4_9b0ff8' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+uniqueName = 'NAMEXYZ_CMSSW8029wDBTV4_b89f068' # name for this ntuple production (include commit hash so it is unique and can be traced) 
 
 config.General.requestName = uniqueName # name of the crab job project (eg on dashboard)
 config.General.workArea = 'crab_projects' # name of directory where crab project info is stored
@@ -56,9 +56,9 @@ config.Data.inputDataset = 'DATASETXYZ' # use the script quickSignalSubmit_crab.
 #################################################################################################
 # config.Data.inputDBS = 'global' # for centrally produced data
 config.Data.inputDBS = 'phys03' # for personal simulation
-# config.Data.unitsPerJob = 10
-# config.Data.splitting = 'FileBased'
 config.Data.splitting = 'Automatic'
+# config.Data.splitting = 'FileBased'
+# config.Data.unitsPerJob = 10
 #################################################################################################
 
 config.Data.totalUnits = -1 # '-1' does them all

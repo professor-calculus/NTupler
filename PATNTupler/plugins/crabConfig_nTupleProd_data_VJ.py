@@ -6,7 +6,7 @@ config = config()
 # EDIT the following:
 # uniqueName, config.Data.lumiMask, config.Data.inputDataset, config.Data.unitsPerJob
 
-uniqueName = 'JetHt_Run2016H-03Feb2017_ver3-v1_CMSSW8029wDBTV4_e6de69' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+uniqueName = 'JetHt_Run2016H-03Feb2017_ver3-v1_CMSSW8029wDBTV4_b89f068' # name for this ntuple production (include commit hash so it is unique and can be traced) 
 
 config.Data.lumiMask = 'Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
 
@@ -44,9 +44,9 @@ config.Data.inputDataset = '/JetHT/Run2016H-03Feb2017_ver3-v1/MINIAOD'
 # config.Data.inputDataset = '/SingleMuon/Run2016H-03Feb2017_ver3-v1/MINIAOD'
 
 #################################################################################################
-# config.Data.unitsPerJob = 5
-# config.Data.splitting = 'FileBased'
 config.Data.splitting = 'Automatic'
+# config.Data.splitting = 'FileBased'
+# config.Data.unitsPerJob = 5
 #################################################################################################
 
 config.Data.inputDBS = 'global' # for centrally produced data
