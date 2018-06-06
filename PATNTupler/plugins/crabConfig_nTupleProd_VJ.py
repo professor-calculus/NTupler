@@ -56,11 +56,12 @@ config.Data.inputDataset = 'DATASETXYZ' # use the script quickSignalSubmit_crab.
 #################################################################################################
 # config.Data.inputDBS = 'global' # for centrally produced data
 config.Data.inputDBS = 'phys03' # for personal simulation
-config.Data.unitsPerJob = 10
+# config.Data.unitsPerJob = 10
+# config.Data.splitting = 'FileBased'
+config.Data.splitting = 'Automatic'
 #################################################################################################
 
 config.Data.totalUnits = -1 # '-1' does them all
-config.Data.splitting = 'FileBased'
 config.Data.publication = False
 config.Data.outLFNDirBase = '/store/user/taylor/ntuples_MC_Apr2018' # Wherever you want the ntuples to go on the RAL T2
 

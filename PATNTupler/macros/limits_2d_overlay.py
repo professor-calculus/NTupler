@@ -31,18 +31,18 @@ import argparse as a
 ### ## # USER INPUTS # ## ###
 
 mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600]
-mHiggsVec = [30, 50, 70, 90, 125]
-inputDirStandard = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_04_16/all_sys/"
-inputDirComparison = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_04_16/no_jms/"
+mHiggsVec = [30, 35, 40, 50, 70, 90, 125]
+inputDirStandard = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_05_30/all_sys/"
+inputDirComparison = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_05_30/no_sigDbt/"
 standardLabel = ""
-comparsionLabel = "(No JMS Sys)"
-outputDir = inputDirComparison + "/a_limit_plot/"
+comparsionLabel = "(No sigDBT Sys)"
+outputDir = inputDirComparison + "/a_limit_plot_comparison_intp1/"
 
 # maximally squeeze the z-axis
-minMu = -1.7
-maxMu = 1.4
+minMu = -1.54
+maxMu = 1.34
 
-legendTextSize = 14.0
+legendTextSize = 13.0
 plotObserved = False
 
 #############################
@@ -50,8 +50,17 @@ plotObserved = False
 #############################
 #############################
 
+def interp(data, method='linear'):
+    x = data[:,0]
+    y = data[:,1]
+    z = data[:,2]
+    
+    xi = np.linspace(x.min(), x.max(), 100)
+    yi = np.linspace(y.min(), y.max(), 100)
+    zi = mlab.griddata(x, y, z, xi, yi, interp=method)
+    
+    return xi, yi, zi
 
-# nb, THIS IS THE FUCTION VERSION BJOERN HAD BEEN USING
 def interp2(data, method='linear', n_p=10):
     x = data[:,0]
     y = data[:,1]
@@ -128,12 +137,19 @@ os.system("rm tmpLimits_obs.txt")
 ####################################
 # >>> The Linear Interpolation <<< #
 
-xi, yi, zi = interp2(exp_50p0, 'linear', 1000) # expected grid
-xj, yj, zj = interp2(exp_50p0, 'linear', 200) # expected line
-xj16, yj16, zj16 = interp2(exp_16p0, 'linear', 200) # expected line (-1 sigma)
-xj84, yj84, zj84 = interp2(exp_84p0, 'linear', 200) # expected line (+1 sigma)
+xi, yi, zi = interp(exp_50p0, 'linear') # expected grid
+xj, yj, zj = interp(exp_50p0, 'linear') # expected line
+xj16, yj16, zj16 = interp(exp_16p0, 'linear') # expected line (-1 sigma)
+xj84, yj84, zj84 = interp(exp_84p0, 'linear') # expected line (+1 sigma)
 if (plotObserved):
-    xk, yk, zk = interp2(obs, 'linear', 200) # observed line
+    xk, yk, zk = interp(obs, 'linear') # observed line
+
+# xi, yi, zi = interp2(exp_50p0, 'linear', 1000) # expected grid
+# xj, yj, zj = interp2(exp_50p0, 'linear', 200) # expected line
+# xj16, yj16, zj16 = interp2(exp_16p0, 'linear', 200) # expected line (-1 sigma)
+# xj84, yj84, zj84 = interp2(exp_84p0, 'linear', 200) # expected line (+1 sigma)
+# if (plotObserved):
+#     xk, yk, zk = interp2(obs, 'linear', 200) # observed line
 
 ####################################
 
@@ -239,11 +255,17 @@ os.system("rm tmpLimits_84p0.txt")
 os.system("rm tmpLimits_97p5.txt")
 os.system("rm tmpLimits_obs.txt")
 
-xj, yj, zj = interp2(exp_50p0, 'linear', 200) # expected line
-xj16, yj16, zj16 = interp2(exp_16p0, 'linear', 200) # expected line (-1 sigma)
-xj84, yj84, zj84 = interp2(exp_84p0, 'linear', 200) # expected line (+1 sigma)
+xj, yj, zj = interp(exp_50p0, 'linear') # expected line
+xj16, yj16, zj16 = interp(exp_16p0, 'linear') # expected line (-1 sigma)
+xj84, yj84, zj84 = interp(exp_84p0, 'linear') # expected line (+1 sigma)
 if (plotObserved):
-    xk, yk, zk = interp2(obs, 'linear', 200) # observed line
+    xk, yk, zk = interp(obs, 'linear') # observed line
+
+# xj, yj, zj = interp2(exp_50p0, 'linear', 200) # expected line
+# xj16, yj16, zj16 = interp2(exp_16p0, 'linear', 200) # expected line (-1 sigma)
+# xj84, yj84, zj84 = interp2(exp_84p0, 'linear', 200) # expected line (+1 sigma)
+# if (plotObserved):
+#     xk, yk, zk = interp2(obs, 'linear', 200) # observed line
 
 if (plotObserved):
     plt_obs = plt.contour(xk, yk, zk, [1.0], colors='r')
