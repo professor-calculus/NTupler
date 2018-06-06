@@ -131,7 +131,12 @@ int main(int argc, char** argv){
     CutVariable ht_CV = CutVariable("ht", {"jecUncUp", "jecUncDown", "jerUncUp", "jerUncDown"});
 
 
-    // EIGHT: >>>BELOW<<<
+    // EIGHT: do you want to accept events with gluinos, default = true (only affects signal samples)
+    const bool useEventsWithGluinos = true;
+
+
+    // NINE: >>>BELOW<<<
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -233,6 +238,7 @@ int main(int argc, char** argv){
                     std::string cutToApply = Form("%s && %s>%d && %s>%d && %s>=%d && %s<%d && %s>%d && %s>%d", dbtCut.c_str(), fatJetA_pt_name.c_str(), cut3_ak8Pt, fatJetB_pt_name.c_str(), cut3_ak8Pt, ht_name.c_str(), cut4_ht[iCut4][0], ht_name.c_str(), cut4_ht[iCut4][1], slimJetA_pt_name.c_str(), cut5_ak4Pt[0], slimJetB_pt_name.c_str(), cut5_ak4Pt[1]);
 
                     cutToApply += " && " + MassCutsObject.GetAllCuts()[iMassRegion];
+                    if (useEventsWithGluinos == false) cutToApply += " && nGluino == 0";
                     // TH2D hTemplate = TH2D("hTemplate", ";fatJetA_MassType (GeV);fatJetB_MassType (GeV)", 600, 0, 300, 600, 0, 300);
                     TH2D hTemplate = TH2D("hTemplate", ";fatJetA_MassType (GeV);fatJetB_MassType (GeV)", 100, 0, 200, 100, 0, 200);
                     std::string varToPlot = fatJetB_mass_name + ":" + fatJetA_mass_name;
@@ -242,7 +248,7 @@ int main(int argc, char** argv){
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
-                    // EIGHT: sample info - SOME SAMPLES NEED SYSTEMATIC WEIGHTS (Signal, TTJets, ...)
+                    // NINE: sample info - SOME SAMPLES NEED SYSTEMATIC WEIGHTS (Signal, TTJets, ...)
                     // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11_CMSSW_8_0_29_dbtV4/mc/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1206);
                     // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11_CMSSW_8_0_29_dbtV4/mc/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 120.4);
                     // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11_CMSSW_8_0_29_dbtV4/mc/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 25.25);
