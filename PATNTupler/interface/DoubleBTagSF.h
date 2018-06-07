@@ -300,43 +300,37 @@ namespace DoubleBTagSF{
 	double getLooseScaleFactor_signal_2017(const double& fatJet_pt)
 	{
 		if (fatJet_pt < 250.0)
-			return 1.00;
+			return 0.96;
 		else if (fatJet_pt < 350.0)
-			return 1.00;
-		else if (fatJet_pt < 430.0)
-			return 0.98;
+			return 0.96;
 		else if (fatJet_pt < 840.0)
-			return 1.01;
+			return 0.95;
 		else
-			return 1.01;
+			return 0.95;
 	}
 
 	double getLooseScaleFactorUp_signal_2017(const double& fatJet_pt)
 	{
 		if (fatJet_pt < 250.0)
-			return (1.00 + 2 * 0.06);
+			return (0.96 + 2 * 0.03);
 		else if (fatJet_pt < 350.0)
-			return (1.00 + 0.06);
-		else if (fatJet_pt < 430.0)
-			return (0.98 + 0.11);
+			return (0.96 + 0.03);
 		else if (fatJet_pt < 840.0)
-			return (1.01 + 0.03);
+			return (0.95 + 0.06);
 		else
-			return (1.01 + 2 * 0.03);
+			return (0.95 + 2 * 0.06);
 	}
 
 	double getLooseScaleFactorDown_signal_2017(const double& fatJet_pt)
 	{
 		if (fatJet_pt < 250.0)
-			return (1.00 - 2 * 0.04);
+			return (0.96 - 2 * 0.03);
 		else if (fatJet_pt < 350.0)
-			return (1.00 - 0.04);
-		else if (fatJet_pt < 430.0)
-			return (0.98 - 0.04);
+			return (0.96 - 0.03);
 		else if (fatJet_pt < 840.0)
-			return (1.01 - 0.06);
+			return (0.95 - 0.04);
 		else
-			return (1.01 - 2 * 0.06);
+			return (0.95 - 2 * 0.04);
 	}
 
 	// ----------------------------------------------------------//
@@ -344,43 +338,37 @@ namespace DoubleBTagSF{
 	double getMed1ScaleFactor_signal_2017(const double& fatJet_pt)
 	{
 		if (fatJet_pt < 250.0)
-			return 0.97;
+			return 0.93;
 		else if (fatJet_pt < 350.0)
-			return 0.97;
-		else if (fatJet_pt < 430.0)
-			return 0.96;
+			return 0.93;
 		else if (fatJet_pt < 840.0)
-			return 0.97;
+			return 0.90;
 		else
-			return 0.97;
+			return 0.90;
 	}
 
 	double getMed1ScaleFactorUp_signal_2017(const double& fatJet_pt)
 	{
 		if (fatJet_pt < 250.0)
-			return (0.97 + 2 * 0.04);
+			return (0.93 + 2 * 0.04);
 		else if (fatJet_pt < 350.0)
-			return (0.97 + 0.04);
-		else if (fatJet_pt < 430.0)
-			return (0.96 + 0.04);
+			return (0.93 + 0.04);
 		else if (fatJet_pt < 840.0)
-			return (0.97 + 0.04);
+			return (0.90 + 0.08);
 		else
-			return (0.97 + 2 * 0.04);
+			return (0.90 + 2 * 0.08);
 	}
 
 	double getMed1ScaleFactorDown_signal_2017(const double& fatJet_pt)
 	{
 		if (fatJet_pt < 250.0)
-			return (0.97 - 2 * 0.03);
+			return (0.93 - 2 * 0.03);
 		else if (fatJet_pt < 350.0)
-			return (0.97 - 0.03);
-		else if (fatJet_pt < 430.0)
-			return (0.96 - 0.04);
+			return (0.93 - 0.03);
 		else if (fatJet_pt < 840.0)
-			return (0.97 - 0.05);
+			return (0.90 - 0.04);
 		else
-			return (0.97 - 2 * 0.05);
+			return (0.90 - 2 * 0.04);
 	}
 
 	// ----------------------------------------------------------//
@@ -388,43 +376,37 @@ namespace DoubleBTagSF{
 	double getMed2ScaleFactor_signal_2017(const double& fatJet_pt)
 	{
 		if (fatJet_pt < 250.0)
-			return 0.90;
+			return 0.85;
 		else if (fatJet_pt < 350.0)
-			return 0.90;
-		else if (fatJet_pt < 430.0)
-			return 0.91;
+			return 0.85;
 		else if (fatJet_pt < 840.0)
-			return 0.87;
+			return 0.80;
 		else
-			return 0.87;
+			return 0.80;
 	}
 
 	double getMed2ScaleFactorUp_signal_2017(const double& fatJet_pt)
 	{
 		if (fatJet_pt < 250.0)
-			return (0.90 + 2 * 0.04);
+			return (0.85 + 2 * 0.04);
 		else if (fatJet_pt < 350.0)
-			return (0.90 + 0.04);
-		else if (fatJet_pt < 430.0)
-			return (0.91 + 0.05);
+			return (0.85 + 0.04);
 		else if (fatJet_pt < 840.0)
-			return (0.87 + 0.04);
+			return (0.80 + 0.07);
 		else
-			return (0.87 + 2 * 0.04);
+			return (0.80 + 2 * 0.07);
 	}
 
 	double getMed2ScaleFactorDown_signal_2017(const double& fatJet_pt)
 	{
 		if (fatJet_pt < 250.0)
-			return (0.90 - 2 * 0.04);
+			return (0.85 - 2 * 0.04);
 		else if (fatJet_pt < 350.0)
-			return (0.90 - 0.04);
-		else if (fatJet_pt < 430.0)
-			return (0.91 - 0.05);
+			return (0.85 - 0.04);
 		else if (fatJet_pt < 840.0)
-			return (0.87 - 0.06);
+			return (0.80 - 0.04);
 		else
-			return (0.87 - 2 * 0.06);
+			return (0.80 - 2 * 0.04);
 	}
 
 	// ----------------------------------------------------------//
