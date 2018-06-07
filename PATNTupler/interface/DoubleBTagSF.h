@@ -416,43 +416,37 @@ namespace DoubleBTagSF{
 	double getLooseScaleFactor_ttbar_2017(const double& fatJet_pt)
 	{
 		if (fatJet_pt < 250.0)
-			return 1.000;
+			return 0.939;
 		else if (fatJet_pt < 350.0)
-			return 1.000;
+			return 0.939;
 		else if (fatJet_pt < 430.0)
-			return 1.000;
-		else if (fatJet_pt < 700.0)
-			return 1.000;
+			return 1.007;
 		else
-			return 1.000;
+			return 0.996;
 	}
 
 	double getLooseScaleFactorUp_ttbar_2017(const double& fatJet_pt)
 	{
 		if (fatJet_pt < 250.0)
-			return (1.000 + 2 * 0.000);
+			return (0.939 + 2 * 0.026);
 		else if (fatJet_pt < 350.0)
-			return (1.000 + 0.000);
+			return (0.939 + 0.026);
 		else if (fatJet_pt < 430.0)
-			return (1.000 + 0.000);
-		else if (fatJet_pt < 700.0)
-			return (1.000 + 0.000);
+			return (1.007 + 0.055);
 		else
-			return (1.000 + 2 * 0.000);
+			return (0.996 + 0.080);
 	}
 
 	double getLooseScaleFactorDown_ttbar_2017(const double& fatJet_pt)
 	{
 		if (fatJet_pt < 250.0)
-			return (1.000 - 2 * 0.000);
+			return (0.939 - 2 * 0.026);
 		else if (fatJet_pt < 350.0)
-			return (1.000 - 0.000);
+			return (0.939 - 0.026);
 		else if (fatJet_pt < 430.0)
-			return (1.000 - 0.000);
-		else if (fatJet_pt < 700.0)
-			return (1.000 - 0.000);
+			return (1.007 - 0.054);
 		else
-			return (1.000 - 2 * 0.000);
+			return (0.996 - 0.078);
 	}
 
 	// ----------------------------------------------------------//
@@ -460,37 +454,37 @@ namespace DoubleBTagSF{
 	double getMed1ScaleFactor_ttbar_2017(const double& fatJet_pt)
 	{
 		if (fatJet_pt < 250.0)
-			return 1.000;
+			return 0.922;
 		else if (fatJet_pt < 350.0)
-			return 1.000;
-		else if (fatJet_pt < 700.0)
-			return 1.000;
+			return 0.922;
+		else if (fatJet_pt < 430.0)
+			return 0.967;
 		else
-			return 1.000;
+			return 0.902;
 	}
 
 	double getMed1ScaleFactorUp_ttbar_2017(const double& fatJet_pt)
 	{
 		if (fatJet_pt < 250.0)
-			return (1.000 + 2 * 0.000);
+			return (0.922 + 2 * 0.027);
 		else if (fatJet_pt < 350.0)
-			return (1.000 + 0.000);
-		else if (fatJet_pt < 700.0)
-			return (1.000 + 0.000);
+			return (0.922 + 0.027);
+		else if (fatJet_pt < 430.0)
+			return (0.967 + 0.057);
 		else
-			return (1.000 + 2 * 0.000);
+			return (0.902 + 0.083);
 	}
 
 	double getMed1ScaleFactorDown_ttbar_2017(const double& fatJet_pt)
 	{
 		if (fatJet_pt < 250.0)
-			return (1.000 - 2 * 0.000);
+			return (0.922 - 2 * 0.027);
 		else if (fatJet_pt < 350.0)
-			return (1.000 - 0.000);
-		else if (fatJet_pt < 700.0)
-			return (1.000 - 0.000);
+			return (0.922 - 0.027);
+		else if (fatJet_pt < 430.0)
+			return (0.967 - 0.056);
 		else
-			return (1.000 - 2 * 0.000);
+			return (0.902 - 0.081);
 	}
 
 	// ----------------------------------------------------------//
@@ -498,37 +492,37 @@ namespace DoubleBTagSF{
 	double getMed2ScaleFactor_ttbar_2017(const double& fatJet_pt)
 	{
 		if (fatJet_pt < 250.0)
-			return 1.000;
+			return 0.875;
 		else if (fatJet_pt < 350.0)
-			return 1.000;
-		else if (fatJet_pt < 700.0)
-			return 1.000;
+			return 0.875;
+		else if (fatJet_pt < 430.0)
+			return 0.939;
 		else
-			return 1.000;
+			return 0.893;
 	}
 
 	double getMed2ScaleFactorUp_ttbar_2017(const double& fatJet_pt)
 	{
 		if (fatJet_pt < 250.0)
-			return (1.000 + 2 * 0.000);
+			return (0.875 + 2 * 0.030);
 		else if (fatJet_pt < 350.0)
-			return (1.000 + 0.000);
-		else if (fatJet_pt < 700.0)
-			return (1.000 + 0.000);
+			return (0.875 + 0.030);
+		else if (fatJet_pt < 430.0)
+			return (0.939 + 0.063);
 		else
-			return (1.000 + 2 * 0.000);
+			return (0.893 + 0.091);
 	}
 
 	double getMed2ScaleFactorDown_ttbar_2017(const double& fatJet_pt)
 	{
 		if (fatJet_pt < 250.0)
-			return (1.000 - 2 * 0.000);
+			return (0.875 - 2 * 0.030);
 		else if (fatJet_pt < 350.0)
-			return (1.000 - 0.000);
-		else if (fatJet_pt < 700.0)
-			return (1.000 - 0.000);
+			return (0.875 - 0.030);
+		else if (fatJet_pt < 430.0)
+			return (0.939 - 0.063);
 		else
-			return (1.000 - 2 * 0.000);
+			return (0.893 - 0.089);
 	}
 
 	// ----------------------------------------------------------//
