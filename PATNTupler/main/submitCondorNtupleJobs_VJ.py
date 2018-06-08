@@ -11,9 +11,7 @@ import datetime
 # 3. Run this script $ python submitCondorNtupleJobs_VJ.py or $ python $CMSSW_BASE/src/NTupler/PATNTupler/main/submitCondorNtupleJobs_VJ.py
 # 4. cd into the outputDirectory/tmp and run the condor job (can use batchJobs/setoffJobs.py)
 
-cmsswBase = os.popen("echo $CMSSW_BASE", "r").readline()
-cmsswBase = cmsswBase.rstrip()
-
+baseDir = os.environ['CMSSW_BASE']
 ###########################################################################################################
 ############## USER INPUTS ################################################################################
 ###########################################################################################################
@@ -22,9 +20,10 @@ cmsswBase = cmsswBase.rstrip()
 
 executable = "nTupAnaNMSSM" # wrt 'main' directory
 code = "mainNMSSM.cc" # wrt 'main' directory
-inputFileListPath = cmsswBase + "/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4_wSys/NAMEXYZ.list"
+inputFileListPath = baseDir + "/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4_wSys/NAMEXYZ.list"
 outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11_CMSSW_8_0_29_dbtV4/mc/NAMEXYZ/" # has to be the full path
 sampleType = "SIGNAL" # choose from SIGNAL, DATA, TTJETS, OTHER_MC
+yearOfRun = 2016
 filesPerJob = 30
 logDirectoryBase = "/opt/ppd/scratch/xap79297/jobLogs/flatTrees/"
 
@@ -40,6 +39,10 @@ if (sampleType != "SIGNAL" and sampleType != "DATA" and sampleType != "TTJETS" a
     print "you have not provided a valid sample type bro, exiting..."
     sys.exit()
 
+if (yearOfRun != 2016 and yearOfRun != 2017):
+    print "you have not provided a valid year of run pal, exiting..."
+    sys.exit()
+
 if outputDirectory[-1] == "/":
     outputDirectory = outputDirectory[:-1]
 
@@ -51,7 +54,6 @@ for iChar in range (len(outputDirectory)-1, 0, -1):
 dataname = dataname + "_" + '{:%Y_%m_%d-%H_%M_%S}'.format(datetime.datetime.now())
 logDirectory = os.path.join(logDirectoryBase,dataname)
 
-baseDir = os.environ['CMSSW_BASE']
 if len(baseDir) == 0:
     print "You are not in a CMSSW environment"
     print "Exiting..."
@@ -119,7 +121,7 @@ for jobList in filesPerJobList:
     shellJob = open(shellJobName,"w")
 
     cmd = "#!/bin/bash\n"
-    cmd += baseDir + "/src/NTupler/PATNTupler/main/" + executable + " flatTree_" + str(jobNum) + ".root " + jobListFileName + " " + sampleType + " batch\n"
+    cmd += baseDir + "/src/NTupler/PATNTupler/main/" + executable + " flatTree_" + str(jobNum) + ".root " + jobListFileName + " " + sampleType + " " + str(yearOfRun) + " batch\n"
     cmd += "if [ $? -eq 0 ]\n"
     cmd += "then\n"
     cmd += "    echo\n"
