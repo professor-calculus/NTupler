@@ -11,6 +11,8 @@ import datetime
 # 3. Run this script $ python submitCondorNtupleJobs_VJ.py or $ python $CMSSW_BASE/src/NTupler/PATNTupler/main/submitCondorNtupleJobs_VJ.py
 # 4. cd into the outputDirectory/tmp and run the condor job (can use batchJobs/setoffJobs.py)
 
+cmsswBase = os.popen("echo $CMSSW_BASE", "r").readline()
+cmsswBase = cmsswBase.rstrip()
 
 ###########################################################################################################
 ############## USER INPUTS ################################################################################
@@ -20,7 +22,7 @@ import datetime
 
 executable = "nTupAnaNMSSM" # wrt 'main' directory
 code = "mainNMSSM.cc" # wrt 'main' directory
-inputFileListPath = "/opt/ppd/scratch/xap79297/CMSSW_8_0_29/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4_wSys/NAMEXYZ.list"
+inputFileListPath = cmsswBase + "/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4_wSys/NAMEXYZ.list"
 outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11_CMSSW_8_0_29_dbtV4/mc/NAMEXYZ/" # has to be the full path
 sampleType = "SIGNAL" # choose from SIGNAL, DATA, TTJETS, OTHER_MC
 filesPerJob = 30
