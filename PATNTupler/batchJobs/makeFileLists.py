@@ -43,7 +43,9 @@ def getAllRootFilesBeneathPaths(pathsSoFarVec, pathsToRootFiles):
 motherDirs = ["/pnfs/pp.rl.ac.uk/data/cms/store/user/taylor/ntuples_MC_Apr2018/nmssmSignalCascadeV05_13TeV_NAMEXYZ/"]
 
 # ...and puts the resulting list as stated here (adding on the 'dcap://dcap.pp.rl.ac.uk:22125/' bit)
-outputFileList = "$CMSSW_BASE/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4_wSys/NAMEXYZ.list"
+cmsswBase = os.popen("echo $CMSSW_BASE", "r").readline()
+cmsswBase = cmsswBase.rstrip()
+outputFileList = cmsswBase + "/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4_wSys/NAMEXYZ.list"
 
 ###########################################################################################################
 ###########################################################################################################
