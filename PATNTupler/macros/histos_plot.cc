@@ -191,7 +191,7 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
         // 2. tag, anti, control --> refers to 2*DBT space
         // 3. sample name on the end
 
-        if (histoToUse != "data" && histoToUse != "data_NOAK4") h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtDiagUpLoose_NOSYS");
+        if (histoToUse != "data") h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtDiagUpLoose_NOSYS");
         h_[Form("U_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtDiagUpLoose_NOSYS");
         h_[Form("D_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtDiagUpLoose_NOSYS");
 
@@ -340,7 +340,7 @@ void GetHistograms2017(std::map<std::string,TH1D*>& h_)
         // 2. tag, anti, control --> refers to 2*DBT space
         // 3. sample name on the end
 
-        if (histoToUse != "data" && histoToUse != "data_NOAK4") h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtDiagUpLoose_NOSYS");
+        if (histoToUse != "data") h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtDiagUpLoose_NOSYS");
         h_[Form("U_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtDiagUpLoose_NOSYS");
         h_[Form("D_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtDiagUpLoose_NOSYS");
 
