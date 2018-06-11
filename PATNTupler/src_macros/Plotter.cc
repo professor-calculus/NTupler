@@ -705,6 +705,8 @@ void Plotter::Save(const std::string& saveName){
 		if (useLogY == false){
 			histoIndi[0].GetHistogram()->SetMaximum(graphMaxLin);
 			histoIndi[0].GetHistogram()->SetMinimum(graphMinLin);
+			// histoIndi[0].GetHistogram()->SetMaximum(1.006);
+			// histoIndi[0].GetHistogram()->SetMinimum(0.92);
 		}
 		else{
 			histoIndi[0].GetHistogram()->SetMaximum(graphMaxLog);
