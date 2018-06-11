@@ -68,7 +68,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_04_11_CMSSW_8_0_29_dbtV4/MassCutsV08/SLIMXYZ/with_Sys/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_04_11_CMSSW_8_0_29_dbtV4/MassCutsV08/run2016/SLIMXYZ/with_Sys/"; // where we are going to save the output plots (should include the samples name + binning maybe)
 
 
     // TWO: do we want to blind the S mass region? (true for data, false for everything else)
@@ -110,6 +110,7 @@ int main(int argc, char** argv){
 
     // FIVE: set up the luminosity
     const double luminosity = 35.867; // 2016 DATASET
+    // const double luminosity = 41.370; // 2017 DATASET
 
 
     // SIX: systematics to run over. only need to use them for TAG dbt. start with 'SF_' for scale factors.
@@ -249,20 +250,40 @@ int main(int argc, char** argv){
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
                     // NINE: sample info - SOME SAMPLES NEED SYSTEMATIC WEIGHTS (Signal, TTJets, ...)
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11_CMSSW_8_0_29_dbtV4/mc/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1206);
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11_CMSSW_8_0_29_dbtV4/mc/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 120.4);
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11_CMSSW_8_0_29_dbtV4/mc/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 25.25);
+                    // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.                    
+                    // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
+                    // 2016 (80X)
 
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11_CMSSW_8_0_29_dbtV4/mc/TTJets_ht1200plus/flatTree.root", cutToApply.c_str(), 831.76, SF_weight.c_str());
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11_CMSSW_8_0_29_dbtV4/mc/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 5.67);
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11_CMSSW_8_0_29_dbtV4/mc/WJets_ht1200plus/flatTree.root", cutToApply.c_str(), 95.14);
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1206);
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 120.4);
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 25.25);
 
-                    // SIGNAL
-                    plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11_CMSSW_8_0_29_dbtV4/mc/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc/TTJets_ht1200plus/flatTree.root", cutToApply.c_str(), 831.76, SF_weight.c_str());
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 5.67);
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc/WJets_ht1200plus/flatTree.root", cutToApply.c_str(), 95.14);
+
+                    // SIGNAL 2016
+                    plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
 
                     // 2016 GOLDEN JSON DATASET
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11_CMSSW_8_0_29_dbtV4/data/JetHT2016_ht1499plus/flatTree.root", cutToApply.c_str());
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/data/JetHT2016_ht1499plus/flatTree.root", cutToApply.c_str());
 
+                    // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
+                    // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
+                    // 2017 (94X)
+
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc17/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1005);
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc17/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 101.8);
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc17/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 20.54);
+
+                    // SIGNAL 2017
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc17/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
+
+                    // 2017 GOLDEN JSON DATASET
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/data17/JetHT_Run2017TOTAL_ht1499plus/flatTree.root", cutToApply.c_str());
+
+                    // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
+                    // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
