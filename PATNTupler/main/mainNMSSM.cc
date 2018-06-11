@@ -845,7 +845,7 @@ int main(int argc, char** argv){
 
 		TTreeReaderValue<int> nPU_tree(treeReader, "nPU");
 		TTreeReaderValue<int> nISR_tree(treeReader, "nISR");
-		TTreeReaderValue<int> nGluino_tree(treeReader, "nGluino"); // HACK: need to comment out this line if working on DATA or QCD (the ntuples are missing nGluino info)
+		//TTreeReaderValue<int> nGluino_tree(treeReader, "nGluino"); // HACK: need to comment out this line if working on DATA or QCD (the ntuples are missing nGluino info)
 
 
 		// Get the 'D' factor for ISR - NOTE THAT THIS IS PER INPUT FILE, NOT THE FULL SAMPLE !
@@ -886,8 +886,8 @@ int main(int argc, char** argv){
 
 			const int nPU = *nPU_tree;
 			const int nISR = *nISR_tree;
-			//const int nGluino = 0; // HACK: use this option if working on DATA or QCD (the ntuples are missing nGluino info)
-			const int nGluino = *nGluino_tree;
+			const int nGluino = 0; // HACK: use this option if working on DATA or QCD (the ntuples are missing nGluino info)
+			//const int nGluino = *nGluino_tree;
 
 			// HT calculation: Only consider jets with |eta| < 3.0, pt > 40.0
 			double ht = 0.0;
