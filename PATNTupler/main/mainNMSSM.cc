@@ -216,6 +216,8 @@ private:
 
 	UInt_t treeVar_nrSlimJets_;
 	UInt_t treeVar_nrSlimBJets_;
+	UInt_t treeVar_nrSepSlimJets_;
+	UInt_t treeVar_nrSepSlimBJets_;
 
 	TLorentzVector* treeVar_jetA_p4Ptr_; TLorentzVector treeVar_jetA_p4_;
 	TLorentzVector* treeVar_jetA_p4Ptr_jecUncUp_; TLorentzVector treeVar_jetA_p4_jecUncUp_;
@@ -223,11 +225,21 @@ private:
 	TLorentzVector* treeVar_jetA_p4Ptr_jerUncUp_; TLorentzVector treeVar_jetA_p4_jerUncUp_;
 	TLorentzVector* treeVar_jetA_p4Ptr_jerUncDown_; TLorentzVector treeVar_jetA_p4_jerUncDown_;
 
+	Double_t treeVar_jetA_pt_;
+	Double_t treeVar_jetA_eta_;
+	Double_t treeVar_jetA_phi_;
+	Double_t treeVar_jetA_E_;
+
 	TLorentzVector* treeVar_jetB_p4Ptr_; TLorentzVector treeVar_jetB_p4_;
 	TLorentzVector* treeVar_jetB_p4Ptr_jecUncUp_; TLorentzVector treeVar_jetB_p4_jecUncUp_;
 	TLorentzVector* treeVar_jetB_p4Ptr_jecUncDown_; TLorentzVector treeVar_jetB_p4_jecUncDown_;
 	TLorentzVector* treeVar_jetB_p4Ptr_jerUncUp_; TLorentzVector treeVar_jetB_p4_jerUncUp_;
 	TLorentzVector* treeVar_jetB_p4Ptr_jerUncDown_; TLorentzVector treeVar_jetB_p4_jerUncDown_;
+
+	Double_t treeVar_jetB_pt_;
+	Double_t treeVar_jetB_eta_;
+	Double_t treeVar_jetB_phi_;
+	Double_t treeVar_jetB_E_;
 
 
 public:
@@ -343,6 +355,8 @@ public:
 
 		mainAnaTree_->Branch("nrSlimJets", &treeVar_nrSlimJets_, "nrSlimJets/i");
 		mainAnaTree_->Branch("nrSlimBJets", &treeVar_nrSlimBJets_, "nrSlimBJets/i");
+		mainAnaTree_->Branch("nrSepSlimJets", &treeVar_nrSepSlimJets_, "nrSepSlimJets/i");
+		mainAnaTree_->Branch("nrSepSlimBJets", &treeVar_nrSepSlimBJets_, "nrSepSlimBJets/i");
 
 		mainAnaTree_->Branch("slimJetA_p4", &treeVar_jetA_p4Ptr_);
 		mainAnaTree_->Branch("slimJetA_p4_jecUncUp", &treeVar_jetA_p4Ptr_jecUncUp_);
@@ -355,11 +369,21 @@ public:
 		mainAnaTree_->Branch("slimJetB_p4_jecUncDown", &treeVar_jetB_p4Ptr_jecUncDown_);
 		mainAnaTree_->Branch("slimJetB_p4_jerUncUp", &treeVar_jetB_p4Ptr_jerUncUp_);
 		mainAnaTree_->Branch("slimJetB_p4_jerUncDown", &treeVar_jetB_p4Ptr_jerUncDown_);
+
+		mainAnaTree_->Branch("slimJetA_pt", &treeVar_jetA_pt_, "slimJetA_pt/D");
+		mainAnaTree_->Branch("slimJetA_eta", &treeVar_jetA_eta_, "slimJetA_eta/D");
+		mainAnaTree_->Branch("slimJetA_phi", &treeVar_jetA_phi_, "slimJetA_phi/D");
+		mainAnaTree_->Branch("slimJetA_E", &treeVar_jetA_E_, "slimJetA_E/D");
+
+		mainAnaTree_->Branch("slimJetA_pt", &treeVar_jetA_pt_, "slimJetB_pt/D");
+		mainAnaTree_->Branch("slimJetA_eta", &treeVar_jetA_eta_, "slimJetB_eta/D");
+		mainAnaTree_->Branch("slimJetA_phi", &treeVar_jetA_phi_, "slimJetB_phi/D");
+		mainAnaTree_->Branch("slimJetB_E", &treeVar_jetB_E_, "slimJetB_E/D");
 	}
 
 	~FatDoubleBJetPairTree(){}
 
-	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp, const float& ht_jecUncDown, const float& ht_jerUncUp, const float& ht_jerUncDown, const float& mht, const float& mht_jecUncUp, const float& mht_jecUncDown, const float& mht_jerUncUp, const float& mht_jerUncDown, const std::vector<ran::NtJet>& slimJets, const std::vector<ran::NtJet>& slimBJets, const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const double& D_factor)
+	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp, const float& ht_jecUncDown, const float& ht_jerUncUp, const float& ht_jerUncDown, const float& mht, const float& mht_jecUncUp, const float& mht_jecUncDown, const float& mht_jerUncUp, const float& mht_jerUncDown, const std::vector<ran::NtJet>& slimJets, const std::vector<ran::NtJet>& allSlimJets, const std::vector<ran::NtJet>& slimBJets, const std::vector<ran::NtJet>& allSlimBJets, const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const double& D_factor)
 	{
 		
 		// DO THE WEIGHTS
@@ -453,8 +477,10 @@ public:
 
 		treeVar_ht_ = ht;
 		treeVar_mht_ = mht;
-		treeVar_nrSlimJets_ = slimJets.size();
-		treeVar_nrSlimBJets_ = slimBJets.size();
+		treeVar_nrSlimJets_ = allSlimJets.size();
+		treeVar_nrSlimBJets_ = allSlimBJets.size();
+		treeVar_nrSepSlimJets_ = slimJets.size();
+		treeVar_nrSepSlimBJets_ = slimBJets.size();
 
 		if (sampleType != "DATA"){
 			treeVar_fatJetA_p4_jecUncUp_.SetPtEtaPhiE(fatJetA.pt() * (1.0 + fatJetA.jecUncertainty()), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * (1.0 + fatJetA.jecUncertainty()) );
@@ -489,6 +515,16 @@ public:
 				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(1).pt() * (1.0 - slimJets.at(1).jecUncertainty()), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * (1.0 - slimJets.at(1).jecUncertainty()) );
 				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(1).pt() * slimJets.at(1).jerUncUp(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * slimJets.at(1).jerUncUp() );
 				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(1).pt() * slimJets.at(1).jerUncDown(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * slimJets.at(1).jerUncDown() );
+
+				treeVar_jetA_pt_ = slimJets.at(0).pt();
+				treeVar_jetA_pt_ = slimJets.at(0).pt();
+				treeVar_jetA_pt_ = slimJets.at(0).pt();
+				treeVar_jetA_E_ = slimJets.at(0).et() * cosh(slimJets.at(0).eta());
+
+				treeVar_jetB_pt_ = slimJets.at(1).pt();
+				treeVar_jetB_eta_ = slimJets.at(1).eta();
+				treeVar_jetB_phi_ = slimJets.at(1).phi();
+				treeVar_jetB_E_ = slimJets.at(1).et() * cosh(slimJets.at(0).eta());
 			}
 			else if (slimJets.size() == 1){
 				treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
@@ -502,6 +538,16 @@ public:
 				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+
+				treeVar_jetA_pt_ = slimJets.at(0).pt();
+				treeVar_jetA_pt_ = slimJets.at(0).pt();
+				treeVar_jetA_pt_ = slimJets.at(0).pt();
+				treeVar_jetA_E_ = slimJets.at(0).et() * cosh(slimJets.at(0).eta());
+
+				treeVar_jetB_pt_ = -1;
+				treeVar_jetB_eta_ = 0.;
+				treeVar_jetB_phi_ = 0.;
+				treeVar_jetB_E_ = 0.;
 			}
 			else {
 				treeVar_jetA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
@@ -515,6 +561,16 @@ public:
 				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+
+				treeVar_jetA_pt_ = -1;
+				treeVar_jetA_pt_ = 0.;
+				treeVar_jetA_pt_ = 0.;
+				treeVar_jetA_E_ = 0.;
+
+				treeVar_jetB_pt_ = -1;
+				treeVar_jetB_eta_ = 0.;
+				treeVar_jetB_phi_ = 0.;
+				treeVar_jetB_E_ = 0.;
 			}
 
 			// fatJetA SoftDropMass+PUPPI
@@ -631,6 +687,16 @@ public:
 				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
 				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
 				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
+
+				treeVar_jetA_pt_ = slimJets.at(0).pt();
+				treeVar_jetA_eta_ = slimJets.at(0).eta();
+				treeVar_jetA_phi_ = slimJets.at(0).phi();
+				treeVar_jetA_E_ = slimJets.at(0).et() * cosh(slimJets.at(0).eta());
+
+				treeVar_jetB_pt_ = slimJets.at(1).pt();
+				treeVar_jetB_eta_ = slimJets.at(1).eta();
+				treeVar_jetB_phi_ = slimJets.at(1).phi();
+				treeVar_jetB_E_ = slimJets.at(1).et() * cosh(slimJets.at(0).eta());
 			}
 			else if (slimJets.size() == 1){
 				treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
@@ -644,6 +710,16 @@ public:
 				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+
+				treeVar_jetA_pt_ = slimJets.at(0).pt();
+				treeVar_jetA_pt_ = slimJets.at(0).pt();
+				treeVar_jetA_pt_ = slimJets.at(0).pt();
+				treeVar_jetA_E_ = slimJets.at(0).et() * cosh(slimJets.at(0).eta());
+
+				treeVar_jetB_pt_ = -1;
+				treeVar_jetB_eta_ = 0.;
+				treeVar_jetB_phi_ = 0.;
+				treeVar_jetB_E_ = 0.;
 			}
 			else {
 				treeVar_jetA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
@@ -657,6 +733,16 @@ public:
 				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+
+				treeVar_jetA_pt_ = -1;
+				treeVar_jetA_pt_ = 0.;
+				treeVar_jetA_pt_ = 0.;
+				treeVar_jetA_E_ = 0.;
+
+				treeVar_jetB_pt_ = -1;
+				treeVar_jetB_eta_ = 0.;
+				treeVar_jetB_phi_ = 0.;
+				treeVar_jetB_E_ = 0.;
 			}		
 
 			const double fatJetA_softDropMassPuppi_ALL = fatJetA.PUPPIsoftdrop_mass() > 0.0 ? fatJetA.PUPPIsoftdrop_mass() : 0.0;
@@ -964,22 +1050,27 @@ int main(int argc, char** argv){
 
 				std::vector<ran::NtJet> slimJets;
 				std::vector<ran::NtJet> slimBJets;
+				std::vector<ran::NtJet> allSlimJets;
+				std::vector<ran::NtJet> allSlimBJets;
 				for (const ran::NtJet& jet : jetVec) {
 					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
 						continue;
-                                        slimJets.push_back(jet);
+					allSlimJets.push_back(jet);
 					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
-                                                slimBJets.push_back(jet);
+                        allSlimBJets.push_back(jet);
 					if (deltaR2(jet.eta(), jet.phi(), fatJetA.eta(), fatJetA.phi()) < (1.4 * 1.4))
 						continue;
 					else if (deltaR2(jet.eta(), jet.phi(), fatJetB.eta(), fatJetB.phi()) < (1.4 * 1.4))
 						continue;
+					slimJets.push_back(jet);
+					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
+						slimBJets.push_back(jet);
 				}
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, slimBJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, slimBJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
 
 				// Fat Jets ordered by DBT discriminator score
 				// doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, slimJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
