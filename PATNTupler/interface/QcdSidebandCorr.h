@@ -7,7 +7,7 @@
 namespace QcdSidebandCorr{
 
 
-	double GetCorr(const unsigned int& binIndex){
+	double GetCorr16(const unsigned int& binIndex){
 
 		std::vector<double> corrVec;
 
@@ -67,7 +67,7 @@ namespace QcdSidebandCorr{
 		}
 	}
 
-	double GetCorrErr(const unsigned int& binIndex){
+	double GetCorrErr16(const unsigned int& binIndex){
 
 		std::vector<double> corrErrVec;
 
