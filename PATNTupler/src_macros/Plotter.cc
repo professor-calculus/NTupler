@@ -347,7 +347,7 @@ void Plotter::AddLegend(TLegend * legDummy)
 
 void Plotter::AddLegend(const double& x1, const double& x2, const double& y1, const double& y2, const double& textSize)
 {
-	leg = new TLegend();
+	leg = new TLegend(x1, y1, x2, y2);
     leg->SetX1NDC(x1);
     leg->SetX2NDC(x2);
 	leg->SetY1NDC(y1);
@@ -381,7 +381,7 @@ void Plotter::AddLegend(const std::vector<std::string>& legendNames, const doubl
 		std::cout << "Not inserting a legend" << std::endl;
 		return;
 	}
-	leg = new TLegend();
+	leg = new TLegend(x1, y1, x2, y2);
     leg->SetX1NDC(x1);
     leg->SetX2NDC(x2);
 	leg->SetY1NDC(y1);
@@ -403,7 +403,7 @@ void Plotter::AddLegend2Cols(const unsigned int& numRowsBeforeUsing2Cols,  const
 	int numRowsTotal = numRowsBeforeUsing2Cols + numRowsUsing2Cols;
 	double fractionRowsBeforeUsing2Cols = double(numRowsBeforeUsing2Cols) / numRowsTotal;
 
-	leg = new TLegend();
+	leg = new TLegend(x1, y2 - fractionRowsBeforeUsing2Cols * (y2-y1), x2, y2);
     leg->SetX1NDC(x1);
     leg->SetX2NDC(x2);
 	leg->SetY1NDC(y2 - fractionRowsBeforeUsing2Cols * (y2-y1));
@@ -412,7 +412,7 @@ void Plotter::AddLegend2Cols(const unsigned int& numRowsBeforeUsing2Cols,  const
 	leg->SetBorderSize(0);
 	leg->SetFillStyle(0);
 
-	leg2Cols = new TLegend();
+	leg2Cols = new TLegend(x1, y1, x2, y2 - fractionRowsBeforeUsing2Cols * (y2-y1));
 	leg2Cols->SetNColumns(2);
     leg2Cols->SetX1NDC(x1);
     leg2Cols->SetX2NDC(x2);
@@ -447,7 +447,7 @@ void Plotter::AddLegend2Cols(const unsigned int& numRowsBeforeUsing2Cols, const 
 	int numRowsTotal = numRowsBeforeUsing2Cols + numRowsUsing2Cols;
 	double fractionRowsBeforeUsing2Cols = double(numRowsBeforeUsing2Cols) / numRowsTotal;
 
-	leg = new TLegend();
+	leg = new TLegend(x1, y2 - fractionRowsBeforeUsing2Cols * (y2-y1), x2, y2);
     leg->SetX1NDC(x1);
     leg->SetX2NDC(x2);
 	leg->SetY1NDC(y2 - fractionRowsBeforeUsing2Cols * (y2-y1));
@@ -456,7 +456,7 @@ void Plotter::AddLegend2Cols(const unsigned int& numRowsBeforeUsing2Cols, const 
 	leg->SetBorderSize(0);
 	leg->SetFillStyle(0);
 
-	leg2Cols = new TLegend();
+	leg2Cols = new TLegend(x1, y1, x2, y2 - fractionRowsBeforeUsing2Cols * (y2-y1));
 	leg2Cols->SetNColumns(2);
     leg2Cols->SetX1NDC(x1);
     leg2Cols->SetX2NDC(x2);
