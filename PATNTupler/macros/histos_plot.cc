@@ -35,10 +35,12 @@ int main(){
 
 
     // ONE: save info & luminosity
-    const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_04_16/2016_80X/oneDimensionRepresentation/testing_systematicVariation/mH50_mSusy2000/UnD_tag_jmr/"; // where we are going to save the output plots (should include the samples name, and any important features)
-    const double luminosity = 35.867; // 2016 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
-    // const double luminosity = 41.370; // 2017 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
+    const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_04_16/2017_94X/oneDimensionRepresentation/checkQCD/S_tag/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    
+    // const double luminosity = 35.867; // 2016 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
+    const double luminosity = 41.370; // 2017 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
   
+
 
 
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
@@ -86,27 +88,35 @@ int main(){
 
 
 
+
+
     // TWO: make plot aesthetics and saving
-    std::vector<TH1D*> indiHistoVec = {h16_["UnD_tag_mH50_mSusy2000"], h16_["UnD_tag_mH50_mSusy2000_jmrUncUp"], h16_["UnD_tag_mH50_mSusy2000_jmrUncDown"]};
+    
+    std::vector<TH1D*> indiHistoVec = {h16_["S_tag_QCD"], h17_["S_tag_QCD"]};
     // std::vector<TH1D*> stackHistoVec = {h16_["S_control_WJets"], h16_["S_control_ZJets"], h16_["S_control_TTJets"], h16_["S_control_QCD"]};
+
     Plotter plot = Plotter(indiHistoVec);
     // Plotter plot = Plotter({}, stackHistoVec);
     // Plotter plot = Plotter(indiHistoVec, stackHistoVec);
 
-    std::vector<std::string> legendNames = {"mH50_mSusy2000", "with jmrSys Up", "with jmrSys Down"};
-    // std::vector<std::string> legendNames = {"WJets", "ZJets", "TTJets", "QCD"};
+    std::vector<std::string> legendNames = {"QCD16", "QCD17"};
 
-    plot.AddLegend(legendNames, 0.16, 0.38, 0.64, 0.83, 0.028);
+    // plot.AddLegend(legendNames, 0.16, 0.38, 0.64, 0.83, 0.028);
     // plot.AddLegend(legendNames, 0.75, 0.88, 0.64, 0.83, 0.028);
-    // plot.AddLegend(legendNames, 0.67, 0.88, 0.61, 0.80, 0.040); // with ratio box
+    plot.AddLegend(legendNames, 0.67, 0.88, 0.61, 0.80, 0.040); // with ratio box
     // plot.AddLegend2Cols(3, legendNames, 0.70, 0.88, 0.64, 0.83, 0.028);
     
-    plot.AddLatex(luminosity);
+    plot.AddLatex();
+    // plot.AddLatex(luminosity);
+    // plot.AddLatex("#it{Preliminary}");
     // plot.AddLatex(luminosity, "#it{Preliminary}");
+    
+    plot.AddRatioBox("ratio");
     // plot.AddRatioBox("ratio", true);
     // plot.AddRatioBox(0.1, 1.9, "ratio", true);
     // plot.AddRatioBox("true / pred", true);
-    // plot.AddRatioBox(0.1,1.9, "true / pred", true);
+    // plot.AddRatioBox(0.1,2.4, "true / pred", true);
+    
     plot.SetErrors();
     // plot.SetErrors("only_stack");
     // plot.SetErrors("only_indi");
@@ -123,6 +133,7 @@ int main(){
     // plot.SetYValueMin(3.10); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(12.10); // REMEMBER THIS PARAM! (only for log)
     plot.SaveSpec01(Form("%s/%s.pdf", outputDir.c_str(), plotName.c_str()), stringVec);
+
 
 
 
