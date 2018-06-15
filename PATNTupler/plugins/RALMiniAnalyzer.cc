@@ -1044,7 +1044,8 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncer
         ithJet.CHSsoftdrop_mass = iJet.userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSSoftDropMass"); // access to soft drop mass
         ithJet.CHSpruned_mass = iJet.userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSPrunedMass");     // access to pruned mass
       
-        ithJet.PUPPIsoftdrop_mass = iJet.userFloat("ak8PFJetsPuppiSoftDropMass");
+        // ithJet.PUPPIsoftdrop_mass = iJet.userFloat("ak8PFJetsPuppiSoftDropMass");
+        ithJet.PUPPIsoftdrop_mass = iJet.userFloat("ak8PFJetsPuppiSoftDropMass") * getPUPPIweight( iJet.pt() , iJet.eta() );
 
       } // closes 2017 jet masses and nJettiness
 
