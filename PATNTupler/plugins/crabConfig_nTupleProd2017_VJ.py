@@ -52,9 +52,8 @@ config.Data.inputDataset = '/QCD_HT2000toInf_TuneCP5_13TeV-madgraph-pythia8/RunI
 #################################################################################################
 config.Data.inputDBS = 'global' # for centrally produced data
 # config.Data.inputDBS = 'phys03' # for personal simulation
-config.Data.splitting = 'Automatic'
-# config.Data.splitting = 'FileBased'
-# config.Data.unitsPerJob = 3
+config.Data.splitting = 'FileBased'
+config.Data.unitsPerJob = 3
 #################################################################################################
 
 config.Data.totalUnits = -1 # '-1' does them all

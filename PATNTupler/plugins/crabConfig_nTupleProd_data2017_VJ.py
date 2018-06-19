@@ -36,9 +36,8 @@ config.JobType.inputFiles = ['puppiCorr.root']
 config.Data.inputDataset = '/SingleMuon/Run2017F-31Mar2018-v1/MINIAOD'
 
 #################################################################################################
-config.Data.splitting = 'Automatic'
-# config.Data.splitting = 'FileBased'
-# config.Data.unitsPerJob = 5
+config.Data.splitting = 'FileBased'
+config.Data.unitsPerJob = 5
 #################################################################################################
 
 config.Data.inputDBS = 'global' # for centrally produced data

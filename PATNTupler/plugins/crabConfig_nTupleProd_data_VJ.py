@@ -44,9 +44,8 @@ config.Data.inputDataset = '/JetHT/Run2016H-03Feb2017_ver3-v1/MINIAOD'
 # config.Data.inputDataset = '/SingleMuon/Run2016H-03Feb2017_ver3-v1/MINIAOD'
 
 #################################################################################################
-config.Data.splitting = 'Automatic'
-# config.Data.splitting = 'FileBased'
-# config.Data.unitsPerJob = 5
+config.Data.splitting = 'FileBased'
+config.Data.unitsPerJob = 5
 #################################################################################################
 
 config.Data.inputDBS = 'global' # for centrally produced data

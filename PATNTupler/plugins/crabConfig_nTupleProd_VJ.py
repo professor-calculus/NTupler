@@ -56,9 +56,8 @@ config.Data.inputDataset = 'DATASETXYZ' # use the script quickSignalSubmit_crab.
 #################################################################################################
 # config.Data.inputDBS = 'global' # for centrally produced data
 config.Data.inputDBS = 'phys03' # for personal simulation
-config.Data.splitting = 'Automatic'
-# config.Data.splitting = 'FileBased'
-# config.Data.unitsPerJob = 10
+config.Data.splitting = 'FileBased'
+config.Data.unitsPerJob = 10
 #################################################################################################
 
 config.Data.totalUnits = -1 # '-1' does them all
