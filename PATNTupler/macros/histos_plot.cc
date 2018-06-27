@@ -35,7 +35,7 @@ int main(){
 
 
     // ONE: save info & luminosity
-    const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_04_16/2017_94X/oneDimensionRepresentation/checkQCD/S_tag/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_04_16/2017_94X/oneDimensionRepresentation/QCD/tag/predNew_highestTwoHtCalculation/"; // where we are going to save the output plots (should include the samples name, and any important features)
     
     // const double luminosity = 35.867; // 2016 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
     const double luminosity = 41.370; // 2017 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
@@ -79,10 +79,10 @@ int main(){
     // h17_["S_anti_QCD"]->GetYaxis()->SetTitle("F_{i}");
     // TH1D * h17 = new TH1D("h17", "", 30, 0, 30);
     // for (unsigned int i = 1; i < 31; ++i){
-        // h17->SetBinContent(i, QcdSidebandCorr::GetCorr17(i));
-        // h17->SetBinError(i, QcdSidebandCorr::GetCorrErr17(i));
-        // std::cout << Form("%.10f", h17_["S_anti_data"]->GetBinContent(i) ) << std::endl;
-        // std::cout << Form("%.10f", h17_["S_anti_data"]->GetBinError(i) ) << std::endl;
+    //     h17->SetBinContent(i, QcdSidebandCorr::GetCorr17(i));
+    //     h17->SetBinError(i, QcdSidebandCorr::GetCorrErr17(i));
+    //     std::cout << Form("%.10f", h17_["S_anti_data"]->GetBinContent(i) ) << std::endl;
+    //     std::cout << Form("%.10f", h17_["S_anti_data"]->GetBinError(i) ) << std::endl;
     // }
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
 
@@ -92,30 +92,31 @@ int main(){
 
     // TWO: make plot aesthetics and saving
     
-    std::vector<TH1D*> indiHistoVec = {h16_["S_tag_QCD"], h17_["S_tag_QCD"]};
+    std::vector<TH1D*> indiHistoVec = {h17_["S_tag_QCD"], h17_["predNew_tag_QCD"]};
     // std::vector<TH1D*> stackHistoVec = {h16_["S_control_WJets"], h16_["S_control_ZJets"], h16_["S_control_TTJets"], h16_["S_control_QCD"]};
 
     Plotter plot = Plotter(indiHistoVec);
     // Plotter plot = Plotter({}, stackHistoVec);
     // Plotter plot = Plotter(indiHistoVec, stackHistoVec);
 
-    std::vector<std::string> legendNames = {"QCD16", "QCD17"};
+    std::vector<std::string> legendNames = {"tag", "tag prediction"};
 
     // plot.AddLegend(legendNames, 0.16, 0.38, 0.64, 0.83, 0.028);
+    // plot.AddLegend(legendNames, 0.18, 0.38, 0.18, 0.30, 0.040);
     // plot.AddLegend(legendNames, 0.75, 0.88, 0.64, 0.83, 0.028);
     plot.AddLegend(legendNames, 0.67, 0.88, 0.61, 0.80, 0.040); // with ratio box
     // plot.AddLegend2Cols(3, legendNames, 0.70, 0.88, 0.64, 0.83, 0.028);
     
-    plot.AddLatex();
-    // plot.AddLatex(luminosity);
+    // plot.AddLatex();
+    plot.AddLatex(luminosity);
     // plot.AddLatex("#it{Preliminary}");
     // plot.AddLatex(luminosity, "#it{Preliminary}");
     
-    plot.AddRatioBox("ratio");
+    // plot.AddRatioBox("ratio");
     // plot.AddRatioBox("ratio", true);
     // plot.AddRatioBox(0.1, 1.9, "ratio", true);
     // plot.AddRatioBox("true / pred", true);
-    // plot.AddRatioBox(0.1,2.4, "true / pred", true);
+    plot.AddRatioBox(0.1,2.4, "true / pred", true);
     
     plot.SetErrors();
     // plot.SetErrors("only_stack");
@@ -128,7 +129,7 @@ int main(){
     plotName = "log";
     plot.SetLogY();
     plot.SetYValueMin(0.15); // REMEMBER THIS PARAM! (only for log)
-    // plot.SetYValueMin(0.80); // REMEMBER THIS PARAM! (only for log)
+    // plot.SetYValueMin(0.50); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(1.10); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(3.10); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(12.10); // REMEMBER THIS PARAM! (only for log)
@@ -376,31 +377,31 @@ void GetHistograms2017(std::map<std::string,TH1D*>& h_)
         h_[Form("UnD_control_%s", histoToUse.c_str())]->Add(h_[Form("D_control_%s", histoToUse.c_str())]);
    
         // NEW METHOD OF PREDICTION
-        // h_[Form("predNew_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
-        // for (int iBin = 1; iBin < h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
-        //     double corrValue = QcdSidebandCorr::GetCorr17(iBin);
-        //     double corrError = QcdSidebandCorr::GetCorrErr17(iBin);
-        //     double UnDValue = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinContent(iBin);
-        //     double UnDError = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinError(iBin);
-        //     double predValue = corrValue * UnDValue;
-        //     double predError = 0.0;
-        //     if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
-        //     h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
-        //     h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
-        // }
+        h_[Form("predNew_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
+        for (int iBin = 1; iBin < h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
+            double corrValue = QcdSidebandCorr::GetCorr17(iBin);
+            double corrError = QcdSidebandCorr::GetCorrErr17(iBin);
+            double UnDValue = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinContent(iBin);
+            double UnDError = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinError(iBin);
+            double predValue = corrValue * UnDValue;
+            double predError = 0.0;
+            if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
+            h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
+            h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
+        }
 
-        // h_[Form("predNew_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
-        // for (int iBin = 1; iBin < h_[Form("predNew_control_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
-        //     double corrValue = QcdSidebandCorr::GetCorr17(iBin);
-        //     double corrError = QcdSidebandCorr::GetCorrErr17(iBin);
-        //     double UnDValue = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinContent(iBin);
-        //     double UnDError = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinError(iBin);
-        //     double predValue = corrValue * UnDValue;
-        //     double predError = 0.0;
-        //     if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
-        //     h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
-        //     h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
-        // }
+        h_[Form("predNew_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
+        for (int iBin = 1; iBin < h_[Form("predNew_control_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
+            double corrValue = QcdSidebandCorr::GetCorr17(iBin);
+            double corrError = QcdSidebandCorr::GetCorrErr17(iBin);
+            double UnDValue = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinContent(iBin);
+            double UnDError = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinError(iBin);
+            double predValue = corrValue * UnDValue;
+            double predError = 0.0;
+            if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
+            h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
+            h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
+        }
 
         // OLD METHOD OF PREDICTION
         h_[Form("predOld_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
