@@ -1057,7 +1057,7 @@ int main(int argc, char** argv){
 						continue;
 					allSlimJets.push_back(jet);
 					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
-                        allSlimBJets.push_back(jet);
+                                                allSlimBJets.push_back(jet);
 					if (deltaR2(jet.eta(), jet.phi(), fatJetA.eta(), fatJetA.phi()) < (1.4 * 1.4))
 						continue;
 					else if (deltaR2(jet.eta(), jet.phi(), fatJetB.eta(), fatJetB.phi()) < (1.4 * 1.4))

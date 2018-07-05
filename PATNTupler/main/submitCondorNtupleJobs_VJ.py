@@ -20,9 +20,9 @@ import datetime
 
 executable = "nTupAnaNMSSM" # wrt 'main' directory
 code = "mainNMSSM.cc" # wrt 'main' directory
-inputFileListPath = "/opt/ppd/scratch/titterton/CMSSW_8_0_29/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4_wSys/QCD_HT2000toInf.list"
-outputDirectory = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11_CMSSW_8_0_29_dbtV4/mc/QCD_HT2000toInf/" # has to be the full path
-sampleType = "OTHER_MC" # choose from SIGNAL, DATA, TTJETS, OTHER_MC
+inputFileListPath = "/opt/ppd/scratch/titterton/CMSSW_8_0_29/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4_wSys/TTJets.list"
+outputDirectory = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11_CMSSW_8_0_29_dbtV4/mc/TTJets/" # has to be the full path
+sampleType = "TTJETS" # choose from SIGNAL, DATA, TTJETS, OTHER_MC
 filesPerJob = 30
 logDirectoryBase = "/opt/ppd/scratch/titterton/jobLogs/flatTrees/"
 

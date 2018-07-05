@@ -3,7 +3,8 @@
 
 signalSamples = {
 
-'P1_1200sq_1210go_130X2': [0.4969, '/nmssmP1SignalCascadeV01_13TeV2016_1200sq_1210go_130X2/atittert-nmssmP1SignalCascadeV01_13TeV2016_processMc04_ed80X_P1_v1_1200sq_1210go_130X2-26e5865c1eecbd2dc98b59f83d79606f/USER']
+#'P1_1200sq_1210go_130X2': [0.4969, '/nmssmP1SignalCascadeV01_13TeV2016_1200sq_1210go_130X2/atittert-nmssmP1SignalCascadeV01_13TeV2016_processMc04_ed80X_P1_v1_1200sq_1210go_130X2-26e5865c1eecbd2dc98b59f83d79606f/USER']
+'P3_1300sq_1100go_130X2': [0.5267, '/nmssmP3SignalCascadeV01_13TeV2016_1300sq_1100go_130X2/atittert-nmssmP3SignalCascadeV01_13TeV2016_processMc04_ed80X_P3_v1_1300sq_1100go_130X2-26e5865c1eecbd2dc98b59f83d79606f/USER']
 
 }
 
