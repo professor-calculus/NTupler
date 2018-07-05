@@ -392,33 +392,51 @@ public:
 
 		if (sampleType == "SIGNAL"){
 
-			treeVar_weight_dbtTag_ = DoubleBTagSF::getDbtTagScaleFactor_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
-			treeVar_weight_dbtTagUp_ = DoubleBTagSF::getDbtTagScaleFactorUp_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
-			treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
+//			treeVar_weight_dbtTag_ = DoubleBTagSF::getDbtTagScaleFactor_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
+//			treeVar_weight_dbtTagUp_ = DoubleBTagSF::getDbtTagScaleFactorUp_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
+//			treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
 
 			// calculate isr weights
-			if (nISR > 6) nISR = 6;
-			double corr_isr = D_factor * IsrWeights::GetWeight(nISR);
-			treeVar_weight_isr_ = corr_isr;
-			treeVar_weight_isrUp_ = corr_isr + 0.5 * (corr_isr - 1);
-			treeVar_weight_isrDown_ = corr_isr - 0.5 * (corr_isr - 1);
+//			if (nISR > 6) nISR = 6;
+//			double corr_isr = D_factor * IsrWeights::GetWeight(nISR);
+//			treeVar_weight_isr_ = corr_isr;
+//			treeVar_weight_isrUp_ = corr_isr + 0.5 * (corr_isr - 1);
+//			treeVar_weight_isrDown_ = corr_isr - 0.5 * (corr_isr - 1);
+
+                     	treeVar_weight_dbtTag_ = 1.0;
+                        treeVar_weight_dbtTagUp_ = 1.0;
+                        treeVar_weight_dbtTagDown_ = 1.0;
+
+                        treeVar_weight_isr_ = 1.0;
+                        treeVar_weight_isrUp_ = 1.0;
+                        treeVar_weight_isrDown_ = 1.0;
 
 			// combined nominal scale factor weights
-			treeVar_weight_combined_ = treeVar_weight_dbtTag_ * treeVar_weight_isr_;	
+//			treeVar_weight_combined_ = treeVar_weight_dbtTag_ * treeVar_weight_isr_;	
+                        treeVar_weight_combined_ = 1.0;
 		}
 		
 		else if (sampleType == "TTJETS"){
 
-			treeVar_weight_dbtTag_ = DoubleBTagSF::getDbtTagScaleFactor_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
-			treeVar_weight_dbtTagUp_ = DoubleBTagSF::getDbtTagScaleFactorUp_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
-			treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
+//			treeVar_weight_dbtTag_ = DoubleBTagSF::getDbtTagScaleFactor_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
+//			treeVar_weight_dbtTagUp_ = DoubleBTagSF::getDbtTagScaleFactorUp_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
+//			treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags());
 
-			treeVar_weight_isr_ = 1.0;
-			treeVar_weight_isrUp_ = 1.0;
-			treeVar_weight_isrDown_ = 1.0;
+//			treeVar_weight_isr_ = 1.0;
+//			treeVar_weight_isrUp_ = 1.0;
+//			treeVar_weight_isrDown_ = 1.0;
+
+                     	treeVar_weight_dbtTag_ = 1.0;
+                        treeVar_weight_dbtTagUp_ = 1.0;
+                        treeVar_weight_dbtTagDown_ = 1.0;
+
+                        treeVar_weight_isr_ = 1.0;
+                        treeVar_weight_isrUp_ = 1.0;
+                        treeVar_weight_isrDown_ = 1.0;
 			
 			// combined nominal scale factor weights
-			treeVar_weight_combined_ = treeVar_weight_dbtTag_;
+//			treeVar_weight_combined_ = treeVar_weight_dbtTag_;
+                        treeVar_weight_combined_ = 1.0;
 		}
 
 		else{
@@ -1150,8 +1168,8 @@ int main(int argc, char** argv){
 				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
 			}
 			else {
-				const ran::NtFatJet& fatJetA = NtFatJet();
-				const ran::NtFatJet& fatJetB = NtFatJet();
+				const ran::NtFatJet& fatJetA = ran::NtFatJet();
+				const ran::NtFatJet& fatJetB = ran::NtFatJet();
 
 				std::vector<ran::NtJet> slimJets;
 				std::vector<ran::NtJet> slimBJets;
