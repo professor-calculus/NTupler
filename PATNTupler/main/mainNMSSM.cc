@@ -1150,8 +1150,8 @@ int main(int argc, char** argv){
 				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
 			}
 			else {
-				const ran::NtFatJet& fatJetA;
-				const ran::NtFatJet& fatJetB;
+				const ran::NtFatJet& fatJetA = NtFatJet();
+				const ran::NtFatJet& fatJetB = NtFatJet();
 
 				std::vector<ran::NtJet> slimJets;
 				std::vector<ran::NtJet> slimBJets;
