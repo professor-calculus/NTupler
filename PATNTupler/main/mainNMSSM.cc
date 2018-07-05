@@ -1112,8 +1112,8 @@ int main(int argc, char** argv){
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
 
 				// Fat Jets ordered by DBT discriminator score
 				// doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, slimJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
@@ -1146,8 +1146,8 @@ int main(int argc, char** argv){
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
 				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
 			}
 			else {
 				const ran::NtFatJet& fatJetA;
