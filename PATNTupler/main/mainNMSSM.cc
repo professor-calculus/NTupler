@@ -218,6 +218,7 @@ private:
 	UInt_t treeVar_nrSlimBJets_;
 	UInt_t treeVar_nrSepSlimJets_;
 	UInt_t treeVar_nrSepSlimBJets_;
+	UInt_t treeVar_nrFatJets_;
 
 	TLorentzVector* treeVar_jetA_p4Ptr_; TLorentzVector treeVar_jetA_p4_;
 	TLorentzVector* treeVar_jetA_p4Ptr_jecUncUp_; TLorentzVector treeVar_jetA_p4_jecUncUp_;
@@ -357,6 +358,7 @@ public:
 		mainAnaTree_->Branch("nrSlimBJets", &treeVar_nrSlimBJets_, "nrSlimBJets/i");
 		mainAnaTree_->Branch("nrSepSlimJets", &treeVar_nrSepSlimJets_, "nrSepSlimJets/i");
 		mainAnaTree_->Branch("nrSepSlimBJets", &treeVar_nrSepSlimBJets_, "nrSepSlimBJets/i");
+		mainAnaTree_->Branch("nrFatJets", &treeVar_nrFatJets_, "nrFatJets/i");
 
 		mainAnaTree_->Branch("slimJetA_p4", &treeVar_jetA_p4Ptr_);
 		mainAnaTree_->Branch("slimJetA_p4_jecUncUp", &treeVar_jetA_p4Ptr_jecUncUp_);
@@ -383,7 +385,7 @@ public:
 
 	~FatDoubleBJetPairTree(){}
 
-	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp, const float& ht_jecUncDown, const float& ht_jerUncUp, const float& ht_jerUncDown, const float& mht, const float& mht_jecUncUp, const float& mht_jecUncDown, const float& mht_jerUncUp, const float& mht_jerUncDown, const std::vector<ran::NtJet>& slimJets, const std::vector<ran::NtJet>& allSlimJets, const std::vector<ran::NtJet>& slimBJets, const std::vector<ran::NtJet>& allSlimBJets, const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const double& D_factor)
+	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp, const float& ht_jecUncDown, const float& ht_jerUncUp, const float& ht_jerUncDown, const float& mht, const float& mht_jecUncUp, const float& mht_jecUncDown, const float& mht_jerUncUp, const float& mht_jerUncDown, const std::vector<ran::NtJet>& slimJets, const std::vector<ran::NtJet>& allSlimJets, const std::vector<ran::NtJet>& slimBJets, const std::vector<ran::NtJet>& allSlimBJets, unsigned int nrFatJets, const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const double& D_factor)
 	{
 		
 		// DO THE WEIGHTS
@@ -442,38 +444,76 @@ public:
 		treeVar_trgDecision_ = trigDecision;
 		treeVar_nPU_ = nPU;
 		treeVar_nGluino_ = nGluino;
+		treeVar_nrFatJets_ = nrFatJets;
 
-		treeVar_fatJetA_p4_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
-		treeVar_fatJetB_p4_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
+		if (fatJetA == NULL)
+		{
+			treeVar_fatJetA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_fatJetB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
 
-		treeVar_fatJetA_doubleBtagDiscrim_ = fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags();
-		treeVar_fatJetB_doubleBtagDiscrim_ = fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags();
+			treeVar_fatJetA_doubleBtagDiscrim_ = 0;
+			treeVar_fatJetB_doubleBtagDiscrim_ = 0;
 
-		treeVar_fatJetA_mass_ = fatJetA.mass();
-		treeVar_fatJetB_mass_ = fatJetB.mass();
+			treeVar_fatJetA_mass_ = 0;
+			treeVar_fatJetB_mass_ = 0;
 
-		treeVar_fatJetA_eta_ = fatJetA.eta();
-		treeVar_fatJetB_eta_ = fatJetB.eta();
+			treeVar_fatJetA_eta_ = 0;
+			treeVar_fatJetB_eta_ = 0;
 
-		treeVar_fatJetA_phi_ = fatJetA.phi();
-		treeVar_fatJetB_phi_ = fatJetB.phi();
+			treeVar_fatJetA_phi_ = 0;
+			treeVar_fatJetB_phi_ = 0;
 
-		treeVar_fatJetA_prunedMass_ = fatJetA.CHSpruned_mass();
-		treeVar_fatJetB_prunedMass_ = fatJetB.CHSpruned_mass();
+			treeVar_fatJetA_prunedMass_ = 0;
+			treeVar_fatJetB_prunedMass_ = 0;
 
-		treeVar_fatJetA_softDropMassCHS_ = fatJetA.CHSsoftdrop_mass();
-		treeVar_fatJetB_softDropMassCHS_ = fatJetB.CHSsoftdrop_mass();
+			treeVar_fatJetA_softDropMassCHS_ = 0;
+			treeVar_fatJetB_softDropMassCHS_ = 0;
 
-		treeVar_fatJetA_nSubjettinessTau1_ = fatJetA.NjettinessAK8_tau1();
-		treeVar_fatJetA_nSubjettinessTau2_ = fatJetA.NjettinessAK8_tau2();
-		treeVar_fatJetB_nSubjettinessTau1_ = fatJetB.NjettinessAK8_tau1();
-		treeVar_fatJetB_nSubjettinessTau2_ = fatJetB.NjettinessAK8_tau2();
+			treeVar_fatJetA_nSubjettinessTau1_ = 0;
+			treeVar_fatJetA_nSubjettinessTau2_ = 0;
+			treeVar_fatJetB_nSubjettinessTau1_ = 0;
+			treeVar_fatJetB_nSubjettinessTau2_ = 0;
 
-		treeVar_fatJetA_electronEnergyFraction_ = fatJetA.electronEnergyFraction();
-		treeVar_fatJetB_electronEnergyFraction_ = fatJetB.electronEnergyFraction();
+			treeVar_fatJetA_electronEnergyFraction_ = 0;
+			treeVar_fatJetB_electronEnergyFraction_ = 0;
 
-		treeVar_fatJetA_muonEnergyFraction_ = fatJetA.muonEnergyFraction();
-		treeVar_fatJetB_muonEnergyFraction_ = fatJetB.muonEnergyFraction();
+			treeVar_fatJetA_muonEnergyFraction_ = 0;
+			treeVar_fatJetB_muonEnergyFraction_ = 0;
+		}
+		else
+		{
+			treeVar_fatJetA_p4_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
+			treeVar_fatJetB_p4_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
+
+			treeVar_fatJetA_doubleBtagDiscrim_ = fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags();
+			treeVar_fatJetB_doubleBtagDiscrim_ = fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags();
+
+			treeVar_fatJetA_mass_ = fatJetA.mass();
+			treeVar_fatJetB_mass_ = fatJetB.mass();
+
+			treeVar_fatJetA_eta_ = fatJetA.eta();
+			treeVar_fatJetB_eta_ = fatJetB.eta();
+
+			treeVar_fatJetA_phi_ = fatJetA.phi();
+			treeVar_fatJetB_phi_ = fatJetB.phi();
+
+			treeVar_fatJetA_prunedMass_ = fatJetA.CHSpruned_mass();
+			treeVar_fatJetB_prunedMass_ = fatJetB.CHSpruned_mass();
+
+			treeVar_fatJetA_softDropMassCHS_ = fatJetA.CHSsoftdrop_mass();
+			treeVar_fatJetB_softDropMassCHS_ = fatJetB.CHSsoftdrop_mass();
+
+			treeVar_fatJetA_nSubjettinessTau1_ = fatJetA.NjettinessAK8_tau1();
+			treeVar_fatJetA_nSubjettinessTau2_ = fatJetA.NjettinessAK8_tau2();
+			treeVar_fatJetB_nSubjettinessTau1_ = fatJetB.NjettinessAK8_tau1();
+			treeVar_fatJetB_nSubjettinessTau2_ = fatJetB.NjettinessAK8_tau2();
+
+			treeVar_fatJetA_electronEnergyFraction_ = fatJetA.electronEnergyFraction();
+			treeVar_fatJetB_electronEnergyFraction_ = fatJetB.electronEnergyFraction();
+
+			treeVar_fatJetA_muonEnergyFraction_ = fatJetA.muonEnergyFraction();
+			treeVar_fatJetB_muonEnergyFraction_ = fatJetB.muonEnergyFraction();
+		}
 
 		treeVar_ht_ = ht;
 		treeVar_mht_ = mht;
@@ -1040,9 +1080,12 @@ int main(int argc, char** argv){
 			std::vector<ran::NtFatJet> centralFatJetVec; // get the *central* fatJets
 			for (const ran::NtFatJet& fatJet : fatJetVec) {
 				if (fabs(fatJet.eta()) < 2.4) centralFatJetVec.push_back(fatJet);
-			}			
+			}
 
-			if (centralFatJetVec.size() >= 2) {
+			// Number of fat jets
+			unsigned int nFatJets = centralFatJetVec.size();		
+
+			if (nFatJets > 1) {
 			// if (centralFatJetVec.size() >= 2 && ht > 1200.0) { // HACK: INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
 			// if (centralFatJetVec.size() >= 2 && ht > 1499.0) { // HACK: INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
 				const ran::NtFatJet& fatJetA = centralFatJetVec.at(0);
@@ -1075,6 +1118,68 @@ int main(int argc, char** argv){
 				// Fat Jets ordered by DBT discriminator score
 				// doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, slimJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
 			}
+			else if (nFatJets == 1) {
+				const ran::NtFatJet& fatJetA = centralFatJetVec.at(0);
+				const ran::NtFatJet& fatJetB = centralFatJetVec.at(0);
+
+				std::vector<ran::NtJet> slimJets;
+				std::vector<ran::NtJet> slimBJets;
+				std::vector<ran::NtJet> allSlimJets;
+				std::vector<ran::NtJet> allSlimBJets;
+				for (const ran::NtJet& jet : jetVec) {
+					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
+						continue;
+					allSlimJets.push_back(jet);
+					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
+                        allSlimBJets.push_back(jet);
+					if (deltaR2(jet.eta(), jet.phi(), fatJetA.eta(), fatJetA.phi()) < (1.4 * 1.4))
+						continue;
+					slimJets.push_back(jet);
+					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
+						slimBJets.push_back(jet);
+				}
+				// Sort the jets by pt, but the b-jets by b-tag discriminator score
+				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
+				std::sort(allSlimJets.begin(), allSlimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
+				std::sort(slimBJets.begin(), slimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
+				std::sort(allSlimBJets.begin(), allSlimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
+
+				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
+				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+			}
+			else {
+				const ran::NtFatJet& fatJetA = NULL;
+				const ran::NtFatJet& fatJetB = NULL;
+
+				std::vector<ran::NtJet> slimJets;
+				std::vector<ran::NtJet> slimBJets;
+				std::vector<ran::NtJet> allSlimJets;
+				std::vector<ran::NtJet> allSlimBJets;
+				for (const ran::NtJet& jet : jetVec) {
+					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
+						continue;
+					allSlimJets.push_back(jet);
+					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
+                        allSlimBJets.push_back(jet);
+					slimJets.push_back(jet);
+					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
+						slimBJets.push_back(jet);
+				}
+				// Sort the jets by pt, but the b-jets by b-tag discriminator score
+				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
+				std::sort(allSlimJets.begin(), allSlimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
+				std::sort(slimBJets.begin(), slimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
+				std::sort(allSlimBJets.begin(), allSlimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
+
+				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
+				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+			}
+
+
 			// event counter
             if (outputEvery!=0 ? (evtIdx % outputEvery == 0) : false){
 				std::cout << "  File " << fileCount << " of " << numberOfFiles;
