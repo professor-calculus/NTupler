@@ -446,7 +446,7 @@ public:
 		treeVar_nGluino_ = nGluino;
 		treeVar_nrFatJets_ = nrFatJets;
 
-		if (fatJetA == NULL)
+		if (nrFatJets == 0)
 		{
 			treeVar_fatJetA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
 			treeVar_fatJetB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
