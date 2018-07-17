@@ -1143,13 +1143,16 @@ int main(int argc, char** argv){
 			std::vector<ran::NtJet> slimJets;
 			std::vector<ran::NtJet> slimBJets;
 			std::vector<ran::NtJet> allSlimJets;
-			std::vector<ran::NtJet> allSlimBJets;		
+			std::vector<ran::NtJet> allSlimBJets;
+
+			const ran::NtFatJet& fatJetA;
+			const ran::NtFatJet& fatJetB;	
 
 			if (nFatJets > 1) {
 			// if (centralFatJetVec.size() >= 2 && ht > 1200.0) { // HACK: INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
 			// if (centralFatJetVec.size() >= 2 && ht > 1499.0) { // HACK: INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
-				const ran::NtFatJet& fatJetA = centralFatJetVec.at(0);
-				const ran::NtFatJet& fatJetB = centralFatJetVec.at(1);
+				fatJetA = centralFatJetVec.at(0);
+				fatJetB = centralFatJetVec.at(1);
 
 				for (const ran::NtJet& jet : jetVec) {
 					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
@@ -1165,11 +1168,10 @@ int main(int argc, char** argv){
 					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
 						slimBJets.push_back(jet);
 				}
-				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 			}
 			else if (nFatJets == 1) {
-				const ran::NtFatJet& fatJetA = centralFatJetVec.at(0);
-				const ran::NtFatJet& fatJetB = centralFatJetVec.at(0);
+				fatJetA = centralFatJetVec.at(0);
+				fatJetB = centralFatJetVec.at(0);
 
 				for (const ran::NtJet& jet : jetVec) {
 					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
@@ -1183,16 +1185,10 @@ int main(int argc, char** argv){
 					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
 						slimBJets.push_back(jet);
 				}
-				// Sort the jets by pt, but the b-jets by b-tag discriminator score
-				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
-				std::sort(allSlimJets.begin(), allSlimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
-				std::sort(slimBJets.begin(), slimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
-				std::sort(allSlimBJets.begin(), allSlimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
-
 			}
 			else {
-				const ran::NtFatJet& fatJetA = ran::NtFatJet();
-				const ran::NtFatJet& fatJetB = ran::NtFatJet();
+				fatJetA = ran::NtFatJet();
+				fatJetB = ran::NtFatJet();
 
 				for (const ran::NtJet& jet : jetVec) {
 					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
@@ -1204,14 +1200,15 @@ int main(int argc, char** argv){
 					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
 						slimBJets.push_back(jet);
 				}
-				// Sort the jets by pt, but the b-jets by b-tag discriminator score
-				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
-				std::sort(allSlimJets.begin(), allSlimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
-				std::sort(slimBJets.begin(), slimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
-				std::sort(allSlimBJets.begin(), allSlimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
-				std::sort(centralElectrons.begin(), centralElectrons.end(), [](const ran::NtElectron& a, const ran::NtElectron& b) {return b.pt() < a.pt();} );
-				std::sort(centralMuons.begin(), centralMuons.end(), [](const ran::NtMuon& a, const ran::NtMuon& b) {return b.pt() < a.pt();} );
 			}
+
+			// Sort the jets by pt, but the b-jets by b-tag discriminator score
+			std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
+			std::sort(allSlimJets.begin(), allSlimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
+			std::sort(slimBJets.begin(), slimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
+			std::sort(allSlimBJets.begin(), allSlimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
+			std::sort(centralElectrons.begin(), centralElectrons.end(), [](const ran::NtElectron& a, const ran::NtElectron& b) {return b.pt() < a.pt();} );
+			std::sort(centralMuons.begin(), centralMuons.end(), [](const ran::NtMuon& a, const ran::NtMuon& b) {return b.pt() < a.pt();} );
 
 			// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
 			// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
