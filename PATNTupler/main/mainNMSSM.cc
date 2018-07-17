@@ -1145,8 +1145,8 @@ int main(int argc, char** argv){
 			std::vector<ran::NtJet> allSlimJets;
 			std::vector<ran::NtJet> allSlimBJets;
 
-			const ran::NtFatJet& fatJetA;
-			const ran::NtFatJet& fatJetB;	
+			ran::NtFatJet& fatJetA;
+			ran::NtFatJet& fatJetB;	
 
 			if (nFatJets > 1) {
 			// if (centralFatJetVec.size() >= 2 && ht > 1200.0) { // HACK: INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
