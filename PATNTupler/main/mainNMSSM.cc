@@ -580,16 +580,6 @@ public:
 				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(1).pt() * (1.0 - slimJets.at(1).jecUncertainty()), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * (1.0 - slimJets.at(1).jecUncertainty()) );
 				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(1).pt() * slimJets.at(1).jerUncUp(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * slimJets.at(1).jerUncUp() );
 				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(1).pt() * slimJets.at(1).jerUncDown(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * slimJets.at(1).jerUncDown() );
-
-				treeVar_jetA_pt_ = slimJets.at(0).pt();
-				treeVar_jetA_pt_ = slimJets.at(0).pt();
-				treeVar_jetA_pt_ = slimJets.at(0).pt();
-				treeVar_jetA_E_ = slimJets.at(0).et() * cosh(slimJets.at(0).eta());
-
-				treeVar_jetB_pt_ = slimJets.at(1).pt();
-				treeVar_jetB_eta_ = slimJets.at(1).eta();
-				treeVar_jetB_phi_ = slimJets.at(1).phi();
-				treeVar_jetB_E_ = slimJets.at(1).et() * cosh(slimJets.at(0).eta());
 			}
 			else if (slimJets.size() == 1){
 				treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
@@ -603,16 +593,6 @@ public:
 				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
-
-				treeVar_jetA_pt_ = slimJets.at(0).pt();
-				treeVar_jetA_pt_ = slimJets.at(0).pt();
-				treeVar_jetA_pt_ = slimJets.at(0).pt();
-				treeVar_jetA_E_ = slimJets.at(0).et() * cosh(slimJets.at(0).eta());
-
-				treeVar_jetB_pt_ = -1;
-				treeVar_jetB_eta_ = 0.;
-				treeVar_jetB_phi_ = 0.;
-				treeVar_jetB_E_ = 0.;
 			}
 			else {
 				treeVar_jetA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
@@ -626,16 +606,6 @@ public:
 				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
-
-				treeVar_jetA_pt_ = -1;
-				treeVar_jetA_pt_ = 0.;
-				treeVar_jetA_pt_ = 0.;
-				treeVar_jetA_E_ = 0.;
-
-				treeVar_jetB_pt_ = -1;
-				treeVar_jetB_eta_ = 0.;
-				treeVar_jetB_phi_ = 0.;
-				treeVar_jetB_E_ = 0.;
 			}
 
 			// Electrons
