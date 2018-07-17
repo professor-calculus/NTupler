@@ -1130,10 +1130,10 @@ int main(int argc, char** argv){
 			std::vector<ran::NtMuon> centralMuons;
 
 			for (const ran::NtElectron& electron : electronVec) {
-				if (fabs(electron.eta()) < 2.5) centralElectrons.push_back(electron)
+				if (fabs(electron.eta()) < 2.5) centralElectrons.push_back(electron);
 			}
 			for (const ran::NtMuon& muon : muonVec) {
-				if (fabs(muon.eta()) < 2.5) centralMuons.push_back(muon)
+				if (fabs(muon.eta()) < 2.5) centralMuons.push_back(muon);
 			}
 
 
