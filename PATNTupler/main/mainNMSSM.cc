@@ -1210,8 +1210,8 @@ int main(int argc, char** argv){
 
 			}
 			else {
-				const ran::NtFatJet& fatJetA = ran::NtFatJet(const ran::FatJetStruct& aJet);
-				const ran::NtFatJet& fatJetB = ran::NtFatJet(const ran::FatJetStruct& aJet);
+				const ran::NtFatJet& fatJetA = ran::NtFatJet();
+				const ran::NtFatJet& fatJetB = ran::NtFatJet();
 
 				for (const ran::NtJet& jet : jetVec) {
 					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
