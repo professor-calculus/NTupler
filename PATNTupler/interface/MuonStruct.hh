@@ -10,10 +10,11 @@ namespace ran{
 
   struct MuonStruct: public TObject{
     MuonStruct(); ///< default constructor
-    virtual ~MuonStruct(){} ///<virtual distructor
+    virtual ~MuonStruct(){} ///<virtual destructor
     float pt ; ///< pt
     float eta ; ///< eta 
     float phi;///< phi
+    float et;///< et
     ROOT::Math::XYZTVector p4 ; ///<
     int charge ; ///<
     bool isGlobalMuon ; ///<
