@@ -235,29 +235,11 @@ private:
 
 	// Electrons
 	TLorentzVector* treeVar_electronA_p4Ptr_; TLorentzVector treeVar_electronA_p4_;
-	TLorentzVector* treeVar_electronA_p4Ptr_jecUncUp_; TLorentzVector treeVar_electronA_p4_jecUncUp_;
-	TLorentzVector* treeVar_electronA_p4Ptr_jecUncDown_; TLorentzVector treeVar_electronA_p4_jecUncDown_;
-	TLorentzVector* treeVar_electronA_p4Ptr_jerUncUp_; TLorentzVector treeVar_electronA_p4_jerUncUp_;
-	TLorentzVector* treeVar_electronA_p4Ptr_jerUncDown_; TLorentzVector treeVar_electronA_p4_jerUncDown_;
-
 	TLorentzVector* treeVar_electronB_p4Ptr_; TLorentzVector treeVar_electronB_p4_;
-	TLorentzVector* treeVar_electronB_p4Ptr_jecUncUp_; TLorentzVector treeVar_electronB_p4_jecUncUp_;
-	TLorentzVector* treeVar_electronB_p4Ptr_jecUncDown_; TLorentzVector treeVar_electronB_p4_jecUncDown_;
-	TLorentzVector* treeVar_electronB_p4Ptr_jerUncUp_; TLorentzVector treeVar_electronB_p4_jerUncUp_;
-	TLorentzVector* treeVar_electron_p4Ptr_jerUncDown_; TLorentzVector treeVar_electronB_p4_jerUncDown_;
 
 	// Muons
 	TLorentzVector* treeVar_muonA_p4Ptr_; TLorentzVector treeVar_muonA_p4_;
-	TLorentzVector* treeVar_muonA_p4Ptr_jecUncUp_; TLorentzVector treeVar_muonA_p4_jecUncUp_;
-	TLorentzVector* treeVar_muonA_p4Ptr_jecUncDown_; TLorentzVector treeVar_muonA_p4_jecUncDown_;
-	TLorentzVector* treeVar_muonA_p4Ptr_jerUncUp_; TLorentzVector treeVar_muonA_p4_jerUncUp_;
-	TLorentzVector* treeVar_muonA_p4Ptr_jerUncDown_; TLorentzVector treeVar_muonA_p4_jerUncDown_;
-
 	TLorentzVector* treeVar_muonB_p4Ptr_; TLorentzVector treeVar_muonB_p4_;
-	TLorentzVector* treeVar_muonB_p4Ptr_jecUncUp_; TLorentzVector treeVar_muonB_p4_jecUncUp_;
-	TLorentzVector* treeVar_muonB_p4Ptr_jecUncDown_; TLorentzVector treeVar_muonB_p4_jecUncDown_;
-	TLorentzVector* treeVar_muonB_p4Ptr_jerUncUp_; TLorentzVector treeVar_muonB_p4_jerUncUp_;
-	TLorentzVector* treeVar_muonB_p4Ptr_jerUncDown_; TLorentzVector treeVar_muonB_p4_jerUncDown_;
 
 public:
 	FatDoubleBJetPairTree(const std::string& treeName, const std::string& fileName) :
@@ -392,29 +374,11 @@ public:
 
 		// Electrons
 		mainAnaTree_->Branch("electronA_p4", &treeVar_electronA_p4Ptr_);
-		mainAnaTree_->Branch("electronA_p4_jecUncUp", &treeVar_electronA_p4Ptr_jecUncUp_);
-		mainAnaTree_->Branch("electronA_p4_jecUncDown", &treeVar_electronA_p4Ptr_jecUncDown_);
-		mainAnaTree_->Branch("electronA_p4_jerUncUp", &treeVar_electronA_p4Ptr_jerUncUp_);
-		mainAnaTree_->Branch("electronA_p4_jerUncDown", &treeVar_electronA_p4Ptr_jerUncDown_);
-
 		mainAnaTree_->Branch("electronB_p4", &treeVar_electronB_p4Ptr_);
-		mainAnaTree_->Branch("electronB_p4_jecUncUp", &treeVar_electronB_p4Ptr_jecUncUp_);
-		mainAnaTree_->Branch("electronB_p4_jecUncDown", &treeVar_electronB_p4Ptr_jecUncDown_);
-		mainAnaTree_->Branch("electronB_p4_jerUncUp", &treeVar_electronB_p4Ptr_jerUncUp_);
-		mainAnaTree_->Branch("electronB_p4_jerUncDown", &treeVar_electronB_p4Ptr_jerUncDown_);
 
 		// Muons
 		mainAnaTree_->Branch("muonA_p4", &treeVar_muonA_p4Ptr_);
-		mainAnaTree_->Branch("muonA_p4_jecUncUp", &treeVar_muonA_p4Ptr_jecUncUp_);
-		mainAnaTree_->Branch("muonA_p4_jecUncDown", &treeVar_muonA_p4Ptr_jecUncDown_);
-		mainAnaTree_->Branch("muonA_p4_jerUncUp", &treeVar_muonA_p4Ptr_jerUncUp_);
-		mainAnaTree_->Branch("muonA_p4_jerUncDown", &treeVar_muonA_p4Ptr_jerUncDown_);
-
 		mainAnaTree_->Branch("muonB_p4", &treeVar_muonB_p4Ptr_);
-		mainAnaTree_->Branch("muonB_p4_jecUncUp", &treeVar_muonB_p4Ptr_jecUncUp_);
-		mainAnaTree_->Branch("muonB_p4_jecUncDown", &treeVar_muonB_p4Ptr_jecUncDown_);
-		mainAnaTree_->Branch("muonB_p4_jerUncUp", &treeVar_muonB_p4Ptr_jerUncUp_);
-		mainAnaTree_->Branch("muonB_p4_jerUncDown", &treeVar_muonB_p4Ptr_jerUncDown_);
 	}
 
 	~FatDoubleBJetPairTree(){}
