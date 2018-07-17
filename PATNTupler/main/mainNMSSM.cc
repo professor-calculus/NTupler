@@ -272,7 +272,7 @@ public:
 		treeVar_electronA_p4Ptr_( &treeVar_electronA_p4_ ),
 		treeVar_electronB_p4Ptr_( &treeVar_electronB_p4_ ),
 		treeVar_muonA_p4Ptr_( &treeVar_muonA_p4_ ),
-		treeVar_muonB_p4Ptr_( &treeVar_muonB_p4_ ),
+		treeVar_muonB_p4Ptr_( &treeVar_muonB_p4_ )
 	{
 		mainAnaTree_->Branch("weight_combined",     &treeVar_weight_combined_,     "weight_combined/D");
 		
