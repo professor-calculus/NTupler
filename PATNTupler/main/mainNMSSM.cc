@@ -1145,8 +1145,8 @@ int main(int argc, char** argv){
 			std::vector<ran::NtJet> allSlimJets;
 			std::vector<ran::NtJet> allSlimBJets;
 
-			ran::NtFatJet& fatJetA;
-			ran::NtFatJet& fatJetB;	
+			ran::NtFatJet& fatJetA = ran::NtFatJet();
+			ran::NtFatJet& fatJetB = ran::NtFatJet();
 
 			if (nFatJets > 1) {
 			// if (centralFatJetVec.size() >= 2 && ht > 1200.0) { // HACK: INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
@@ -1187,8 +1187,8 @@ int main(int argc, char** argv){
 				}
 			}
 			else {
-				fatJetA = ran::NtFatJet();
-				fatJetB = ran::NtFatJet();
+				//fatJetA = ran::NtFatJet();
+				//fatJetB = ran::NtFatJet();
 
 				for (const ran::NtJet& jet : jetVec) {
 					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
