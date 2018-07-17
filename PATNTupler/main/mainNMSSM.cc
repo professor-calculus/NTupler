@@ -220,16 +220,12 @@ private:
 	UInt_t treeVar_nrSepSlimBJets_;
 	UInt_t treeVar_nrFatJets_;
 
+	// Slim jets
 	TLorentzVector* treeVar_jetA_p4Ptr_; TLorentzVector treeVar_jetA_p4_;
 	TLorentzVector* treeVar_jetA_p4Ptr_jecUncUp_; TLorentzVector treeVar_jetA_p4_jecUncUp_;
 	TLorentzVector* treeVar_jetA_p4Ptr_jecUncDown_; TLorentzVector treeVar_jetA_p4_jecUncDown_;
 	TLorentzVector* treeVar_jetA_p4Ptr_jerUncUp_; TLorentzVector treeVar_jetA_p4_jerUncUp_;
 	TLorentzVector* treeVar_jetA_p4Ptr_jerUncDown_; TLorentzVector treeVar_jetA_p4_jerUncDown_;
-
-	Double_t treeVar_jetA_pt_;
-	Double_t treeVar_jetA_eta_;
-	Double_t treeVar_jetA_phi_;
-	Double_t treeVar_jetA_E_;
 
 	TLorentzVector* treeVar_jetB_p4Ptr_; TLorentzVector treeVar_jetB_p4_;
 	TLorentzVector* treeVar_jetB_p4Ptr_jecUncUp_; TLorentzVector treeVar_jetB_p4_jecUncUp_;
@@ -237,11 +233,31 @@ private:
 	TLorentzVector* treeVar_jetB_p4Ptr_jerUncUp_; TLorentzVector treeVar_jetB_p4_jerUncUp_;
 	TLorentzVector* treeVar_jetB_p4Ptr_jerUncDown_; TLorentzVector treeVar_jetB_p4_jerUncDown_;
 
-	Double_t treeVar_jetB_pt_;
-	Double_t treeVar_jetB_eta_;
-	Double_t treeVar_jetB_phi_;
-	Double_t treeVar_jetB_E_;
+	// Electrons
+	TLorentzVector* treeVar_electronA_p4Ptr_; TLorentzVector treeVar_electronA_p4_;
+	TLorentzVector* treeVar_electronA_p4Ptr_jecUncUp_; TLorentzVector treeVar_electronA_p4_jecUncUp_;
+	TLorentzVector* treeVar_electronA_p4Ptr_jecUncDown_; TLorentzVector treeVar_electronA_p4_jecUncDown_;
+	TLorentzVector* treeVar_electronA_p4Ptr_jerUncUp_; TLorentzVector treeVar_electronA_p4_jerUncUp_;
+	TLorentzVector* treeVar_electronA_p4Ptr_jerUncDown_; TLorentzVector treeVar_electronA_p4_jerUncDown_;
 
+	TLorentzVector* treeVar_electronB_p4Ptr_; TLorentzVector treeVar_electronB_p4_;
+	TLorentzVector* treeVar_electronB_p4Ptr_jecUncUp_; TLorentzVector treeVar_electronB_p4_jecUncUp_;
+	TLorentzVector* treeVar_electronB_p4Ptr_jecUncDown_; TLorentzVector treeVar_electronB_p4_jecUncDown_;
+	TLorentzVector* treeVar_electronB_p4Ptr_jerUncUp_; TLorentzVector treeVar_electronB_p4_jerUncUp_;
+	TLorentzVector* treeVar_electron_p4Ptr_jerUncDown_; TLorentzVector treeVar_electronB_p4_jerUncDown_;
+
+	// Muons
+	TLorentzVector* treeVar_muonA_p4Ptr_; TLorentzVector treeVar_muonA_p4_;
+	TLorentzVector* treeVar_muonA_p4Ptr_jecUncUp_; TLorentzVector treeVar_muonA_p4_jecUncUp_;
+	TLorentzVector* treeVar_muonA_p4Ptr_jecUncDown_; TLorentzVector treeVar_muonA_p4_jecUncDown_;
+	TLorentzVector* treeVar_muonA_p4Ptr_jerUncUp_; TLorentzVector treeVar_muonA_p4_jerUncUp_;
+	TLorentzVector* treeVar_muonA_p4Ptr_jerUncDown_; TLorentzVector treeVar_muonA_p4_jerUncDown_;
+
+	TLorentzVector* treeVar_muonB_p4Ptr_; TLorentzVector treeVar_muonB_p4_;
+	TLorentzVector* treeVar_muonB_p4Ptr_jecUncUp_; TLorentzVector treeVar_muonB_p4_jecUncUp_;
+	TLorentzVector* treeVar_muonB_p4Ptr_jecUncDown_; TLorentzVector treeVar_muonB_p4_jecUncDown_;
+	TLorentzVector* treeVar_muonB_p4Ptr_jerUncUp_; TLorentzVector treeVar_muonB_p4_jerUncUp_;
+	TLorentzVector* treeVar_muonB_p4Ptr_jerUncDown_; TLorentzVector treeVar_muonB_p4_jerUncDown_;
 
 public:
 	FatDoubleBJetPairTree(const std::string& treeName, const std::string& fileName) :
@@ -342,6 +358,7 @@ public:
 		mainAnaTree_->Branch("fatJetB_nSubjettinessTau1", &treeVar_fatJetB_nSubjettinessTau1_, "fatJetB_nSubjettinessTau1/F");
 		mainAnaTree_->Branch("fatJetB_nSubjettinessTau2", &treeVar_fatJetB_nSubjettinessTau2_, "fatJetB_nSubjettinessTau2/F");
 
+		// Sums
 		mainAnaTree_->Branch("ht", &treeVar_ht_, "ht/F");
 		mainAnaTree_->Branch("ht_jecUncUp", &treeVar_ht_jecUncUp_, "ht_jecUncUp/F");
 		mainAnaTree_->Branch("ht_jecUncDown", &treeVar_ht_jecUncDown_, "ht_jecUncDown/F");
@@ -360,6 +377,7 @@ public:
 		mainAnaTree_->Branch("nrSepSlimBJets", &treeVar_nrSepSlimBJets_, "nrSepSlimBJets/i");
 		mainAnaTree_->Branch("nrFatJets", &treeVar_nrFatJets_, "nrFatJets/i");
 
+		// Slim jets
 		mainAnaTree_->Branch("slimJetA_p4", &treeVar_jetA_p4Ptr_);
 		mainAnaTree_->Branch("slimJetA_p4_jecUncUp", &treeVar_jetA_p4Ptr_jecUncUp_);
 		mainAnaTree_->Branch("slimJetA_p4_jecUncDown", &treeVar_jetA_p4Ptr_jecUncDown_);
@@ -372,20 +390,42 @@ public:
 		mainAnaTree_->Branch("slimJetB_p4_jerUncUp", &treeVar_jetB_p4Ptr_jerUncUp_);
 		mainAnaTree_->Branch("slimJetB_p4_jerUncDown", &treeVar_jetB_p4Ptr_jerUncDown_);
 
-		mainAnaTree_->Branch("slimJetA_pt", &treeVar_jetA_pt_, "slimJetA_pt/D");
-		mainAnaTree_->Branch("slimJetA_eta", &treeVar_jetA_eta_, "slimJetA_eta/D");
-		mainAnaTree_->Branch("slimJetA_phi", &treeVar_jetA_phi_, "slimJetA_phi/D");
-		mainAnaTree_->Branch("slimJetA_E", &treeVar_jetA_E_, "slimJetA_E/D");
+		// Electrons
+		mainAnaTree_->Branch("electronA_p4", &treeVar_electronA_p4Ptr_);
+		mainAnaTree_->Branch("electronA_p4_jecUncUp", &treeVar_electronA_p4Ptr_jecUncUp_);
+		mainAnaTree_->Branch("electronA_p4_jecUncDown", &treeVar_electronA_p4Ptr_jecUncDown_);
+		mainAnaTree_->Branch("electronA_p4_jerUncUp", &treeVar_electronA_p4Ptr_jerUncUp_);
+		mainAnaTree_->Branch("electronA_p4_jerUncDown", &treeVar_electronA_p4Ptr_jerUncDown_);
 
-		mainAnaTree_->Branch("slimJetA_pt", &treeVar_jetA_pt_, "slimJetB_pt/D");
-		mainAnaTree_->Branch("slimJetA_eta", &treeVar_jetA_eta_, "slimJetB_eta/D");
-		mainAnaTree_->Branch("slimJetA_phi", &treeVar_jetA_phi_, "slimJetB_phi/D");
-		mainAnaTree_->Branch("slimJetB_E", &treeVar_jetB_E_, "slimJetB_E/D");
+		mainAnaTree_->Branch("electronB_p4", &treeVar_electronB_p4Ptr_);
+		mainAnaTree_->Branch("electronB_p4_jecUncUp", &treeVar_electronB_p4Ptr_jecUncUp_);
+		mainAnaTree_->Branch("electronB_p4_jecUncDown", &treeVar_electronB_p4Ptr_jecUncDown_);
+		mainAnaTree_->Branch("electronB_p4_jerUncUp", &treeVar_electronB_p4Ptr_jerUncUp_);
+		mainAnaTree_->Branch("electronB_p4_jerUncDown", &treeVar_electronB_p4Ptr_jerUncDown_);
+
+		// Muons
+		mainAnaTree_->Branch("muonA_p4", &treeVar_muonA_p4Ptr_);
+		mainAnaTree_->Branch("muonA_p4_jecUncUp", &treeVar_muonA_p4Ptr_jecUncUp_);
+		mainAnaTree_->Branch("muonA_p4_jecUncDown", &treeVar_muonA_p4Ptr_jecUncDown_);
+		mainAnaTree_->Branch("muonA_p4_jerUncUp", &treeVar_muonA_p4Ptr_jerUncUp_);
+		mainAnaTree_->Branch("muonA_p4_jerUncDown", &treeVar_muonA_p4Ptr_jerUncDown_);
+
+		mainAnaTree_->Branch("muonB_p4", &treeVar_muonB_p4Ptr_);
+		mainAnaTree_->Branch("muonB_p4_jecUncUp", &treeVar_muonB_p4Ptr_jecUncUp_);
+		mainAnaTree_->Branch("muonB_p4_jecUncDown", &treeVar_muonB_p4Ptr_jecUncDown_);
+		mainAnaTree_->Branch("muonB_p4_jerUncUp", &treeVar_muonB_p4Ptr_jerUncUp_);
+		mainAnaTree_->Branch("muonB_p4_jerUncDown", &treeVar_muonB_p4Ptr_jerUncDown_);
 	}
 
 	~FatDoubleBJetPairTree(){}
 
-	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, ran::NtFatJet& fatJetA, ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp, const float& ht_jecUncDown, const float& ht_jerUncUp, const float& ht_jerUncDown, const float& mht, const float& mht_jecUncUp, const float& mht_jecUncDown, const float& mht_jerUncUp, const float& mht_jerUncDown, const std::vector<ran::NtJet>& slimJets, const std::vector<ran::NtJet>& allSlimJets, const std::vector<ran::NtJet>& slimBJets, const std::vector<ran::NtJet>& allSlimBJets, unsigned int nrFatJets, const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const double& D_factor)
+	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, ran::NtFatJet& fatJetA, ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp,
+					const float& ht_jecUncDown, const float& ht_jerUncUp, const float& ht_jerUncDown, const float& mht, const float& mht_jecUncUp, const float& mht_jecUncDown,
+					const float& mht_jerUncUp, const float& mht_jerUncDown, const float& mht_phi, const float& mht_phi_jecUncUp, const float& mht_phi_jecUncDown,
+					const float& mht_phi_jerUncUp, const float& mht_phi_jerUncDown, const std::vector<ran::NtJet>& slimJets, const std::vector<ran::NtJet>& allSlimJets,
+					const std::vector<ran::NtJet>& slimBJets, const std::vector<ran::NtJet>& allSlimBJets, unsigned int nrFatJets,
+					const std::vector<ran::NtElectron>& centralElectrons, const std::vector<ran::NtMuon>& centralMuons,
+					const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const double& D_factor)
 	{
 		
 		// DO THE WEIGHTS
@@ -634,6 +674,34 @@ public:
 				treeVar_jetB_E_ = 0.;
 			}
 
+			// Electrons
+			if (centralElectrons.size() > 1){
+				treeVar_electronA_p4_.SetPtEtaPhiE(centralElectrons.at(0).pt(), centralElectrons.at(0).eta(), centralElectrons.at(0).phi(), centralElectrons.at(0).et() * cosh(centralElectrons.at(0).eta()) );
+				treeVar_electronB_p4_.SetPtEtaPhiE(centralElectrons.at(1).pt(), centralElectrons.at(1).eta(), centralElectrons.at(1).phi(), centralElectrons.at(1).et() * cosh(centralElectrons.at(1).eta()) );
+			}
+			else if (centralElectrons.size() == 1){
+				treeVar_electronA_p4_.SetPtEtaPhiE(centralElectrons.at(0).pt(), centralElectrons.at(0).eta(), centralElectrons.at(0).phi(), centralElectrons.at(0).et() * cosh(centralElectrons.at(0).eta()) );
+				treeVar_electronB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+			}
+			else {
+				treeVar_electronA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_electronB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+			}
+
+			// Muons
+			if (centralMuons.size() > 1){
+				treeVar_muonA_p4_.SetPtEtaPhiE(centralMuons.at(0).pt(), centralMuons.at(0).eta(), centralMuons.at(0).phi(), centralMuons.at(0).et() * cosh(centralMuons.at(0).eta()) );
+				treeVar_muonB_p4_.SetPtEtaPhiE(centralMuons.at(1).pt(), centralMuons.at(1).eta(), centralMuons.at(1).phi(), centralMuons.at(1).et() * cosh(centralMuons.at(1).eta()) );
+			}
+			else if (centralMuons.size() == 1){
+				treeVar_muonA_p4_.SetPtEtaPhiE(centralMuons.at(0).pt(), centralMuons.at(0).eta(), centralMuons.at(0).phi(), centralMuons.at(0).et() * cosh(centralMuons.at(0).eta()) );
+				treeVar_muonB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+			}
+			else {
+				treeVar_muonA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_muonB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+			}
+
 			// fatJetA SoftDropMass+PUPPI
 			if (nrFatJets > 0)
 			{
@@ -754,16 +822,6 @@ public:
 				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
 				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
 				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
-
-				treeVar_jetA_pt_ = slimJets.at(0).pt();
-				treeVar_jetA_eta_ = slimJets.at(0).eta();
-				treeVar_jetA_phi_ = slimJets.at(0).phi();
-				treeVar_jetA_E_ = slimJets.at(0).et() * cosh(slimJets.at(0).eta());
-
-				treeVar_jetB_pt_ = slimJets.at(1).pt();
-				treeVar_jetB_eta_ = slimJets.at(1).eta();
-				treeVar_jetB_phi_ = slimJets.at(1).phi();
-				treeVar_jetB_E_ = slimJets.at(1).et() * cosh(slimJets.at(0).eta());
 			}
 			else if (slimJets.size() == 1){
 				treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
@@ -777,16 +835,6 @@ public:
 				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
-
-				treeVar_jetA_pt_ = slimJets.at(0).pt();
-				treeVar_jetA_pt_ = slimJets.at(0).pt();
-				treeVar_jetA_pt_ = slimJets.at(0).pt();
-				treeVar_jetA_E_ = slimJets.at(0).et() * cosh(slimJets.at(0).eta());
-
-				treeVar_jetB_pt_ = -1;
-				treeVar_jetB_eta_ = 0.;
-				treeVar_jetB_phi_ = 0.;
-				treeVar_jetB_E_ = 0.;
 			}
 			else {
 				treeVar_jetA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
@@ -800,17 +848,35 @@ public:
 				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+			}
 
-				treeVar_jetA_pt_ = -1;
-				treeVar_jetA_pt_ = 0.;
-				treeVar_jetA_pt_ = 0.;
-				treeVar_jetA_E_ = 0.;
+			// Electrons
+			if (centralElectrons.size() > 1){
+				treeVar_electronA_p4_.SetPtEtaPhiE(centralElectrons.at(0).pt(), centralElectrons.at(0).eta(), centralElectrons.at(0).phi(), centralElectrons.at(0).et() * cosh(centralElectrons.at(0).eta()) );
+				treeVar_electronB_p4_.SetPtEtaPhiE(centralElectrons.at(1).pt(), centralElectrons.at(1).eta(), centralElectrons.at(1).phi(), centralElectrons.at(1).et() * cosh(centralElectrons.at(1).eta()) );
+			}
+			else if (centralElectrons.size() == 1){
+				treeVar_electronA_p4_.SetPtEtaPhiE(centralElectrons.at(0).pt(), centralElectrons.at(0).eta(), centralElectrons.at(0).phi(), centralElectrons.at(0).et() * cosh(centralElectrons.at(0).eta()) );
+				treeVar_electronB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+			}
+			else {
+				treeVar_electronA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_electronB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+			}
 
-				treeVar_jetB_pt_ = -1;
-				treeVar_jetB_eta_ = 0.;
-				treeVar_jetB_phi_ = 0.;
-				treeVar_jetB_E_ = 0.;
-			}		
+			// Muons
+			if (centralMuons.size() > 1){
+				treeVar_muonA_p4_.SetPtEtaPhiE(centralMuons.at(0).pt(), centralMuons.at(0).eta(), centralMuons.at(0).phi(), centralMuons.at(0).et() * cosh(centralMuons.at(0).eta()) );
+				treeVar_muonB_p4_.SetPtEtaPhiE(centralMuons.at(1).pt(), centralMuons.at(1).eta(), centralMuons.at(1).phi(), centralMuons.at(1).et() * cosh(centralMuons.at(1).eta()) );
+			}
+			else if (centralMuons.size() == 1){
+				treeVar_muonA_p4_.SetPtEtaPhiE(centralMuons.at(0).pt(), centralMuons.at(0).eta(), centralMuons.at(0).phi(), centralMuons.at(0).et() * cosh(centralMuons.at(0).eta()) );
+				treeVar_muonB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+			}
+			else {
+				treeVar_muonA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_muonB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+			}	
 
 			if (nrFatJets > 0)
 			{
@@ -976,12 +1042,12 @@ int main(int argc, char** argv){
 			// std::cout << "ERROR setting up reader for event info branch (status = " << evtInfo.GetSetupStatus() << ")" << std::endl;
 			// return 1;
 		// }
-		// TTreeReaderValue<std::vector<ran::ElectronStruct>> eleBranchValue(treeReader, "electronCollection");
+		TTreeReaderValue<std::vector<ran::ElectronStruct>> eleBranchValue(treeReader, "electronCollection");
 		// if (eleBranchValue.GetSetupStatus() < 0) {
 			// std::cout << "ERROR setting up reader for electronCollection branch (status = " << eleBranchValue.GetSetupStatus() << ")" << std::endl;
 			// return 1;
 		// }
-		// TTreeReaderValue<std::vector<ran::MuonStruct>> muonBranchValue(treeReader, "muonCollection");
+		TTreeReaderValue<std::vector<ran::MuonStruct>> muonBranchValue(treeReader, "muonCollection");
 		// if (muonBranchValue.GetSetupStatus() < 0) {
 			// std::cout << "ERROR setting up reader for muonCollection branch (status = " << muonBranchValue.GetSetupStatus() << ")" << std::endl; 
 			// return 1;
@@ -1024,8 +1090,8 @@ int main(int argc, char** argv){
 		// Loop over the events
 		while (treeReader.Next()) {
 
-			// const std::vector<ran::NtElectron> electronVec(eleBranchValue->begin(), eleBranchValue->end());
-			// const std::vector<ran::NtMuon> muonVec(muonBranchValue->begin(), muonBranchValue->end());
+			const std::vector<ran::NtElectron> electronVec(eleBranchValue->begin(), eleBranchValue->end());
+			const std::vector<ran::NtMuon> muonVec(muonBranchValue->begin(), muonBranchValue->end());
 			const std::vector<ran::NtJet> jetVec(jetBranchValue->begin(), jetBranchValue->end());
 			std::vector<ran::NtFatJet> fatJetVec(fatJetBranchValue->begin(), fatJetBranchValue->end());
 			// std::sort(fatJetVec.begin(), fatJetVec.end(), [](const ran::NtFatJet& a, const ran::NtFatJet& b) {return b.pt() < a.pt();} );
@@ -1081,6 +1147,12 @@ int main(int argc, char** argv){
 			double mht_jerUncUp = 0.0;
 			double mht_jerUncDown = 0.0;
 
+			double mht_phi = 0.0;
+			double mht_phi_jecUncUp = 0.0;
+			double mht_phi_jecUncDown = 0.0;
+			double mht_phi_jerUncUp = 0.0;
+			double mht_phi_jerUncDown = 0.0;
+
 			for (const ran::NtJet& jet : jetVec) {
 
 				if ( fabs(jet.eta()) <= 3.0 ){
@@ -1100,11 +1172,17 @@ int main(int argc, char** argv){
 			}
 
 			mht = TMath::Sqrt(mht_y*mht_y + mht_x*mht_x);
-			std::cout << mht << std::endl;
+			//std::cout << mht << std::endl;
 			mht_jecUncUp = TMath::Sqrt(mht_jecUncUp_y*mht_jecUncUp_y + mht_jecUncUp_x*mht_jecUncUp_x);
 			mht_jecUncDown = TMath::Sqrt(mht_jecUncDown_y*mht_jecUncDown_y + mht_jecUncDown_x*mht_jecUncDown_x);
 			mht_jerUncUp = TMath::Sqrt(mht_jerUncUp_y*mht_jerUncUp_y + mht_jerUncUp_x*mht_jerUncUp_x);
 			mht_jerUncDown = TMath::Sqrt(mht_jerUncDown_y*mht_jerUncDown_y + mht_jerUncDown_x*mht_jerUncDown_x);
+
+			mht_phi = TMath::Atan2(mht_y, mht_x);
+			mht_phi_jecUncUp = TMath::Atan2(mht_jecUncUp_y, mht_jecUncUp_x);
+			mht_phi_jecUncDown = TMath::Atan2(mht_jecUncDown_y, mht_jecUncDown_x);
+			mht_phi_jerUncUp = TMath::Atan2(mht_jerUncUp_y, mht_jerUncUp_x);
+			mht_phi_jerUncDown = TMath::Atan2(mht_jerUncDown_y, mht_jerUncDown_x);
 
 
 			std::vector<ran::NtFatJet> centralFatJetVec; // get the *central* fatJets
@@ -1112,8 +1190,26 @@ int main(int argc, char** argv){
 				if (fabs(fatJet.eta()) < 2.4) centralFatJetVec.push_back(fatJet);
 			}
 
+
+			// Do the leptons
+			std::vector<ran::NtElectron> centralElectrons;
+			std::vector<ran::NtMuon> centralMuons;
+
+			for (const ran::NtElectron& electron : electronVec) {
+				if (fabs(electron.eta()) < 2.5) centralElectrons.push_back(electron)
+			}
+			for (const ran::NtMuon& muon : muonVec) {
+				if (fabs(muon.eta()) < 2.5) centralMuons.push_back(muon)
+			}
+
+
 			// Number of fat jets
-			unsigned int nFatJets = centralFatJetVec.size();		
+			unsigned int nFatJets = centralFatJetVec.size();
+
+			std::vector<ran::NtJet> slimJets;
+			std::vector<ran::NtJet> slimBJets;
+			std::vector<ran::NtJet> allSlimJets;
+			std::vector<ran::NtJet> allSlimBJets;		
 
 			if (nFatJets > 1) {
 			// if (centralFatJetVec.size() >= 2 && ht > 1200.0) { // HACK: INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
@@ -1121,10 +1217,6 @@ int main(int argc, char** argv){
 				const ran::NtFatJet& fatJetA = centralFatJetVec.at(0);
 				const ran::NtFatJet& fatJetB = centralFatJetVec.at(1);
 
-				std::vector<ran::NtJet> slimJets;
-				std::vector<ran::NtJet> slimBJets;
-				std::vector<ran::NtJet> allSlimJets;
-				std::vector<ran::NtJet> allSlimBJets;
 				for (const ran::NtJet& jet : jetVec) {
 					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
 						continue;
@@ -1140,22 +1232,11 @@ int main(int argc, char** argv){
 						slimBJets.push_back(jet);
 				}
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
-
-				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
-
-				// Fat Jets ordered by DBT discriminator score
-				// doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, slimJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
 			}
 			else if (nFatJets == 1) {
 				const ran::NtFatJet& fatJetA = centralFatJetVec.at(0);
 				const ran::NtFatJet& fatJetB = centralFatJetVec.at(0);
 
-				std::vector<ran::NtJet> slimJets;
-				std::vector<ran::NtJet> slimBJets;
-				std::vector<ran::NtJet> allSlimJets;
-				std::vector<ran::NtJet> allSlimBJets;
 				for (const ran::NtJet& jet : jetVec) {
 					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
 						continue;
@@ -1174,19 +1255,11 @@ int main(int argc, char** argv){
 				std::sort(slimBJets.begin(), slimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
 				std::sort(allSlimBJets.begin(), allSlimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
 
-				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
-				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
 			}
 			else {
 				const ran::NtFatJet& fatJetA = ran::NtFatJet();
 				const ran::NtFatJet& fatJetB = ran::NtFatJet();
 
-				std::vector<ran::NtJet> slimJets;
-				std::vector<ran::NtJet> slimBJets;
-				std::vector<ran::NtJet> allSlimJets;
-				std::vector<ran::NtJet> allSlimBJets;
 				for (const ran::NtJet& jet : jetVec) {
 					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
 						continue;
@@ -1202,12 +1275,14 @@ int main(int argc, char** argv){
 				std::sort(allSlimJets.begin(), allSlimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 				std::sort(slimBJets.begin(), slimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
 				std::sort(allSlimBJets.begin(), allSlimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
-
-				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
-				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+				std::sort(centralElectrons.begin(), centralElectrons.end(), [](const ran::NtElectron& a, const ran::NtElectron& b) {return b.pt() < a.pt();} );
+				std::sort(centralMuons.begin(), centralMuons.end(), [](const ran::NtMuon& a, const ran::NtMuon& b) {return b.pt() < a.pt();} );
 			}
+
+			// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
+			// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
+			if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, centralMuons, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+			else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, centralMuons, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
 
 
 			// event counter
