@@ -1145,14 +1145,14 @@ int main(int argc, char** argv){
 			std::vector<ran::NtJet> allSlimJets;
 			std::vector<ran::NtJet> allSlimBJets;
 
-			ran::NtFatJet& fatJetA = ran::NtFatJet();
-			ran::NtFatJet& fatJetB = ran::NtFatJet();
+			const ran::NtFatJet& fatJetA;
+			const ran::NtFatJet& fatJetB;	
 
 			if (nFatJets > 1) {
 			// if (centralFatJetVec.size() >= 2 && ht > 1200.0) { // HACK: INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
 			// if (centralFatJetVec.size() >= 2 && ht > 1499.0) { // HACK: INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
-				fatJetA = centralFatJetVec.at(0);
-				fatJetB = centralFatJetVec.at(1);
+				const ran::NtFatJet& fatJetA = centralFatJetVec.at(0);
+				const ran::NtFatJet& fatJetB = centralFatJetVec.at(1);
 
 				for (const ran::NtJet& jet : jetVec) {
 					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
@@ -1170,8 +1170,8 @@ int main(int argc, char** argv){
 				}
 			}
 			else if (nFatJets == 1) {
-				fatJetA = centralFatJetVec.at(0);
-				fatJetB = centralFatJetVec.at(0);
+				const ran::NtFatJet& fatJetA = centralFatJetVec.at(0);
+				const ran::NtFatJet& fatJetB = centralFatJetVec.at(0);
 
 				for (const ran::NtJet& jet : jetVec) {
 					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
@@ -1187,8 +1187,8 @@ int main(int argc, char** argv){
 				}
 			}
 			else {
-				//fatJetA = ran::NtFatJet();
-				//fatJetB = ran::NtFatJet();
+				const ran::NtFatJet& fatJetA = ran::NtFatJet(const ran::FatJetStruct& aJet);
+				const ran::NtFatJet& fatJetB = ran::NtFatJet(const ran::FatJetStruct& aJet);
 
 				for (const ran::NtJet& jet : jetVec) {
 					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
