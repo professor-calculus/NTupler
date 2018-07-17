@@ -383,7 +383,7 @@ public:
 
 	~FatDoubleBJetPairTree(){}
 
-	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, ran::NtFatJet& fatJetA, ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp,
+	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp,
 					const float& ht_jecUncDown, const float& ht_jerUncUp, const float& ht_jerUncDown, const float& mht, const float& mht_jecUncUp, const float& mht_jecUncDown,
 					const float& mht_jerUncUp, const float& mht_jerUncDown, const float& mht_phi, const float& mht_phi_jecUncUp, const float& mht_phi_jecUncDown,
 					const float& mht_phi_jerUncUp, const float& mht_phi_jerUncDown, const std::vector<ran::NtJet>& slimJets, const std::vector<ran::NtJet>& allSlimJets,
