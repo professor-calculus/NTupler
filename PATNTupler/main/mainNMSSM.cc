@@ -1112,11 +1112,11 @@ int main(int argc, char** argv){
 			mht_jerUncUp = TMath::Sqrt(mht_jerUncUp_y*mht_jerUncUp_y + mht_jerUncUp_x*mht_jerUncUp_x);
 			mht_jerUncDown = TMath::Sqrt(mht_jerUncDown_y*mht_jerUncDown_y + mht_jerUncDown_x*mht_jerUncDown_x);
 
-			mht_phi = TMath::Atan2(mht_y, mht_x);
-			mht_phi_jecUncUp = TMath::Atan2(mht_jecUncUp_y, mht_jecUncUp_x);
-			mht_phi_jecUncDown = TMath::Atan2(mht_jecUncDown_y, mht_jecUncDown_x);
-			mht_phi_jerUncUp = TMath::Atan2(mht_jerUncUp_y, mht_jerUncUp_x);
-			mht_phi_jerUncDown = TMath::Atan2(mht_jerUncDown_y, mht_jerUncDown_x);
+			mht_phi = TMath::ATan2(mht_y, mht_x);
+			mht_phi_jecUncUp = TMath::ATan2(mht_jecUncUp_y, mht_jecUncUp_x);
+			mht_phi_jecUncDown = TMath::ATan2(mht_jecUncDown_y, mht_jecUncDown_x);
+			mht_phi_jerUncUp = TMath::ATan2(mht_jerUncUp_y, mht_jerUncUp_x);
+			mht_phi_jerUncDown = TMath::ATan2(mht_jerUncDown_y, mht_jerUncDown_x);
 
 
 			std::vector<ran::NtFatJet> centralFatJetVec; // get the *central* fatJets
