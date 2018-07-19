@@ -14,7 +14,6 @@ namespace ran{
     float pt ; ///< pt
     float eta ; ///< eta 
     float phi;///< phi
-    float et;///< et
     ROOT::Math::XYZTVector p4 ; ///<
     int charge ; ///<
     bool isGlobalMuon ; ///<

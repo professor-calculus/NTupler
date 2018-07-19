@@ -396,7 +396,9 @@ public:
 					const std::vector<ran::NtElectron>& centralElectrons, const std::vector<ran::NtMuon>& centralMuons,
 					const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const double& D_factor)
 	{
-		
+		// Hack: Muon mass for TLorentzVector...
+		double muonMass = 0.105658;
+
 		// DO THE WEIGHTS
 
 		if (sampleType == "SIGNAL"){
@@ -629,16 +631,16 @@ public:
 
 			// Muons
 			if (centralMuons.size() > 1){
-				treeVar_muonA_p4_.SetPtEtaPhiE(centralMuons.at(0).pt(), centralMuons.at(0).eta(), centralMuons.at(0).phi(), centralMuons.at(0).et() * cosh(centralMuons.at(0).eta()) );
-				treeVar_muonB_p4_.SetPtEtaPhiE(centralMuons.at(1).pt(), centralMuons.at(1).eta(), centralMuons.at(1).phi(), centralMuons.at(1).et() * cosh(centralMuons.at(1).eta()) );
+				treeVar_muonA_p4_.SetPtEtaPhiM(centralMuons.at(0).pt(), centralMuons.at(0).eta(), centralMuons.at(0).phi(), muonMass );
+				treeVar_muonB_p4_.SetPtEtaPhiM(centralMuons.at(1).pt(), centralMuons.at(1).eta(), centralMuons.at(1).phi(), muonMass );
 			}
 			else if (centralMuons.size() == 1){
-				treeVar_muonA_p4_.SetPtEtaPhiE(centralMuons.at(0).pt(), centralMuons.at(0).eta(), centralMuons.at(0).phi(), centralMuons.at(0).et() * cosh(centralMuons.at(0).eta()) );
-				treeVar_muonB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_muonA_p4_.SetPtEtaPhiM(centralMuons.at(0).pt(), centralMuons.at(0).eta(), centralMuons.at(0).phi(), muonMass );
+				treeVar_muonB_p4_.SetPtEtaPhiM(0, 0, 0, muonMass);
 			}
 			else {
-				treeVar_muonA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_muonB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_muonA_p4_.SetPtEtaPhiM(0, 0, 0, muonMass);
+				treeVar_muonB_p4_.SetPtEtaPhiM(0, 0, 0, muonMass);
 			}
 
 			// fatJetA SoftDropMass+PUPPI
@@ -805,16 +807,16 @@ public:
 
 			// Muons
 			if (centralMuons.size() > 1){
-				treeVar_muonA_p4_.SetPtEtaPhiE(centralMuons.at(0).pt(), centralMuons.at(0).eta(), centralMuons.at(0).phi(), centralMuons.at(0).et() * cosh(centralMuons.at(0).eta()) );
-				treeVar_muonB_p4_.SetPtEtaPhiE(centralMuons.at(1).pt(), centralMuons.at(1).eta(), centralMuons.at(1).phi(), centralMuons.at(1).et() * cosh(centralMuons.at(1).eta()) );
+				treeVar_muonA_p4_.SetPtEtaPhiM(centralMuons.at(0).pt(), centralMuons.at(0).eta(), centralMuons.at(0).phi(), muonMass );
+				treeVar_muonB_p4_.SetPtEtaPhiM(centralMuons.at(1).pt(), centralMuons.at(1).eta(), centralMuons.at(1).phi(), muonMass );
 			}
 			else if (centralMuons.size() == 1){
-				treeVar_muonA_p4_.SetPtEtaPhiE(centralMuons.at(0).pt(), centralMuons.at(0).eta(), centralMuons.at(0).phi(), centralMuons.at(0).et() * cosh(centralMuons.at(0).eta()) );
-				treeVar_muonB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_muonA_p4_.SetPtEtaPhiM(centralMuons.at(0).pt(), centralMuons.at(0).eta(), centralMuons.at(0).phi(), muonMass );
+				treeVar_muonB_p4_.SetPtEtaPhiM(0, 0, 0, muonMass);
 			}
 			else {
-				treeVar_muonA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_muonB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_muonA_p4_.SetPtEtaPhiM(0, 0, 0, muonMass);
+				treeVar_muonB_p4_.SetPtEtaPhiM(0, 0, 0, muonMass);
 			}	
 
 			if (nrFatJets > 0)
