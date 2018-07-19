@@ -364,6 +364,12 @@ public:
 		mainAnaTree_->Branch("mht_jerUncUp", &treeVar_mht_jerUncUp_, "mht_jerUncUp/F");
 		mainAnaTree_->Branch("mht_jerUncDown", &treeVar_mht_jerUncDown_, "mht_jerUncDown/F");
 
+		mainAnaTree_->Branch("mht_phi", &treeVar_mht_phi_, "mht/F");
+		mainAnaTree_->Branch("mht_phi_jecUncUp", &treeVar_mht_phi_jecUncUp_, "mht_jecUncUp/F");
+		mainAnaTree_->Branch("mht_phi_jecUncDown", &treeVar_mht_phi_jecUncDown_, "mht_jecUncDown/F");
+		mainAnaTree_->Branch("mht_phi_jerUncUp", &treeVar_mht_phi_jerUncUp_, "mht_jerUncUp/F");
+		mainAnaTree_->Branch("mht_phi_jerUncDown", &treeVar_mht_phi_jerUncDown_, "mht_jerUncDown/F");
+
 		mainAnaTree_->Branch("nrSlimJets", &treeVar_nrSlimJets_, "nrSlimJets/i");
 		mainAnaTree_->Branch("nrSlimBJets", &treeVar_nrSlimBJets_, "nrSlimBJets/i");
 		mainAnaTree_->Branch("nrSepSlimJets", &treeVar_nrSepSlimJets_, "nrSepSlimJets/i");
