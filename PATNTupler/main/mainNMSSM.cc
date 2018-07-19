@@ -214,6 +214,12 @@ private:
 	Float_t treeVar_mht_jerUncUp_;
 	Float_t treeVar_mht_jerUncDown_;
 
+	Float_t treeVar_mht_phi_;
+	Float_t treeVar_mht_phi_jecUncUp_;
+	Float_t treeVar_mht_phi_jecUncDown_;
+	Float_t treeVar_mht_phi_jerUncUp_;
+	Float_t treeVar_mht_phi_jerUncDown_;
+
 	UInt_t treeVar_nrSlimJets_;
 	UInt_t treeVar_nrSlimBJets_;
 	UInt_t treeVar_nrSepSlimJets_;
@@ -546,6 +552,7 @@ public:
 
 		treeVar_ht_ = ht;
 		treeVar_mht_ = mht;
+		treeVar_mht_phi_ = mht_phi;
 		treeVar_nrSlimJets_ = allSlimJets.size();
 		treeVar_nrSlimBJets_ = allSlimBJets.size();
 		treeVar_nrSepSlimJets_ = slimJets.size();
@@ -574,6 +581,11 @@ public:
 			treeVar_mht_jecUncDown_ = mht_jecUncDown;
 			treeVar_mht_jerUncUp_ = mht_jerUncUp;
 			treeVar_mht_jerUncDown_ = mht_jerUncDown;
+
+			treeVar_mht_phi_jecUncUp_ = mht_phi_jecUncUp;
+			treeVar_mht_phi_jecUncDown_ = mht_phi_jecUncDown;
+			treeVar_mht_phi_jerUncUp_ = mht_phi_jerUncUp;
+			treeVar_mht_phi_jerUncDown_ = mht_phi_jerUncDown;
 
 			if (slimJets.size() > 1){
 				treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
@@ -750,6 +762,11 @@ public:
 			treeVar_mht_jecUncDown_ = mht;
 			treeVar_mht_jerUncUp_ = mht;
 			treeVar_mht_jerUncDown_ = mht;
+
+			treeVar_mht_phi_jecUncUp_ = mht_phi;
+			treeVar_mht_phi_jecUncDown_ = mht_phi;
+			treeVar_mht_phi_jerUncUp_ = mht_phi;
+			treeVar_mht_phi_jerUncDown_ = mht_phi;
 
 			if (slimJets.size() > 1){
 				treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
