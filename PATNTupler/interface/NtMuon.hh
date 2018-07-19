@@ -10,7 +10,6 @@ namespace ran{
     NtMuon() : muon(0){} ///< Default constructor
     NtMuon(const ran::MuonStruct& aMuon) : muon(&aMuon){} ///< Constructor
     float pt() const {return muon->pt;} ///<Particle pt
-    float et() const {return muon->et;} ///<Particle et
     float eta() const {return muon->eta;}///<Particle eta
     float phi() const {return muon->phi;}///<Particle phi
     ROOT::Math::XYZTVector p4() const {return muon->p4;}
