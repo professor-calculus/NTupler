@@ -225,6 +225,7 @@ private:
 	UInt_t treeVar_nrSepSlimJets_;
 	UInt_t treeVar_nrSepSlimBJets_;
 	UInt_t treeVar_nrFatJets_;
+	UInt_t treeVar_nrMuons_;
 
 	// Slim jets
 	TLorentzVector* treeVar_jetA_p4Ptr_; TLorentzVector treeVar_jetA_p4_;
@@ -375,6 +376,7 @@ public:
 		mainAnaTree_->Branch("nrSepSlimJets", &treeVar_nrSepSlimJets_, "nrSepSlimJets/i");
 		mainAnaTree_->Branch("nrSepSlimBJets", &treeVar_nrSepSlimBJets_, "nrSepSlimBJets/i");
 		mainAnaTree_->Branch("nrFatJets", &treeVar_nrFatJets_, "nrFatJets/i");
+		mainAnaTree_->Branch("nrMuons", &treeVar_nrMuons_, "nrMuons/i");
 
 		// Slim jets
 		mainAnaTree_->Branch("slimJetA_p4", &treeVar_jetA_p4Ptr_);
@@ -405,7 +407,7 @@ public:
 					const float& mht_jerUncUp, const float& mht_jerUncDown, const float& mht_phi, const float& mht_phi_jecUncUp, const float& mht_phi_jecUncDown,
 					const float& mht_phi_jerUncUp, const float& mht_phi_jerUncDown, const std::vector<ran::NtJet>& slimJets, const std::vector<ran::NtJet>& allSlimJets,
 					const std::vector<ran::NtJet>& slimBJets, const std::vector<ran::NtJet>& allSlimBJets, unsigned int nrFatJets,
-					const std::vector<ran::NtElectron>& centralElectrons, const std::vector<ran::NtMuon>& centralMuons,
+					const std::vector<ran::NtElectron>& centralElectrons, const std::vector<ran::NtMuon>& centralMuons, unsigned int nrMuons,
 					const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const double& D_factor)
 	{
 		// Hack: Muon mass for TLorentzVector...
@@ -486,6 +488,7 @@ public:
 		treeVar_nPU_ = nPU;
 		treeVar_nGluino_ = nGluino;
 		treeVar_nrFatJets_ = nrFatJets;
+		treeVar_nrMuons_ = nrMuons;
 
 		if (nrFatJets == 0)
 		{
@@ -1163,12 +1166,15 @@ int main(int argc, char** argv){
 				if (fabs(electron.eta()) < 2.5) centralElectrons.push_back(electron);
 			}
 			for (const ran::NtMuon& muon : muonVec) {
-				if (fabs(muon.eta()) < 2.5) centralMuons.push_back(muon);
+				if (fabs(muon.eta()) < 2.5 && muon.pt() > 10.) centralMuons.push_back(muon);
 			}
 
 
 			// Number of fat jets
 			unsigned int nFatJets = centralFatJetVec.size();
+
+			// Number of muons
+			unsigned int nMuons = centralMuons.size();
 
 			std::vector<ran::NtJet> slimJets;
 			std::vector<ran::NtJet> slimBJets;
@@ -1205,8 +1211,8 @@ int main(int argc, char** argv){
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
 				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, centralMuons, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, centralMuons, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, centralMuons, nMuons, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, centralMuons, nMuons, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
 
 			}
 			else if (nFatJets == 1) {
