@@ -53,6 +53,11 @@ config.JobType.inputFiles = ['puppiCorr.root']
 # SIGNAL SAMPLES: 200K events, 100 files = ~2K events per unit (use ten units per job)
 config.Data.inputDataset = 'DATASETXYZ' # use the script quickSignalSubmit_crab.py to deploy
 
+# CENTRAL PRODUCTION SIGNAL: (use one unit per job)
+# config.Data.inputDataset = '/NMSSMCascade_mH-70_mSUSY-1200_TuneCUEP8M1_13TeV-madgraph-pythia8/RunIISummer16MiniAODv2-80X_mcRun2_asymptotic_2016_TrancheIV_v6-v2/MINIAODSIM'
+# config.Data.inputDataset = '/NMSSMCascade_mH-70_mSUSY-2000_TuneCUEP8M1_13TeV-madgraph-pythia8/RunIISummer16MiniAODv2-80X_mcRun2_asymptotic_2016_TrancheIV_v6-v2/MINIAODSIM'
+# config.Data.inputDataset = '/NMSSMCascade_mH-70_mSUSY-2600_TuneCUEP8M1_13TeV-madgraph-pythia8/RunIISummer16MiniAODv2-80X_mcRun2_asymptotic_2016_TrancheIV_v6-v2/MINIAODSIM'
+
 #################################################################################################
 # config.Data.inputDBS = 'global' # for centrally produced data
 config.Data.inputDBS = 'phys03' # for personal simulation

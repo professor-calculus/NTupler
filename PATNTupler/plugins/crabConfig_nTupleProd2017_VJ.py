@@ -49,6 +49,11 @@ config.Data.inputDataset = '/QCD_HT2000toInf_TuneCP5_13TeV-madgraph-pythia8/RunI
 # SIGNAL SAMPLES: 200K events & 150 files (use 30 units per job)
 # config.Data.inputDataset = 'DATASETXYZ' # use the script quickSignalSubmit_crab.py to deploy
 
+# CENTRAL PRODUCTION SIGNAL: (use one unit per job)
+# config.Data.inputDataset = '/NMSSMCascade_mH-70_mSUSY-1200_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM'
+# config.Data.inputDataset = '/NMSSMCascade_mH-70_mSUSY-2000_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM'
+# config.Data.inputDataset = '/NMSSMCascade_mH-70_mSUSY-2600_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM'
+
 #################################################################################################
 config.Data.inputDBS = 'global' # for centrally produced data
 # config.Data.inputDBS = 'phys03' # for personal simulation
