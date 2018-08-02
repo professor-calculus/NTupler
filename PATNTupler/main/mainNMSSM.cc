@@ -158,6 +158,7 @@ private:
 
 	Bool_t treeVar_trgDecision_;
 	UInt_t treeVar_nPU_;
+	Double_t treeVar_nTrueInt_;
 	UInt_t treeVar_nGluino_;
 
 	TLorentzVector* treeVar_fatJetA_p4Ptr_; TLorentzVector treeVar_fatJetA_p4_;
@@ -266,6 +267,7 @@ public:
 
 		mainAnaTree_->Branch("trgDecision", &treeVar_trgDecision_, "trgDecision/O");
 		mainAnaTree_->Branch("nPU", &treeVar_nPU_, "nPU/i");
+		mainAnaTree_->Branch("nTrueInt", &treeVar_nTrueInt_, "nTrueInt/D");
 		mainAnaTree_->Branch("nGluino", &treeVar_nGluino_, "nGluino/i");
 
 		mainAnaTree_->Branch("fatJetA_p4", &treeVar_fatJetA_p4Ptr_);
@@ -341,7 +343,7 @@ public:
 
 	~FatDoubleBJetPairTree(){}
 
-	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp, const float& ht_jecUncDown, const float& ht_jerUncUp, const float& ht_jerUncDown, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const double& D_factor, const unsigned int& yearOfRun, const double& muon_maxPt, const double& muon_sumPt)
+	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp, const float& ht_jecUncDown, const float& ht_jerUncUp, const float& ht_jerUncDown, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision, const int& nPU, const float& nTrueInt, int nISR, const int& nGluino, const double& D_factor, const unsigned int& yearOfRun, const double& muon_maxPt, const double& muon_sumPt)
 	{
 		
 		// DO THE WEIGHTS
@@ -399,6 +401,7 @@ public:
 
 		treeVar_trgDecision_ = trigDecision;
 		treeVar_nPU_ = nPU;
+		treeVar_nTrueInt_ = nTrueInt;
 		treeVar_nGluino_ = nGluino;
 
 		treeVar_fatJetA_p4_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
@@ -823,6 +826,7 @@ int main(int argc, char** argv){
 		TTreeReaderValue<std::vector<unsigned int>> recordedTriggerValue(treeReader, "recordedTriggers");
 
 		TTreeReaderValue<int> nPU_tree(treeReader, "nPU");
+		TTreeReaderValue<float> nTrueInt_tree(treeReader, "nTrueInt");
 		TTreeReaderValue<int> nISR_tree(treeReader, "nISR");
 		TTreeReaderValue<int> nGluino_tree(treeReader, "nGluino"); // HACK: need to comment out this line if working on DATA or QCD (the ntuples are missing nGluino info)
 
@@ -864,10 +868,12 @@ int main(int argc, char** argv){
 			}
 
 			const int nPU = *nPU_tree;
-			// if (nPU < 28) continue; // if you only want to use a sample of particular PU
+			const float nTrueInt = *nTrueInt_tree;
 			const int nISR = *nISR_tree;
 			// const int nGluino = 0; // HACK: use this option if working on DATA or QCD (the ntuples are missing nGluino info)
 			const int nGluino = *nGluino_tree;
+			
+			// if (nPU < 28) continue; // if you only want to use a sample of particular PU
 
 			// Muon Information
 			double muon_maxPt = 0.0;
@@ -919,11 +925,11 @@ int main(int argc, char** argv){
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, slimJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, slimJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt);
 
 				// Fat Jets ordered by DBT discriminator score
-				// doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, slimJets, doesEventPassTrigger, nPU, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt);
+				// doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt);
 			}
 			// event counter
             if (outputEvery!=0 ? (evtIdx % outputEvery == 0) : false){
