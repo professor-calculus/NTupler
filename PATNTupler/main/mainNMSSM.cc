@@ -873,7 +873,8 @@ int main(int argc, char** argv){
 			// const int nGluino = 0; // HACK: use this option if working on DATA or QCD (the ntuples are missing nGluino info)
 			const int nGluino = *nGluino_tree;
 			
-			// if (nPU < 28) continue; // if you only want to use a sample of particular PU
+			if (sampleType != "DATA" && yearOfRun == 2017 && nPU < 2) continue; // to veto the zeroPU events in 94X simulation
+			// if (nPU < 28) continue; // HACK: if you only want to use a sample of particular PU
 
 			// Muon Information
 			double muon_maxPt = 0.0;
