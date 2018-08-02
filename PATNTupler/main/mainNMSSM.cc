@@ -162,16 +162,16 @@ private:
 	UInt_t treeVar_nGluino_;
 
 	TLorentzVector* treeVar_fatJetA_p4Ptr_; TLorentzVector treeVar_fatJetA_p4_;
-	TLorentzVector* treeVar_fatJetA_p4Ptr_jecUncUp_; TLorentzVector treeVar_fatJetA_p4_jecUncUp_;
-	TLorentzVector* treeVar_fatJetA_p4Ptr_jecUncDown_; TLorentzVector treeVar_fatJetA_p4_jecUncDown_;
-	TLorentzVector* treeVar_fatJetA_p4Ptr_jerUncUp_; TLorentzVector treeVar_fatJetA_p4_jerUncUp_;
-	TLorentzVector* treeVar_fatJetA_p4Ptr_jerUncDown_; TLorentzVector treeVar_fatJetA_p4_jerUncDown_;
+	TLorentzVector* treeVar_fatJetA_p4Ptr_jecAK8UncUp_; TLorentzVector treeVar_fatJetA_p4_jecAK8UncUp_;
+	TLorentzVector* treeVar_fatJetA_p4Ptr_jecAK8UncDown_; TLorentzVector treeVar_fatJetA_p4_jecAK8UncDown_;
+	TLorentzVector* treeVar_fatJetA_p4Ptr_jerAK8UncUp_; TLorentzVector treeVar_fatJetA_p4_jerAK8UncUp_;
+	TLorentzVector* treeVar_fatJetA_p4Ptr_jerAK8UncDown_; TLorentzVector treeVar_fatJetA_p4_jerAK8UncDown_;
 
 	TLorentzVector* treeVar_fatJetB_p4Ptr_; TLorentzVector treeVar_fatJetB_p4_;
-	TLorentzVector* treeVar_fatJetB_p4Ptr_jecUncUp_; TLorentzVector treeVar_fatJetB_p4_jecUncUp_;
-	TLorentzVector* treeVar_fatJetB_p4Ptr_jecUncDown_; TLorentzVector treeVar_fatJetB_p4_jecUncDown_;
-	TLorentzVector* treeVar_fatJetB_p4Ptr_jerUncUp_; TLorentzVector treeVar_fatJetB_p4_jerUncUp_;
-	TLorentzVector* treeVar_fatJetB_p4Ptr_jerUncDown_; TLorentzVector treeVar_fatJetB_p4_jerUncDown_;
+	TLorentzVector* treeVar_fatJetB_p4Ptr_jecAK8UncUp_; TLorentzVector treeVar_fatJetB_p4_jecAK8UncUp_;
+	TLorentzVector* treeVar_fatJetB_p4Ptr_jecAK8UncDown_; TLorentzVector treeVar_fatJetB_p4_jecAK8UncDown_;
+	TLorentzVector* treeVar_fatJetB_p4Ptr_jerAK8UncUp_; TLorentzVector treeVar_fatJetB_p4_jerAK8UncUp_;
+	TLorentzVector* treeVar_fatJetB_p4Ptr_jerAK8UncDown_; TLorentzVector treeVar_fatJetB_p4_jerAK8UncDown_;
 
 	Double_t treeVar_fatJetA_doubleBtagDiscrim_;
 	Double_t treeVar_fatJetA_mass_;
@@ -201,24 +201,24 @@ private:
 	Float_t treeVar_fatJetB_nSubjettinessTau2_;
 
 	Float_t treeVar_ht_;
-	Float_t treeVar_ht_jecUncUp_;
-	Float_t treeVar_ht_jecUncDown_;
-	Float_t treeVar_ht_jerUncUp_;
-	Float_t treeVar_ht_jerUncDown_;
+	Float_t treeVar_ht_jecAK4UncUp_;
+	Float_t treeVar_ht_jecAK4UncDown_;
+	Float_t treeVar_ht_jerAK4UncUp_;
+	Float_t treeVar_ht_jerAK4UncDown_;
 
 	UInt_t treeVar_nrSlimJets_;
 	
 	TLorentzVector* treeVar_jetA_p4Ptr_; TLorentzVector treeVar_jetA_p4_;
-	TLorentzVector* treeVar_jetA_p4Ptr_jecUncUp_; TLorentzVector treeVar_jetA_p4_jecUncUp_;
-	TLorentzVector* treeVar_jetA_p4Ptr_jecUncDown_; TLorentzVector treeVar_jetA_p4_jecUncDown_;
-	TLorentzVector* treeVar_jetA_p4Ptr_jerUncUp_; TLorentzVector treeVar_jetA_p4_jerUncUp_;
-	TLorentzVector* treeVar_jetA_p4Ptr_jerUncDown_; TLorentzVector treeVar_jetA_p4_jerUncDown_;
+	TLorentzVector* treeVar_jetA_p4Ptr_jecAK4UncUp_; TLorentzVector treeVar_jetA_p4_jecAK4UncUp_;
+	TLorentzVector* treeVar_jetA_p4Ptr_jecAK4UncDown_; TLorentzVector treeVar_jetA_p4_jecAK4UncDown_;
+	TLorentzVector* treeVar_jetA_p4Ptr_jerAK4UncUp_; TLorentzVector treeVar_jetA_p4_jerAK4UncUp_;
+	TLorentzVector* treeVar_jetA_p4Ptr_jerAK4UncDown_; TLorentzVector treeVar_jetA_p4_jerAK4UncDown_;
 
 	TLorentzVector* treeVar_jetB_p4Ptr_; TLorentzVector treeVar_jetB_p4_;
-	TLorentzVector* treeVar_jetB_p4Ptr_jecUncUp_; TLorentzVector treeVar_jetB_p4_jecUncUp_;
-	TLorentzVector* treeVar_jetB_p4Ptr_jecUncDown_; TLorentzVector treeVar_jetB_p4_jecUncDown_;
-	TLorentzVector* treeVar_jetB_p4Ptr_jerUncUp_; TLorentzVector treeVar_jetB_p4_jerUncUp_;
-	TLorentzVector* treeVar_jetB_p4Ptr_jerUncDown_; TLorentzVector treeVar_jetB_p4_jerUncDown_;
+	TLorentzVector* treeVar_jetB_p4Ptr_jecAK4UncUp_; TLorentzVector treeVar_jetB_p4_jecAK4UncUp_;
+	TLorentzVector* treeVar_jetB_p4Ptr_jecAK4UncDown_; TLorentzVector treeVar_jetB_p4_jecAK4UncDown_;
+	TLorentzVector* treeVar_jetB_p4Ptr_jerAK4UncUp_; TLorentzVector treeVar_jetB_p4_jerAK4UncUp_;
+	TLorentzVector* treeVar_jetB_p4Ptr_jerAK4UncDown_; TLorentzVector treeVar_jetB_p4_jerAK4UncDown_;
 
 	Double_t treeVar_muon_maxPt_;
 	Double_t treeVar_muon_sumPt_;
@@ -228,28 +228,28 @@ public:
 		TreeHandlerBase(treeName, "Tree of double-b fat jet candidates ("+treeName+")", fileName),
 		
 		treeVar_fatJetA_p4Ptr_( &treeVar_fatJetA_p4_ ),
-		treeVar_fatJetA_p4Ptr_jecUncUp_( &treeVar_fatJetA_p4_jecUncUp_ ),
-		treeVar_fatJetA_p4Ptr_jecUncDown_( &treeVar_fatJetA_p4_jecUncDown_ ),
-		treeVar_fatJetA_p4Ptr_jerUncUp_( &treeVar_fatJetA_p4_jerUncUp_ ),
-		treeVar_fatJetA_p4Ptr_jerUncDown_( &treeVar_fatJetA_p4_jerUncDown_ ),
+		treeVar_fatJetA_p4Ptr_jecAK8UncUp_( &treeVar_fatJetA_p4_jecAK8UncUp_ ),
+		treeVar_fatJetA_p4Ptr_jecAK8UncDown_( &treeVar_fatJetA_p4_jecAK8UncDown_ ),
+		treeVar_fatJetA_p4Ptr_jerAK8UncUp_( &treeVar_fatJetA_p4_jerAK8UncUp_ ),
+		treeVar_fatJetA_p4Ptr_jerAK8UncDown_( &treeVar_fatJetA_p4_jerAK8UncDown_ ),
 
 		treeVar_fatJetB_p4Ptr_( &treeVar_fatJetB_p4_ ),
-		treeVar_fatJetB_p4Ptr_jecUncUp_( &treeVar_fatJetB_p4_jecUncUp_ ),
-		treeVar_fatJetB_p4Ptr_jecUncDown_( &treeVar_fatJetB_p4_jecUncDown_ ),
-		treeVar_fatJetB_p4Ptr_jerUncUp_( &treeVar_fatJetB_p4_jerUncUp_ ),
-		treeVar_fatJetB_p4Ptr_jerUncDown_( &treeVar_fatJetB_p4_jerUncDown_ ),
+		treeVar_fatJetB_p4Ptr_jecAK8UncUp_( &treeVar_fatJetB_p4_jecAK8UncUp_ ),
+		treeVar_fatJetB_p4Ptr_jecAK8UncDown_( &treeVar_fatJetB_p4_jecAK8UncDown_ ),
+		treeVar_fatJetB_p4Ptr_jerAK8UncUp_( &treeVar_fatJetB_p4_jerAK8UncUp_ ),
+		treeVar_fatJetB_p4Ptr_jerAK8UncDown_( &treeVar_fatJetB_p4_jerAK8UncDown_ ),
 
 		treeVar_jetA_p4Ptr_( &treeVar_jetA_p4_ ),
-		treeVar_jetA_p4Ptr_jecUncUp_( &treeVar_jetA_p4_jecUncUp_ ),
-		treeVar_jetA_p4Ptr_jecUncDown_( &treeVar_jetA_p4_jecUncDown_ ),
-		treeVar_jetA_p4Ptr_jerUncUp_( &treeVar_jetA_p4_jerUncUp_ ),
-		treeVar_jetA_p4Ptr_jerUncDown_( &treeVar_jetA_p4_jerUncDown_ ),
+		treeVar_jetA_p4Ptr_jecAK4UncUp_( &treeVar_jetA_p4_jecAK4UncUp_ ),
+		treeVar_jetA_p4Ptr_jecAK4UncDown_( &treeVar_jetA_p4_jecAK4UncDown_ ),
+		treeVar_jetA_p4Ptr_jerAK4UncUp_( &treeVar_jetA_p4_jerAK4UncUp_ ),
+		treeVar_jetA_p4Ptr_jerAK4UncDown_( &treeVar_jetA_p4_jerAK4UncDown_ ),
 
 		treeVar_jetB_p4Ptr_( &treeVar_jetB_p4_ ),
-		treeVar_jetB_p4Ptr_jecUncUp_( &treeVar_jetB_p4_jecUncUp_ ),
-		treeVar_jetB_p4Ptr_jecUncDown_( &treeVar_jetB_p4_jecUncDown_ ),
-		treeVar_jetB_p4Ptr_jerUncUp_( &treeVar_jetB_p4_jerUncUp_ ),
-		treeVar_jetB_p4Ptr_jerUncDown_( &treeVar_jetB_p4_jerUncDown_ )
+		treeVar_jetB_p4Ptr_jecAK4UncUp_( &treeVar_jetB_p4_jecAK4UncUp_ ),
+		treeVar_jetB_p4Ptr_jecAK4UncDown_( &treeVar_jetB_p4_jecAK4UncDown_ ),
+		treeVar_jetB_p4Ptr_jerAK4UncUp_( &treeVar_jetB_p4_jerAK4UncUp_ ),
+		treeVar_jetB_p4Ptr_jerAK4UncDown_( &treeVar_jetB_p4_jerAK4UncDown_ )
 	{
 		mainAnaTree_->Branch("weight_combined",     &treeVar_weight_combined_,     "weight_combined/D");
 		
@@ -271,16 +271,16 @@ public:
 		mainAnaTree_->Branch("nGluino", &treeVar_nGluino_, "nGluino/i");
 
 		mainAnaTree_->Branch("fatJetA_p4", &treeVar_fatJetA_p4Ptr_);
-		mainAnaTree_->Branch("fatJetA_p4_jecUncUp", &treeVar_fatJetA_p4Ptr_jecUncUp_);
-		mainAnaTree_->Branch("fatJetA_p4_jecUncDown", &treeVar_fatJetA_p4Ptr_jecUncDown_);
-		mainAnaTree_->Branch("fatJetA_p4_jerUncUp", &treeVar_fatJetA_p4Ptr_jerUncUp_);
-		mainAnaTree_->Branch("fatJetA_p4_jerUncDown", &treeVar_fatJetA_p4Ptr_jerUncDown_);
+		mainAnaTree_->Branch("fatJetA_p4_jecAK8UncUp", &treeVar_fatJetA_p4Ptr_jecAK8UncUp_);
+		mainAnaTree_->Branch("fatJetA_p4_jecAK8UncDown", &treeVar_fatJetA_p4Ptr_jecAK8UncDown_);
+		mainAnaTree_->Branch("fatJetA_p4_jerAK8UncUp", &treeVar_fatJetA_p4Ptr_jerAK8UncUp_);
+		mainAnaTree_->Branch("fatJetA_p4_jerAK8UncDown", &treeVar_fatJetA_p4Ptr_jerAK8UncDown_);
 
 		mainAnaTree_->Branch("fatJetB_p4", &treeVar_fatJetB_p4Ptr_);
-		mainAnaTree_->Branch("fatJetB_p4_jecUncUp", &treeVar_fatJetB_p4Ptr_jecUncUp_);
-		mainAnaTree_->Branch("fatJetB_p4_jecUncDown", &treeVar_fatJetB_p4Ptr_jecUncDown_);
-		mainAnaTree_->Branch("fatJetB_p4_jerUncUp", &treeVar_fatJetB_p4Ptr_jerUncUp_);
-		mainAnaTree_->Branch("fatJetB_p4_jerUncDown", &treeVar_fatJetB_p4Ptr_jerUncDown_);
+		mainAnaTree_->Branch("fatJetB_p4_jecAK8UncUp", &treeVar_fatJetB_p4Ptr_jecAK8UncUp_);
+		mainAnaTree_->Branch("fatJetB_p4_jecAK8UncDown", &treeVar_fatJetB_p4Ptr_jecAK8UncDown_);
+		mainAnaTree_->Branch("fatJetB_p4_jerAK8UncUp", &treeVar_fatJetB_p4Ptr_jerAK8UncUp_);
+		mainAnaTree_->Branch("fatJetB_p4_jerAK8UncDown", &treeVar_fatJetB_p4Ptr_jerAK8UncDown_);
 
 		mainAnaTree_->Branch("fatJetA_doubleBtagDiscrim", &treeVar_fatJetA_doubleBtagDiscrim_,   "fatJetA_doubleBtagDiscrim/D");
 		mainAnaTree_->Branch("fatJetB_doubleBtagDiscrim", &treeVar_fatJetB_doubleBtagDiscrim_,   "fatJetB_doubleBtagDiscrim/D");
@@ -318,24 +318,24 @@ public:
 		mainAnaTree_->Branch("fatJetB_nSubjettinessTau2", &treeVar_fatJetB_nSubjettinessTau2_, "fatJetB_nSubjettinessTau2/F");
 
 		mainAnaTree_->Branch("ht", &treeVar_ht_, "ht/F");
-		mainAnaTree_->Branch("ht_jecUncUp", &treeVar_ht_jecUncUp_, "ht_jecUncUp/F");
-		mainAnaTree_->Branch("ht_jecUncDown", &treeVar_ht_jecUncDown_, "ht_jecUncDown/F");
-		mainAnaTree_->Branch("ht_jerUncUp", &treeVar_ht_jerUncUp_, "ht_jerUncUp/F");
-		mainAnaTree_->Branch("ht_jerUncDown", &treeVar_ht_jerUncDown_, "ht_jerUncDown/F");
+		mainAnaTree_->Branch("ht_jecAK4UncUp", &treeVar_ht_jecAK4UncUp_, "ht_jecAK4UncUp/F");
+		mainAnaTree_->Branch("ht_jecAK4UncDown", &treeVar_ht_jecAK4UncDown_, "ht_jecAK4UncDown/F");
+		mainAnaTree_->Branch("ht_jerAK4UncUp", &treeVar_ht_jerAK4UncUp_, "ht_jerAK4UncUp/F");
+		mainAnaTree_->Branch("ht_jerAK4UncDown", &treeVar_ht_jerAK4UncDown_, "ht_jerAK4UncDown/F");
 
 		mainAnaTree_->Branch("nrSlimJets", &treeVar_nrSlimJets_, "nrSlimJets/i");
 		
 		mainAnaTree_->Branch("slimJetA_p4", &treeVar_jetA_p4Ptr_);
-		mainAnaTree_->Branch("slimJetA_p4_jecUncUp", &treeVar_jetA_p4Ptr_jecUncUp_);
-		mainAnaTree_->Branch("slimJetA_p4_jecUncDown", &treeVar_jetA_p4Ptr_jecUncDown_);
-		mainAnaTree_->Branch("slimJetA_p4_jerUncUp", &treeVar_jetA_p4Ptr_jerUncUp_);
-		mainAnaTree_->Branch("slimJetA_p4_jerUncDown", &treeVar_jetA_p4Ptr_jerUncDown_);
+		mainAnaTree_->Branch("slimJetA_p4_jecAK4UncUp", &treeVar_jetA_p4Ptr_jecAK4UncUp_);
+		mainAnaTree_->Branch("slimJetA_p4_jecAK4UncDown", &treeVar_jetA_p4Ptr_jecAK4UncDown_);
+		mainAnaTree_->Branch("slimJetA_p4_jerAK4UncUp", &treeVar_jetA_p4Ptr_jerAK4UncUp_);
+		mainAnaTree_->Branch("slimJetA_p4_jerAK4UncDown", &treeVar_jetA_p4Ptr_jerAK4UncDown_);
 
 		mainAnaTree_->Branch("slimJetB_p4", &treeVar_jetB_p4Ptr_);
-		mainAnaTree_->Branch("slimJetB_p4_jecUncUp", &treeVar_jetB_p4Ptr_jecUncUp_);
-		mainAnaTree_->Branch("slimJetB_p4_jecUncDown", &treeVar_jetB_p4Ptr_jecUncDown_);
-		mainAnaTree_->Branch("slimJetB_p4_jerUncUp", &treeVar_jetB_p4Ptr_jerUncUp_);
-		mainAnaTree_->Branch("slimJetB_p4_jerUncDown", &treeVar_jetB_p4Ptr_jerUncDown_);
+		mainAnaTree_->Branch("slimJetB_p4_jecAK4UncUp", &treeVar_jetB_p4Ptr_jecAK4UncUp_);
+		mainAnaTree_->Branch("slimJetB_p4_jecAK4UncDown", &treeVar_jetB_p4Ptr_jecAK4UncDown_);
+		mainAnaTree_->Branch("slimJetB_p4_jerAK4UncUp", &treeVar_jetB_p4Ptr_jerAK4UncUp_);
+		mainAnaTree_->Branch("slimJetB_p4_jerAK4UncDown", &treeVar_jetB_p4Ptr_jerAK4UncDown_);
 
 		mainAnaTree_->Branch("muon_maxPt", &treeVar_muon_maxPt_,   "muon_maxPt/D");
 		mainAnaTree_->Branch("muon_sumPt", &treeVar_muon_sumPt_,   "muon_sumPt/D");
@@ -343,7 +343,7 @@ public:
 
 	~FatDoubleBJetPairTree(){}
 
-	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp, const float& ht_jecUncDown, const float& ht_jerUncUp, const float& ht_jerUncDown, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision, const int& nPU, const float& nTrueInt, int nISR, const int& nGluino, const double& D_factor, const unsigned int& yearOfRun, const double& muon_maxPt, const double& muon_sumPt)
+	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecAK4UncUp, const float& ht_jecAK4UncDown, const float& ht_jerAK4UncUp, const float& ht_jerAK4UncDown, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision, const int& nPU, const float& nTrueInt, int nISR, const int& nGluino, const double& D_factor, const unsigned int& yearOfRun, const double& muon_maxPt, const double& muon_sumPt)
 	{
 		
 		// DO THE WEIGHTS
@@ -437,59 +437,59 @@ public:
 		treeVar_muon_sumPt_ = muon_sumPt;
 
 		if (sampleType != "DATA"){
-			treeVar_fatJetA_p4_jecUncUp_.SetPtEtaPhiE(fatJetA.pt() * (1.0 + fatJetA.jecUncertainty()), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * (1.0 + fatJetA.jecUncertainty()) );
-			treeVar_fatJetA_p4_jecUncDown_.SetPtEtaPhiE(fatJetA.pt() * (1.0 - fatJetA.jecUncertainty()), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * (1.0 - fatJetA.jecUncertainty()) );
-			treeVar_fatJetA_p4_jerUncUp_.SetPtEtaPhiE(fatJetA.pt() * fatJetA.jerUncUp(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * fatJetA.jerUncUp() );
-			treeVar_fatJetA_p4_jerUncDown_.SetPtEtaPhiE(fatJetA.pt() * fatJetA.jerUncDown(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * fatJetA.jerUncDown() );
+			treeVar_fatJetA_p4_jecAK8UncUp_.SetPtEtaPhiE(fatJetA.pt() * (1.0 + fatJetA.jecUncertainty()), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * (1.0 + fatJetA.jecUncertainty()) );
+			treeVar_fatJetA_p4_jecAK8UncDown_.SetPtEtaPhiE(fatJetA.pt() * (1.0 - fatJetA.jecUncertainty()), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * (1.0 - fatJetA.jecUncertainty()) );
+			treeVar_fatJetA_p4_jerAK8UncUp_.SetPtEtaPhiE(fatJetA.pt() * fatJetA.jerUncUp(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * fatJetA.jerUncUp() );
+			treeVar_fatJetA_p4_jerAK8UncDown_.SetPtEtaPhiE(fatJetA.pt() * fatJetA.jerUncDown(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * fatJetA.jerUncDown() );
 
-			treeVar_fatJetB_p4_jecUncUp_.SetPtEtaPhiE(fatJetB.pt() * (1.0 + fatJetB.jecUncertainty()), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * (1.0 + fatJetB.jecUncertainty()) );
-			treeVar_fatJetB_p4_jecUncDown_.SetPtEtaPhiE(fatJetB.pt() * (1.0 - fatJetB.jecUncertainty()), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * (1.0 - fatJetB.jecUncertainty()) );
-			treeVar_fatJetB_p4_jerUncUp_.SetPtEtaPhiE(fatJetB.pt() * fatJetB.jerUncUp(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * fatJetB.jerUncUp() );
-			treeVar_fatJetB_p4_jerUncDown_.SetPtEtaPhiE(fatJetB.pt() * fatJetB.jerUncDown(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * fatJetB.jerUncDown() );
+			treeVar_fatJetB_p4_jecAK8UncUp_.SetPtEtaPhiE(fatJetB.pt() * (1.0 + fatJetB.jecUncertainty()), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * (1.0 + fatJetB.jecUncertainty()) );
+			treeVar_fatJetB_p4_jecAK8UncDown_.SetPtEtaPhiE(fatJetB.pt() * (1.0 - fatJetB.jecUncertainty()), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * (1.0 - fatJetB.jecUncertainty()) );
+			treeVar_fatJetB_p4_jerAK8UncUp_.SetPtEtaPhiE(fatJetB.pt() * fatJetB.jerUncUp(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * fatJetB.jerUncUp() );
+			treeVar_fatJetB_p4_jerAK8UncDown_.SetPtEtaPhiE(fatJetB.pt() * fatJetB.jerUncDown(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * fatJetB.jerUncDown() );
 
-			treeVar_ht_jecUncUp_ = ht_jecUncUp;
-			treeVar_ht_jecUncDown_ = ht_jecUncDown;
-			treeVar_ht_jerUncUp_ = ht_jerUncUp;
-			treeVar_ht_jerUncDown_ = ht_jerUncDown;
+			treeVar_ht_jecAK4UncUp_ = ht_jecAK4UncUp;
+			treeVar_ht_jecAK4UncDown_ = ht_jecAK4UncDown;
+			treeVar_ht_jerAK4UncUp_ = ht_jerAK4UncUp;
+			treeVar_ht_jerAK4UncDown_ = ht_jerAK4UncDown;
 
 			if (slimJets.size() > 1){
 				treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
-				treeVar_jetA_p4_jecUncUp_.SetPtEtaPhiE(slimJets.at(0).pt() * (1.0 + slimJets.at(0).jecUncertainty()), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) * (1.0 + slimJets.at(0).jecUncertainty()) );
-				treeVar_jetA_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(0).pt() * (1.0 - slimJets.at(0).jecUncertainty()), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) * (1.0 - slimJets.at(0).jecUncertainty()) );
-				treeVar_jetA_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(0).pt() * slimJets.at(0).jerUncUp(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) * slimJets.at(0).jerUncUp() );
-				treeVar_jetA_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(0).pt() * slimJets.at(0).jerUncDown(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) * slimJets.at(0).jerUncDown() );
+				treeVar_jetA_p4_jecAK4UncUp_.SetPtEtaPhiE(slimJets.at(0).pt() * (1.0 + slimJets.at(0).jecUncertainty()), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) * (1.0 + slimJets.at(0).jecUncertainty()) );
+				treeVar_jetA_p4_jecAK4UncDown_.SetPtEtaPhiE(slimJets.at(0).pt() * (1.0 - slimJets.at(0).jecUncertainty()), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) * (1.0 - slimJets.at(0).jecUncertainty()) );
+				treeVar_jetA_p4_jerAK4UncUp_.SetPtEtaPhiE(slimJets.at(0).pt() * slimJets.at(0).jerUncUp(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) * slimJets.at(0).jerUncUp() );
+				treeVar_jetA_p4_jerAK4UncDown_.SetPtEtaPhiE(slimJets.at(0).pt() * slimJets.at(0).jerUncDown(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) * slimJets.at(0).jerUncDown() );
 
 				treeVar_jetB_p4_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
-				treeVar_jetB_p4_jecUncUp_.SetPtEtaPhiE(slimJets.at(1).pt() * (1.0 + slimJets.at(1).jecUncertainty()), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * (1.0 + slimJets.at(1).jecUncertainty()) );
-				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(1).pt() * (1.0 - slimJets.at(1).jecUncertainty()), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * (1.0 - slimJets.at(1).jecUncertainty()) );
-				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(1).pt() * slimJets.at(1).jerUncUp(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * slimJets.at(1).jerUncUp() );
-				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(1).pt() * slimJets.at(1).jerUncDown(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * slimJets.at(1).jerUncDown() );
+				treeVar_jetB_p4_jecAK4UncUp_.SetPtEtaPhiE(slimJets.at(1).pt() * (1.0 + slimJets.at(1).jecUncertainty()), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * (1.0 + slimJets.at(1).jecUncertainty()) );
+				treeVar_jetB_p4_jecAK4UncDown_.SetPtEtaPhiE(slimJets.at(1).pt() * (1.0 - slimJets.at(1).jecUncertainty()), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * (1.0 - slimJets.at(1).jecUncertainty()) );
+				treeVar_jetB_p4_jerAK4UncUp_.SetPtEtaPhiE(slimJets.at(1).pt() * slimJets.at(1).jerUncUp(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * slimJets.at(1).jerUncUp() );
+				treeVar_jetB_p4_jerAK4UncDown_.SetPtEtaPhiE(slimJets.at(1).pt() * slimJets.at(1).jerUncDown(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * slimJets.at(1).jerUncDown() );
 			}
 			else if (slimJets.size() == 1){
 				treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
-				treeVar_jetA_p4_jecUncUp_.SetPtEtaPhiE(slimJets.at(0).pt() * (1.0 + slimJets.at(0).jecUncertainty()), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) * (1.0 + slimJets.at(0).jecUncertainty()) );
-				treeVar_jetA_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(0).pt() * (1.0 - slimJets.at(0).jecUncertainty()), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) * (1.0 - slimJets.at(0).jecUncertainty()) );
-				treeVar_jetA_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(0).pt() * slimJets.at(0).jerUncUp(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) * slimJets.at(0).jerUncUp() );
-				treeVar_jetA_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(0).pt() * slimJets.at(0).jerUncDown(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) * slimJets.at(0).jerUncDown() );
+				treeVar_jetA_p4_jecAK4UncUp_.SetPtEtaPhiE(slimJets.at(0).pt() * (1.0 + slimJets.at(0).jecUncertainty()), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) * (1.0 + slimJets.at(0).jecUncertainty()) );
+				treeVar_jetA_p4_jecAK4UncDown_.SetPtEtaPhiE(slimJets.at(0).pt() * (1.0 - slimJets.at(0).jecUncertainty()), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) * (1.0 - slimJets.at(0).jecUncertainty()) );
+				treeVar_jetA_p4_jerAK4UncUp_.SetPtEtaPhiE(slimJets.at(0).pt() * slimJets.at(0).jerUncUp(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) * slimJets.at(0).jerUncUp() );
+				treeVar_jetA_p4_jerAK4UncDown_.SetPtEtaPhiE(slimJets.at(0).pt() * slimJets.at(0).jerUncDown(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) * slimJets.at(0).jerUncDown() );
 
 				treeVar_jetB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetB_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetB_p4_jecAK4UncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetB_p4_jecAK4UncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetB_p4_jerAK4UncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetB_p4_jerAK4UncDown_.SetPtEtaPhiE(0, 0, 0, 0);
 			}
 			else {
 				treeVar_jetA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetA_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetA_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetA_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetA_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetA_p4_jecAK4UncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetA_p4_jecAK4UncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetA_p4_jerAK4UncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetA_p4_jerAK4UncDown_.SetPtEtaPhiE(0, 0, 0, 0);
 
 				treeVar_jetB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetB_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetB_p4_jecAK4UncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetB_p4_jecAK4UncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetB_p4_jerAK4UncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetB_p4_jerAK4UncDown_.SetPtEtaPhiE(0, 0, 0, 0);
 			}
 
 			// fatJetA SoftDropMass+PUPPI
@@ -574,59 +574,59 @@ public:
 		} // closes 'if' sampleType does NOT equal DATA
 		
 		else {
-			treeVar_fatJetA_p4_jecUncUp_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
-			treeVar_fatJetA_p4_jecUncDown_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
-			treeVar_fatJetA_p4_jerUncUp_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
-			treeVar_fatJetA_p4_jerUncDown_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
+			treeVar_fatJetA_p4_jecAK8UncUp_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
+			treeVar_fatJetA_p4_jecAK8UncDown_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
+			treeVar_fatJetA_p4_jerAK8UncUp_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
+			treeVar_fatJetA_p4_jerAK8UncDown_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
 
-			treeVar_fatJetB_p4_jecUncUp_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
-			treeVar_fatJetB_p4_jecUncDown_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
-			treeVar_fatJetB_p4_jerUncUp_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
-			treeVar_fatJetB_p4_jerUncDown_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
+			treeVar_fatJetB_p4_jecAK8UncUp_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
+			treeVar_fatJetB_p4_jecAK8UncDown_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
+			treeVar_fatJetB_p4_jerAK8UncUp_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
+			treeVar_fatJetB_p4_jerAK8UncDown_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
 
-			treeVar_ht_jecUncUp_ = ht;
-			treeVar_ht_jecUncDown_ = ht;
-			treeVar_ht_jerUncUp_ = ht;
-			treeVar_ht_jerUncDown_ = ht;
+			treeVar_ht_jecAK4UncUp_ = ht;
+			treeVar_ht_jecAK4UncDown_ = ht;
+			treeVar_ht_jerAK4UncUp_ = ht;
+			treeVar_ht_jerAK4UncDown_ = ht;
 
 			if (slimJets.size() > 1){
 				treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
-				treeVar_jetA_p4_jecUncUp_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
-				treeVar_jetA_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
-				treeVar_jetA_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
-				treeVar_jetA_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
+				treeVar_jetA_p4_jecAK4UncUp_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
+				treeVar_jetA_p4_jecAK4UncDown_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
+				treeVar_jetA_p4_jerAK4UncUp_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
+				treeVar_jetA_p4_jerAK4UncDown_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
 
 				treeVar_jetB_p4_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
-				treeVar_jetB_p4_jecUncUp_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
-				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
-				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
-				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
+				treeVar_jetB_p4_jecAK4UncUp_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
+				treeVar_jetB_p4_jecAK4UncDown_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
+				treeVar_jetB_p4_jerAK4UncUp_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
+				treeVar_jetB_p4_jerAK4UncDown_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
 			}
 			else if (slimJets.size() == 1){
 				treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
-				treeVar_jetA_p4_jecUncUp_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
-				treeVar_jetA_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
-				treeVar_jetA_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
-				treeVar_jetA_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
+				treeVar_jetA_p4_jecAK4UncUp_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
+				treeVar_jetA_p4_jecAK4UncDown_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
+				treeVar_jetA_p4_jerAK4UncUp_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
+				treeVar_jetA_p4_jerAK4UncDown_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
 
 				treeVar_jetB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetB_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetB_p4_jecAK4UncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetB_p4_jecAK4UncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetB_p4_jerAK4UncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetB_p4_jerAK4UncDown_.SetPtEtaPhiE(0, 0, 0, 0);
 			}
 			else {
 				treeVar_jetA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetA_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetA_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetA_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetA_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetA_p4_jecAK4UncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetA_p4_jecAK4UncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetA_p4_jerAK4UncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetA_p4_jerAK4UncDown_.SetPtEtaPhiE(0, 0, 0, 0);
 				
 				treeVar_jetB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetB_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetB_p4_jecAK4UncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetB_p4_jecAK4UncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetB_p4_jerAK4UncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_jetB_p4_jerAK4UncDown_.SetPtEtaPhiE(0, 0, 0, 0);
 			}		
 
 			const double fatJetA_softDropMassPuppi_ALL = fatJetA.PUPPIsoftdrop_mass() > 0.0 ? fatJetA.PUPPIsoftdrop_mass() : 0.0;
@@ -886,19 +886,19 @@ int main(int argc, char** argv){
 
 			// HT calculation: Only consider jets with |eta| < 3.0, pt > 40.0
 			double ht = 0.0;
-			double ht_jecUncUp = 0.0;
-			double ht_jecUncDown = 0.0;
-			double ht_jerUncUp = 0.0;
-			double ht_jerUncDown = 0.0;
+			double ht_jecAK4UncUp = 0.0;
+			double ht_jecAK4UncDown = 0.0;
+			double ht_jerAK4UncUp = 0.0;
+			double ht_jerAK4UncDown = 0.0;
 			for (const ran::NtJet& jet : jetVec) {
 
 				if ( fabs(jet.eta()) <= 3.0 ){
 
 					if ( jet.pt() >= 40.0 ) ht += jet.pt();
-					if ( jet.pt() * ( 1.0 + jet.jecUncertainty() ) >= 40.0 ) ht_jecUncUp += jet.pt() * ( 1.0 + jet.jecUncertainty() );
-					if ( jet.pt() * ( 1.0 - jet.jecUncertainty() ) >= 40.0 ) ht_jecUncDown += jet.pt() * ( 1.0 - jet.jecUncertainty() );
-					if ( jet.pt() * jet.jerUncUp() >= 40.0 ) ht_jerUncUp += jet.pt() * jet.jerUncUp();
-					if ( jet.pt() * jet.jerUncDown() >= 40.0 ) ht_jerUncDown += jet.pt() * jet.jerUncDown();
+					if ( jet.pt() * ( 1.0 + jet.jecUncertainty() ) >= 40.0 ) ht_jecAK4UncUp += jet.pt() * ( 1.0 + jet.jecUncertainty() );
+					if ( jet.pt() * ( 1.0 - jet.jecUncertainty() ) >= 40.0 ) ht_jecAK4UncDown += jet.pt() * ( 1.0 - jet.jecUncertainty() );
+					if ( jet.pt() * jet.jerUncUp() >= 40.0 ) ht_jerAK4UncUp += jet.pt() * jet.jerUncUp();
+					if ( jet.pt() * jet.jerUncDown() >= 40.0 ) ht_jerAK4UncDown += jet.pt() * jet.jerUncDown();
 				}
 			}
 
@@ -926,11 +926,11 @@ int main(int argc, char** argv){
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt);
 
 				// Fat Jets ordered by DBT discriminator score
-				// doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt);
+				// doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt);
 			}
 			// event counter
             if (outputEvery!=0 ? (evtIdx % outputEvery == 0) : false){
