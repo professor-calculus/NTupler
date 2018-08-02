@@ -115,21 +115,21 @@ int main(int argc, char** argv){
 
     // SIX: systematics to run over. only need to use them for TAG dbt. start with 'SF_' for scale factors.
     // const std::vector<std::string> systematicNameVec = {"NOSYS"}; // >> data & no systematic
-    // const std::vector<std::string> systematicNameVec = {"jecUncUp", "jecUncDown", "jerUncUp", "jerUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown"}; // >> WJets and ZJets
-    // const std::vector<std::string> systematicNameVec = {"jecUncUp", "jecUncDown", "jerUncUp", "jerUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown"}; // >> TTJets
-    const std::vector<std::string> systematicNameVec = {"jecUncUp", "jecUncDown", "jerUncUp", "jerUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown"}; // >> SIGNAL
+    // const std::vector<std::string> systematicNameVec = {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown", "jecAK8UncUp", "jecAK8UncDown", "jerAK8UncUp", "jerAK8UncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown"}; // >> WJets and ZJets
+    // const std::vector<std::string> systematicNameVec = {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown", "jecAK8UncUp", "jecAK8UncDown", "jerAK8UncUp", "jerAK8UncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown"}; // >> TTJets
+    const std::vector<std::string> systematicNameVec = {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown", "jecAK8UncUp", "jecAK8UncDown", "jerAK8UncUp", "jerAK8UncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown"}; // >> SIGNAL
 
 
     // SEVEN: variables to use AND the systematics that affect their distributions
-    CutVariable fatJetA_pt_CV = CutVariable("fatJetA_p4.Pt()", {"jecUncUp", "jecUncDown", "jerUncUp", "jerUncDown"});
-    CutVariable fatJetB_pt_CV = CutVariable("fatJetB_p4.Pt()", {"jecUncUp", "jecUncDown", "jerUncUp", "jerUncDown"});
+    CutVariable fatJetA_pt_CV = CutVariable("fatJetA_p4.Pt()", {"jecAK8UncUp", "jecAK8UncDown", "jerAK8UncUp", "jerAK8UncDown"});
+    CutVariable fatJetB_pt_CV = CutVariable("fatJetB_p4.Pt()", {"jecAK8UncUp", "jecAK8UncDown", "jerAK8UncUp", "jerAK8UncDown"});
     CutVariable fatJetA_mass_CV = CutVariable("fatJetA_softDropMassPuppi", {"jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown"});
     CutVariable fatJetB_mass_CV = CutVariable("fatJetB_softDropMassPuppi", {"jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown"});
     CutVariable fatJetA_dbt_CV = CutVariable("fatJetA_doubleBtagDiscrim", {});
     CutVariable fatJetB_dbt_CV = CutVariable("fatJetB_doubleBtagDiscrim", {});
-    CutVariable slimJetA_pt_CV = CutVariable("slimJetA_p4.Pt()", {"jecUncUp", "jecUncDown", "jerUncUp", "jerUncDown"});
-    CutVariable slimJetB_pt_CV = CutVariable("slimJetB_p4.Pt()", {"jecUncUp", "jecUncDown", "jerUncUp", "jerUncDown"});
-    CutVariable ht_CV = CutVariable("ht", {"jecUncUp", "jecUncDown", "jerUncUp", "jerUncDown"});
+    CutVariable slimJetA_pt_CV = CutVariable("slimJetA_p4.Pt()", {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown"});
+    CutVariable slimJetB_pt_CV = CutVariable("slimJetB_p4.Pt()", {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown"});
+    CutVariable ht_CV = CutVariable("ht", {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown"});
 
 
     // EIGHT: do you want to accept events with gluinos, default = true (only affects signal samples)

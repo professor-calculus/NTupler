@@ -265,10 +265,14 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
 
         // SYSTEMATIC VARIATIONS (for TAG histograms)
         std::vector<std::string> nonTrivialSysVec;
-        nonTrivialSysVec.push_back("jecUncUp");
-        nonTrivialSysVec.push_back("jecUncDown");
-        nonTrivialSysVec.push_back("jerUncUp");
-        nonTrivialSysVec.push_back("jerUncDown");
+        nonTrivialSysVec.push_back("jecAK4UncUp");
+        nonTrivialSysVec.push_back("jecAK4UncDown");
+        nonTrivialSysVec.push_back("jerAK4UncUp");
+        nonTrivialSysVec.push_back("jerAK4UncDown");
+        nonTrivialSysVec.push_back("jecAK8UncUp");
+        nonTrivialSysVec.push_back("jecAK8UncDown");
+        nonTrivialSysVec.push_back("jerAK8UncUp");
+        nonTrivialSysVec.push_back("jerAK8UncDown");
         nonTrivialSysVec.push_back("jmsUncUp");
         nonTrivialSysVec.push_back("jmsUncDown");
         nonTrivialSysVec.push_back("jmrUncUp");
@@ -414,10 +418,14 @@ void GetHistograms2017(std::map<std::string,TH1D*>& h_)
 
         // SYSTEMATIC VARIATIONS (for TAG histograms)
         std::vector<std::string> nonTrivialSysVec;
-        nonTrivialSysVec.push_back("jecUncUp");
-        nonTrivialSysVec.push_back("jecUncDown");
-        nonTrivialSysVec.push_back("jerUncUp");
-        nonTrivialSysVec.push_back("jerUncDown");
+        nonTrivialSysVec.push_back("jecAK4UncUp");
+        nonTrivialSysVec.push_back("jecAK4UncDown");
+        nonTrivialSysVec.push_back("jerAK4UncUp");
+        nonTrivialSysVec.push_back("jerAK4UncDown");
+        nonTrivialSysVec.push_back("jecAK8UncUp");
+        nonTrivialSysVec.push_back("jecAK8UncDown");
+        nonTrivialSysVec.push_back("jerAK8UncUp");
+        nonTrivialSysVec.push_back("jerAK8UncDown");
         nonTrivialSysVec.push_back("jmsUncUp");
         nonTrivialSysVec.push_back("jmsUncDown");
         nonTrivialSysVec.push_back("jmrUncUp");
