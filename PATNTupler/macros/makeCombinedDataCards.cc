@@ -89,8 +89,10 @@ int main(){
     CommonSystematicVec.push_back( CommonSystematic("XS_TTJets lnN", 1.5, {"TTJets"}) );
     CommonSystematicVec.push_back( CommonSystematic("XS_ZJets lnN", 1.5, {"ZJets"}) );
     CommonSystematicVec.push_back( CommonSystematic("XS_WJets lnN", 1.5, {"WJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("jecUnc lnN", "jecUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("jerUnc lnN", "jerUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("jecAK4Unc lnN", "jecAK4Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("jerAK4Unc lnN", "jerAK4Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("jecAK8Unc lnN", "jecAK8Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("jerAK8Unc lnN", "jerAK8Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
     CommonSystematicVec.push_back( CommonSystematic("jmsUnc lnN", "jmsUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
     CommonSystematicVec.push_back( CommonSystematic("jmrUnc lnN", "jmrUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
     CommonSystematicVec.push_back( CommonSystematic("SigDbtTag lnN", "dbtTag", {"SIGNAL"}) );
