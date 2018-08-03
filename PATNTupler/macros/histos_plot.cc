@@ -66,8 +66,8 @@ int main(){
     // h16_["S_anti_QCD"]->GetYaxis()->SetTitle("F_{i}");
     // TH1D * h16 = new TH1D("h16", "", 30, 0, 30);
     // for (unsigned int i = 1; i < 31; ++i){
-        // h16->SetBinContent(i, QcdSidebandCorr::GetCorr16(i));
-        // h16->SetBinError(i, QcdSidebandCorr::GetCorrErr16(i));
+        // h16->SetBinContent(i, QcdSidebandCorr::GetCorr(i, 2016));
+        // h16->SetBinError(i, QcdSidebandCorr::GetCorrErr(i, 2016));
         // std::cout << Form("%.10f", h16_["S_anti_data"]->GetBinContent(i) ) << std::endl;
         // std::cout << Form("%.10f", h16_["S_anti_data"]->GetBinError(i) ) << std::endl;
     // }
@@ -79,8 +79,8 @@ int main(){
     // h17_["S_anti_QCD"]->GetYaxis()->SetTitle("F_{i}");
     // TH1D * h17 = new TH1D("h17", "", 30, 0, 30);
     // for (unsigned int i = 1; i < 31; ++i){
-    //     h17->SetBinContent(i, QcdSidebandCorr::GetCorr17(i));
-    //     h17->SetBinError(i, QcdSidebandCorr::GetCorrErr17(i));
+    //     h17->SetBinContent(i, QcdSidebandCorr::GetCorr(i, 2017));
+    //     h17->SetBinError(i, QcdSidebandCorr::GetCorrErr(i, 2017));
     //     std::cout << Form("%.10f", h17_["S_anti_data"]->GetBinContent(i) ) << std::endl;
     //     std::cout << Form("%.10f", h17_["S_anti_data"]->GetBinError(i) ) << std::endl;
     // }
@@ -230,8 +230,8 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
         // NEW METHOD OF PREDICTION
         h_[Form("predNew_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
         for (int iBin = 1; iBin < h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
-            double corrValue = QcdSidebandCorr::GetCorr16(iBin);
-            double corrError = QcdSidebandCorr::GetCorrErr16(iBin);
+            double corrValue = QcdSidebandCorr::GetCorr(iBin, 2016);
+            double corrError = QcdSidebandCorr::GetCorrErr(iBin, 2016);
             double UnDValue = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinContent(iBin);
             double UnDError = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinError(iBin);
             double predValue = corrValue * UnDValue;
@@ -243,8 +243,8 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
 
         h_[Form("predNew_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
         for (int iBin = 1; iBin < h_[Form("predNew_control_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
-            double corrValue = QcdSidebandCorr::GetCorr16(iBin);
-            double corrError = QcdSidebandCorr::GetCorrErr16(iBin);
+            double corrValue = QcdSidebandCorr::GetCorr(iBin, 2016);
+            double corrError = QcdSidebandCorr::GetCorrErr(iBin, 2016);
             double UnDValue = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinContent(iBin);
             double UnDError = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinError(iBin);
             double predValue = corrValue * UnDValue;
@@ -383,8 +383,8 @@ void GetHistograms2017(std::map<std::string,TH1D*>& h_)
         // NEW METHOD OF PREDICTION
         h_[Form("predNew_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
         for (int iBin = 1; iBin < h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
-            double corrValue = QcdSidebandCorr::GetCorr17(iBin);
-            double corrError = QcdSidebandCorr::GetCorrErr17(iBin);
+            double corrValue = QcdSidebandCorr::GetCorr(iBin, 2017);
+            double corrError = QcdSidebandCorr::GetCorrErr(iBin, 2017);
             double UnDValue = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinContent(iBin);
             double UnDError = h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetBinError(iBin);
             double predValue = corrValue * UnDValue;
@@ -396,8 +396,8 @@ void GetHistograms2017(std::map<std::string,TH1D*>& h_)
 
         h_[Form("predNew_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
         for (int iBin = 1; iBin < h_[Form("predNew_control_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
-            double corrValue = QcdSidebandCorr::GetCorr17(iBin);
-            double corrError = QcdSidebandCorr::GetCorrErr17(iBin);
+            double corrValue = QcdSidebandCorr::GetCorr(iBin, 2017);
+            double corrError = QcdSidebandCorr::GetCorrErr(iBin, 2017);
             double UnDValue = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinContent(iBin);
             double UnDError = h_[Form("predNew_control_%s", histoToUse.c_str())]->GetBinError(iBin);
             double predValue = corrValue * UnDValue;

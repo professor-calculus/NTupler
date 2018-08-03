@@ -5,6 +5,7 @@
 #include <memory>
 #include <map>
 #include <fstream>
+#include <algorithm> 
 #include <sys/stat.h>
 
 //ROOT HEADERS
@@ -22,7 +23,7 @@
 // MAKE DATACARDS TO USE WITH COMBINED
 
 
-void GetHistograms(std::map<std::string,TH1D*>&); // NEED TO CHANGE THE FILE PATH IN THIS FUNCTION WHEN USING NEW HISTOGRAMS
+void GetHistograms(std::map<std::string,TH1D*>&, const unsigned int&); // NEED TO CHANGE THE FILE PATH IN THIS FUNCTION WHEN USING NEW HISTOGRAMS
 
 class CommonSystematic{
 public:
@@ -104,6 +105,13 @@ int main(){
     bool areWeBlinded = true;
 
 
+
+    // SEVEN: year of run
+    const int yearOfRun = 2016;
+    // const int yearOfRun = 2017;
+
+
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -116,7 +124,7 @@ int main(){
     }
 
     std::map<std::string, TH1D*> hOriginal_;
-    GetHistograms(hOriginal_);
+    GetHistograms(hOriginal_, yearOfRun);
     
     // get event weightings
     std::vector<std::vector<double>> signalWeightVec_S;
@@ -155,7 +163,7 @@ int main(){
         for (unsigned int iBin = 1; iBin < numberOfBins + 1; ++iBin){
 
             unsigned int data_obs_S = hOriginal_[Form("S_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
-            if (areWeBlinded) data_obs_S = ceil( QcdSidebandCorr::GetCorr(iBin) * hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin) ); // use to get a non zero and roughly realistic value whilst we are blinded
+            if (areWeBlinded) data_obs_S = ceil( QcdSidebandCorr::GetCorr(iBin, yearOfRun) * hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin) ); // use to get a non zero and roughly realistic value whilst we are blinded
             const unsigned int data_obs_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
             const double rate_signal_S = hOriginal_[Form("S_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);
             const double rate_signal_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);;
@@ -341,8 +349,8 @@ int main(){
             }
             
             dataCard << "\n# estimate QCD\n";
-            double corrRatio = QcdSidebandCorr::GetCorr(iBin);
-            double corrRatioError = QcdSidebandCorr::GetCorrErr(iBin);
+            double corrRatio = QcdSidebandCorr::GetCorr(iBin, yearOfRun);
+            double corrRatioError = QcdSidebandCorr::GetCorrErr(iBin, yearOfRun);
             WriteBlock(Form("ch%d_R", iBin), otherColSize, dataCard);
             dataCard << "param " << std::to_string(corrRatio) << " " << std::to_string(corrRatioError) << "\n";
             WriteBlock(Form("ch%d_alpha", iBin), otherColSize, dataCard);
@@ -371,14 +379,27 @@ int main(){
 }
 
 
-void GetHistograms(std::map<std::string,TH1D*>& h_)
+void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRun)
 {
     // histos locations
-    std::string preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_04_11_CMSSW_8_0_29_dbtV4/MassCutsV08/";
-    
-    std::string postamble = "MassCutsV08_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
+    std::string preamble = "";
+    std::string postamble = "";
+
+    if (yearOfRun == 2016){
+        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_04_11/MassCutsV08/run2016/";
+        postamble = "MassCutsV08_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
+    }
+    else if (yearOfRun == 2017){
+        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_04_11/MassCutsV08/run2017/";
+        postamble = "MassCutsV08_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi41.root";
+    }
+    else{
+        std::cout << "You have not given GetHistograms a valid year" << std::endl;
+        return;
+    }
+
     std::vector<std::string> histoNameVec;
-    histoNameVec.push_back("data"); // comment out when working on MC
+    histoNameVec.push_back("data");
     histoNameVec.push_back("TTJets");
     histoNameVec.push_back("ZJets");
     histoNameVec.push_back("WJets");
