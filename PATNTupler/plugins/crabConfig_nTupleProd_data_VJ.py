@@ -6,7 +6,7 @@ config = config()
 # EDIT the following:
 # uniqueName, config.Data.lumiMask, config.Data.inputDataset, config.Data.unitsPerJob
 
-uniqueName = 'JetHt_Run2016H-03Feb2017_ver3-v1_CMSSW8029wDBTV4_b89f068' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+uniqueName = 'JetHt_Run2016H-03Feb2017_ver3-v1_CMSSW8029wDBTV4_fbd67939' # name for this ntuple production (include commit hash so it is unique and can be traced) 
 
 config.Data.lumiMask = 'Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
 
@@ -51,6 +51,6 @@ config.Data.unitsPerJob = 5
 config.Data.inputDBS = 'global' # for centrally produced data
 config.Data.totalUnits = -1 # '-1' does them all
 config.Data.publication = False
-config.Data.outLFNDirBase = '/store/user/taylor/ntuples_DATA_Apr2018' # Wherever you want the ntuples to go on the RAL T2
+config.Data.outLFNDirBase = '/store/user/taylor/ntuples_DATA_AUG2018' # Wherever you want the ntuples to go on the RAL T2
 
 config.Site.storageSite = 'T2_UK_SGrid_RALPP'
