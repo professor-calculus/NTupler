@@ -35,6 +35,7 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 from Configuration.AlCa.autoCond import autoCond
 process.GlobalTag = GlobalTag(process.GlobalTag, '80X_mcRun2_asymptotic_2016_TrancheIV_v8', '') #
 
+process.options = cms.untracked.PSet( allowUnscheduled = cms.untracked.bool(True) )
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(2000) )
 process.source = cms.Source ("PoolSource",fileNames = cms.untracked.vstring(
@@ -64,8 +65,23 @@ my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.heepElectronI
 for idmod in my_id_modules:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 
+# update slimmedJetsAK8 to include version4 of the double-b tagger
+from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
 
-#this is our example analysis module reading the results
+updateJetCollection(
+   process,
+   labelName = 'AK8wDBTV4',
+   jetSource = cms.InputTag('slimmedJetsAK8'),
+   pvSource = cms.InputTag('offlineSlimmedPrimaryVertices'),
+   svSource = cms.InputTag('slimmedSecondaryVertices'),
+   rParam = 0.8,
+   jetCorrections = ('AK8PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
+   btagDiscriminators = [
+      'pfBoostedDoubleSecondaryVertexAK8BJetTags',
+   ],
+)
+
+# this is our example analysis module reading the results
 process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        isThis2016 = cms.bool(True),
                                        isThisMC = cms.bool(True),
@@ -80,7 +96,7 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        muons = cms.InputTag("slimmedMuons"),
                                        electrons = cms.InputTag("slimmedElectrons"),
                                        jets = cms.InputTag("slimmedJets"),
-                                       fatjets = cms.InputTag("slimmedJetsAK8"),
+                                       fatjets = cms.InputTag("updatedPatJetsTransientCorrectedAK8wDBTV4"),
                                        genjets = cms.InputTag("slimmedGenJets"),
                                        genjetsAK8 = cms.InputTag("slimmedGenJetsAK8"),
                                        genParticles = cms.InputTag("prunedGenParticles"),
@@ -97,5 +113,5 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        )
 
 process.p = cms.Path(
-    process.egmGsfElectronIDSequence* 
+    process.egmGsfElectronIDSequence*
     process.demo) #our analysing example module, replace with your module
