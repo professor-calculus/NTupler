@@ -65,16 +65,14 @@ my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.heepElectronI
 for idmod in my_id_modules:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 
-# update slimmedJetsAK8 to include version4 of the double-b tagger
+# update slimmedJetsAK8 to include version4 of the double-b tagger (and redo JECs)
 from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
-
 updateJetCollection(
    process,
    labelName = 'NewJEC',
    jetSource = cms.InputTag('slimmedJets'),
    jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
 )
-
 updateJetCollection(
    process,
    labelName = 'AK8wDBTV4AndNewJEC',
