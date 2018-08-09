@@ -67,6 +67,6 @@ config.Data.unitsPerJob = 10
 
 config.Data.totalUnits = -1 # '-1' does them all
 config.Data.publication = False
-config.Data.outLFNDirBase = '/store/user/taylor/ntuples_MC_AUG2018' # Wherever you want the ntuples to go on the RAL T2
+config.Data.outLFNDirBase = '/store/user/taylor/ntuples_MC_AUG2018_v2' # Wherever you want the ntuples to go on the RAL T2
 
 config.Site.storageSite = 'T2_UK_SGrid_RALPP'
