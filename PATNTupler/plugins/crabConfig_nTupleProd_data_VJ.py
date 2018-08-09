@@ -23,7 +23,7 @@ config.JobType.inputFiles = ['puppiCorr.root']
 
 # JetHT 2016 - 03Feb2017: ~ 100k events/file (use five units per job) 
 # config.Data.inputDataset = '/JetHT/Run2016B-07Aug17_ver1-v1/MINIAOD' # might not be any runs here in that pass masking
-# config.Data.inputDataset = '/JetHT/Run2016B-07Aug17_ver2-v2/MINIAOD'
+# config.Data.inputDataset = '/JetHT/Run2016B-07Aug17_ver2-v1/MINIAOD'
 # config.Data.inputDataset = '/JetHT/Run2016C-07Aug17-v1/MINIAOD'
 # config.Data.inputDataset = '/JetHT/Run2016D-07Aug17-v1/MINIAOD'
 # config.Data.inputDataset = '/JetHT/Run2016E-07Aug17-v1/MINIAOD'
