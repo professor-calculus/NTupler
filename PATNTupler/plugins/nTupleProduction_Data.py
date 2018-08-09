@@ -32,7 +32,7 @@ process.TFileService = cms.Service("TFileService", fileName=cms.string('nTuple.r
 #setup global tag
 from Configuration.AlCa.GlobalTag import GlobalTag
 from Configuration.AlCa.autoCond import autoCond
-process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016SeptRepro_v7', '') #
+process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016LegacyRepro_v4', '') #
 
 process.options = cms.untracked.PSet( allowUnscheduled = cms.untracked.bool(True) )
 
@@ -45,7 +45,8 @@ process.source = cms.Source ("PoolSource",fileNames = cms.untracked.vstring(
 useMiniAOD=True
 
 if useMiniAOD==True:
-    process.source.fileNames=cms.untracked.vstring('/store/data/Run2016E/JetHT/MINIAOD/03Feb2017-v1/110000/00098E8E-9CEB-E611-BA25-008CFA110B08.root',)
+    process.source.fileNames=cms.untracked.vstring('/store/data/Run2016E/JetHT/MINIAOD/07Aug17-v1/110000/009584F7-9B87-E711-95D6-0CC47A4D764C.root',)
+    # process.source.fileNames=cms.untracked.vstring('/store/data/Run2016E/JetHT/MINIAOD/03Feb2017-v1/110000/00098E8E-9CEB-E611-BA25-008CFA110B08.root',)
     # process.source.fileNames=cms.untracked.vstring('/store/data/Run2016E/SingleMuon/MINIAOD/03Feb2017-v1/110000/001D567A-0CEB-E611-A438-D8D385AE8848.root',)
 
 #setup the VID with HEEP 7.0
@@ -63,20 +64,20 @@ my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.heepElectronI
 for idmod in my_id_modules:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 
-# update slimmedJetsAK8 to include version4 of the double-b tagger
-from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
-updateJetCollection(
-   process,
-   labelName = 'AK8wDBTV4',
-   jetSource = cms.InputTag('slimmedJetsAK8'),
-   pvSource = cms.InputTag('offlineSlimmedPrimaryVertices'),
-   svSource = cms.InputTag('slimmedSecondaryVertices'),
-   rParam = 0.8,
-   jetCorrections = ('AK8PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
-   btagDiscriminators = [
-      'pfBoostedDoubleSecondaryVertexAK8BJetTags',
-   ],
-)
+# # update slimmedJetsAK8 to include version4 of the double-b tagger
+# from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
+# updateJetCollection(
+#    process,
+#    labelName = 'AK8wDBTV4',
+#    jetSource = cms.InputTag('slimmedJetsAK8'),
+#    pvSource = cms.InputTag('offlineSlimmedPrimaryVertices'),
+#    svSource = cms.InputTag('slimmedSecondaryVertices'),
+#    rParam = 0.8,
+#    jetCorrections = ('AK8PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
+#    btagDiscriminators = [
+#       'pfBoostedDoubleSecondaryVertexAK8BJetTags',
+#    ],
+# )
 
 #this is our example analysis module reading the results
 process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
@@ -91,7 +92,7 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        muons = cms.InputTag("slimmedMuons"),
                                        electrons = cms.InputTag("slimmedElectrons"),
                                        jets = cms.InputTag("slimmedJets"),
-                                       fatjets = cms.InputTag("updatedPatJetsTransientCorrectedAK8wDBTV4"),
+                                       fatjets = cms.InputTag("slimmedJetsAK8"),
                                        genjets = cms.InputTag("slimmedGenJets"),
                                        genjetsAK8 = cms.InputTag("slimmedGenJetsAK8"),
                                        genParticles = cms.InputTag("prunedGenParticles"),

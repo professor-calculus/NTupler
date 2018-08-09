@@ -70,7 +70,14 @@ from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
 
 updateJetCollection(
    process,
-   labelName = 'AK8wDBTV4',
+   labelName = 'NewJEC',
+   jetSource = cms.InputTag('slimmedJets'),
+   jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
+)
+
+updateJetCollection(
+   process,
+   labelName = 'AK8wDBTV4AndNewJEC',
    jetSource = cms.InputTag('slimmedJetsAK8'),
    pvSource = cms.InputTag('offlineSlimmedPrimaryVertices'),
    svSource = cms.InputTag('slimmedSecondaryVertices'),
@@ -95,8 +102,8 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        puInfo = cms.InputTag("slimmedAddPileupInfo"),
                                        muons = cms.InputTag("slimmedMuons"),
                                        electrons = cms.InputTag("slimmedElectrons"),
-                                       jets = cms.InputTag("slimmedJets"),
-                                       fatjets = cms.InputTag("updatedPatJetsTransientCorrectedAK8wDBTV4"),
+                                       jets = cms.InputTag("updatedPatJetsNewJEC"),
+                                       fatjets = cms.InputTag("updatedPatJetsTransientCorrectedAK8wDBTV4AndNewJEC"),
                                        genjets = cms.InputTag("slimmedGenJets"),
                                        genjetsAK8 = cms.InputTag("slimmedGenJetsAK8"),
                                        genParticles = cms.InputTag("prunedGenParticles"),
