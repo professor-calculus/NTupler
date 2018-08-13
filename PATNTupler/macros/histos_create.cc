@@ -250,6 +250,7 @@ int main(int argc, char** argv){
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
                     // NINE: sample info - SOME SAMPLES NEED SYSTEMATIC WEIGHTS (Signal, TTJets, ...)
+                    // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. 
                     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.                    
                     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
                     // 2016 (80X)
@@ -266,26 +267,28 @@ int main(int argc, char** argv){
                     plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
 
                     // 2016 GOLDEN JSON DATASET
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/data16/JetHT2016_ht1499plus/flatTree.root", cutToApply.c_str());
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/data16/JetHT_Run2016Total_ht1499plus/flatTree.root", cutToApply.c_str());
 
                     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
                     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
+                    // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. 
                     // 2017 (94X)
 
                     // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1005);
                     // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 101.8);
                     // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 20.54);
 
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/TTToHadronic_ht1200plus/flatTree.root", cutToApply.c_str(), 377.96);
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/TTToSemiLeptonic_ht1200plus/flatTree.root", cutToApply.c_str(), 365.34);
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/TTTo2L2Nu_ht1200plus/flatTree.root", cutToApply.c_str(), 88.29);
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/TTToHadronic_ht1200plus/flatTree.root", cutToApply.c_str(), 377.96, SF_weight.c_str());
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/TTToSemiLeptonic_ht1200plus/flatTree.root", cutToApply.c_str(), 365.34, SF_weight.c_str());
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/TTTo2L2Nu_ht1200plus/flatTree.root", cutToApply.c_str(), 88.29, SF_weight.c_str());
 
                     // SIGNAL 2017
                     // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
 
                     // 2017 GOLDEN JSON DATASET
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/data17_old/JetHT_Run2017TOTAL_ht1499plus/flatTree.root", cutToApply.c_str());
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/data17/JetHT_Run2017TOTAL_ht1499plus/flatTree.root", cutToApply.c_str());
 
+                    // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
                     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
                     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
                     //////////////////////////////////////////////////////////////////////////////////////////////////////
