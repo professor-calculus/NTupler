@@ -68,7 +68,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_04_11/MassCutsV08/run2016/SLIMXYZ/with_Sys/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_08_03/MassCutsV08/run2016/SLIMXYZ/with_Sys/"; // where we are going to save the output plots (should include the samples name + binning maybe)
 
 
     // TWO: do we want to blind the S mass region? (true for data, false for everything else)
