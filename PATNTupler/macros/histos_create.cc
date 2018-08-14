@@ -68,7 +68,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_08_03/MassCutsV08/run2016/SLIMXYZ/with_Sys/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_08_03/MassCutsV09/run2016/SLIMXYZ/with_Sys/"; // where we are going to save the output plots (should include the samples name + binning maybe)
 
 
     // TWO: do we want to blind the S mass region? (true for data, false for everything else)
@@ -92,12 +92,12 @@ int main(int argc, char** argv){
     // FOUR: set the mass regions (use a KEYNAME and keep track of what means what!!!!)
     double S1_Node1 = 40.0;
     double S1_Node2 = 17.6;
-    double SMAX_Node1 = 172.0;
-    double SMAX_Node2 = 114.7;
-    std::vector<double> SN_Nodes = {53.2, 66.4, 79.6, 92.8, 106.0, 119.2, 132.4, 145.6, 158.8};
-    MassRegionCuts MassCutsObject = MassRegionCuts("MassCutsV08", S1_Node1, S1_Node2, SMAX_Node1, SMAX_Node2, SN_Nodes);
+    double SMAX_Node1 = 170.7;
+    double SMAX_Node2 = 113.7;
+    std::vector<double> SN_Nodes = {51.9, 65.1, 78.3, 91.5, 104.7, 117.9, 131.1, 144.3, 157.5};
+    MassRegionCuts MassCutsObject = MassRegionCuts("MassCutsV09", S1_Node1, S1_Node2, SMAX_Node1, SMAX_Node2, SN_Nodes);
     const double sideBandScaleFactor = 0.5;
-    const std::string massCutObjectName = "MassCutsV08";
+    const std::string massCutObjectName = "MassCutsV09";
 
     // const double S1_Node1 = 195.0;
     // const double S1_Node2 = 100.0;
