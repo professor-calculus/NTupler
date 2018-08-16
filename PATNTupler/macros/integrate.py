@@ -130,6 +130,27 @@ def f1d_fullCutsData_anti_ht3500toInf_2016(x):
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
 function_1d["fullCutsData_anti_ht3500toInf_2016"] = f1d_fullCutsData_anti_ht3500toInf_2016
 
+def f1d_fullCutsMC_anti_ht3500toInf_2016(x):
+	p0 =   9.03049e-03
+	p1 =  -1.38427e-01
+	p2 =   7.05835e-03
+	p3 =   1.17844e+01
+	p4 =   6.36038e-02
+	p5 =   4.33541e+02
+	p6 =  -1.53672e-02
+	p7 =  -5.48818e+03
+	p8 =   2.61665e-01
+	p9 =   3.50503e-06
+	p10 = -5.09385e-04
+	p11 = -2.33548e-07
+	p12 =  1.73295e-04
+	p13 = -7.12602e-10
+	p14 = -9.74547e-04
+	p15 =  5.35169e-12
+	p16 =  3.18996e-04
+	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
+function_1d["fullCutsMC_anti_ht3500toInf_2016"] = f1d_fullCutsMC_anti_ht3500toInf_2016
+
 #*,. #*,. #*,. #*,.
 #*,. 2017 #*,. #*,.
 def f1d_specCutsData_anti_2017(x):
@@ -379,9 +400,11 @@ for i in range(0, len(three_x_points_vec)-1):
 	ratio__antiS_over_antiUnD__fullCuts_anti_ht1500to2500_2016 = integral_S["fullCutsData_anti_ht1500to2500_2016"] / (2 * integral_U["fullCutsData_anti_ht1500to2500_2016"])
 	ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500_2016 = integral_S["fullCutsData_anti_ht2500to3500_2016"] / (2 * integral_U["fullCutsData_anti_ht2500to3500_2016"])
 	ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf_2016 = integral_S["fullCutsData_anti_ht3500toInf_2016"] / (2 * integral_U["fullCutsData_anti_ht3500toInf_2016"])	
+	ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf_2016_MC = integral_S["fullCutsMC_anti_ht3500toInf_2016"] / (2 * integral_U["fullCutsMC_anti_ht3500toInf_2016"])	
 	# print "2016 ht1500to2500 F_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht1500to2500_2016)
 	# print "2016 ht2500to3500 F_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht2500to3500_2016)
-	# print "2016 ht3500toInf F_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf_2016)
+	print "2016 ht3500toInf F_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf_2016)
+	# print "2016 MC ht3500toInf F_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf_2016_MC)
 
 	correctionFactor_specCutsDataLoose_2016 = (integral_S["specCutsData_tagLoose_2016"] / integral_S["specCutsData_anti_2016"]) * (integral_U["specCutsData_anti_2016"] / integral_U["specCutsData_tagLoose_2016"])
 	# print "2016 correction factor C_" + str(iMR) + " = " + str(correctionFactor_specCutsDataLoose_2016)
@@ -397,7 +420,7 @@ for i in range(0, len(three_x_points_vec)-1):
 	# print "2017 ht3500toInf F_" + str(iMR) + " = " + str(ratio__antiS_over_antiUnD__fullCuts_anti_ht3500toInf_2017)
 
 	correctionFactor_specCutsDataLoose_2017 = (integral_S["specCutsData_tagLoose_2017"] / integral_S["specCutsData_anti_2017"]) * (integral_U["specCutsData_anti_2017"] / integral_U["specCutsData_tagLoose_2017"])
-	print "2017 correction factor C_" + str(iMR) + " = " + str(correctionFactor_specCutsDataLoose_2017)
+	# print "2017 correction factor C_" + str(iMR) + " = " + str(correctionFactor_specCutsDataLoose_2017)
 	
 	###############################################################
 	###############################################################
