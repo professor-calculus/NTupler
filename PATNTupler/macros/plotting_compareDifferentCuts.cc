@@ -61,7 +61,7 @@ int main(int argc, char** argv){
     // std::string varToPlot = "slimJetA_p4.Pt()";
     // std::string varToPlot = "ht";
     
-    TH1D hTemplate("hTemplate", ";fatJetA SoftDropMass (GeV);fraction of events / bin", 40, 0, 200);
+    TH1D hTemplate("hTemplate", ";fatJetA SoftDropMass (GeV);fraction of events / bin", 88, 0, 220);
     // TH1D hTemplate("hTemplate", ";fatJetA SoftDropMass (GeV);ratio", 40, 0, 200);
     // TH1D hTemplate("hTemplate", ";fatJetA doubleBtagDiscriminator;fraction of events / bin", 40, -1, 1);
     // TH1D hTemplate("hTemplate", ";fatJetA p_{T} (GeV);fraction of events / bin", 40, 0, 3000);
@@ -164,10 +164,9 @@ int main(int argc, char** argv){
                     plotElementA.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/data17/JetHT_Run2017TOTAL_ht1499plus/flatTree.root", cutToApply.c_str());
                     
                     plotElementA.NormalisePlot(); // OPTIONAL: toggle on or off
-                    if (iCut2 == 0) plotElementA.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8]))", 15, 200, {0,0,0,0,0,0,0,0}, 46);
-                    else plotElementA.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8]))", 15, 200, {0,0,0,0,0,0,0,0}, 38);
-
-
+                    if (iCut2 == 0) plotElementA.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8])) + [9]*(x-[10]) + [11]*(x-[12])*(x-[12]) + [13]*(x-[14])*(x-[14])*(x-[14]) + [15]*(x-[16])*(x-[16])*(x-[16])*(x-[16])", 13, 220, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}, 46);
+                    // else plotElementA.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8])) + [9]*(x-[10]) + [11]*(x-[12])*(x-[12]) + [13]*(x-[14])*(x-[14])*(x-[14]) + [15]*(x-[16])*(x-[16])*(x-[16])*(x-[16])", 13, 220, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}, 38);
+                    
 
                     // QCD
                     PlotEntry plotElementB = PlotEntry("QCD MC", hTemplate, varToPlot.c_str(), luminosity); // note that the luminosity value doesn't matter IF we will normalise later
@@ -181,8 +180,8 @@ int main(int argc, char** argv){
                     plotElementB.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 20.54);
                     
                     plotElementB.NormalisePlot(); // OPTIONAL: toggle on or off
-                    if (iCut2 == 0) plotElementB.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8]))", 12, 200, {0,0,0,0,0,0,0,0}, 46);
-                    plotElementB.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8]))", 15, 200, {0,0,0,0,0,0,0,0}, 38);
+                    // if (iCut2 == 0) plotElementB.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8])) + [9]*(x-[10]) + [11]*(x-[12])*(x-[12]) + [13]*(x-[14])*(x-[14])*(x-[14]) + [15]*(x-[16])*(x-[16])*(x-[16])*(x-[16])", 13, 220, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}, 46);
+                    plotElementB.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8])) + [9]*(x-[10]) + [11]*(x-[12])*(x-[12]) + [13]*(x-[14])*(x-[14])*(x-[14]) + [15]*(x-[16])*(x-[16])*(x-[16])*(x-[16])", 13, 220, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}, 38);
 
 
                     // STILL ON OLD 80X VERSION AS DON"T KNOW WHEN I WILL NEED THEM
@@ -256,9 +255,9 @@ int main(int argc, char** argv){
 
     // plot.AddLegend(0.65, 0.88, 0.70, 0.87); // top right (wide 4)
     // // plot.AddLegend(0.65, 0.88, 0.62, 0.87); // top right (wide 6)
-    // plot.AddLegend(0.63, 0.88, 0.70, 0.87, 0.05); // top right (wide 2)
+    plot.AddLegend(0.63, 0.88, 0.70, 0.87, 0.05); // top right (wide 2)
     // plot.AddLegend(0.20, 0.50, 0.70, 0.87, 0.05); // top left (wide 2)
-    plot.AddLegend(0.45, 0.88, 0.70, 0.87, 0.05); // top right (extra wide 2)
+    // plot.AddLegend(0.45, 0.88, 0.70, 0.87, 0.05); // top right (extra wide 2)
     // // plot.AddLegend(0.45, 0.88, 0.70, 0.87); // top right (extra wide 4)
     // // plot.AddLegend(0.45, 0.88, 0.62, 0.87); // top right (extra wide 6)
 
