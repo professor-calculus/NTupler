@@ -30,7 +30,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_04_16/2017_94X/fatJetAmass_theFITS/specialCuts_dataEnhancedQCD/version_loose/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2017_94X/fatJetAmass_theFITS/fullKinematicCuts_antiDBT/ht1500to2500/"; // where we are going to save the output plots (should include the samples name, and any important features)
 
 
 
@@ -39,13 +39,13 @@ int main(int argc, char** argv){
     // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Max","Off","Max"}, {"Off","Max","Off","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     // std::vector<int> cut3_ak8Pt = {-1};
     // std::vector<std::vector<int>> cut4_ht = { {-1,99999} }; // these are HT bins, not just cuts (NB: use 99999 for a maximum)
-    std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
+    // std::vector<std::vector<int>> cut5_ak4Pt = { {-1,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
     // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"DIAG_UP", "Loose"} };
-    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Loose","Max","Off","Loose"}, {"Off","Loose","Off","Loose"} };
+    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Loose","Off","Loose"} };
     std::vector<int> cut3_ak8Pt = {300};
     std::vector<std::vector<int>> cut4_ht = { {1500,2500} }; // these are HT bins, not just cuts (NB: use 99999 for a maximum)
-    // std::vector<std::vector<int>> cut5_ak4Pt = { {300,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
+    std::vector<std::vector<int>> cut5_ak4Pt = { {300,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
 
 
 
@@ -146,15 +146,10 @@ int main(int argc, char** argv){
                         else legendName += Form("_AK4PT %d:%d", cut5_ak4Pt[iCut5][0], cut5_ak4Pt[iCut5][1]);
                     }                    
 
-                    // if (iCut2==0) legendName = "Tag DBT"; // EXTRA HACK ON
-                    // if (iCut2==1) legendName = "Anti-tag DBT"; // EXTRA HACK ON
-                    if (iCut2==0) legendName = "0.3 < fatJetA DBT < 1.0"; // EXTRA HACK ON
-                    if (iCut2==1) legendName = "-1.0 < fatJetA DBT < 0.3"; // EXTRA HACK ON
+                    // if (iCut2==0) legendName = "0.3 < fatJetA DBT < 1.0"; // EXTRA HACK ON
+                    // if (iCut2==1) legendName = "-1.0 < fatJetA DBT < 0.3"; // EXTRA HACK ON
 
-                    // if (iCut2==0) cutToApply = "nPU < 20"; // EXTRA HACK ON
-                    // if (iCut2==1) cutToApply = "nPU > 28"; // EXTRA HACK ON
-                    // if (iCut2==0) legendName = "nPU < 20"; // EXTRA HACK ON
-                    // if (iCut2==1) legendName = "nPU > 28"; // EXTRA HACK ON
+
 
 
 
@@ -162,28 +157,35 @@ int main(int argc, char** argv){
                     // FOUR: sample info
 
                     // DATA
-                    // PlotEntry plotElement2 = PlotEntry("Data", hTemplate, varToPlot.c_str()); // NO LUMI
-                    PlotEntry plotElement2 = PlotEntry(legendName.c_str(), hTemplate, varToPlot.c_str()); // NO LUMI
-                    // plotElement2.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/data/JetHT2016_ht1499plus/flatTree.root", cutToApply.c_str());
-                    plotElement2.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/data17/JetHT_Run2017TOTAL_ht1499plus/flatTree.root", cutToApply.c_str());
-                    plotElement2.NormalisePlot(); // OPTIONAL: toggle on or off
-                    if (iCut2 == 0) plotElement2.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8]))", 15, 200, {0,0,0,0,0,0,0,0}, 46);
-                    else plotElement2.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8]))", 15, 200, {0,0,0,0,0,0,0,0}, 38);
+                    PlotEntry plotElementA = PlotEntry("Data", hTemplate, varToPlot.c_str()); // NO LUMI
+                    // PlotEntry plotElementA = PlotEntry(legendName.c_str(), hTemplate, varToPlot.c_str()); // NO LUMI
+                    
+                    // plotElementA.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/data16/JetHT_Run2016Total_ht1499plus/flatTree.root", cutToApply.c_str());
+                    plotElementA.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/data17/JetHT_Run2017TOTAL_ht1499plus/flatTree.root", cutToApply.c_str());
+                    
+                    plotElementA.NormalisePlot(); // OPTIONAL: toggle on or off
+                    if (iCut2 == 0) plotElementA.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8]))", 15, 200, {0,0,0,0,0,0,0,0}, 46);
+                    else plotElementA.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8]))", 15, 200, {0,0,0,0,0,0,0,0}, 38);
+
 
 
                     // QCD
-                    // PlotEntry plotElement = PlotEntry("QCD MC", hTemplate, varToPlot.c_str(), luminosity); // note that the luminosity value doesn't matter IF we will normalise later
-                    // PlotEntry plotElement = PlotEntry(legendName.c_str(), hTemplate, varToPlot.c_str(), luminosity); // note that the luminosity value doesn't matter IF we will normalise later
-                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1206);
-                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 120.4);
-                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 25.25);
-                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc17/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1005);
-                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc17/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 101.8);
-                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc17/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 20.54);
-                    // plotElement.NormalisePlot(); // OPTIONAL: toggle on or off
-                    // if (iCut2 == 0) plotElement.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8]))", 12, 200, {0,0,0,0,0,0,0,0}, 46);
-                    // plotElement.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8]))", 15, 200, {0,0,0,0,0,0,0,0}, 38);
+                    PlotEntry plotElementB = PlotEntry("QCD MC", hTemplate, varToPlot.c_str(), luminosity); // note that the luminosity value doesn't matter IF we will normalise later
+                    // PlotEntry plotElementB = PlotEntry(legendName.c_str(), hTemplate, varToPlot.c_str(), luminosity); // note that the luminosity value doesn't matter IF we will normalise later
+                    
+                    // plotElementB.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1206);
+                    // plotElementB.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 120.4);
+                    // plotElementB.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 25.25);
+                    plotElementB.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1005);
+                    plotElementB.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 101.8);
+                    plotElementB.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 20.54);
+                    
+                    plotElementB.NormalisePlot(); // OPTIONAL: toggle on or off
+                    if (iCut2 == 0) plotElementB.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8]))", 12, 200, {0,0,0,0,0,0,0,0}, 46);
+                    plotElementB.FitFunction("[0] + [1]/(x-[2]) + [3]/((x-[4])*(x-[4])) + [5]/((x-[6])*(x-[6])*(x-[6])) + [7]/((x-[8])*(x-[8])*(x-[8])*(x-[8]))", 15, 200, {0,0,0,0,0,0,0,0}, 38);
 
+
+                    // STILL ON OLD 80X VERSION AS DON"T KNOW WHEN I WILL NEED THEM
                     // ZJets
                     // PlotEntry plotElement = PlotEntry(legendName.c_str(), hTemplate, varToPlot.c_str(), luminosity);
                     // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 5.67);
@@ -208,9 +210,11 @@ int main(int argc, char** argv){
 
 
 
-                    plotEntryVec_MC.push_back(plotElement2);
+                    plotEntryVec_MC.push_back(plotElementA);
+                    plotEntryVec_MC.push_back(plotElementB);
                     // plotEntryVec_MC.push_back(plotElement);
-                    // plotEntryVec_Data.push_back(plotElement2);
+                    // plotEntryVec_Data.push_back(plotElementB);
+
 
                 } // closes loop through cut 5 states
             } // closes loop through cut 4 states
