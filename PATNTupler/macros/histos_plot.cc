@@ -35,7 +35,7 @@ int main(){
 
 
     // ONE: save info & luminosity
-    const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2016_80X/oneDimensionRepresentation/testing_systematicVariation/mH70_mSusy1200/S_tag_jms/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2016_80X/oneDimensionRepresentation/DATA/control/predNew_calcForHighestTwoHtBins/"; // where we are going to save the output plots (should include the samples name, and any important features)
     
     const double luminosity = 35.867; // 2016 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
     // const double luminosity = 41.370; // 2017 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
@@ -92,31 +92,31 @@ int main(){
 
     // TWO: make plot aesthetics and saving
     
-    std::vector<TH1D*> indiHistoVec = {h16_["S_tag_mH70_mSusy1200"], h16_["S_tag_mH70_mSusy1200_jmsUncUp"], h16_["S_tag_mH70_mSusy1200_jmsUncDown"]};
+    std::vector<TH1D*> indiHistoVec = {h16_["S_control_data"], h16_["predNew_control_data"]};
     // std::vector<TH1D*> stackHistoVec = {h16_["S_tag_WJets"], h16_["S_tag_ZJets"], h16_["S_tag_TTJets"], h16_["S_tag_QCD"]};
 
     Plotter plot = Plotter(indiHistoVec);
     // Plotter plot = Plotter({}, stackHistoVec);
     // Plotter plot = Plotter(indiHistoVec, stackHistoVec);
 
-    std::vector<std::string> legendNames = {"mH70_mSusy1200", "with jmsSys Up", "with jmsSys Down"};
+    std::vector<std::string> legendNames = {"control", "control prediction"};
 
     // plot.AddLegend(legendNames, 0.16, 0.38, 0.64, 0.83, 0.028);
     // plot.AddLegend(legendNames, 0.18, 0.38, 0.18, 0.30, 0.040);
-    plot.AddLegend(legendNames, 0.67, 0.88, 0.64, 0.83, 0.028);
-    // plot.AddLegend(legendNames, 0.67, 0.88, 0.61, 0.80, 0.040); // with ratio box
+    // plot.AddLegend(legendNames, 0.67, 0.88, 0.64, 0.83, 0.028);
+    plot.AddLegend(legendNames, 0.67, 0.88, 0.61, 0.80, 0.040); // with ratio box
     // plot.AddLegend2Cols(3, legendNames, 0.70, 0.88, 0.64, 0.83, 0.028);
     
     // plot.AddLatex();
-    plot.AddLatex(luminosity);
+    // plot.AddLatex(luminosity);
     // plot.AddLatex("#it{Preliminary}");
-    // plot.AddLatex(luminosity, "#it{Preliminary}");
+    plot.AddLatex(luminosity, "#it{Preliminary}");
     
     // plot.AddRatioBox("ratio");
     // plot.AddRatioBox("ratio", true);
     // plot.AddRatioBox(0.1, 1.9, "ratio", true);
     // plot.AddRatioBox("true / pred", true);
-    // plot.AddRatioBox(0.1,2.4, "true / pred", true);
+    plot.AddRatioBox(0.1,2.4, "true / pred", true);
     // plot.AddRatioBox(0.84,1.16, "priv / central", true);
     
     plot.SetErrors();
@@ -129,8 +129,8 @@ int main(){
     
     plotName = "log";
     plot.SetLogY();
-    plot.SetYValueMin(0.15); // REMEMBER THIS PARAM! (only for log)
-    // plot.SetYValueMin(0.50); // REMEMBER THIS PARAM! (only for log)
+    // plot.SetYValueMin(0.15); // REMEMBER THIS PARAM! (only for log)
+    plot.SetYValueMin(0.50); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(1.10); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(3.10); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(12.10); // REMEMBER THIS PARAM! (only for log)
@@ -245,8 +245,8 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
             double predValue = corrValue * UnDValue;
             double predError = 0.0;
             if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
-            // h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
-            // h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
+            h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
+            h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
         }
 
         h_[Form("predNew_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
@@ -258,8 +258,8 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
             double predValue = corrValue * UnDValue;
             double predError = 0.0;
             if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
-            // h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
-            // h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
+            h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
+            h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
         }
 
         // OLD METHOD OF PREDICTION
@@ -404,8 +404,8 @@ void GetHistograms2017(std::map<std::string,TH1D*>& h_)
             double predValue = corrValue * UnDValue;
             double predError = 0.0;
             if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
-            // h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
-            // h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
+            h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
+            h_[Form("predNew_tag_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
         }
 
         h_[Form("predNew_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
@@ -417,8 +417,8 @@ void GetHistograms2017(std::map<std::string,TH1D*>& h_)
             double predValue = corrValue * UnDValue;
             double predError = 0.0;
             if (UnDValue != 0) predError = predValue * sqrt( (corrError/corrValue)*(corrError/corrValue) + (UnDError/UnDValue)*(UnDError/UnDValue) );
-            // h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
-            // h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
+            h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinContent(iBin, predValue);
+            h_[Form("predNew_control_%s", histoToUse.c_str())]->SetBinError(iBin, predError);
         }
 
         // OLD METHOD OF PREDICTION
