@@ -54,7 +54,7 @@ int main(){
 
 
     // ONE: save info (signal specific directories beneath this)
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_05_30/all_sys/";
+    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_08_03/2016_only/TESTING_all_sys_v01/";
   
 
     // TWO: physics info - to match the histograms that you use
@@ -386,12 +386,12 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     std::string postamble = "";
 
     if (yearOfRun == 2016){
-        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_04_11/MassCutsV08/run2016/";
-        postamble = "MassCutsV08_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
+        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_08_03/MassCutsV09/run2016/";
+        postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
     }
     else if (yearOfRun == 2017){
-        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_04_11/MassCutsV08/run2017/";
-        postamble = "MassCutsV08_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi41.root";
+        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_08_03/MassCutsV09/run2017/";
+        postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi41.root";
     }
     else{
         std::cout << "You have not given GetHistograms a valid year" << std::endl;
@@ -401,6 +401,9 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     std::vector<std::string> histoNameVec;
     histoNameVec.push_back("data");
     histoNameVec.push_back("TTJets");
+    histoNameVec.push_back("TTJets0L");
+    histoNameVec.push_back("TTJets1L");
+    histoNameVec.push_back("TTJets2L");
     histoNameVec.push_back("ZJets");
     histoNameVec.push_back("WJets");
     histoNameVec.push_back("mH30_mSusy800");
