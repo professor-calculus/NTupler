@@ -53,13 +53,16 @@ int main(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
     // ONE: save info (signal specific directories beneath this)
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_08_03/2016_only/TESTING_all_sys_v01/";
+    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_08_03/2017_only/TESTING_all_sys_v02/";
   
+
 
     // TWO: physics info - to match the histograms that you use
     const unsigned int numberOfBins = 30;
     const unsigned int numberOfHtDivisions = 3;
+
 
 
     // THREE: Samples To Use (different project for each signal sample)
@@ -73,8 +76,11 @@ int main(){
                                             "mH30_mSusy2400", "mH35_mSusy2400", "mH40_mSusy2400", "mH50_mSusy2400", "mH70_mSusy2400", "mH90_mSusy2400", "mH125_mSusy2400",
                                             "mH30_mSusy2600", "mH35_mSusy2600", "mH40_mSusy2600", "mH50_mSusy2600", "mH70_mSusy2600", "mH90_mSusy2600", "mH125_mSusy2600", 
                                         };
-    const std::vector<std::string> mcbkVec = {"TTJets", "ZJets", "WJets"}; // the mc background samples
+    // const std::vector<std::string> mcbkVec = {"TTJets", "ZJets", "WJets"}; // the 2016 MC background samples
+    // const std::vector<std::string> mcbkVec = {"TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}; // the 2017 MC background samples
+    const std::vector<std::string> mcbkVec = {"TTJets0L", "TTJets1L", "TTJets2L"}; // the 2017 MC background samples I can do on Aug2018
     const std::string qcdName = "QCD"; // this is just a label as QCD contribution is driven during the fit
+
 
 
     // FOUR: data card layout info
@@ -82,23 +88,42 @@ int main(){
     const unsigned int otherColSize = 20;
 
 
+
     // FIVE: common systematics (statistical error systematics automatically taken care of)
+    std::vector<CommonSystematic> CommonSystematicVec;
     // NB1 - make the sure the sample names match to the above
     // NB2 - "SIGNAL" refers all signal samples
-    std::vector<CommonSystematic> CommonSystematicVec;
-    CommonSystematicVec.push_back( CommonSystematic("luminosity lnN", 1.025, {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("XS_TTJets lnN", 1.5, {"TTJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("XS_ZJets lnN", 1.5, {"ZJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("XS_WJets lnN", 1.5, {"WJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("jecAK4Unc lnN", "jecAK4Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("jerAK4Unc lnN", "jerAK4Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("jecAK8Unc lnN", "jecAK8Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("jerAK8Unc lnN", "jerAK8Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("jmsUnc lnN", "jmsUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec.push_back( CommonSystematic("jmrUnc lnN", "jmrUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+
+    // *** 2016 ***
+    // CommonSystematicVec.push_back( CommonSystematic("luminosity lnN", 1.025, {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    // CommonSystematicVec.push_back( CommonSystematic("XS_TTJets lnN", 1.5, {"TTJets"}) );
+    // CommonSystematicVec.push_back( CommonSystematic("XS_ZJets lnN", 1.5, {"ZJets"}) );
+    // CommonSystematicVec.push_back( CommonSystematic("XS_WJets lnN", 1.5, {"WJets"}) );
+    // CommonSystematicVec.push_back( CommonSystematic("jecAK4Unc lnN", "jecAK4Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    // CommonSystematicVec.push_back( CommonSystematic("jerAK4Unc lnN", "jerAK4Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    // CommonSystematicVec.push_back( CommonSystematic("jecAK8Unc lnN", "jecAK8Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    // CommonSystematicVec.push_back( CommonSystematic("jerAK8Unc lnN", "jerAK8Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    // CommonSystematicVec.push_back( CommonSystematic("jmsUnc lnN", "jmsUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    // CommonSystematicVec.push_back( CommonSystematic("jmrUnc lnN", "jmrUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    // CommonSystematicVec.push_back( CommonSystematic("SigDbtTag lnN", "dbtTag", {"SIGNAL"}) );
+    // CommonSystematicVec.push_back( CommonSystematic("TtDbtTag lnN", "dbtTag", {"TTJets"}) );
+    // CommonSystematicVec.push_back( CommonSystematic("isr lnN", "isr", {"SIGNAL"}) );
+
+    // *** 2017 ***
+    CommonSystematicVec.push_back( CommonSystematic("luminosity lnN", 1.025, {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L"}) );
+    CommonSystematicVec.push_back( CommonSystematic("XS_TTJets0L lnN", 1.5, {"TTJets0L"}) );
+    CommonSystematicVec.push_back( CommonSystematic("XS_TTJets1L lnN", 1.5, {"TTJets1L"}) );
+    CommonSystematicVec.push_back( CommonSystematic("XS_TTJets2L lnN", 1.5, {"TTJets2L"}) );
+    CommonSystematicVec.push_back( CommonSystematic("jecAK4Unc lnN", "jecAK4Unc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L"}) );
+    CommonSystematicVec.push_back( CommonSystematic("jerAK4Unc lnN", "jerAK4Unc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L"}) );
+    CommonSystematicVec.push_back( CommonSystematic("jecAK8Unc lnN", "jecAK8Unc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L"}) );
+    CommonSystematicVec.push_back( CommonSystematic("jerAK8Unc lnN", "jerAK8Unc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L"}) );
+    CommonSystematicVec.push_back( CommonSystematic("jmsUnc lnN", "jmsUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L"}) );
+    CommonSystematicVec.push_back( CommonSystematic("jmrUnc lnN", "jmrUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L"}) );
     CommonSystematicVec.push_back( CommonSystematic("SigDbtTag lnN", "dbtTag", {"SIGNAL"}) );
-    CommonSystematicVec.push_back( CommonSystematic("TtDbtTag lnN", "dbtTag", {"TTJets"}) );
+    CommonSystematicVec.push_back( CommonSystematic("TtDbtTag lnN", "dbtTag", {"TTJets0L", "TTJets1L", "TTJets2L"}) );
     CommonSystematicVec.push_back( CommonSystematic("isr lnN", "isr", {"SIGNAL"}) );
+
 
 
     // SIX: are we blinded ? if true, uses Fi * data_obs_UnD as a dummy for data_obs_S
@@ -107,8 +132,8 @@ int main(){
 
 
     // SEVEN: year of run
-    const int yearOfRun = 2016;
-    // const int yearOfRun = 2017;
+    // const int yearOfRun = 2016;
+    const int yearOfRun = 2017;
 
 
 
@@ -163,7 +188,8 @@ int main(){
         for (unsigned int iBin = 1; iBin < numberOfBins + 1; ++iBin){
 
             unsigned int data_obs_S = hOriginal_[Form("S_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
-            if (areWeBlinded) data_obs_S = ceil( QcdSidebandCorr::GetCorr(iBin, yearOfRun) * hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin) ); // use to get a non zero and roughly realistic value whilst we are blinded
+            // if (areWeBlinded) data_obs_S = ceil( QcdSidebandCorr::GetCorr(iBin, yearOfRun) * hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin)); // use to get a non zero and roughly realistic value whilst we are blinded
+            if (areWeBlinded) data_obs_S = ceil( QcdSidebandCorr::GetCorr(iBin, yearOfRun) * hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin) + 0.000001); // use to get a non zero and roughly realistic value whilst we are blinded
             const unsigned int data_obs_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
             const double rate_signal_S = hOriginal_[Form("S_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);
             const double rate_signal_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);;
@@ -357,9 +383,9 @@ int main(){
             dataCard << "rateParam mass_UnD " << qcdName << " ";
             double qcdInitialEstimate = data_obs_UnD;
             for (auto rate_mcbk_UnD : rate_mcbkVec_UnD) qcdInitialEstimate = qcdInitialEstimate - rate_mcbk_UnD;
-            if (qcdInitialEstimate < 0){
+            if (qcdInitialEstimate <= 0){
                 qcdInitialEstimate = 0.0;
-                std::cout << "WARNING: qcd estimate of zero!" << std::endl;
+                std::cout << "WARNING: initial qcd estimate of zero! (in search region bin: " << iBin << ")" << std::endl;
             }
             double qcdUpperLimit = 2.0 * data_obs_UnD + 30.0;
             dataCard << std::to_string(qcdInitialEstimate) << " " << "[0," << std::to_string(qcdUpperLimit) << "]\n";
