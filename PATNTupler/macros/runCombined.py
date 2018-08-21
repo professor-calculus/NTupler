@@ -29,6 +29,9 @@ for signalDir in signalDirs:
 	# if (signalDir[0:4] != "mH40"):
 	# 	continue
 
+	# if (signalDir != "mH40_mSusy2400\n"):
+	# 	continue
+
 	signalDir = signalDir.rstrip()
 	c1 = -1
 	c2 = -1
