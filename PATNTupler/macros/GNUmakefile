@@ -54,7 +54,9 @@ histos_create: histos_create.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
 histos_plot: histos_plot.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
-makeCombinedDataCards: makeCombinedDataCards.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+# makeCombinedDataCards: makeCombinedDataCards.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+	# $(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
+makeCombineDataCardsBOTHYEARS: makeCombineDataCardsBOTHYEARS.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
 histos_plot_special: histos_plot_special.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
@@ -92,6 +94,7 @@ clean:
 	rm -rf table_investigateEventSelectionCuts table_investigateEventSelectionCuts.o ${OBJDIR}/*
 	rm -rf histos_create histos_create.o ${OBJDIR}/*
 	rm -rf histos_plot histos_plot.o ${OBJDIR}/*
-	rm -rf makeCombinedDataCards makeCombinedDataCards.o ${OBJDIR}/*
+	# rm -rf makeCombinedDataCards makeCombinedDataCards.o ${OBJDIR}/*
+	rm -rf makeCombineDataCardsBOTHYEARS makeCombineDataCardsBOTHYEARS.o ${OBJDIR}/*
 	rm -rf histos_plot_special histos_plot_special.o ${OBJDIR}/*
 	rm -rf plotting_brazil plotting_brazil.o ${OBJDIR}/*
