@@ -56,7 +56,7 @@ int main(){
 
 
     // ONE: save info (signal specific directories beneath this)
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_08_03/2016_and_2017_v2/TESTING_all_sys_v02/";
+    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_08_03/2016_and_2017/TESTING_all_sys_v01/";
   
 
 
@@ -69,7 +69,7 @@ int main(){
     // THREE: Samples To Use (different project for each signal sample)
     const std::string dataSample = "data";
     std::vector<std::string> signalVec = { // the different signal samples you wish to use
-                                            // "mH30_mSusy800", "mH50_mSusy800", "mH70_mSusy800", "mH90_mSusy800", "mH125_mSusy800",
+                                            "mH30_mSusy800",                                      "mH50_mSusy800",  "mH70_mSusy800",  "mH90_mSusy800",  "mH125_mSusy800",
                                             "mH30_mSusy1200", "mH35_mSusy1200", "mH40_mSusy1200", "mH50_mSusy1200", "mH70_mSusy1200", "mH90_mSusy1200", "mH125_mSusy1200",
                                             "mH30_mSusy1600", "mH35_mSusy1600", "mH40_mSusy1600", "mH50_mSusy1600", "mH70_mSusy1600", "mH90_mSusy1600", "mH125_mSusy1600",
                                             "mH30_mSusy2000", "mH35_mSusy2000", "mH40_mSusy2000", "mH50_mSusy2000", "mH70_mSusy2000", "mH90_mSusy2000", "mH125_mSusy2000",
@@ -207,8 +207,8 @@ int main(){
             for (unsigned int iBin = 1; iBin < numberOfBins + 1; ++iBin){
 
                 unsigned int data_obs_S = hOriginal_[Form("S_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
-                // if (areWeBlinded) data_obs_S = ceil( QcdSidebandCorr::GetCorr(iBin, yearOfRun) * hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin)); // use to get a non zero and roughly realistic value whilst we are blinded
-                if (areWeBlinded) data_obs_S = ceil( QcdSidebandCorr::GetCorr(iBin, yearOfRun) * hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin) + 0.000001); // use to get a non zero and roughly realistic value whilst we are blinded
+                if (areWeBlinded) data_obs_S = ceil( QcdSidebandCorr::GetCorr(iBin, yearOfRun) * hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin)); // use to get a non zero and roughly realistic value whilst we are blinded
+                // if (areWeBlinded) data_obs_S = ceil( QcdSidebandCorr::GetCorr(iBin, yearOfRun) * hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin) + 0.000001); // use to get a non zero and roughly realistic value whilst we are blinded
                 const unsigned int data_obs_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
                 const double rate_signal_S = hOriginal_[Form("S_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);
                 const double rate_signal_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);;
@@ -313,17 +313,17 @@ int main(){
                 }
 
                 dataCard << "\n# unique systematics\n";
-                if (rate_signal_S > 0){
-                    const unsigned int iVec = iBin - 1;
-                    double signalWeight_S = signalWeightVec_S[iSig][iVec];
-                    const int rawCount = round(rate_signal_S / signalWeight_S);
-                    const std::string statSysName = "ch" + std::to_string(binLabel) + "_SIG_S_stats gmN " + std::to_string(rawCount);
-                    const std::string signalWeightStr = std::to_string(signalWeight_S);
-                    WriteBlock(statSysName, firstColSize, dataCard);
-                    WriteBlock(signalWeightStr, otherColSize, dataCard);
-                    for (unsigned int c = 0; c < 2 * mcbkVec[yearOfRun].size() + 3; ++c) WriteBlock("-", otherColSize, dataCard);
-                    dataCard << "\n";
-                }
+                // if (rate_signal_S > 0){
+                //     const unsigned int iVec = iBin - 1;
+                //     double signalWeight_S = signalWeightVec_S[iSig][iVec];
+                //     const int rawCount = round(rate_signal_S / signalWeight_S);
+                //     const std::string statSysName = "ch" + std::to_string(binLabel) + "_SIG_S_stats gmN " + std::to_string(rawCount);
+                //     const std::string signalWeightStr = std::to_string(signalWeight_S);
+                //     WriteBlock(statSysName, firstColSize, dataCard);
+                //     WriteBlock(signalWeightStr, otherColSize, dataCard);
+                //     for (unsigned int c = 0; c < 2 * mcbkVec[yearOfRun].size() + 3; ++c) WriteBlock("-", otherColSize, dataCard);
+                //     dataCard << "\n";
+                // }
 
                 for (size_t iMC = 0; iMC < mcbkVec[yearOfRun].size(); ++iMC){
                     
@@ -347,18 +347,18 @@ int main(){
                     }
                 }
 
-                if (rate_signal_UnD > 0){
-                    const unsigned int iVec = iBin - 1;
-                    double signalWeight_UnD = signalWeightVec_UnD[iSig][iVec];
-                    const int rawCount = round(rate_signal_UnD / signalWeight_UnD);
-                    const std::string statSysName = "ch" + std::to_string(binLabel) + "_SIG_UnD_stats gmN " + std::to_string(rawCount);
-                    const std::string signalWeightStr = std::to_string(signalWeight_UnD);
-                    WriteBlock(statSysName, firstColSize, dataCard);
-                    for (unsigned int c = 0; c < mcbkVec[yearOfRun].size() + 2; ++c) WriteBlock("-", otherColSize, dataCard);
-                    WriteBlock(signalWeightStr, otherColSize, dataCard);
-                    for (unsigned int c = 0; c < mcbkVec[yearOfRun].size() + 1; ++c) WriteBlock("-", otherColSize, dataCard);
-                    dataCard << "\n";
-                }
+                // if (rate_signal_UnD > 0){
+                //     const unsigned int iVec = iBin - 1;
+                //     double signalWeight_UnD = signalWeightVec_UnD[iSig][iVec];
+                //     const int rawCount = round(rate_signal_UnD / signalWeight_UnD);
+                //     const std::string statSysName = "ch" + std::to_string(binLabel) + "_SIG_UnD_stats gmN " + std::to_string(rawCount);
+                //     const std::string signalWeightStr = std::to_string(signalWeight_UnD);
+                //     WriteBlock(statSysName, firstColSize, dataCard);
+                //     for (unsigned int c = 0; c < mcbkVec[yearOfRun].size() + 2; ++c) WriteBlock("-", otherColSize, dataCard);
+                //     WriteBlock(signalWeightStr, otherColSize, dataCard);
+                //     for (unsigned int c = 0; c < mcbkVec[yearOfRun].size() + 1; ++c) WriteBlock("-", otherColSize, dataCard);
+                //     dataCard << "\n";
+                // }
 
                 for (size_t iMC = 0; iMC < mcbkVec[yearOfRun].size(); ++iMC){
                     
@@ -425,6 +425,7 @@ int main(){
         const std::string outputDir = outputDirGeneral + "/" + signal + "/";
         std::cout << "SIGNAL SAMPLE = " << signal << ": " << outputDir << std::endl;
         std::system( Form("source %scomboCommand.sh", outputDir.c_str()) );
+        std::system( Form("sed -i \"s:number of nuisance parameters:number of nuisance parameters\\n---------------\\nshapes * * FAKE\\n---------------:\" %sallbins.txt", outputDir.c_str()) );
         std::system( Form("text2workspace.py %sallbins.txt", outputDir.c_str()) );
         std::cout << std::endl;
     }
