@@ -32,13 +32,14 @@ import argparse as a
 
 mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600]
 mHiggsVec = [30, 35, 40, 50, 70, 90, 125]
-inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_05_30/all_sys/"
+inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_08_03/2016_and_2017_V3/TESTING_all_sys_v01/"
 outputDir = inputDir + "/a_limitPlot_intp1/"
 
 plotObserved = False
+plotTitle = '77.24 fb$^{-1}$ (13 TeV)'
 # maximally squeeze the z-axis
-minMu = -1.54
-maxMu = 1.34
+minMu = -2.00
+maxMu = 1.00
 
 #############################
 #############################
@@ -81,8 +82,7 @@ for mSusy in mSusyVec:
         f_97p5.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
         
         T.GetEntry(5)
-        if (mSusy > 1200): # HACK
-            f_obs.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
+        f_obs.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
 
 f_2p5.close()
 f_16p0.close()
@@ -226,7 +226,7 @@ cbar = plt.colorbar()
 cbar.set_ticks(ticks)
 cbar.set_label('95% CL Upper Limit on $\sigma/\sigma_{theory}$', rotation=90, fontsize=16, labelpad=14)
 plt.title('CMS $Preliminary$', loc='left', fontsize=17, fontweight='bold')
-plt.title('35.87fb$^{-1}$ (13 TeV)', loc='right', fontsize=17)
+plt.title(plotTitle, loc='right', fontsize=17)
 plt.legend(loc='upper left')
 
 
