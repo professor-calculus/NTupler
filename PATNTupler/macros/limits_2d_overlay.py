@@ -32,18 +32,19 @@ import argparse as a
 
 mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600]
 mHiggsVec = [30, 35, 40, 50, 70, 90, 125]
-inputDirStandard = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_05_30/all_sys/"
-inputDirComparison = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_05_30/no_sigDbt/"
-standardLabel = ""
-comparsionLabel = "(No sigDBT Sys)"
+inputDirStandard = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_08_03/2016_and_2017_V3/TESTING_all_sys_v01/"
+inputDirComparison = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_08_03/2016_and_2017_V3/TESTING_v01_no_sigDbtTag/"
 outputDir = inputDirComparison + "/a_limit_plot_comparison_intp1/"
 
-# maximally squeeze the z-axis
-minMu = -1.54
-maxMu = 1.34
-
+standardLabel = ""
+comparsionLabel = "(No sigDBT Sys)"
 legendTextSize = 13.0
+
 plotObserved = False
+plotTitle = '77.24 fb$^{-1}$ (13 TeV)'
+# maximally squeeze the z-axis
+minMu = -2.00
+maxMu = 1.00
 
 #############################
 #############################
@@ -201,7 +202,7 @@ cbar = plt.colorbar()
 cbar.set_ticks(ticks)
 cbar.set_label('95% CL Upper Limit on $\sigma/\sigma_{theory}$', rotation=90, fontsize=16, labelpad=14)
 plt.title('CMS $Preliminary$', loc='left', fontsize=17, fontweight='bold')
-plt.title('35.87fb$^{-1}$ (13 TeV)', loc='right', fontsize=17)
+plt.title(plotTitle, loc='right', fontsize=17)
 
 # now do the same for the comparison limits
 f_2p5 = open("tmpLimits_2p5.txt", 'w')
