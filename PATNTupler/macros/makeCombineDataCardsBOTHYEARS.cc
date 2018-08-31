@@ -56,7 +56,7 @@ int main(){
 
 
     // ONE: save info (signal specific directories beneath this)
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_08_03/2016_and_2017/TESTING_all_sys_v01/";
+    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_09_01/2016_and_2017_no2017WZ_wrong2017MassSystematics/TESTING_UB_allSys/";
   
 
 
@@ -67,15 +67,16 @@ int main(){
 
 
     // THREE: Samples To Use (different project for each signal sample)
-    const std::string dataSample = "data";
+    const std::string dataSample = "Data";
     std::vector<std::string> signalVec = { // the different signal samples you wish to use
-                                            "mH30_mSusy800",                                      "mH50_mSusy800",  "mH70_mSusy800",  "mH90_mSusy800",  "mH125_mSusy800",
+                                            // "mH30_mSusy800",                                      "mH50_mSusy800",  "mH70_mSusy800",  "mH90_mSusy800",  "mH125_mSusy800",
                                             "mH30_mSusy1200", "mH35_mSusy1200", "mH40_mSusy1200", "mH50_mSusy1200", "mH70_mSusy1200", "mH90_mSusy1200", "mH125_mSusy1200",
                                             "mH30_mSusy1600", "mH35_mSusy1600", "mH40_mSusy1600", "mH50_mSusy1600", "mH70_mSusy1600", "mH90_mSusy1600", "mH125_mSusy1600",
                                             "mH30_mSusy2000", "mH35_mSusy2000", "mH40_mSusy2000", "mH50_mSusy2000", "mH70_mSusy2000", "mH90_mSusy2000", "mH125_mSusy2000",
                                             "mH30_mSusy2200", "mH35_mSusy2200", "mH40_mSusy2200", "mH50_mSusy2200", "mH70_mSusy2200", "mH90_mSusy2200", "mH125_mSusy2200",
                                             "mH30_mSusy2400", "mH35_mSusy2400", "mH40_mSusy2400", "mH50_mSusy2400", "mH70_mSusy2400", "mH90_mSusy2400", "mH125_mSusy2400",
                                             "mH30_mSusy2600", "mH35_mSusy2600", "mH40_mSusy2600", "mH50_mSusy2600", "mH70_mSusy2600", "mH90_mSusy2600", "mH125_mSusy2600", 
+                                            "mH30_mSusy2800", "mH35_mSusy2800", "mH40_mSusy2800", "mH50_mSusy2800", "mH70_mSusy2800", "mH90_mSusy2800", "mH125_mSusy2800", 
                                         };
     std::map<unsigned int, std::vector<std::string>> mcbkVec;
     mcbkVec[2016] = {"TTJets", "ZJets", "WJets"}; // the 2016 MC background samples
@@ -96,6 +97,7 @@ int main(){
     // NB1 - make the sure the sample names match to the above (for the given year)
     // NB2 - "SIGNAL" refers all signal samples
     // *** 2016 ***
+    CommonSystematicVec[2016].push_back( CommonSystematic("signalPDF lnN", 1.1, {"SIGNAL"}) ); // correlated to 2017
     CommonSystematicVec[2016].push_back( CommonSystematic("luminosity2016 lnN", 1.025, {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("XS_TTJets2016 lnN", 1.5, {"TTJets"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("XS_ZJets2016 lnN", 1.5, {"ZJets"}) );
@@ -110,6 +112,7 @@ int main(){
     CommonSystematicVec[2016].push_back( CommonSystematic("TtDbtTag2016 lnN", "dbtTag", {"TTJets"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("isr2016 lnN", "isr", {"SIGNAL"}) );
     // *** 2017 ***
+    CommonSystematicVec[2016].push_back( CommonSystematic("signalPDF lnN", 1.1, {"SIGNAL"}) ); // correlated to 2016
     CommonSystematicVec[2017].push_back( CommonSystematic("luminosity2017 lnN", 1.025, {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets0L2017 lnN", 1.5, {"TTJets0L"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets1L2017 lnN", 1.5, {"TTJets1L"}) );
@@ -127,7 +130,7 @@ int main(){
 
 
     // SIX: are we blinded ? if true, uses Fi * data_obs_UnD as a dummy for data_obs_S
-    bool areWeBlinded = true;
+    bool areWeBlinded = false;
 
 
 
@@ -156,7 +159,7 @@ int main(){
 
         std::map<std::string, TH1D*> hOriginal_;
         GetHistograms(hOriginal_, yearOfRun);
-        std::vector<double> qcdUnDLowerBoundInHtDivison = GetQcdUnDLowerBoundInHtDivison(hOriginal_["UnD_tag_data_NOSYS"], numberOfHtDivisions);
+        std::vector<double> qcdUnDLowerBoundInHtDivison = GetQcdUnDLowerBoundInHtDivison(hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())], numberOfHtDivisions);
 
         // get event weightings
         std::vector<std::vector<double>> signalWeightVec_S;
@@ -454,7 +457,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     }
 
     std::vector<std::string> histoNameVec;
-    histoNameVec.push_back("data");
+    histoNameVec.push_back("Data");
     histoNameVec.push_back("TTJets");
     histoNameVec.push_back("TTJets0L");
     histoNameVec.push_back("TTJets1L");
@@ -508,6 +511,13 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("mH70_mSusy2600");
     histoNameVec.push_back("mH90_mSusy2600");
     histoNameVec.push_back("mH125_mSusy2600");
+    histoNameVec.push_back("mH30_mSusy2800");
+    histoNameVec.push_back("mH35_mSusy2800");
+    histoNameVec.push_back("mH40_mSusy2800");
+    histoNameVec.push_back("mH50_mSusy2800");
+    histoNameVec.push_back("mH70_mSusy2800");
+    histoNameVec.push_back("mH90_mSusy2800");
+    histoNameVec.push_back("mH125_mSusy2800");
 
     std::vector<std::string> nonTrivialSysVec;
     nonTrivialSysVec.push_back("NOSYS");
