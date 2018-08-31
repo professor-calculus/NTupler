@@ -237,7 +237,7 @@ for mSusy in mSusyVec:
         T.GetEntry(4)
         f_97p5.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
         T.GetEntry(5)
- 
+        f_obs.write("%d   %d   %f\n" % (mSusy, mHiggs, T.limit))
         
 f_2p5.close()
 f_16p0.close()
