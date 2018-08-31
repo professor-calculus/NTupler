@@ -30,16 +30,16 @@ import argparse as a
 #############################
 ### ## # USER INPUTS # ## ###
 
-mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600]
+mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600, 2800]
 mHiggsVec = [30, 35, 40, 50, 70, 90, 125]
-inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_08_03/2016_and_2017_V3/TESTING_all_sys_v01/"
-outputDir = inputDir + "/a_limitPlot_intp1/"
+inputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_09_01/2016_and_2017_no2017WZ_wrong2017MassSystematics/TESTING_UB_allSys/"
+outputDir = inputDir + "/a_limitPlot_intp1_noObs/"
 
 plotObserved = False
 plotTitle = '77.24 fb$^{-1}$ (13 TeV)'
 # maximally squeeze the z-axis
 minMu = -2.00
-maxMu = 1.00
+maxMu = 1.25
 
 #############################
 #############################
@@ -62,6 +62,9 @@ for mSusy in mSusyVec:
         rootFile = "higgsCombineTest.AsymptoticLimits.mH" + str(mHiggs) + ".mSusy" + str(mSusy) + ".root"
         rootFile = os.path.join(inputDir, rootFile)
         if os.path.isfile(rootFile) == False:
+            print ""
+            print "THIS PLOT IS MISSING: mH" + str(mHiggs) + "_mSusy" + str(mSusy)
+            print ""
             continue
         f = ROOT.TFile(rootFile)
         T = f.Get("limit")

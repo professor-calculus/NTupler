@@ -16,9 +16,12 @@ import time
 # A COMMA SEPARATED LIST OF NUISANCES THAT YOU WISH TO FREEZE.
 
 nuisancesToFreeze = "" # >>> no freezing a thing
+# nuisancesToFreeze = "signalPDF"
 # nuisancesToFreeze = "SigDbtTag2016,SigDbtTag2017"
 # nuisancesToFreeze = "TtDbtTag2016,TtDbtTag2017"
 # nuisancesToFreeze = "XS_TTJets2016,XS_TTJets0L2017,XS_TTJets1L2017,XS_TTJets2L2017"
+# nuisancesToFreeze = "XS_ZJets2016,XS_ZJets2017"
+# nuisancesToFreeze = "XS_WJets2016,XS_WJets2017"
 # nuisancesToFreeze = "luminosity2016,luminosity2017"
 # nuisancesToFreeze = "jecAK4Unc2016,jecAK4Unc2017"
 # nuisancesToFreeze = "jerAK4Unc2016,jerAK4Unc2017"
