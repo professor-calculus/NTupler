@@ -194,6 +194,11 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
     histoNameVec.push_back("mH70_mSusy2600");
     histoNameVec.push_back("mH90_mSusy2600");
     histoNameVec.push_back("mH125_mSusy2600");
+    histoNameVec.push_back("mH30_mSusy2800");
+    histoNameVec.push_back("mH50_mSusy2800");
+    histoNameVec.push_back("mH70_mSusy2800");
+    histoNameVec.push_back("mH90_mSusy2800");
+    histoNameVec.push_back("mH125_mSusy2800");
     histoNameVec.push_back("CPS_h70s1200");
     histoNameVec.push_back("CPS_h70s2000");
     histoNameVec.push_back("CPS_h70s2600");
@@ -357,6 +362,11 @@ void GetHistograms2017(std::map<std::string,TH1D*>& h_)
     histoNameVec.push_back("mH70_mSusy2600");
     histoNameVec.push_back("mH90_mSusy2600");
     histoNameVec.push_back("mH125_mSusy2600");
+    histoNameVec.push_back("mH30_mSusy2800");
+    histoNameVec.push_back("mH50_mSusy2800");
+    histoNameVec.push_back("mH70_mSusy2800");
+    histoNameVec.push_back("mH90_mSusy2800");
+    histoNameVec.push_back("mH125_mSusy2800");
     histoNameVec.push_back("CPS_h70s1200");
     histoNameVec.push_back("CPS_h70s2000");
     histoNameVec.push_back("CPS_h70s2600");
