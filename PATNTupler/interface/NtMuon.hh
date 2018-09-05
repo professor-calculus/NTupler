@@ -15,6 +15,9 @@ namespace ran{
     ROOT::Math::XYZTVector p4() const {return muon->p4;}
     int charge() const {return muon->charge;}
     bool isGlobalMuon() const {return muon->isGlobalMuon;}
+    bool isPFMuon() const {return muon->isPFMuon;}
+    bool isLooseMuon() const {return muon->isLooseMuon;}
+    bool isTightMuon() const {return muon->isTightMuon;}
     bool isTrackerMuon() const {return muon->isTrackerMuon;}
     bool isStandAloneMuon() const {return muon->isStandAloneMuon;}
     bool isHighPtMuon() const {return muon->isHighPtMuon;} ///< is this a high pt muon

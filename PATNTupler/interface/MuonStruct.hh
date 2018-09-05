@@ -19,6 +19,8 @@ namespace ran{
     bool isGlobalMuon ; ///<
     bool isTrackerMuon ; ///<
     bool isPFMuon ; ///<
+    bool isLooseMuon ; ///<
+    bool isTightMuon ; ///<
     bool isStandAloneMuon ; ///<
     bool isHighPtMuon; ///< is this a high pt muon
     int numMatchedMuonStns ; ///<

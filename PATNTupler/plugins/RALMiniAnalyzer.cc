@@ -1218,6 +1218,8 @@ void RALMiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
       aMuon.charge             = imuon.charge();
       aMuon.isGlobalMuon       = imuon.isGlobalMuon();
       aMuon.isPFMuon           = imuon.isPFMuon();
+      aMuon.isLooseMuon        = imuon.isLooseMuon();
+      aMuon.isTightMuon        = imuon.isTightMuon();
       aMuon.isTrackerMuon      = imuon.isTrackerMuon();
       aMuon.isStandAloneMuon   = imuon.isStandAloneMuon();
       aMuon.isHighPtMuon       = imuon.isHighPtMuon(pV);
