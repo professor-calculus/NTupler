@@ -936,7 +936,7 @@ double relPFIsoR04 (ran::NtMuon muon) {
 
 std::vector<ran::NtMuon> looseMuons (std::vector<ran::NtMuon> muons) {
 	std::vector<ran::NtMuon> looseMu;
-	for(int i=0; i<muons.size(); i++)
+	for(unsigned int i=0; i<muons.size(); i++)
 	{
 		if(muons[i].isLooseMuon()  && relPFIsoR04(muons[i]) < 0.25)
 		{
@@ -948,7 +948,7 @@ std::vector<ran::NtMuon> looseMuons (std::vector<ran::NtMuon> muons) {
 
 std::vector<ran::NtMuon> tightMuons (std::vector<ran::NtMuon> muons) {
 	std::vector<ran::NtMuon> tightMu;
-	for(int i=0; i<muons.size(); i++)
+	for(unsigned int i=0; i<muons.size(); i++)
 	{
 		if(muons[i].isTightMuon() && relPFIsoR04(muons[i]) < 0.15)
 		{
@@ -1317,7 +1317,7 @@ int main(int argc, char** argv){
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
 				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
 				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, centralMuons, tightMu, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
 
 			}
 
