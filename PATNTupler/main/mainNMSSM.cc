@@ -916,11 +916,29 @@ std::string getOutputDirFromOutputFile(std::string outputFile)
     return outputDirectory;
 }
 
+double relPFIsoR03(ran::ntMuon muon){
+	double relIso = (muon.pfIsoR03_sumChgHadPt
+					+ max(0., muon.pfIsoR03_sumNeutHadPt 
+							+ muon.pfIsoR03_sumPhtEt
+							- 0.5*muon.pfIsoR03_sumPUPt))/(muon.pt)
+
+	return relIso;
+}
+
+double relPFIsoR04(ran::ntMuon muon){
+	double relIso = (muon.pfIsoR04_sumChgHadPt
+					+ max(0., muon.pfIsoR04_sumNeutHadPt 
+							+ muon.pfIsoR04_sumPhtEt
+							- 0.5*muon.pfIsoR04_sumPUPt))/(muon.pt)
+
+	return relIso;
+}
+
 std::vector<ran::NtMuon> looseMuons(std::vector<ran::NtMuon> muons){
 	std::vector<ran::NtMuon> looseMu;
 	for(int i=0; i<muons.size(); i++)
 	{
-		if(muons[i].isLooseMuon
+		if(muons[i].isLooseMuon  && relPFIsoR04(muons[i]) < 0.25)
 		{
 			looseMu.push_back(muons[i])
 		}
@@ -932,7 +950,7 @@ std::vector<ran::NtMuon> tightMuons(std::vector<ran::NtMuon> muons){
 	std::vector<ran::NtMuon> tightMu;
 	for(int i=0; i<muons.size(); i++)
 	{
-		if(muons[i].isTightMuon)
+		if(muons[i].isTightMuon && relPFIsoR04(muons[i]) < 0.15)
 		{
 			tightMu.push_back(muons[i])
 		}
