@@ -16,6 +16,9 @@ namespace ran{
     int charge() const {return muon->charge;}
     bool isGlobalMuon() const {return muon->isGlobalMuon;}
     bool isTrackerMuon() const {return muon->isTrackerMuon;}
+    bool isPFMuon() const {return muon->isPFMuon;}
+    bool isLooseMuon() const {return muon->isLooseMuon;}
+    bool isTightMuon() const {return muon->isTightMuon;}
     bool isStandAloneMuon() const {return muon->isStandAloneMuon;}
     bool isHighPtMuon() const {return muon->isHighPtMuon;} ///< is this a high pt muon
     int numMatchedMuonStns() const {return muon->numMatchedMuonStns;}
