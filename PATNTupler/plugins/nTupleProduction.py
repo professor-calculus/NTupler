@@ -46,8 +46,8 @@ process.source = cms.Source ("PoolSource",fileNames = cms.untracked.vstring(
 useMiniAOD=True
 
 if useMiniAOD==True:
-    # process.source.fileNames=cms.untracked.vstring('/store/user/taylor/nmssmSignalCascadeV05_13TeV_mH90p0_mSusy2000p0_ratio0p99_splitting0p1/nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH90p0_mSusy2000p0_ratio0p99_splitting0p1/170321_112712/0000/nmssmSignal_MINIAODSIM_1.root',)
-    process.source.fileNames=cms.untracked.vstring('file:/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/exampleMiniAOD/nmssmSignal_MINIAODSIM_80X.root')
+    process.source.fileNames=cms.untracked.vstring('/store/user/atittert/nmssmP1SignalCascadeV01_13TeV2016_1200sq_1210go_130X2/nmssmP1SignalCascadeV01_13TeV2016_processMc04_ed80X_P1_v1_1200sq_1210go_130X2/180528_132105/0000/nmssmSignal_MINIAODSIM_1.root')
+    # process.source.fileNames=cms.untracked.vstring('file:/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/exampleMiniAOD/nmssmSignal_MINIAODSIM_80X.root')
     # process.source.fileNames=cms.untracked.vstring('file:/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/exampleMiniAOD/TT_MINIAODSIM_80X.root')
 
 #setup the VID with HEEP 7.0

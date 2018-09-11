@@ -6,7 +6,7 @@ config = config()
 # EDIT the following:
 # uniqueName, config.Data.inputDataset, config.Data.inputDBS, config.Data.unitsPerJob
 
-uniqueName = 'MORIOND2017_SingleTop_tW_Top_CMSSW8029_titterton' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+uniqueName = 'MORIOND2017_DYJetsToLL_HT800to1200_CMSSW8029_titterton' # name for this ntuple production (include commit hash so it is unique and can be traced) 
 
 config.General.requestName = uniqueName # name of the crab job project (eg on dashboard)
 config.General.workArea = 'crab_projects' # name of directory where crab project info is stored
@@ -47,8 +47,26 @@ config.JobType.inputFiles = ['puppiCorr.root']
 # MORIOND2017_ZJets_HT600toInf: 1.0M events, 28 files = 37K events/file (use three units per job)
 # config.Data.inputDataset = '/ZJetsToQQ_HT600toInf_13TeV-madgraph/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'
 
+# MORIOND2017_DYJetsToLL_HT800to1200: 2.7M events, 82 files = 30K events/file (use three units per job)
+config.Data.inputDataset = '/DYJetsToLL_M-50_HT-800to1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'
+
+# MORIOND2017_DYJetsToLL_HT1200to2500: 0.6M events, 33 files = 20K events/file (use three units per job)
+# config.Data.inputDataset = '/DYJetsToLL_M-50_HT-1200to2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'
+
+# MORIOND2017_DYJetsToLL_HT2500ToInf: 0.4M events, 17 files = 25K events/file (use three units per job)
+# config.Data.inputDataset = '/DYJetsToLL_M-50_HT-2500toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'
+
 # MORIOND2017_WJets_HT600toInf: 1.0M events, 18 files = 55K events/file (use three units per job)
 # config.Data.inputDataset = '/WJetsToQQ_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'
+
+# MORIOND2017_WJetsToLNu_HT800To1200: 6.2M events, 115 files, 52K events/file (use three units per job)
+# config.Data.inputDataset = '/WJetsToLNu_HT-800To1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
+
+# MORIOND2017_WJetsToLNu_HT1200To2500: 6.6M events, 116 files, 52K events/file (use three units per job)
+# config.Data.inputDataset = '/WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
+
+# MORIOND2017_WJetsToLNu_HT2500ToInf: 2.4M events, 46 files, 50K events/file (use three units per job)
+# config.Data.inputDataset = '/WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
 
 # MORIOND2017_TTWJetsToLNu_part1: 2M events, 33 files = 55K events/file (three units per job)
 # config.Data.inputDataset = '/TTWJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v3/MINIAODSIM'
@@ -93,7 +111,7 @@ config.JobType.inputFiles = ['puppiCorr.root']
 # config.Data.inputDataset = '/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
 
 # MORIOND2017_SingleTop_tW_Top: 7M events, 161 files, 45k events/file (three units/job)
-config.Data.inputDataset = '/ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
+# config.Data.inputDataset = '/ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
 
 # SIGNAL SAMPLES: 200K events, 100 files = ~2K events per unit (use ten units per job)
 # config.Data.inputDataset = 'DATASETXYZ' # use the script quickSignalSubmit_crab.py to deploy

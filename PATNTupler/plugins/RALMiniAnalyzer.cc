@@ -1201,11 +1201,11 @@ void RALMiniAnalyzer::ReadInIsrInfo(const edm::Event& iEvent)
         nGluino++;
       else if (iGenParticle.pdgId()==35 && iGenParticle.numberOfDaughters()==2)
       {
-        if ( abs(p.daughter(0)->pdgID) == 5  && abs(p.daughter(1)->pdgID) == 5 )
+        if ( abs(iGenParticle.daughter(0)->pdgId()) == 5  && abs(iGenParticle.daughter(1)->pdgId()) == 5 )
         {
           nHiggs2bb++;
-          if (higgs2bbDelR1 == -1) higgs2bbDelR1 = p.daughter(0).p4().deltaR(p.daughter(1).p4());
-          else if (higgs2bbDelR2 == -1) higgs2bbDelR2 = p.daughter(0).p4().deltaR(p.daughter(1).p4());
+          if (higgs2bbDelR1 == -1) higgs2bbDelR1 = deltaR(iGenParticle.daughter(0)->p4(), iGenParticle.daughter(1)->p4());
+          else if (higgs2bbDelR2 == -1) higgs2bbDelR2 = deltaR(iGenParticle.daughter(0)->p4(), iGenParticle.daughter(1)->p4());
         }
       }
 
