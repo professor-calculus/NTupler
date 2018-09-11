@@ -198,6 +198,9 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       int nPU_;
       int nISR_;
       int nGLUINO_;
+      int nHIGGS2BB_;
+      float HIGGS2BB_DR1_;
+      float HIGGS2BB_DR2_;
       std::vector<ran::ElectronStruct>* electronCollection_;
       std::vector<ran::MuonStruct>* muonCollection_;
       std::vector<ran::JetStruct>* jetCollection_;
@@ -272,6 +275,9 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     EventDataTree->Branch("nPU", &nPU_, "nPU/I");
     EventDataTree->Branch("nISR", &nISR_, "nISR/I");
     EventDataTree->Branch("nGluino", &nGLUINO_, "nGluino/I");
+    EventDataTree->Branch("nHiggs2bb", &nHIGGS2BB_, "nHiggs2bb/I");
+    EventDataTree->Branch("Higgs2bbDelR1", &HIGGS2BB_DR1_, "Higgs2bbDelR1/F");
+    EventDataTree->Branch("Higgs2bbDelR2", &HIGGS2BB_DR2_, "Higgs2bbDelR2/F");
     EventDataTree->Branch("electronCollection","std::vector<ran::ElectronStruct>", &electronCollection_, 64000, 1); 
     EventDataTree->Branch("muonCollection","std::vector<ran::MuonStruct>", &muonCollection_, 64000, 1); 
     EventDataTree->Branch("jetCollection","std::vector<ran::JetStruct>", &jetCollection_, 64000, 1);
@@ -511,6 +517,9 @@ void RALMiniAnalyzer::ResetEventByEventVariables(){
   nPU_ = 0;
   nISR_ = 0;
   nGLUINO_ = 0;
+  nHIGGS2BB_ = 0;
+  HIGGS2BB_DR1_ = -1;
+  HIGGS2BB_DR2_ = -1;
 }
 
 //------------ For getting the correction factor for the PUPPI softDropMass -------------
@@ -1181,15 +1190,31 @@ void RALMiniAnalyzer::ReadInIsrInfo(const edm::Event& iEvent)
 
 
     // additional info for signal processes - count the number of gluinos in the event
+    // Also the number of Higgs which decay to bb and the DelR between b quarks from the same Higgs
     unsigned int nGluino = 0;
+    unsigned int nHiggs2bb = 0;
+    float higgs2bbDelR1 = -1;
+    float higgs2bbDelR2 = -1;
     for (const reco::GenParticle &iGenParticle: *genParticles){
 
       if (iGenParticle.pdgId()==1000021 && iGenParticle.numberOfDaughters()==2)
         nGluino++;
+      else if (iGenParticle.pdgId()==35 && iGenParticle.numberOfDaughters()==2)
+      {
+        if ( abs(p.daughter(0)->pdgID) == 5  && abs(p.daughter(1)->pdgID) == 5 )
+        {
+          nHiggs2bb++;
+          if (higgs2bbDelR1 == -1) higgs2bbDelR1 = p.daughter(0).p4().deltaR(p.daughter(1).p4());
+          else if (higgs2bbDelR2 == -1) higgs2bbDelR2 = p.daughter(0).p4().deltaR(p.daughter(1).p4());
+        }
+      }
 
     } // closes loop through genParticles
     // std::cout << "number of gluinos: " << nGluino << "\n" << std::endl;
     nGLUINO_ = nGluino;
+    nHIGGS2BB_ = nHiggs2bb;
+    HIGGS2BB_DR1_ = higgs2bbDelR1;
+    HIGGS2BB_DR2_ = higgs2bbDelR2;
 }
 
 
