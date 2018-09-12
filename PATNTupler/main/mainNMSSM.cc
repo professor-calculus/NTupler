@@ -159,6 +159,10 @@ private:
 	UInt_t treeVar_nPU_;
 	UInt_t treeVar_nGluino_;
 
+	UInt_t treeVar_nHiggsTobb_;
+	Double_t treeVar_DelRHiggs_bb_1_;
+	Double_t treeVar_DelRHiggs_bb_2_;
+
 	TLorentzVector* treeVar_fatJetA_p4Ptr_; TLorentzVector treeVar_fatJetA_p4_;
 	TLorentzVector* treeVar_fatJetA_p4Ptr_jecUncUp_; TLorentzVector treeVar_fatJetA_p4_jecUncUp_;
 	TLorentzVector* treeVar_fatJetA_p4Ptr_jecUncDown_; TLorentzVector treeVar_fatJetA_p4_jecUncDown_;
@@ -300,6 +304,10 @@ public:
 		mainAnaTree_->Branch("nPU", &treeVar_nPU_, "nPU/i");
 		mainAnaTree_->Branch("nGluino", &treeVar_nGluino_, "nGluino/i");
 
+		mainAnaTree_->Branch("nHiggsTobb", &treeVar_nHiggsTobb_, "nHiggsTobb/i");
+		mainAnaTree_->Branch("DelR_bb_Higgs1", &treeVar_DelRHiggs_bb_1_, "DelR_bb_Higgs1/D");
+		mainAnaTree_->Branch("DelR_bb_Higgs2", &treeVar_DelRHiggs_bb_1_, "DelR_bb_Higgs2/D");
+
 		mainAnaTree_->Branch("fatJetA_p4", &treeVar_fatJetA_p4Ptr_);
 		mainAnaTree_->Branch("fatJetA_p4_jecUncUp", &treeVar_fatJetA_p4Ptr_jecUncUp_);
 		mainAnaTree_->Branch("fatJetA_p4_jecUncDown", &treeVar_fatJetA_p4Ptr_jecUncDown_);
@@ -410,7 +418,7 @@ public:
 					const float& mht_phi_jerUncUp, const float& mht_phi_jerUncDown, const std::vector<ran::NtJet>& slimJets, const std::vector<ran::NtJet>& allSlimJets,
 					const std::vector<ran::NtJet>& slimBJets, const std::vector<ran::NtJet>& allSlimBJets, unsigned int nrFatJets,
 					const std::vector<ran::NtElectron>& centralElectrons, const std::vector<ran::NtMuon>& tightMuons, unsigned int nrLooseMuons, unsigned int nrTightMuons,
-					const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const double& D_factor)
+					const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const int& nHiggs2bb, const float& DelRHiggs2bb_1, const float& DelRHiggs2bb_2, const double& D_factor)
 	{
 		// Hack: Muon mass for TLorentzVector...
 		double muonMass = 0.105658;
@@ -489,6 +497,9 @@ public:
 		treeVar_trgDecision_ = trigDecision;
 		treeVar_nPU_ = nPU;
 		treeVar_nGluino_ = nGluino;
+		treeVar_nHiggsTobb_ = nHiggs2bb;
+		treeVar_DelRHiggs_bb_1_ = DelRHiggs2bb_1;
+		treeVar_DelRHiggs_bb_2_ = DelRHiggs2bb_2;
 		treeVar_nrFatJets_ = nrFatJets;
 		treeVar_nrLooseMuons_ = nrLooseMuons;
 		treeVar_nrTightMuons_ = nrTightMuons;
@@ -1077,6 +1088,9 @@ int main(int argc, char** argv){
 
 		TTreeReaderValue<int> nPU_tree(treeReader, "nPU");
 		TTreeReaderValue<int> nISR_tree(treeReader, "nISR");
+		TTreeReaderValue<int> nHiggs2bb_tree(treeReader, "nHiggs2bb"); // HACK: need to comment out this line if working on DATA or QCD (the ntuples are missing nGluino info)
+		TTreeReaderValue<double> DelRHiggs2bb_1_tree(treeReader, "Higgs2bbDelR1"); // HACK: need to comment out this line if working on DATA or QCD (the ntuples are missing nGluino info)
+		TTreeReaderValue<double> DelRHiggs2bb_2_tree(treeReader, "Higgs2bbDelR2"); // HACK: need to comment out this line if working on DATA or QCD (the ntuples are missing nGluino info)
 		//TTreeReaderValue<int> nGluino_tree(treeReader, "nGluino"); // HACK: need to comment out this line if working on DATA or QCD (the ntuples are missing nGluino info)
 
 
@@ -1118,8 +1132,14 @@ int main(int argc, char** argv){
 
 			const int nPU = *nPU_tree;
 			const int nISR = *nISR_tree;
-			const int nGluino = 0; // HACK: use this option if working on DATA or QCD (the ntuples are missing nGluino info)
-			//const int nGluino = *nGluino_tree;
+			//const int nGluino = 0; // HACK: use this option if working on DATA or QCD (the ntuples are missing nGluino info)
+			//const int nHiggs2bb = 0; // HACK: use this option if working on DATA or QCD (the ntuples are missing nGluino info)
+			//const float DelR_bb_Higgs1 = -1; // HACK: use this option if working on DATA or QCD (the ntuples are missing nGluino info)
+			//const float DelR_bb_Higgs2 = -1; // HACK: use this option if working on DATA or QCD (the ntuples are missing nGluino info)
+			const int nGluino = *nGluino_tree;
+			const int nHiggs2bb = *nHiggs2bb_tree;
+			const float DelR_bb_Higgs1 = *DelRHiggs2bb_1_tree;
+			const float DelR_bb_Higgs2 = *DelRHiggs2bb_2_tree;
 
 			// HT calculation: Only consider jets with |eta| < 3.0, pt > 40.0
 			double ht = 0.0;
@@ -1257,8 +1277,8 @@ int main(int argc, char** argv){
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
 				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor);
 
 			}
 			else if (nFatJets == 1) {
@@ -1287,8 +1307,8 @@ int main(int argc, char** argv){
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
 				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor);
 
 			}
 			else {
@@ -1316,8 +1336,8 @@ int main(int argc, char** argv){
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
 				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, D_factor);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor);
 
 			}
 
