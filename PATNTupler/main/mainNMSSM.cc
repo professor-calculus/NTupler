@@ -1243,9 +1243,11 @@ int main(int argc, char** argv){
 			unsigned int nTightMuons = tightMu.size();
 
 			std::vector<ran::NtJet> slimJets;
-			std::vector<ran::NtJet> slimBJets;
+			std::vector<ran::NtJet> slimLooseBJets;
+			std::vector<ran::NtJet> slimMediumBJets;
 			std::vector<ran::NtJet> allSlimJets;
-			std::vector<ran::NtJet> allSlimBJets;
+			std::vector<ran::NtJet> allSlimLooseBJets;
+			std::vector<ran::NtJet> allSlimMediumBJets;
 
 			if (nFatJets > 1) {
 			// if (centralFatJetVec.size() >= 2 && ht > 1200.0) { // HACK: INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
@@ -1258,14 +1260,14 @@ int main(int argc, char** argv){
 						continue;
 					allSlimJets.push_back(jet);
 					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
-                                                allSlimBJets.push_back(jet);
+                        allSlimMediumBJets.push_back(jet);
 					if (deltaR2(jet.eta(), jet.phi(), fatJetA.eta(), fatJetA.phi()) < (1.4 * 1.4))
 						continue;
 					else if (deltaR2(jet.eta(), jet.phi(), fatJetB.eta(), fatJetB.phi()) < (1.4 * 1.4))
 						continue;
 					slimJets.push_back(jet);
 					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
-						slimBJets.push_back(jet);
+						slimMediumBJets.push_back(jet);
 				}
 				// Sort the jets by pt, but the b-jets by b-tag discriminator score
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
@@ -1290,12 +1292,12 @@ int main(int argc, char** argv){
 						continue;
 					allSlimJets.push_back(jet);
 					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
-                        allSlimBJets.push_back(jet);
+                        allSlimMediumBJets.push_back(jet);
 					if (deltaR2(jet.eta(), jet.phi(), fatJetA.eta(), fatJetA.phi()) < (1.4 * 1.4))
 						continue;
 					slimJets.push_back(jet);
 					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
-						slimBJets.push_back(jet);
+						slimMediumBJets.push_back(jet);
 				}
 				// Sort the jets by pt, but the b-jets by b-tag discriminator score
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
@@ -1320,10 +1322,10 @@ int main(int argc, char** argv){
 						continue;
 					allSlimJets.push_back(jet);
 					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
-                        allSlimBJets.push_back(jet);
+                        allSlimMediumBJets.push_back(jet);
 					slimJets.push_back(jet);
 					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
-						slimBJets.push_back(jet);
+						slimMediumBJets.push_back(jet);
 				}
 
 				// Sort the jets by pt, but the b-jets by b-tag discriminator score

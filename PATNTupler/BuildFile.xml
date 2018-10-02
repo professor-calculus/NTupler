@@ -1,9 +1,0 @@
-<use name="DataFormats/PatCandidates"/>
-<use name="root"/>
-<use name="boost"/>
-
-<export>
-   <use name="root"/>
-   <use name="boost"/>
-   <lib name="NTuplerPATNTupler"/>
-</export>
