@@ -6,7 +6,7 @@ config = config()
 # EDIT the following:
 # uniqueName, config.Data.inputDataset, config.Data.inputDBS, config.Data.unitsPerJob
 
-uniqueName = 'MORIOND2017_WJetsToLNu_HT1200to2500_CMSSW8029_titterton' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+uniqueName = 'NAMEXYZ_CMSSW8029wDBTV4_titterton' # name for this ntuple production (include commit hash so it is unique and can be traced) 
 
 config.General.requestName = uniqueName # name of the crab job project (eg on dashboard)
 config.General.workArea = 'crab_projects' # name of directory where crab project info is stored
@@ -63,7 +63,7 @@ config.JobType.inputFiles = ['puppiCorr.root']
 # config.Data.inputDataset = '/WJetsToLNu_HT-800To1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
 
 # MORIOND2017_WJetsToLNu_HT1200To2500: 6.6M events, 116 files, 52K events/file (use three units per job)
-config.Data.inputDataset = '/WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
+# config.Data.inputDataset = '/WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
 
 # MORIOND2017_WJetsToLNu_HT2500ToInf: 2.4M events, 46 files, 50K events/file (use three units per job)
 # config.Data.inputDataset = '/WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
@@ -114,7 +114,7 @@ config.Data.inputDataset = '/WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgrap
 # config.Data.inputDataset = '/ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
 
 # SIGNAL SAMPLES: 200K events, 100 files = ~2K events per unit (use ten units per job)
-# config.Data.inputDataset = 'DATASETXYZ' # use the script quickSignalSubmit_crab.py to deploy
+config.Data.inputDataset = 'DATASETXYZ' # use the script quickSignalSubmit_crab.py to deploy
 
 # CENTRAL PRODUCTION SIGNAL: (use one unit per job)
 # config.Data.inputDataset = '/NMSSMCascade_mH-70_mSUSY-1200_TuneCUEP8M1_13TeV-madgraph-pythia8/RunIISummer16MiniAODv2-80X_mcRun2_asymptotic_2016_TrancheIV_v6-v2/MINIAODSIM'
@@ -130,6 +130,6 @@ config.Data.unitsPerJob = 1
 
 config.Data.totalUnits = -1 # '-1' does them all
 config.Data.publication = False
-config.Data.outLFNDirBase = '/store/user/atittert/ntuples_MC_AUG2018_v2' # Wherever you want the ntuples to go on the RAL T2
+config.Data.outLFNDirBase = '/store/user/atittert/ntuples_MC_OCT2018_v1' # Wherever you want the ntuples to go on the RAL T2
 
 config.Site.storageSite = 'T2_UK_SGrid_RALPP'

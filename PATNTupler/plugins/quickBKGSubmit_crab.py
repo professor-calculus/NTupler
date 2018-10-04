@@ -23,7 +23,7 @@ if sys.argv[1] == "2016":
 
 		os.system("cp crabConfig_nTupleProd_VJ.py TEMP_crabConfig_nTupleProd_VJ.py") # 80X
 		os.system("sed -i 's:NAMEXYZ:%s:g' TEMP_crabConfig_nTupleProd_VJ.py" % keys[i])
-		os.system("sed -i 's:DATASETXYZ:%s:g' TEMP_crabConfig_nTupleProd_VJ.py" % signalSamples16[keys[i]][1])
+		os.system("sed -i 's:DATASETXYZ:%s:g' TEMP_crabConfig_nTupleProd_VJ.py" % bkgSamples16[keys[i]][1])
 		# os.system("cat TEMP_crabConfig_nTupleProd_VJ.py") # for testing
 		os.system("crab submit -c TEMP_crabConfig_nTupleProd_VJ.py") # for running
 		os.system("rm TEMP_crabConfig_nTupleProd_VJ.py")
@@ -38,7 +38,7 @@ if sys.argv[1] == "2017":
 
 		os.system("cp crabConfig_nTupleProd2017_VJ.py TEMP_crabConfig_nTupleProd_VJ.py") # 94X
 		os.system("sed -i 's:NAMEXYZ:%s:g' TEMP_crabConfig_nTupleProd_VJ.py" % keys[i])
-		os.system("sed -i 's:DATASETXYZ:%s:g' TEMP_crabConfig_nTupleProd_VJ.py" % signalSamples17[keys[i]][1])
+		os.system("sed -i 's:DATASETXYZ:%s:g' TEMP_crabConfig_nTupleProd_VJ.py" % bkgSamples17[keys[i]][1])
 		# os.system("cat TEMP_crabConfig_nTupleProd_VJ.py") # for testing
 		os.system("crab submit -c TEMP_crabConfig_nTupleProd_VJ.py") # for running
 		os.system("rm TEMP_crabConfig_nTupleProd_VJ.py")
