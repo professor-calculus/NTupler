@@ -135,10 +135,10 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       ///For reading in the electron information, and dumping it into ran::Event class ...
       void ReadInElectrons(const edm::Event&);
 
-      ///For reading in the electron information, and dumping it into ran::Event class ...
+      ///For reading in the photon information, and dumping it into ran::Event class ...
       void ReadInPhotons(const edm::Event&);
 
-      ///For reading in the electron information, and dumping it into ran::Event class ...
+      ///For reading in the PF candidate track information, and dumping it into ran::Event class ...
       void ReadInTracks(const edm::Event&);
   
       ///For reading in the muon information, and dumping it into ran::Event class ...
@@ -211,7 +211,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       float HIGGS2BB_DR1_;
       float HIGGS2BB_DR2_;
       std::vector<ran::ElectronStruct>* electronCollection_;
-      std::vector<ran::PhotononStruct>* photonCollection_;
+      std::vector<ran::PhotonStruct>* photonCollection_;
       std::vector<ran::TrackStruct>* trackCollection_;
       std::vector<ran::MuonStruct>* muonCollection_;
       std::vector<ran::JetStruct>* jetCollection_;
