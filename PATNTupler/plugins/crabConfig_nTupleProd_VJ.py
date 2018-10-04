@@ -6,7 +6,7 @@ config = config()
 # EDIT the following:
 # uniqueName, config.Data.inputDataset, config.Data.inputDBS, config.Data.unitsPerJob
 
-uniqueName = 'MORIOND2017_DYJetsToLL_HT800to1200_CMSSW8029_titterton' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+uniqueName = 'MORIOND2017_WJetsToLNu_HT1200to2500_CMSSW8029_titterton' # name for this ntuple production (include commit hash so it is unique and can be traced) 
 
 config.General.requestName = uniqueName # name of the crab job project (eg on dashboard)
 config.General.workArea = 'crab_projects' # name of directory where crab project info is stored
@@ -48,7 +48,7 @@ config.JobType.inputFiles = ['puppiCorr.root']
 # config.Data.inputDataset = '/ZJetsToQQ_HT600toInf_13TeV-madgraph/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'
 
 # MORIOND2017_DYJetsToLL_HT800to1200: 2.7M events, 82 files = 30K events/file (use three units per job)
-config.Data.inputDataset = '/DYJetsToLL_M-50_HT-800to1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'
+# config.Data.inputDataset = '/DYJetsToLL_M-50_HT-800to1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'
 
 # MORIOND2017_DYJetsToLL_HT1200to2500: 0.6M events, 33 files = 20K events/file (use three units per job)
 # config.Data.inputDataset = '/DYJetsToLL_M-50_HT-1200to2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'
@@ -63,7 +63,7 @@ config.Data.inputDataset = '/DYJetsToLL_M-50_HT-800to1200_TuneCUETP8M1_13TeV-mad
 # config.Data.inputDataset = '/WJetsToLNu_HT-800To1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
 
 # MORIOND2017_WJetsToLNu_HT1200To2500: 6.6M events, 116 files, 52K events/file (use three units per job)
-# config.Data.inputDataset = '/WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
+config.Data.inputDataset = '/WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
 
 # MORIOND2017_WJetsToLNu_HT2500ToInf: 2.4M events, 46 files, 50K events/file (use three units per job)
 # config.Data.inputDataset = '/WJetsToLNu_HT-2500ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
@@ -125,7 +125,7 @@ config.Data.inputDataset = '/DYJetsToLL_M-50_HT-800to1200_TuneCUETP8M1_13TeV-mad
 config.Data.inputDBS = 'global' # for centrally produced data
 # config.Data.inputDBS = 'phys03' # for personal simulation
 config.Data.splitting = 'FileBased'
-config.Data.unitsPerJob = 3
+config.Data.unitsPerJob = 1
 #################################################################################################
 
 config.Data.totalUnits = -1 # '-1' does them all
