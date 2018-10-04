@@ -21,8 +21,8 @@
 #pragma link C++ class ran::MetStruct+;
 #pragma link C++ class std::vector< ran::ElectronStruct>;
 #pragma link C++ class std::vector< ran::MuonStruct>;
-#pragma link C++ class std::vector<ran::PhotonStruct+>;
-#pragma link C++ class std::vector<ran::TrackStruct+>;
+#pragma link C++ class std::vector<ran::PhotonStruct>;
+#pragma link C++ class std::vector<ran::TrackStruct>;
 #pragma link C++ class std::vector< ran::JetStruct>;
 #pragma link C++ class std::vector< ran::FatJetStruct>;
 #pragma link C++ class std::vector< ran::MetStruct>;

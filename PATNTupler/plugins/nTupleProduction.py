@@ -60,7 +60,7 @@ else:
     switchOnVIDElectronIdProducer(process, DataFormat.AOD)
 
 # define which IDs we want to produce
-my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV70_cff']
+my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.heepElectronID_HEEPV70_cff', 'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Summer16_80X_V1_cff']
 #add them to the VID producer
 for idmod in my_id_modules:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
@@ -116,7 +116,7 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        elesMiniAOD=cms.InputTag("slimmedElectrons"),
                                        trkIsolMap=cms.InputTag("heepIDVarValueMaps","eleTrkPtIso"),
                                        vid=cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-loose"),
-                                       rho=cms.InputTag("fixedGridRhoAll")
+                                       rho=cms.InputTag("fixedGridRhoAll"),
                                        rhoPhoton=cms.InputTag("fixedGridRhoFastjetAll")
                                        )
 
