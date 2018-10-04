@@ -24,18 +24,9 @@ namespace ran{
     bool gsfTrack_available;///< Is GSF track available
     float scEta;///< super cluster eta
     float scEnergy;///< super cluster energy
-    bool ecalDrivenSeed;///< is ecal driven
-    float e2x5Max;///< e2x5 max
     float e5x5;///< e5x5
-    float e1x5;///< e1x5
-    float deltaPhiSuperClusterTrackAtVtx;///< 
-    float deltaEtaSuperClusterTrackAtVtx;///< 
+    float e1x5;///< e1x5 
     float hadronicOverEm;///< H/E
-    //int nrMissHits;///< Number of missing hits
-    float scSigmaIEtaIEta;///< 
-    float dr03EcalRecHitSumEt;///< 
-    float dr03HcalDepth1TowerSumEt;///< 
-    float dr03TkSumPt;///< 
     float pfIso_chHadrIso;//For photon ID criteria
     float pfIso_neuHadrIso;// " "
     float pfIso_photonIso;// " "

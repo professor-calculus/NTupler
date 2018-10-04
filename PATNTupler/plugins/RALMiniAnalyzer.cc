@@ -823,7 +823,7 @@ void RALMiniAnalyzer::ReadInPhotons(const edm::Event& iEvent)
 
   for (const pat::Photon &iphoton : *photons) {
     photonCollection_->push_back(ran::PhotonStruct{}); 
-    ran::photonStruct &aPhoton = photonCollection_->back();     
+    ran::PhotonStruct &aPhoton = photonCollection_->back();     
 
     aPhoton.et = iphoton.et();
     aPhoton.pt = iphoton.pt();
@@ -833,24 +833,16 @@ void RALMiniAnalyzer::ReadInPhotons(const edm::Event& iEvent)
     aPhoton.gsfTrack_available = iphoton.gsfTrack().isAvailable();
     aPhoton.scEta = iphoton.superCluster()->eta();
     aPhoton.scEnergy = iphoton.superCluster()->energy(); 
-    aPhoton.ecalDrivenSeed = iphoton.ecalDrivenSeed(); 
     aPhoton.sigmaIetaIeta = iphoton.sigmaIetaIeta();
     aPhoton.full5x5_sigmaIetaIeta = iphoton.full5x5_sigmaIetaIeta();
     //aPhoton.passConversionVeto = iphoton.passConversionVeto();
-    aPhoton.e2x5Max = iphoton.e2x5Max();
     aPhoton.e5x5 = iphoton.e5x5();
     aPhoton.e1x5 = iphoton.e1x5();
-    aPhoton.deltaPhiSuperClusterTrackAtVtx = iphoton.deltaPhiSuperClusterTrackAtVtx();
-    aPhoton.deltaEtaSuperClusterTrackAtVtx = iphoton.deltaEtaSuperClusterTrackAtVtx();
     aPhoton.hadronicOverEm = iphoton.hadronicOverEm();
     //aPhoton.nrMissHits = iphoton.gsfTrack().trackerExpectedHitsInner().numberOfHits();
     aPhoton.pfIso_chHadrIso = iphoton.getPflowIsolationVariables().chargedHadronIso;
     aPhoton.pfIso_neuHadrIso = iphoton.getPflowIsolationVariables().neutralHadronIso;
     aPhoton.pfIso_photonIso = iphoton.getPflowIsolationVariables().photonIso;
-    aPhoton.scSigmaIEtaIEta = iphoton.scSigmaIEtaIEta();
-    aPhoton.dr03EcalRecHitSumEt = iphoton.dr03EcalRecHitSumEt();
-    aPhoton.dr03HcalDepth1TowerSumEt = iphoton.dr03HcalDepth1TowerSumEt();
-    aPhoton.dr03TkSumPt = iphoton.dr03TkSumPt();
     aPhoton.passElectronVeto = iphoton.passElectronVeto();
     //aPhoton.pfIso_chgHad = iphoton.pfIsolationVariables().chargedHadronIso;
     //aPhoton.pfIso_neutHad = iphoton.pfIsolationVariables().neutralHadronIso;
@@ -864,12 +856,12 @@ void RALMiniAnalyzer::ReadInPhotons(const edm::Event& iEvent)
 
 void RALMiniAnalyzer::ReadInTracks(const edm::Event& iEvent)
 {
-  edm::Handle<pat::PackedCandidatesCollection> tracks;
+  edm::Handle<pat::PackedCandidateCollection> tracks;
   iEvent.getByToken(trackToken_, tracks);
 
   for (const pat::PackedCandidate &itrack : *tracks) {
     trackCollection_->push_back(ran::TrackStruct{}); 
-    ran::trackStruct &aTrack = trackCollection_->back();     
+    ran::TrackStruct &aTrack = trackCollection_->back();     
 
     aTrack.et = itrack.et();
     aTrack.pt = itrack.pt();
