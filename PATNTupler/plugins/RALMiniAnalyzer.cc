@@ -258,8 +258,7 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     triggerObjects_(consumes<pat::TriggerObjectStandAloneCollection>(iConfig.getParameter<edm::InputTag>("objects"))),
     triggerPrescales_(consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("prescales"))),
     targetTriggerPaths_(iConfig.getParameter<std::vector<std::string> >("selectedTriggerPaths")),
-
-    rhoToken_(consumes<double>(iConfig.getParameter<edm::InputTag>("rho")))
+    rhoToken_(consumes<double>(iConfig.getParameter<edm::InputTag>("rho"))),
     rhoPhotonToken_(consumes<double>(iConfig.getParameter<edm::InputTag>("rhoPhoton")))
     //cuts_(iConfig)
 {
