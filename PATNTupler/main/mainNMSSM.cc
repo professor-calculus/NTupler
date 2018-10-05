@@ -945,6 +945,255 @@ double relPFIsoR04 (ran::NtMuon muon) {
 	return relIso;
 }
 
+double electronPFIsolation(edm::Handle<pat::PackedCandidateCollection> pfcands,
+                        const ran::NtElectron ptcl,  
+                        double r_iso_min, double r_iso_max, double kt_scale,
+                        bool charged_only) {
+	
+	if (ptcl.pt()) < 5 return 9999.;
+
+	double deadcone_nh(0.), deadcone_ch(0.), deadcone_ph(0.), deadcone_pu(0.);
+    if(type == 'electron') {
+      if (fabs(ptcl.eta())>1.479) {deadcone_ch = 0.015; deadcone_pu = 0.015; deadcone_ph = 0.08;}
+    } else if(type == 'muon') {
+      deadcone_ch = 0.0001; deadcone_pu = 0.01; deadcone_ph = 0.01;deadcone_nh = 0.01;  
+    }
+
+    double iso_nh(0.); double iso_ch(0.); 
+    double iso_ph(0.); double iso_pu(0.);
+    double ptThresh(0.5);
+    if(type == 'electron') ptThresh = 0;
+    double r_iso = max(r_iso_min,min(r_iso_max, kt_scale/ptcl.pt()));
+    for (const pat::PackedCandidate &pfc : *pfcands) {
+      if (abs(pfc.pdgId())<7) continue;
+
+      double dr = deltaR(pfc, ptcl);
+      if (dr > r_iso) continue;
+      
+      //////////////////  NEUTRALS  /////////////////////////
+      if (pfc.charge()==0){
+        if (pfc.pt()>ptThresh) {
+          /////////// PHOTONS ////////////
+          if (abs(pfc.pdgId())==22) {
+            if(dr < deadcone_ph) continue;
+            iso_ph += pfc.pt();
+	    /////////// NEUTRAL HADRONS ////////////
+          } else if (abs(pfc.pdgId())==130) {
+            if(dr < deadcone_nh) continue;
+            iso_nh += pfc.pt();
+          }
+        }
+        //////////////////  CHARGED from PV  /////////////////////////
+      } else if (pfc.fromPV()>1){
+        if (abs(pfc.pdgId())==211) {
+          if(dr < deadcone_ch) continue;
+          iso_ch += pfc.pt();
+        }
+        //////////////////  CHARGED from PU  /////////////////////////
+      } else {
+        if (pfc.pt()>ptThresh){
+          if(dr < deadcone_pu) continue;
+          iso_pu += pfc.pt();
+        }
+      }
+    }
+    double iso(0.);
+    if (charged_only){
+      iso = iso_ch;
+    } else {
+      iso = iso_ph + iso_nh;
+      iso -= 0.5*iso_pu;
+      if (iso>0) iso += iso_ch;
+      else iso = iso_ch;
+    }
+    iso = iso/ptcl.pt();
+
+    return iso;
+}
+
+double muonPFIsolation(edm::Handle<pat::PackedCandidateCollection> pfcands,
+                        const ran::NtMuon ptcl,  
+                        double r_iso_min, double r_iso_max, double kt_scale,
+                        bool charged_only) {
+	
+	if (ptcl.pt()) < 5 return 9999.;
+
+	double deadcone_nh(0.), deadcone_ch(0.), deadcone_ph(0.), deadcone_pu(0.);
+    deadcone_ch = 0.0001; deadcone_pu = 0.01; deadcone_ph = 0.01;deadcone_nh = 0.01;  
+
+    double iso_nh(0.); double iso_ch(0.); 
+    double iso_ph(0.); double iso_pu(0.);
+    double ptThresh(0.5);
+    double r_iso = max(r_iso_min,min(r_iso_max, kt_scale/ptcl.pt()));
+    for (const pat::PackedCandidate &pfc : *pfcands) {
+      if (abs(pfc.pdgId())<7) continue;
+
+      double dr = deltaR(pfc, ptcl);
+      if (dr > r_iso) continue;
+      
+      //////////////////  NEUTRALS  /////////////////////////
+      if (pfc.charge()==0){
+        if (pfc.pt()>ptThresh) {
+          /////////// PHOTONS ////////////
+          if (abs(pfc.pdgId())==22) {
+            if(dr < deadcone_ph) continue;
+            iso_ph += pfc.pt();
+	    /////////// NEUTRAL HADRONS ////////////
+          } else if (abs(pfc.pdgId())==130) {
+            if(dr < deadcone_nh) continue;
+            iso_nh += pfc.pt();
+          }
+        }
+        //////////////////  CHARGED from PV  /////////////////////////
+      } else if (pfc.fromPV()>1){
+        if (abs(pfc.pdgId())==211) {
+          if(dr < deadcone_ch) continue;
+          iso_ch += pfc.pt();
+        }
+        //////////////////  CHARGED from PU  /////////////////////////
+      } else {
+        if (pfc.pt()>ptThresh){
+          if(dr < deadcone_pu) continue;
+          iso_pu += pfc.pt();
+        }
+      }
+    }
+    double iso(0.);
+    if (charged_only){
+      iso = iso_ch;
+    } else {
+      iso = iso_ph + iso_nh;
+      iso -= 0.5*iso_pu;
+      if (iso>0) iso += iso_ch;
+      else iso = iso_ch;
+    }
+    iso = iso/ptcl.pt();
+
+    return iso;
+}
+
+double photonPFIsolation(edm::Handle<pat::PackedCandidateCollection> pfcands,
+                        const ran::NtPhoton ptcl,  
+                        bool charged_only) {
+	
+	if (ptcl.pt()) < 5 return 9999.;
+
+	double deadcone_nh(0.), deadcone_ch(0.), deadcone_ph(0.), deadcone_pu(0.);
+    deadcone_ch = 0.0001; deadcone_pu = 0.01; deadcone_ph = 0.01;deadcone_nh = 0.01;
+
+    double iso_nh(0.); double iso_ch(0.); 
+    double iso_ph(0.); double iso_pu(0.);
+    double ptThresh(0.5);
+    double r_iso = 0.3;
+    for (const pat::PackedCandidate &pfc : *pfcands) {
+      if (abs(pfc.pdgId())<7) continue;
+
+      double dr = deltaR(pfc, ptcl);
+      if (dr > r_iso) continue;
+      
+      //////////////////  NEUTRALS  /////////////////////////
+      if (pfc.charge()==0){
+        if (pfc.pt()>ptThresh) {
+          /////////// PHOTONS ////////////
+          if (abs(pfc.pdgId())==22) {
+            if(dr < deadcone_ph) continue;
+            iso_ph += pfc.pt();
+	    /////////// NEUTRAL HADRONS ////////////
+          } else if (abs(pfc.pdgId())==130) {
+            if(dr < deadcone_nh) continue;
+            iso_nh += pfc.pt();
+          }
+        }
+        //////////////////  CHARGED from PV  /////////////////////////
+      } else if (pfc.fromPV()>1){
+        if (abs(pfc.pdgId())==211) {
+          if(dr < deadcone_ch) continue;
+          iso_ch += pfc.pt();
+        }
+        //////////////////  CHARGED from PU  /////////////////////////
+      } else {
+        if (pfc.pt()>ptThresh){
+          if(dr < deadcone_pu) continue;
+          iso_pu += pfc.pt();
+        }
+      }
+    }
+    double iso(0.);
+    if (charged_only){
+      iso = iso_ch;
+    } else {
+      iso = iso_ph + iso_nh;
+      iso -= 0.5*iso_pu;
+      if (iso>0) iso += iso_ch;
+      else iso = iso_ch;
+    }
+    iso = iso/ptcl.pt();
+
+    return iso;
+}
+
+double trackPFIsolation(edm::Handle<pat::PackedCandidateCollection> pfcands,
+                        const ran::NtTrack ptcl,  
+                        bool charged_only) {
+	
+	if (ptcl.pt()) < 5 return 9999.;
+
+	double deadcone_nh(0.), deadcone_ch(0.), deadcone_ph(0.), deadcone_pu(0.);
+    deadcone_ch = 0.0001; deadcone_pu = 0.01; deadcone_ph = 0.01;deadcone_nh = 0.01;
+
+    double iso_nh(0.); double iso_ch(0.); 
+    double iso_ph(0.); double iso_pu(0.);
+    double ptThresh(0.5);
+    double r_iso = 0.3;
+    for (const pat::PackedCandidate &pfc : *pfcands) {
+      if (abs(pfc.pdgId())<7) continue;
+
+      double dr = deltaR(pfc, ptcl);
+      if (dr > r_iso) continue;
+      
+      //////////////////  NEUTRALS  /////////////////////////
+      if (pfc.charge()==0){
+        if (pfc.pt()>ptThresh) {
+          /////////// PHOTONS ////////////
+          if (abs(pfc.pdgId())==22) {
+            if(dr < deadcone_ph) continue;
+            iso_ph += pfc.pt();
+	    /////////// NEUTRAL HADRONS ////////////
+          } else if (abs(pfc.pdgId())==130) {
+            if(dr < deadcone_nh) continue;
+            iso_nh += pfc.pt();
+          }
+        }
+        //////////////////  CHARGED from PV  /////////////////////////
+      } else if (pfc.fromPV()>1){
+        if (abs(pfc.pdgId())==211) {
+          if(dr < deadcone_ch) continue;
+          iso_ch += pfc.pt();
+        }
+        //////////////////  CHARGED from PU  /////////////////////////
+      } else {
+        if (pfc.pt()>ptThresh){
+          if(dr < deadcone_pu) continue;
+          iso_pu += pfc.pt();
+        }
+      }
+    }
+    double iso(0.);
+    if (charged_only){
+      iso = iso_ch;
+    } else {
+      iso = iso_ph + iso_nh;
+      iso -= 0.5*iso_pu;
+      if (iso>0) iso += iso_ch;
+      else iso = iso_ch;
+    }
+    iso = iso/ptcl.pt();
+
+    return iso;
+}
+
+
+
 std::vector<ran::NtMuon> looseMuons (std::vector<ran::NtMuon> muons) {
 	std::vector<ran::NtMuon> looseMu;
 	for(unsigned int i=0; i<muons.size(); i++)
@@ -1073,6 +1322,16 @@ int main(int argc, char** argv){
 			// std::cout << "ERROR setting up reader for muonCollection branch (status = " << muonBranchValue.GetSetupStatus() << ")" << std::endl; 
 			// return 1;
 		// }
+		TTreeReaderValue<std::vector<ran::PhotonStruct>> photonBranchValue(treeReader, "photonCollection");
+		// if (muonBranchValue.GetSetupStatus() < 0) {
+			// std::cout << "ERROR setting up reader for muonCollection branch (status = " << muonBranchValue.GetSetupStatus() << ")" << std::endl; 
+			// return 1;
+		// }
+		TTreeReaderValue<std::vector<ran::TrackStruct>> trackBranchValue(treeReader, "trackCollection");
+		// if (muonBranchValue.GetSetupStatus() < 0) {
+			// std::cout << "ERROR setting up reader for muonCollection branch (status = " << muonBranchValue.GetSetupStatus() << ")" << std::endl; 
+			// return 1;
+		// }
 		TTreeReaderValue<std::vector<ran::FatJetStruct>> fatJetBranchValue(treeReader, "fatjetCollection");
 		// if (fatJetBranchValue.GetSetupStatus() < 0) {
 			// std::cout << "ERROR setting up reader for fat jet branch (status = " << fatJetBranchValue.GetSetupStatus() << ")" << std::endl; 
@@ -1116,6 +1375,8 @@ int main(int argc, char** argv){
 
 			const std::vector<ran::NtElectron> electronVec(eleBranchValue->begin(), eleBranchValue->end());
 			const std::vector<ran::NtMuon> muonVec(muonBranchValue->begin(), muonBranchValue->end());
+			const std::vector<ran::NtPhoton> photonVec(photonBranchValue->begin(), photonBranchValue->end());
+			const std::vector<ran::NtPhoton> trackVec(trackBranchValue->begin(), trackBranchValue->end());
 			const std::vector<ran::NtJet> jetVec(jetBranchValue->begin(), jetBranchValue->end());
 			std::vector<ran::NtFatJet> fatJetVec(fatJetBranchValue->begin(), fatJetBranchValue->end());
 			// std::sort(fatJetVec.begin(), fatJetVec.end(), [](const ran::NtFatJet& a, const ran::NtFatJet& b) {return b.pt() < a.pt();} );
@@ -1223,16 +1484,69 @@ int main(int argc, char** argv){
 
 			// Do the leptons
 			std::vector<ran::NtElectron> centralElectrons;
+			std::vector<ran::NtElectron> isolatedElectrons;
 			std::vector<ran::NtMuon> centralMuons;
+			std::vector<ran::NtMuon> looseMu;
 
 			for (const ran::NtElectron& electron : electronVec) {
 				if (fabs(electron.eta()) < 2.5) centralElectrons.push_back(electron);
 			}
+
 			for (const ran::NtMuon& muon : muonVec) {
 				if (fabs(muon.eta()) < 2.5 && muon.pt() > 10.) centralMuons.push_back(muon);
 			}
 
-			std::vector<ran::NtMuon> looseMu = looseMuons(centralMuons);
+			for (const ran::NtPhoton& photon : photonVec) {
+				if (fabs(photon.eta()) < 2.5 && photon.pt() > 10.) centralPhotons.push_back(photon);
+			}
+
+			for (const ran::NtTrack& track : trackVec) {
+				if (fabs(track.eta()) < 2.5 && track.pt() > 10.) centralTracks.push_back(muon);
+			}
+
+			vector<const pat::PackedCandidate*> el_pfmatch, mu_pfmatch, theTracks;
+    		for (const pat::PackedCandidate& pfc : trackVec) {
+
+				// Matching electrons/muons with pf candidates
+				/* Not needed it seems...
+				for (unsigned int ilep(0); ilep < centralElectrons->size(); ilep++) {
+					const pat::Electron &lep = (*centralElectrons)[ilep];
+					if(el_pfmatch.size() <= ilep) el_pfmatch.push_back(&pfc);
+					else if(abs(pfc.pdgId()) == 11 && deltaR(pfc, lep) < deltaR(*(el_pfmatch[ilep]), lep)) el_pfmatch[ilep] = &pfc;
+				}
+				for (unsigned int ilep(0); ilep < centralMuons->size(); ilep++) {
+					const pat::Muon &lep = (*centralMuons)[ilep];
+					if(mu_pfmatch.size() <= ilep) mu_pfmatch.push_back(&pfc);
+					else if(abs(pfc.pdgId()) == 13 && deltaR(pfc, lep) < deltaR(*(mu_pfmatch[ilep]), lep)) mu_pfmatch[ilep] = &pfc;
+				}
+				*/
+				if( abs(pfc->eta() < 2.5) && pfc->pt() > 10 && pfc->fromPV()> 1 && pfc->pdgId() == 211)
+				{
+					theTracks.push_back(&pfc);
+				}
+			// Loop over PF candidates
+			}
+
+			// Finding electron PF match
+			for (unsigned int ilep(0); ilep < centralElectrons->size(); ilep++) {
+				const pat::Electron &lep = (*centralElectrons)[ilep];
+				double miniso = getPFIsolation(pfcands, dynamic_cast<const reco::Candidate *>(&lep), 0.05, 0.2, 10., false);
+				if(miniso < 0.1 && lep.passHEEPID())
+				{
+					isolatedElectrons.push_back(&lep);
+				}
+			}
+
+			// Finding muon PF match
+			for (unsigned int ilep(0); ilep < centralMuons->size(); ilep++) {
+				const pat::Muon &lep = (*centralMuons)[ilep];
+				double miniso = getPFIsolation(pfcands, dynamic_cast<const reco::Candidate *>(&lep), 0.05, 0.2, 10., false);
+				if(miniso < 0.2 && lep.isLooseMuon( ))
+				{
+					looseMu.push_back(&lep);
+				}
+			}
+
 			std::vector<ran::NtMuon> tightMu = tightMuons(centralMuons);
 
 			// Number of fat jets

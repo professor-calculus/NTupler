@@ -29,6 +29,8 @@
 using std::unique_ptr;
 using ran::ElectronStruct;
 using ran::MuonStruct;
+using ran::PhotonStruct;
+using ran::TrackStruct;
 using ran::JetStruct;
 using std::string;
 
@@ -60,6 +62,8 @@ private:
   unique_ptr<ran::EventInfo> evtInfo;
   TBranch* eventInfoBranch; ///< Event info branch
   TBranch* electronBranch; ///< Electron branch
+  TBranch* photonBranch; ///< Electron branch
+  TBranch* trackBranch; ///< Electron branch
   TBranch* jetBranch; ///< Jet branch
   TBranch* muonBranch; ///< Muon branch
 };
