@@ -876,7 +876,7 @@ void RALMiniAnalyzer::ReadInTracks(const edm::Event& iEvent)
 
     aTrack.fromPV = itrack.fromPV();
     aTrack.pdgId = itrack.pdgId();
-    aTrack.dz_pV = itrack.dz(pV);
+    aTrack.dz_pV = itrack.dz();
   }
 }
 

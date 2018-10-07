@@ -17,7 +17,7 @@ namespace ran{
 
     int fromPV() const {return track->fromPV;}
     int pdgId() const {return track->pdgId;}
-    float dz_pV const {return track->dz_pV;}///<Distance in z from primary vertex
+    float dz_pV() const {return track->dz_pV;}///<Distance in z from primary vertex
     
   private:
     const ran::TrackStruct* track;
