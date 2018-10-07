@@ -859,6 +859,11 @@ void RALMiniAnalyzer::ReadInTracks(const edm::Event& iEvent)
   edm::Handle<pat::PackedCandidateCollection> tracks;
   iEvent.getByToken(trackToken_, tracks);
 
+  edm::Handle<reco::VertexCollection> vertices;
+  iEvent.getByToken(vtxToken_, vertices);
+  if (vertices->empty()) return; // skip the event if no PV found
+  const reco::Vertex &pV = vertices->front();
+
   for (const pat::PackedCandidate &itrack : *tracks) {
     trackCollection_->push_back(ran::TrackStruct{}); 
     ran::TrackStruct &aTrack = trackCollection_->back();     
@@ -867,9 +872,11 @@ void RALMiniAnalyzer::ReadInTracks(const edm::Event& iEvent)
     aTrack.pt = itrack.pt();
     aTrack.eta = itrack.eta();
     aTrack.phi = itrack.phi();
+    aTrack.charge = itrack.charge();
 
     aTrack.fromPV = itrack.fromPV();
     aTrack.pdgId = itrack.pdgId();
+    aTrack.dz_pV = itrack.dz(pV);
   }
 }
 

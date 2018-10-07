@@ -19,9 +19,11 @@ namespace ran{
     float pt;///< track pt
     float eta;///< track eta
     float phi;//track phi
+    int charge; //track charged
 
-    bool fromPV; // is from Primary Vertex
+    int fromPV; // >1 means from Primary Vertex
     int pdgId;
+    float dz_pV; // dz from primary vertex
 
     ClassDef(TrackStruct,1)//TrackStruct class definition
   };
