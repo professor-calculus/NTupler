@@ -261,17 +261,17 @@ private:
 	TLorentzVector* treeVar_bjetB_p4Ptr_jerUncUp_; TLorentzVector treeVar_bjetB_p4_jerUncUp_;
 	TLorentzVector* treeVar_bjetB_p4Ptr_jerUncDown_; TLorentzVector treeVar_bjetB_p4_jerUncDown_;
 
-	TLorentzVector* treeVar_bjetC_p4Ptr_; TLorentzVector treeVar_bjetA_p4_;
-	TLorentzVector* treeVar_bjetC_p4Ptr_jecUncUp_; TLorentzVector treeVar_bjetA_p4_jecUncUp_;
-	TLorentzVector* treeVar_bjetC_p4Ptr_jecUncDown_; TLorentzVector treeVar_bjetA_p4_jecUncDown_;
-	TLorentzVector* treeVar_bjetC_p4Ptr_jerUncUp_; TLorentzVector treeVar_bjetA_p4_jerUncUp_;
-	TLorentzVector* treeVar_bjetC_p4Ptr_jerUncDown_; TLorentzVector treeVar_bjetA_p4_jerUncDown_;
+	TLorentzVector* treeVar_bjetC_p4Ptr_; TLorentzVector treeVar_bjetC_p4_;
+	TLorentzVector* treeVar_bjetC_p4Ptr_jecUncUp_; TLorentzVector treeVar_bjetC_p4_jecUncUp_;
+	TLorentzVector* treeVar_bjetC_p4Ptr_jecUncDown_; TLorentzVector treeVar_bjetC_p4_jecUncDown_;
+	TLorentzVector* treeVar_bjetC_p4Ptr_jerUncUp_; TLorentzVector treeVar_bjetC_p4_jerUncUp_;
+	TLorentzVector* treeVar_bjetC_p4Ptr_jerUncDown_; TLorentzVector treeVar_bjetC_p4_jerUncDown_;
 
-	TLorentzVector* treeVar_bjetD_p4Ptr_; TLorentzVector treeVar_bjetB_p4_;
-	TLorentzVector* treeVar_bjetD_p4Ptr_jecUncUp_; TLorentzVector treeVar_bjetB_p4_jecUncUp_;
-	TLorentzVector* treeVar_bjetD_p4Ptr_jecUncDown_; TLorentzVector treeVar_bjetB_p4_jecUncDown_;
-	TLorentzVector* treeVar_bjetD_p4Ptr_jerUncUp_; TLorentzVector treeVar_bjetB_p4_jerUncUp_;
-	TLorentzVector* treeVar_bjetD_p4Ptr_jerUncDown_; TLorentzVector treeVar_bjetB_p4_jerUncDown_;
+	TLorentzVector* treeVar_bjetD_p4Ptr_; TLorentzVector treeVar_bjetD_p4_;
+	TLorentzVector* treeVar_bjetD_p4Ptr_jecUncUp_; TLorentzVector treeVar_bjetD_p4_jecUncUp_;
+	TLorentzVector* treeVar_bjetD_p4Ptr_jecUncDown_; TLorentzVector treeVar_bjetD_p4_jecUncDown_;
+	TLorentzVector* treeVar_bjetD_p4Ptr_jerUncUp_; TLorentzVector treeVar_bjetD_p4_jerUncUp_;
+	TLorentzVector* treeVar_bjetD_p4Ptr_jerUncDown_; TLorentzVector treeVar_bjetD_p4_jerUncDown_;
 
 	// Electrons
 	TLorentzVector* treeVar_electronA_p4Ptr_; TLorentzVector treeVar_electronA_p4_;
@@ -1115,8 +1115,8 @@ double relPFIsoR04 (ran::NtMuon muon) {
 	return relIso;
 }
 
-double electronPFIsolation(edm::Handle<pat::PackedCandidateCollection> pfcands,
-                        const ran::NtElectron ptcl,  
+double electronPFIsolation(std::vector<ran::NtTrack> pfcands,
+                        const ran::NtElectron ptcl,
                         double r_iso_min, double r_iso_max, double kt_scale,
                         bool charged_only) {
 	
@@ -1134,7 +1134,8 @@ double electronPFIsolation(edm::Handle<pat::PackedCandidateCollection> pfcands,
     double ptThresh(0.5);
     if(type == 'electron') ptThresh = 0;
     double r_iso = max(r_iso_min,min(r_iso_max, kt_scale/ptcl.pt()));
-    for (const pat::PackedCandidate &pfc : *pfcands) {
+    for (int iTrk = 0; iTrk < pfcands.size(); iTrk++) {
+	  pfc = pfcands[iTrk];
       if (abs(pfc.pdgId())<7) continue;
 
       double dr = deltaR(pfc, ptcl);
@@ -1181,7 +1182,7 @@ double electronPFIsolation(edm::Handle<pat::PackedCandidateCollection> pfcands,
     return iso;
 }
 
-double muonPFIsolation(edm::Handle<pat::PackedCandidateCollection> pfcands,
+double muonPFIsolation(std::vector<ran::NtTrack> pfcands,
                         const ran::NtMuon ptcl,  
                         double r_iso_min, double r_iso_max, double kt_scale,
                         bool charged_only) {
@@ -1195,7 +1196,8 @@ double muonPFIsolation(edm::Handle<pat::PackedCandidateCollection> pfcands,
     double iso_ph(0.); double iso_pu(0.);
     double ptThresh(0.5);
     double r_iso = max(r_iso_min,min(r_iso_max, kt_scale/ptcl.pt()));
-    for (const pat::PackedCandidate &pfc : *pfcands) {
+    for (int iTrk = 0; iTrk < pfcands.size(); iTrk++) {
+	  pfc = pfcands[iTrk];
       if (abs(pfc.pdgId())<7) continue;
 
       double dr = deltaR(pfc, ptcl);
@@ -1242,7 +1244,7 @@ double muonPFIsolation(edm::Handle<pat::PackedCandidateCollection> pfcands,
     return iso;
 }
 
-double photonPFIsolation(edm::Handle<pat::PackedCandidateCollection> pfcands,
+double photonPFIsolation(std::vector<ran::NtTrack> pfcands,
                         const ran::NtPhoton ptcl,  
                         bool charged_only) {
 	
@@ -1255,7 +1257,8 @@ double photonPFIsolation(edm::Handle<pat::PackedCandidateCollection> pfcands,
     double iso_ph(0.); double iso_pu(0.);
     double ptThresh(0.5);
     double r_iso = 0.3;
-    for (const pat::PackedCandidate &pfc : *pfcands) {
+    for (int iTrk = 0; iTrk < pfcands.size(); iTrk++) {
+	  pfc = pfcands[iTrk];
       if (abs(pfc.pdgId())<7) continue;
 
       double dr = deltaR(pfc, ptcl);
@@ -1302,7 +1305,7 @@ double photonPFIsolation(edm::Handle<pat::PackedCandidateCollection> pfcands,
     return iso;
 }
 
-double trackPFIsolation(edm::Handle<pat::PackedCandidateCollection> pfcands,
+double trackPFIsolation(std::vector<ran::NtTrack> pfcands,
                         const ran::NtTrack ptcl,  
                         bool charged_only) {
 	
@@ -1315,7 +1318,8 @@ double trackPFIsolation(edm::Handle<pat::PackedCandidateCollection> pfcands,
     double iso_ph(0.); double iso_pu(0.);
     double ptThresh(0.5);
     double r_iso = 0.3;
-    for (const pat::PackedCandidate &pfc : *pfcands) {
+    for (int iTrk = 0; iTrk < pfcands.size(); iTrk++) {
+	  pfc = pfcands[iTrk];
       if (abs(pfc.pdgId())<7) continue;
 
       double dr = deltaR(pfc, ptcl);
