@@ -231,6 +231,9 @@ private:
 	UInt_t treeVar_nrFatJets_;
 	UInt_t treeVar_nrLooseMuons_;
 	UInt_t treeVar_nrTightMuons_;
+	UInt_t treeVar_nrElectrons_;
+	UInt_t treeVar_nrPhotons_;
+	UInt_t treeVar_nrTracks_;
 
 	// Slim jets
 	TLorentzVector* treeVar_jetA_p4Ptr_; TLorentzVector treeVar_jetA_p4_;
@@ -244,6 +247,31 @@ private:
 	TLorentzVector* treeVar_jetB_p4Ptr_jecUncDown_; TLorentzVector treeVar_jetB_p4_jecUncDown_;
 	TLorentzVector* treeVar_jetB_p4Ptr_jerUncUp_; TLorentzVector treeVar_jetB_p4_jerUncUp_;
 	TLorentzVector* treeVar_jetB_p4Ptr_jerUncDown_; TLorentzVector treeVar_jetB_p4_jerUncDown_;
+
+	// b jets
+	TLorentzVector* treeVar_bjetA_p4Ptr_; TLorentzVector treeVar_bjetA_p4_;
+	TLorentzVector* treeVar_bjetA_p4Ptr_jecUncUp_; TLorentzVector treeVar_bjetA_p4_jecUncUp_;
+	TLorentzVector* treeVar_bjetA_p4Ptr_jecUncDown_; TLorentzVector treeVar_bjetA_p4_jecUncDown_;
+	TLorentzVector* treeVar_bjetA_p4Ptr_jerUncUp_; TLorentzVector treeVar_bjetA_p4_jerUncUp_;
+	TLorentzVector* treeVar_bjetA_p4Ptr_jerUncDown_; TLorentzVector treeVar_bjetA_p4_jerUncDown_;
+
+	TLorentzVector* treeVar_bjetB_p4Ptr_; TLorentzVector treeVar_bjetB_p4_;
+	TLorentzVector* treeVar_bjetB_p4Ptr_jecUncUp_; TLorentzVector treeVar_bjetB_p4_jecUncUp_;
+	TLorentzVector* treeVar_bjetB_p4Ptr_jecUncDown_; TLorentzVector treeVar_bjetB_p4_jecUncDown_;
+	TLorentzVector* treeVar_bjetB_p4Ptr_jerUncUp_; TLorentzVector treeVar_bjetB_p4_jerUncUp_;
+	TLorentzVector* treeVar_bjetB_p4Ptr_jerUncDown_; TLorentzVector treeVar_bjetB_p4_jerUncDown_;
+
+	TLorentzVector* treeVar_bjetC_p4Ptr_; TLorentzVector treeVar_bjetA_p4_;
+	TLorentzVector* treeVar_bjetC_p4Ptr_jecUncUp_; TLorentzVector treeVar_bjetA_p4_jecUncUp_;
+	TLorentzVector* treeVar_bjetC_p4Ptr_jecUncDown_; TLorentzVector treeVar_bjetA_p4_jecUncDown_;
+	TLorentzVector* treeVar_bjetC_p4Ptr_jerUncUp_; TLorentzVector treeVar_bjetA_p4_jerUncUp_;
+	TLorentzVector* treeVar_bjetC_p4Ptr_jerUncDown_; TLorentzVector treeVar_bjetA_p4_jerUncDown_;
+
+	TLorentzVector* treeVar_bjetD_p4Ptr_; TLorentzVector treeVar_bjetB_p4_;
+	TLorentzVector* treeVar_bjetD_p4Ptr_jecUncUp_; TLorentzVector treeVar_bjetB_p4_jecUncUp_;
+	TLorentzVector* treeVar_bjetD_p4Ptr_jecUncDown_; TLorentzVector treeVar_bjetB_p4_jecUncDown_;
+	TLorentzVector* treeVar_bjetD_p4Ptr_jerUncUp_; TLorentzVector treeVar_bjetB_p4_jerUncUp_;
+	TLorentzVector* treeVar_bjetD_p4Ptr_jerUncDown_; TLorentzVector treeVar_bjetB_p4_jerUncDown_;
 
 	// Electrons
 	TLorentzVector* treeVar_electronA_p4Ptr_; TLorentzVector treeVar_electronA_p4_;
@@ -387,6 +415,9 @@ public:
 		mainAnaTree_->Branch("nrFatJets", &treeVar_nrFatJets_, "nrFatJets/i");
 		mainAnaTree_->Branch("nrLooseMuons", &treeVar_nrLooseMuons_, "nrLooseMuons/i");
 		mainAnaTree_->Branch("nrTightMuons", &treeVar_nrTightMuons_, "nrTightMuons/i");
+		mainAnaTree_->Branch("nrElectrons", &treeVar_nrElectrons_, "nrElectrons/i");
+		mainAnaTree_->Branch("nrPhotons", &treeVar_nrPhotons_, "nrPhotons/i");
+		mainAnaTree_->Branch("nrTracks", &treeVar_nrTracks_, "nrTracks/i");
 
 		// Slim jets
 		mainAnaTree_->Branch("slimJetA_p4", &treeVar_jetA_p4Ptr_);
@@ -400,6 +431,31 @@ public:
 		mainAnaTree_->Branch("slimJetB_p4_jecUncDown", &treeVar_jetB_p4Ptr_jecUncDown_);
 		mainAnaTree_->Branch("slimJetB_p4_jerUncUp", &treeVar_jetB_p4Ptr_jerUncUp_);
 		mainAnaTree_->Branch("slimJetB_p4_jerUncDown", &treeVar_jetB_p4Ptr_jerUncDown_);
+
+		// b-tagged jets, in descending b-tag score order
+		mainAnaTree_->Branch("bJetA_p4", &treeVar_bjetA_p4Ptr_);
+		mainAnaTree_->Branch("bJetA_p4_jecUncUp", &treeVar_bjetA_p4Ptr_jecUncUp_);
+		mainAnaTree_->Branch("bJetA_p4_jecUncDown", &treeVar_bjetA_p4Ptr_jecUncDown_);
+		mainAnaTree_->Branch("bJetA_p4_jerUncUp", &treeVar_bjetA_p4Ptr_jerUncUp_);
+		mainAnaTree_->Branch("bJetA_p4_jerUncDown", &treeVar_bjetA_p4Ptr_jerUncDown_);
+
+		mainAnaTree_->Branch("bJetB_p4", &treeVar_bjetB_p4Ptr_);
+		mainAnaTree_->Branch("bJetB_p4_jecUncUp", &treeVar_bjetB_p4Ptr_jecUncUp_);
+		mainAnaTree_->Branch("bJetB_p4_jecUncDown", &treeVar_bjetB_p4Ptr_jecUncDown_);
+		mainAnaTree_->Branch("bJetB_p4_jerUncUp", &treeVar_bjetB_p4Ptr_jerUncUp_);
+		mainAnaTree_->Branch("bJetB_p4_jerUncDown", &treeVar_bjetB_p4Ptr_jerUncDown_);
+
+		mainAnaTree_->Branch("bJetC_p4", &treeVar_bjetC_p4Ptr_);
+		mainAnaTree_->Branch("bJetC_p4_jecUncUp", &treeVar_bjetC_p4Ptr_jecUncUp_);
+		mainAnaTree_->Branch("bJetC_p4_jecUncDown", &treeVar_bjetC_p4Ptr_jecUncDown_);
+		mainAnaTree_->Branch("bJetC_p4_jerUncUp", &treeVar_bjetC_p4Ptr_jerUncUp_);
+		mainAnaTree_->Branch("bJetC_p4_jerUncDown", &treeVar_bjetC_p4Ptr_jerUncDown_);
+
+		mainAnaTree_->Branch("bJetD_p4", &treeVar_bjetD_p4Ptr_);
+		mainAnaTree_->Branch("bJetD_p4_jecUncUp", &treeVar_bjetD_p4Ptr_jecUncUp_);
+		mainAnaTree_->Branch("blimJetD_p4_jecUncDown", &treeVar_bjetD_p4Ptr_jecUncDown_);
+		mainAnaTree_->Branch("bJetD_p4_jerUncUp", &treeVar_bjetD_p4Ptr_jerUncUp_);
+		mainAnaTree_->Branch("bJetD_p4_jerUncDown", &treeVar_bjetD_p4Ptr_jerUncDown_);
 
 		// Electrons
 		mainAnaTree_->Branch("electronA_p4", &treeVar_electronA_p4Ptr_);
@@ -415,9 +471,10 @@ public:
 	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecUncUp,
 					const float& ht_jecUncDown, const float& ht_jerUncUp, const float& ht_jerUncDown, const float& mht, const float& mht_jecUncUp, const float& mht_jecUncDown,
 					const float& mht_jerUncUp, const float& mht_jerUncDown, const float& mht_phi, const float& mht_phi_jecUncUp, const float& mht_phi_jecUncDown,
-					const float& mht_phi_jerUncUp, const float& mht_phi_jerUncDown, const std::vector<ran::NtJet>& slimJets, const std::vector<ran::NtJet>& allSlimJets,
-					const std::vector<ran::NtJet>& slimBJets, const std::vector<ran::NtJet>& allSlimBJets, unsigned int nrFatJets,
+					const float& mht_phi_jerUncUp, const float& mht_phi_jerUncDown, const std::vector<ran::NtJet>& slimJets, const std::vector<ran::NtJet>& allSlimJets, const std::vector<ran::NtJet>& slimJetsByBtagScore,
+					const std::vector<ran::NtJet>& looseBJets, const std::vector<ran::NtJet>& allLooseBJets, const std::vector<ran::NtJet>& mediumBJets, const std::vector<ran::NtJet>& allMediumBJets, unsigned int nrFatJets,
 					const std::vector<ran::NtElectron>& centralElectrons, const std::vector<ran::NtMuon>& tightMuons, unsigned int nrLooseMuons, unsigned int nrTightMuons,
+					const int nrElectrons, const int nrPhotons, const int nrPhotons,
 					const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const int& nHiggs2bb, const float& DelRHiggs2bb_1, const float& DelRHiggs2bb_2, const double& D_factor)
 	{
 		// Hack: Muon mass for TLorentzVector...
@@ -503,6 +560,9 @@ public:
 		treeVar_nrFatJets_ = nrFatJets;
 		treeVar_nrLooseMuons_ = nrLooseMuons;
 		treeVar_nrTightMuons_ = nrTightMuons;
+		treeVar_nrElectrons_ = nrElectrons;
+		treeVar_nrPhotons_ = nrPhotons;
+		treeVar_nrTracks_ = nrTracks;
 
 		if (nrFatJets == 0)
 		{
@@ -648,6 +708,61 @@ public:
 				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+			}
+
+			// Slim jets by b-tag score (excluding those too close to DBT AK8 jets)
+
+			treeVar_bjetA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetA_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetA_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetA_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetA_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+
+			treeVar_bjetB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetB_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+
+			treeVar_bjetC_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetC_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetC_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetC_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetC_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+
+			treeVar_bjetD_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetD_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetD_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetD_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetD_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+
+			if (slimJetsByBtagScore.size() > 0){
+				treeVar_bjetA_p4_.SetPtEtaPhiE(slimJetsByBtagScore.at(0).pt(), slimJetsByBtagScore.at(0).eta(), slimJetsByBtagScore.at(0).phi(), slimJetsByBtagScore.at(0).et() * cosh(slimJetsByBtagScore.at(0).eta()) );
+				treeVar_bjetA_p4_jecUncUp_.SetPtEtaPhiE(slimJetsByBtagScore.at(0).pt() * (1.0 + slimJetsByBtagScore.at(0).jecUncertainty()), slimJetsByBtagScore.at(0).eta(), slimJetsByBtagScore.at(0).phi(), slimJetsByBtagScore.at(0).et() * cosh(slimJetsByBtagScore.at(0).eta()) * (1.0 + slimJetsByBtagScore.at(0).jecUncertainty()) );
+				treeVar_bjetA_p4_jecUncDown_.SetPtEtaPhiE(slimJetsByBtagScore.at(0).pt() * (1.0 - slimJetsByBtagScore.at(0).jecUncertainty()), slimJetsByBtagScore.at(0).eta(), slimJetsByBtagScore.at(0).phi(), slimJetsByBtagScore.at(0).et() * cosh(slimJetsByBtagScore.at(0).eta()) * (1.0 - slimJetsByBtagScore.at(0).jecUncertainty()) );
+				treeVar_bjetA_p4_jerUncUp_.SetPtEtaPhiE(slimJetsByBtagScore.at(0).pt() * slimJetsByBtagScore.at(0).jerUncUp(), slimJetsByBtagScore.at(0).eta(), slimJetsByBtagScore.at(0).phi(), slimJetsByBtagScore.at(0).et() * cosh(slimJetsByBtagScore.at(0).eta()) * slimJetsByBtagScore.at(0).jerUncUp() );
+				treeVar_bjetA_p4_jerUncDown_.SetPtEtaPhiE(slimJetsByBtagScore.at(0).pt() * slimJetsByBtagScore.at(0).jerUncDown(), slimJetsByBtagScore.at(0).eta(), slimJetsByBtagScore.at(0).phi(), slimJetsByBtagScore.at(0).et() * cosh(slimJetsByBtagScore.at(0).eta()) * slimJetsByBtagScore.at(0).jerUncDown() );
+			}
+			if (slimJetsByBtagScore.size() > 1){
+				treeVar_bjetB_p4_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
+				treeVar_bjetB_p4_jecUncUp_.SetPtEtaPhiE(slimJets.at(1).pt() * (1.0 + slimJets.at(1).jecUncertainty()), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * (1.0 + slimJets.at(1).jecUncertainty()) );
+				treeVar_bjetB_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(1).pt() * (1.0 - slimJets.at(1).jecUncertainty()), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * (1.0 - slimJets.at(1).jecUncertainty()) );
+				treeVar_bjetB_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(1).pt() * slimJets.at(1).jerUncUp(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * slimJets.at(1).jerUncUp() );
+				treeVar_bjetB_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(1).pt() * slimJets.at(1).jerUncDown(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * slimJets.at(1).jerUncDown() );
+			}
+			if (slimJetsByBtagScore.size() > 2){
+				treeVar_bjetC_p4_.SetPtEtaPhiE(slimJets.at(2).pt(), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) );
+				treeVar_bjetC_p4_jecUncUp_.SetPtEtaPhiE(slimJets.at(2).pt() * (2.0 + slimJets.at(2).jecUncertainty()), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) * (2.0 + slimJets.at(2).jecUncertainty()) );
+				treeVar_bjetC_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(2).pt() * (2.0 - slimJets.at(2).jecUncertainty()), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) * (2.0 - slimJets.at(2).jecUncertainty()) );
+				treeVar_bjetC_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(2).pt() * slimJets.at(2).jerUncUp(), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) * slimJets.at(2).jerUncUp() );
+				treeVar_bjetC_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(2).pt() * slimJets.at(2).jerUncDown(), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) * slimJets.at(2).jerUncDown() );
+			}
+			if (slimJetsByBtagScore.size() > 3){
+				treeVar_bjetD_p4_.SetPtEtaPhiE(slimJets.at(3).pt(), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) );
+				treeVar_bjetD_p4_jecUncUp_.SetPtEtaPhiE(slimJets.at(3).pt() * (3.0 + slimJets.at(3).jecUncertainty()), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) * (3.0 + slimJets.at(3).jecUncertainty()) );
+				treeVar_bjetD_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(3).pt() * (3.0 - slimJets.at(3).jecUncertainty()), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) * (3.0 - slimJets.at(3).jecUncertainty()) );
+				treeVar_bjetD_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(3).pt() * slimJets.at(3).jerUncUp(), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) * slimJets.at(3).jerUncUp() );
+				treeVar_bjetD_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(3).pt() * slimJets.at(3).jerUncDown(), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) * slimJets.at(3).jerUncDown() );
 			}
 
 			// Electrons
@@ -829,6 +944,61 @@ public:
 				treeVar_jetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
 				treeVar_jetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+			}
+
+			// Slim jets by b-tag score (excluding those too close to DBT AK8 jets)
+
+			treeVar_bjetA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetA_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetA_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetA_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetA_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+
+			treeVar_bjetB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetB_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+
+			treeVar_bjetC_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetC_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetC_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetC_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetC_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+
+			treeVar_bjetD_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetD_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetD_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetD_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+			treeVar_bjetD_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+
+			if (slimJetsByBtagScore.size() > 0){
+				treeVar_bjetA_p4_.SetPtEtaPhiE(slimJetsByBtagScore.at(0).pt(), slimJetsByBtagScore.at(0).eta(), slimJetsByBtagScore.at(0).phi(), slimJetsByBtagScore.at(0).et() * cosh(slimJetsByBtagScore.at(0).eta()) );
+				treeVar_bjetA_p4_jecUncUp_.SetPtEtaPhiE(slimJetsByBtagScore.at(0).pt() * (1.0 + slimJetsByBtagScore.at(0).jecUncertainty()), slimJetsByBtagScore.at(0).eta(), slimJetsByBtagScore.at(0).phi(), slimJetsByBtagScore.at(0).et() * cosh(slimJetsByBtagScore.at(0).eta()) * (1.0 + slimJetsByBtagScore.at(0).jecUncertainty()) );
+				treeVar_bjetA_p4_jecUncDown_.SetPtEtaPhiE(slimJetsByBtagScore.at(0).pt() * (1.0 - slimJetsByBtagScore.at(0).jecUncertainty()), slimJetsByBtagScore.at(0).eta(), slimJetsByBtagScore.at(0).phi(), slimJetsByBtagScore.at(0).et() * cosh(slimJetsByBtagScore.at(0).eta()) * (1.0 - slimJetsByBtagScore.at(0).jecUncertainty()) );
+				treeVar_bjetA_p4_jerUncUp_.SetPtEtaPhiE(slimJetsByBtagScore.at(0).pt() * slimJetsByBtagScore.at(0).jerUncUp(), slimJetsByBtagScore.at(0).eta(), slimJetsByBtagScore.at(0).phi(), slimJetsByBtagScore.at(0).et() * cosh(slimJetsByBtagScore.at(0).eta()) * slimJetsByBtagScore.at(0).jerUncUp() );
+				treeVar_bjetA_p4_jerUncDown_.SetPtEtaPhiE(slimJetsByBtagScore.at(0).pt() * slimJetsByBtagScore.at(0).jerUncDown(), slimJetsByBtagScore.at(0).eta(), slimJetsByBtagScore.at(0).phi(), slimJetsByBtagScore.at(0).et() * cosh(slimJetsByBtagScore.at(0).eta()) * slimJetsByBtagScore.at(0).jerUncDown() );
+			}
+			if (slimJetsByBtagScore.size() > 1){
+				treeVar_bjetB_p4_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
+				treeVar_bjetB_p4_jecUncUp_.SetPtEtaPhiE(slimJets.at(1).pt() * (1.0 + slimJets.at(1).jecUncertainty()), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * (1.0 + slimJets.at(1).jecUncertainty()) );
+				treeVar_bjetB_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(1).pt() * (1.0 - slimJets.at(1).jecUncertainty()), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * (1.0 - slimJets.at(1).jecUncertainty()) );
+				treeVar_bjetB_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(1).pt() * slimJets.at(1).jerUncUp(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * slimJets.at(1).jerUncUp() );
+				treeVar_bjetB_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(1).pt() * slimJets.at(1).jerUncDown(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * slimJets.at(1).jerUncDown() );
+			}
+			if (slimJetsByBtagScore.size() > 2){
+				treeVar_bjetC_p4_.SetPtEtaPhiE(slimJets.at(2).pt(), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) );
+				treeVar_bjetC_p4_jecUncUp_.SetPtEtaPhiE(slimJets.at(2).pt() * (2.0 + slimJets.at(2).jecUncertainty()), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) * (2.0 + slimJets.at(2).jecUncertainty()) );
+				treeVar_bjetC_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(2).pt() * (2.0 - slimJets.at(2).jecUncertainty()), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) * (2.0 - slimJets.at(2).jecUncertainty()) );
+				treeVar_bjetC_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(2).pt() * slimJets.at(2).jerUncUp(), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) * slimJets.at(2).jerUncUp() );
+				treeVar_bjetC_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(2).pt() * slimJets.at(2).jerUncDown(), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) * slimJets.at(2).jerUncDown() );
+			}
+			if (slimJetsByBtagScore.size() > 3){
+				treeVar_bjetD_p4_.SetPtEtaPhiE(slimJets.at(3).pt(), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) );
+				treeVar_bjetD_p4_jecUncUp_.SetPtEtaPhiE(slimJets.at(3).pt() * (3.0 + slimJets.at(3).jecUncertainty()), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) * (3.0 + slimJets.at(3).jecUncertainty()) );
+				treeVar_bjetD_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(3).pt() * (3.0 - slimJets.at(3).jecUncertainty()), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) * (3.0 - slimJets.at(3).jecUncertainty()) );
+				treeVar_bjetD_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(3).pt() * slimJets.at(3).jerUncUp(), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) * slimJets.at(3).jerUncUp() );
+				treeVar_bjetD_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(3).pt() * slimJets.at(3).jerUncDown(), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) * slimJets.at(3).jerUncDown() );
 			}
 
 			// Electrons
@@ -1210,7 +1380,7 @@ std::vector<ran::NtMuon> tightMuons (std::vector<ran::NtMuon> muons) {
 	std::vector<ran::NtMuon> tightMu;
 	for(unsigned int i=0; i<muons.size(); i++)
 	{
-		if(muons[i].isTightMuon() && relPFIsoR04(muons[i]) < 0.15)
+		if(muons[i].isTightMuon() && relPFIsoR03(muons[i]) < 0.15)
 		{
 			tightMu.push_back(muons[i]);
 		}
@@ -1402,7 +1572,7 @@ int main(int argc, char** argv){
 			const float DelR_bb_Higgs1 = *DelRHiggs2bb_1_tree;
 			const float DelR_bb_Higgs2 = *DelRHiggs2bb_2_tree;
 
-			// HT calculation: Only consider jets with |eta| < 3.0, pt > 40.0
+			// HT calculation: Only consider jets with |eta| < 2.4, pt > 40.0
 			double ht = 0.0;
 			double ht_jecUncUp = 0.0;
 			double ht_jecUncDown = 0.0;
@@ -1410,7 +1580,7 @@ int main(int argc, char** argv){
 			double ht_jerUncDown = 0.0;
 			for (const ran::NtJet& jet : jetVec) {
 
-				if ( fabs(jet.eta()) <= 3.0 ){
+				if ( fabs(jet.eta()) <= 2.4 ){
 
 					if ( jet.pt() >= 40.0 ) ht += jet.pt();
 					if ( jet.pt() * ( 1.0 + jet.jecUncertainty() ) >= 40.0 ) ht_jecUncUp += jet.pt() * ( 1.0 + jet.jecUncertainty() );
@@ -1487,6 +1657,10 @@ int main(int argc, char** argv){
 			std::vector<ran::NtElectron> isolatedElectrons;
 			std::vector<ran::NtMuon> centralMuons;
 			std::vector<ran::NtMuon> looseMu;
+			std::vector<ran::NtPhoton> centralPhotons;
+			std::vector<ran::NtPhoton> isolatedPhotons;
+			std::vector<ran::NtPhoton> chargedTracks;
+			std::vector<ran::NtPhoton> isolatedTracks;
 
 			for (const ran::NtElectron& electron : electronVec) {
 				if (fabs(electron.eta()) < 2.5) centralElectrons.push_back(electron);
@@ -1497,53 +1671,72 @@ int main(int argc, char** argv){
 			}
 
 			for (const ran::NtPhoton& photon : photonVec) {
-				if (fabs(photon.eta()) < 2.5 && photon.pt() > 10.) centralPhotons.push_back(photon);
+				if (fabs(photon.eta()) < 2.5 && photon.pt() > 25.) centralPhotons.push_back(photon);
 			}
 
 			for (const ran::NtTrack& track : trackVec) {
-				if (fabs(track.eta()) < 2.5 && track.pt() > 10.) centralTracks.push_back(muon);
-			}
-
-			vector<const pat::PackedCandidate*> el_pfmatch, mu_pfmatch, theTracks;
-    		for (const pat::PackedCandidate& pfc : trackVec) {
-
-				// Matching electrons/muons with pf candidates
-				/* Not needed it seems...
-				for (unsigned int ilep(0); ilep < centralElectrons->size(); ilep++) {
-					const pat::Electron &lep = (*centralElectrons)[ilep];
-					if(el_pfmatch.size() <= ilep) el_pfmatch.push_back(&pfc);
-					else if(abs(pfc.pdgId()) == 11 && deltaR(pfc, lep) < deltaR(*(el_pfmatch[ilep]), lep)) el_pfmatch[ilep] = &pfc;
-				}
-				for (unsigned int ilep(0); ilep < centralMuons->size(); ilep++) {
-					const pat::Muon &lep = (*centralMuons)[ilep];
-					if(mu_pfmatch.size() <= ilep) mu_pfmatch.push_back(&pfc);
-					else if(abs(pfc.pdgId()) == 13 && deltaR(pfc, lep) < deltaR(*(mu_pfmatch[ilep]), lep)) mu_pfmatch[ilep] = &pfc;
-				}
-				*/
-				if( abs(pfc->eta() < 2.5) && pfc->pt() > 10 && pfc->fromPV()> 1 && pfc->pdgId() == 211)
+				if( abs(track.eta() < 2.5) && track.pt() > 10 && track.fromPV()> 1 && track.pdgId() == 211)
 				{
-					theTracks.push_back(&pfc);
+					chargedTracks.push_back(track);
 				}
-			// Loop over PF candidates
 			}
 
-			// Finding electron PF match
+			// Electron ID and mini isolation
 			for (unsigned int ilep(0); ilep < centralElectrons->size(); ilep++) {
-				const pat::Electron &lep = (*centralElectrons)[ilep];
-				double miniso = getPFIsolation(pfcands, dynamic_cast<const reco::Candidate *>(&lep), 0.05, 0.2, 10., false);
-				if(miniso < 0.1 && lep.passHEEPID())
+				lep = centralElectrons[ilep];
+				double miniso = getElectronPFIsolation(pfcands, lep, 0.05, 0.2, 10., false);
+				if( miniso < 0.1 && lep.passHEEPID() )
 				{
-					isolatedElectrons.push_back(&lep);
+					isolatedElectrons.push_back(lep);
 				}
 			}
 
-			// Finding muon PF match
+			// Loose muon ID and mini isolation
 			for (unsigned int ilep(0); ilep < centralMuons->size(); ilep++) {
-				const pat::Muon &lep = (*centralMuons)[ilep];
-				double miniso = getPFIsolation(pfcands, dynamic_cast<const reco::Candidate *>(&lep), 0.05, 0.2, 10., false);
-				if(miniso < 0.2 && lep.isLooseMuon( ))
+				lep = centralMuons[ilep];
+				double miniso = getMuonPFIsolation(pfcands, lep, 0.05, 0.2, 10., false);
+				if( miniso < 0.2 && lep.isLooseMuon() )
 				{
-					looseMu.push_back(&lep);
+					looseMu.push_back(lep);
+				}
+			}
+
+			// Loose photon ID and rel isolation
+			for (unsigned int ilep(0); ilep < centralPhotons->size(); ilep++) {
+				lep = centralPhotons[ilep];
+				// 2016 photon ID criteria
+				if( !lep.passElectronVeto() ) continue;
+				if( lep.hadronicOverEm() > 0.05 ) continue;
+				if( lep.isEB() )
+				{
+					if( lep.sigmaIetaIeta() > 0.0102 ) continue;
+					if( lep.pfIso_chHadrIso() > 3.32 ) continue;
+					if( lep.pfIso_neuHadrIso() > ( 1.92 + 0.014*lep.pt() + 0.000019*lep.pt()*lep.pt() ) ) continue;
+					if( lep.pfIso_photonIso() > ( 0.81 + 0.0053*lep.pt() ) ) continue;
+				}
+				else if( lep.isEE() )
+				{
+					if( lep.sigmaIetaIeta() > 0.0274 ) continue;
+					if( lep.pfIso_chHadrIso() > 1.97 ) continue;
+					if( lep.pfIso_neuHadrIso() > ( 11.86 + 0.014*lep.pt() + 0.000025*lep.pt()*lep.pt() ) ) continue;
+					if( lep.pfIso_photonIso() > ( 0.83 + 0.0034*lep.pt() ) ) continue;
+				}
+				else continue;
+
+				double miniso = getPhotonPFIsolation(pfcands, lep, false);
+				if(miniso < 0.2)
+				{
+					isolatedPhotons.push_back(lep);
+				}
+			}
+
+			// Track isolation
+			for (unsigned int ilep(0); ilep < centralMuons->size(); ilep++) {
+				lep = chargedTracks[ilep];
+				double miniso = getTrackPFIsolation(pfcands, lep, false);
+				if(miniso < 0.1)
+				{
+					isolatedTracks.push_back(lep);
 				}
 			}
 
@@ -1555,6 +1748,9 @@ int main(int argc, char** argv){
 			// Number of muons
 			unsigned int nLooseMuons = looseMu.size();
 			unsigned int nTightMuons = tightMu.size();
+			unsigned int nIsolatedPhotons = isolatedPhotons.size();
+			unsigned int nIsolatedElectrons = isolatedElectrons.size();
+			unsigned int nIsolatedTracks = isolatedTracks.size();
 
 			std::vector<ran::NtJet> slimJets;
 			std::vector<ran::NtJet> slimLooseBJets;
@@ -1562,6 +1758,7 @@ int main(int argc, char** argv){
 			std::vector<ran::NtJet> allSlimJets;
 			std::vector<ran::NtJet> allSlimLooseBJets;
 			std::vector<ran::NtJet> allSlimMediumBJets;
+			std::vector<ran::NtJet> slimJetsByBtagScore;
 
 			if (nFatJets > 1) {
 			// if (centralFatJetVec.size() >= 2 && ht > 1200.0) { // HACK: INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
@@ -1575,26 +1772,38 @@ int main(int argc, char** argv){
 					allSlimJets.push_back(jet);
 					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
                         allSlimMediumBJets.push_back(jet);
+					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.5426)
+                        allSlimLooseBJets.push_back(jet);
+					if (deltaR2(jet.eta(), jet.phi(), fatJetA.eta(), fatJetA.phi()) < (1.4 * 1.4) && fatJetA.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.3)
+						continue;
+					else if (deltaR2(jet.eta(), jet.phi(), fatJetB.eta(), fatJetB.phi()) < (1.4 * 1.4) && fatJetB.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.3)
+						continue;
+					slimJetsByBtagScore.push_back(jet);
+					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
+						slimMediumBJets.push_back(jet);
+					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.5426)
+                        slimLooseBJets.push_back(jet);
 					if (deltaR2(jet.eta(), jet.phi(), fatJetA.eta(), fatJetA.phi()) < (1.4 * 1.4))
 						continue;
 					else if (deltaR2(jet.eta(), jet.phi(), fatJetB.eta(), fatJetB.phi()) < (1.4 * 1.4))
 						continue;
 					slimJets.push_back(jet);
-					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
-						slimMediumBJets.push_back(jet);
 				}
 				// Sort the jets by pt, but the b-jets by b-tag discriminator score
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
+				std::sort(slimJetsByBtagScore.begin(), slimJetsByBtagScore.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
 				std::sort(allSlimJets.begin(), allSlimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
-				std::sort(slimBJets.begin(), slimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
-				std::sort(allSlimBJets.begin(), allSlimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
+				std::sort(slimLooseBJets.begin(), slimLooseBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
+				std::sort(allSlimLooseBJets.begin(), allSlimLooseBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
+				std::sort(slimMediumBJets.begin(), slimMediumBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
+				std::sort(allSlimMediumBJets.begin(), allSlimMediumBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
 				std::sort(centralElectrons.begin(), centralElectrons.end(), [](const ran::NtElectron& a, const ran::NtElectron& b) {return b.pt() < a.pt();} );
 				std::sort(centralMuons.begin(), centralMuons.end(), [](const ran::NtMuon& a, const ran::NtMuon& b) {return b.pt() < a.pt();} );
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
 				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor);
 
 			}
 			else if (nFatJets == 1) {
@@ -1607,24 +1816,34 @@ int main(int argc, char** argv){
 					allSlimJets.push_back(jet);
 					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
                         allSlimMediumBJets.push_back(jet);
+					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.5426)
+                        allSlimLooseBJets.push_back(jet);
+					if (deltaR2(jet.eta(), jet.phi(), fatJetA.eta(), fatJetA.phi()) < (1.4 * 1.4) && fatJetA.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.3)
+						continue;
+					slimJetsByBtagScore.push_back(jet);
+					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
+						slimMediumBJets.push_back(jet);
+					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.5426)
+                        slimLooseBJets.push_back(jet);
 					if (deltaR2(jet.eta(), jet.phi(), fatJetA.eta(), fatJetA.phi()) < (1.4 * 1.4))
 						continue;
 					slimJets.push_back(jet);
-					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
-						slimMediumBJets.push_back(jet);
 				}
 				// Sort the jets by pt, but the b-jets by b-tag discriminator score
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
+				std::sort(slimJetsByBtagScore.begin(), slimJetsByBtagScore.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
 				std::sort(allSlimJets.begin(), allSlimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
-				std::sort(slimBJets.begin(), slimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
-				std::sort(allSlimBJets.begin(), allSlimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
+				std::sort(slimLooseBJets.begin(), slimLooseBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
+				std::sort(allSlimLooseBJets.begin(), allSlimLooseBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
+				std::sort(slimMediumBJets.begin(), slimMediumBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
+				std::sort(allSlimMediumBJets.begin(), allSlimMediumBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
 				std::sort(centralElectrons.begin(), centralElectrons.end(), [](const ran::NtElectron& a, const ran::NtElectron& b) {return b.pt() < a.pt();} );
 				std::sort(centralMuons.begin(), centralMuons.end(), [](const ran::NtMuon& a, const ran::NtMuon& b) {return b.pt() < a.pt();} );
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
 				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor);
 
 			}
 			else {
@@ -1637,23 +1856,31 @@ int main(int argc, char** argv){
 					allSlimJets.push_back(jet);
 					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
                         allSlimMediumBJets.push_back(jet);
+					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.5426)
+                        allSlimLooseBJets.push_back(jet);
 					slimJets.push_back(jet);
+					slimJetsByBtagScore.push_back(jet);
 					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
 						slimMediumBJets.push_back(jet);
+					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.5426)
+                        slimLooseBJets.push_back(jet);
 				}
 
 				// Sort the jets by pt, but the b-jets by b-tag discriminator score
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
+				std::sort(slimJetsByBtagScore.begin(), slimJetsByBtagScore.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
 				std::sort(allSlimJets.begin(), allSlimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
-				std::sort(slimBJets.begin(), slimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
-				std::sort(allSlimBJets.begin(), allSlimBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
+				std::sort(slimLooseBJets.begin(), slimLooseBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
+				std::sort(allSlimLooseBJets.begin(), allSlimLooseBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
+				std::sort(slimMediumBJets.begin(), slimMediumBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
+				std::sort(allSlimMediumBJets.begin(), allSlimMediumBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
 				std::sort(centralElectrons.begin(), centralElectrons.end(), [](const ran::NtElectron& a, const ran::NtElectron& b) {return b.pt() < a.pt();} );
 				std::sort(centralMuons.begin(), centralMuons.end(), [](const ran::NtMuon& a, const ran::NtMuon& b) {return b.pt() < a.pt();} );
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
 				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimBJets, allSlimBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor);
 
 			}
 
