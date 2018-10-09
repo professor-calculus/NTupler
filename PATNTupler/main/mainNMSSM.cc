@@ -14,6 +14,7 @@
 #include <TLorentzVector.h> 
 #include <TTreeReader.h>
 #include <TTreeReaderValue.h>
+#include <TMath.h>
 
 //RAL PARTICLE HEADERS
 #include "NtpReader.hh"
@@ -1138,7 +1139,7 @@ double electronPFIsolation(std::vector<ran::NtTrack> pfcands,
                         double r_iso_min, double r_iso_max, double kt_scale,
                         bool charged_only) {
 	
-	if (ptcl.pt()) < 5 return 9999.;
+	if (ptcl.pt() < 5) return 9999.;
 
 	double deadcone_nh(0.), deadcone_ch(0.), deadcone_ph(0.), deadcone_pu(0.);
     if(type == 'electron') {
@@ -1151,7 +1152,7 @@ double electronPFIsolation(std::vector<ran::NtTrack> pfcands,
     double iso_ph(0.); double iso_pu(0.);
     double ptThresh(0.5);
     if(type == 'electron') ptThresh = 0;
-    double r_iso = max(r_iso_min,min(r_iso_max, kt_scale/ptcl.pt()));
+    double r_iso = TMath::Max(r_iso_min,TMath::Min(r_iso_max, kt_scale/ptcl.pt()));
     for (unsigned int iTrk = 0; iTrk < pfcands.size(); iTrk++) {
 	  ran::NtTrack pfc = pfcands[iTrk];
       if (abs(pfc.pdgId())<7) continue;
@@ -1205,7 +1206,7 @@ double muonPFIsolation(std::vector<ran::NtTrack> pfcands,
                         double r_iso_min, double r_iso_max, double kt_scale,
                         bool charged_only) {
 	
-	if (ptcl.pt()) < 5 return 9999.;
+	if (ptcl.pt() < 5) return 9999.;
 
 	double deadcone_nh(0.), deadcone_ch(0.), deadcone_ph(0.), deadcone_pu(0.);
     deadcone_ch = 0.0001; deadcone_pu = 0.01; deadcone_ph = 0.01;deadcone_nh = 0.01;  
@@ -1213,7 +1214,7 @@ double muonPFIsolation(std::vector<ran::NtTrack> pfcands,
     double iso_nh(0.); double iso_ch(0.); 
     double iso_ph(0.); double iso_pu(0.);
     double ptThresh(0.5);
-    double r_iso = max(r_iso_min,min(r_iso_max, kt_scale/ptcl.pt()));
+    double r_iso = TMath::Max(r_iso_min,TMath::Min(r_iso_max, kt_scale/ptcl.pt()));
     for (unsigned int iTrk = 0; iTrk < pfcands.size(); iTrk++) {
 	  ran::NtTrack pfc = pfcands[iTrk];
       if (abs(pfc.pdgId())<7) continue;
@@ -1266,7 +1267,7 @@ double photonPFIsolation(std::vector<ran::NtTrack> pfcands,
                         const ran::NtPhoton ptcl,  
                         bool charged_only) {
 	
-	if (ptcl.pt()) < 5 return 9999.;
+	if (ptcl.pt() < 5) return 9999.;
 
 	double deadcone_nh(0.), deadcone_ch(0.), deadcone_ph(0.), deadcone_pu(0.);
     deadcone_ch = 0.0001; deadcone_pu = 0.01; deadcone_ph = 0.01;deadcone_nh = 0.01;
@@ -1327,7 +1328,7 @@ double trackPFIsolation(std::vector<ran::NtTrack> pfcands,
                         const ran::NtTrack ptcl,  
                         bool charged_only) {
 	
-	if (ptcl.pt()) < 5 return 9999.;
+	if (ptcl.pt() < 5) return 9999.;
 
 	double deadcone_nh(0.), deadcone_ch(0.), deadcone_ph(0.), deadcone_pu(0.);
     deadcone_ch = 0.0001; deadcone_pu = 0.01; deadcone_ph = 0.01;deadcone_nh = 0.01;
