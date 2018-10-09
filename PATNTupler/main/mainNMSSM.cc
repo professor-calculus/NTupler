@@ -632,11 +632,12 @@ public:
 		treeVar_mht_ = mht;
 		treeVar_mht_phi_ = mht_phi;
 		treeVar_nrSlimJets_ = allSlimJets.size();
-		treeVar_nrSlimLooseBJets_ = allSlimBJets.size();
-		treeVar_nrSlimMediumBJets_ = allSlimBJets.size();
+		treeVar_nrSlimLooseBJets_ = allSlimLooseBJets.size();
+		treeVar_nrSlimMediumBJets_ = allSlimMediumBJets.size();
 		treeVar_nrSepSlimJets_ = slimJets.size();
-		treeVar_nrSepSlimLooseBJets_ = slimBJets.size();
-		treeVar_nrSepSlimMediumBJets_ = allSlimBJets.size();
+		treeVar_nrSepSlimLooseBJets_ = slimLooseBJets.size();
+		treeVar_nrSepSlimMediumBJets_ = allSlimMediumBJets.size();
+		treeVar_nrSlimJetsByBtagScore_ = slimJetsByBtagScore.size();
 
 		if (sampleType != "DATA"){
 			if (nrFatJets > 0)
@@ -713,8 +714,6 @@ public:
 			treeVar_bJetB_tag_score_ = -1;
 			treeVar_bJetC_tag_score_ = -1;
 			treeVar_bJetD_tag_score_ = -1;
-
-			treeVar_nrSlimJetsByBtagScore_ = slimJetsByBtagScore.size();
 
 			treeVar_bjetA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
 			treeVar_bjetA_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
@@ -961,8 +960,6 @@ public:
 			treeVar_bJetC_tag_score_ = -1;
 			treeVar_bJetD_tag_score_ = -1;
 
-			treeVar_nrSlimJetsByBtagScore_ = slimJetsByBtagScore.size();
-
 			treeVar_bjetA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
 			treeVar_bjetA_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
 			treeVar_bjetA_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
@@ -1142,16 +1139,11 @@ double electronPFIsolation(std::vector<ran::NtTrack> pfcands,
 	if (ptcl.pt() < 5) return 9999.;
 
 	double deadcone_nh(0.), deadcone_ch(0.), deadcone_ph(0.), deadcone_pu(0.);
-    if(type == 'electron') {
-      if (fabs(ptcl.eta())>1.479) {deadcone_ch = 0.015; deadcone_pu = 0.015; deadcone_ph = 0.08;}
-    } else if(type == 'muon') {
-      deadcone_ch = 0.0001; deadcone_pu = 0.01; deadcone_ph = 0.01;deadcone_nh = 0.01;  
-    }
+    if (fabs(ptcl.eta())>1.479) {deadcone_ch = 0.015; deadcone_pu = 0.015; deadcone_ph = 0.08;}
 
     double iso_nh(0.); double iso_ch(0.); 
     double iso_ph(0.); double iso_pu(0.);
-    double ptThresh(0.5);
-    if(type == 'electron') ptThresh = 0;
+    double ptThresh(0.);
     double r_iso = TMath::Max(r_iso_min,TMath::Min(r_iso_max, kt_scale/ptcl.pt()));
     for (unsigned int iTrk = 0; iTrk < pfcands.size(); iTrk++) {
 	  ran::NtTrack pfc = pfcands[iTrk];
