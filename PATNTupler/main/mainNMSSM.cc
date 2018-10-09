@@ -592,11 +592,11 @@ public:
 			treeVar_fatJetA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
 			treeVar_fatJetB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
 
-			treeVar_fatJetA_doubleBtagDiscrim_ = 0;
-			treeVar_fatJetB_doubleBtagDiscrim_ = 0;
+			treeVar_fatJetA_doubleBtagDiscrim_ = -2;
+			treeVar_fatJetB_doubleBtagDiscrim_ = -2;
 
-			treeVar_fatJetA_mass_ = 0;
-			treeVar_fatJetB_mass_ = 0;
+			treeVar_fatJetA_mass_ = -1;
+			treeVar_fatJetB_mass_ = -1;
 
 			treeVar_fatJetA_eta_ = 0;
 			treeVar_fatJetB_eta_ = 0;
@@ -620,6 +620,42 @@ public:
 
 			treeVar_fatJetA_muonEnergyFraction_ = 0;
 			treeVar_fatJetB_muonEnergyFraction_ = 0;
+		}
+		else if(nrFatJets == 1)
+		{
+			{
+			treeVar_fatJetA_p4_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
+			treeVar_fatJetB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+
+			treeVar_fatJetA_doubleBtagDiscrim_ = fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags();
+			treeVar_fatJetB_doubleBtagDiscrim_ = -2;
+
+			treeVar_fatJetA_mass_ = fatJetA.mass();
+			treeVar_fatJetB_mass_ = -1;
+
+			treeVar_fatJetA_eta_ = fatJetA.eta();
+			treeVar_fatJetB_eta_ = 0;
+
+			treeVar_fatJetA_phi_ = fatJetA.phi();
+			treeVar_fatJetB_phi_ = 0;
+
+			treeVar_fatJetA_prunedMass_ = fatJetA.CHSpruned_mass();
+			treeVar_fatJetB_prunedMass_ = 0;
+
+			treeVar_fatJetA_softDropMassCHS_ = fatJetA.CHSsoftdrop_mass();
+			treeVar_fatJetB_softDropMassCHS_ = 0;
+
+			treeVar_fatJetA_nSubjettinessTau1_ = fatJetA.NjettinessAK8_tau1();
+			treeVar_fatJetA_nSubjettinessTau2_ = fatJetA.NjettinessAK8_tau2();
+			treeVar_fatJetB_nSubjettinessTau1_ = 0;
+			treeVar_fatJetB_nSubjettinessTau2_ = 0;
+
+			treeVar_fatJetA_electronEnergyFraction_ = fatJetA.electronEnergyFraction();
+			treeVar_fatJetB_electronEnergyFraction_ = 0;
+
+			treeVar_fatJetA_muonEnergyFraction_ = fatJetA.muonEnergyFraction();
+			treeVar_fatJetB_muonEnergyFraction_ = 0;
+		}
 		}
 		else
 		{
@@ -668,17 +704,31 @@ public:
 		treeVar_nrSlimJetsByBtagScore_ = slimJetsByBtagScore.size();
 
 		if (sampleType != "DATA"){
-			if (nrFatJets > 0)
+			if (nrFatJets == 0)
+			{
+				treeVar_fatJetA_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_fatJetA_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_fatJetA_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_fatJetA_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_fatJetB_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_fatJetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_fatJetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_fatJetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+			}
+			else
 			{
 				treeVar_fatJetA_p4_jecUncUp_.SetPtEtaPhiE(fatJetA.pt() * (1.0 + fatJetA.jecUncertainty()), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * (1.0 + fatJetA.jecUncertainty()) );
 				treeVar_fatJetA_p4_jecUncDown_.SetPtEtaPhiE(fatJetA.pt() * (1.0 - fatJetA.jecUncertainty()), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * (1.0 - fatJetA.jecUncertainty()) );
 				treeVar_fatJetA_p4_jerUncUp_.SetPtEtaPhiE(fatJetA.pt() * fatJetA.jerUncUp(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * fatJetA.jerUncUp() );
 				treeVar_fatJetA_p4_jerUncDown_.SetPtEtaPhiE(fatJetA.pt() * fatJetA.jerUncDown(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * fatJetA.jerUncDown() );
 
-				treeVar_fatJetB_p4_jecUncUp_.SetPtEtaPhiE(fatJetB.pt() * (1.0 + fatJetB.jecUncertainty()), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * (1.0 + fatJetB.jecUncertainty()) );
-				treeVar_fatJetB_p4_jecUncDown_.SetPtEtaPhiE(fatJetB.pt() * (1.0 - fatJetB.jecUncertainty()), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * (1.0 - fatJetB.jecUncertainty()) );
-				treeVar_fatJetB_p4_jerUncUp_.SetPtEtaPhiE(fatJetB.pt() * fatJetB.jerUncUp(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * fatJetB.jerUncUp() );
-				treeVar_fatJetB_p4_jerUncDown_.SetPtEtaPhiE(fatJetB.pt() * fatJetB.jerUncDown(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * fatJetB.jerUncDown() );
+				if (nrFatJets > 1)
+				{
+					treeVar_fatJetB_p4_jecUncUp_.SetPtEtaPhiE(fatJetB.pt() * (1.0 + fatJetB.jecUncertainty()), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * (1.0 + fatJetB.jecUncertainty()) );
+					treeVar_fatJetB_p4_jecUncDown_.SetPtEtaPhiE(fatJetB.pt() * (1.0 - fatJetB.jecUncertainty()), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * (1.0 - fatJetB.jecUncertainty()) );
+					treeVar_fatJetB_p4_jerUncUp_.SetPtEtaPhiE(fatJetB.pt() * fatJetB.jerUncUp(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * fatJetB.jerUncUp() );
+					treeVar_fatJetB_p4_jerUncDown_.SetPtEtaPhiE(fatJetB.pt() * fatJetB.jerUncDown(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * fatJetB.jerUncDown() );
+				}
 			}
 
 			treeVar_ht_jecUncUp_ = ht_jecUncUp;
@@ -777,27 +827,27 @@ public:
 			}
 			if (slimJetsByBtagScore.size() > 1){
 				treeVar_bJetB_tag_score_ = slimJetsByBtagScore.at(1).pfCombinedInclusiveSecondaryVertexV2BJetTags();
-				treeVar_bjetB_p4_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
-				treeVar_bjetB_p4_jecUncUp_.SetPtEtaPhiE(slimJets.at(1).pt() * (1.0 + slimJets.at(1).jecUncertainty()), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * (1.0 + slimJets.at(1).jecUncertainty()) );
-				treeVar_bjetB_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(1).pt() * (1.0 - slimJets.at(1).jecUncertainty()), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * (1.0 - slimJets.at(1).jecUncertainty()) );
-				treeVar_bjetB_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(1).pt() * slimJets.at(1).jerUncUp(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * slimJets.at(1).jerUncUp() );
-				treeVar_bjetB_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(1).pt() * slimJets.at(1).jerUncDown(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) * slimJets.at(1).jerUncDown() );
+				treeVar_bjetB_p4_.SetPtEtaPhiE(slimJetsByBtagScore.at(1).pt(), slimJetsByBtagScore.at(1).eta(), slimJetsByBtagScore.at(1).phi(), slimJetsByBtagScore.at(1).et() * cosh(slimJetsByBtagScore.at(1).eta()) );
+				treeVar_bjetB_p4_jecUncUp_.SetPtEtaPhiE(slimJetsByBtagScore.at(1).pt() * (1.0 + slimJetsByBtagScore.at(1).jecUncertainty()), slimJetsByBtagScore.at(1).eta(), slimJetsByBtagScore.at(1).phi(), slimJetsByBtagScore.at(1).et() * cosh(slimJetsByBtagScore.at(1).eta()) * (1.0 + slimJetsByBtagScore.at(1).jecUncertainty()) );
+				treeVar_bjetB_p4_jecUncDown_.SetPtEtaPhiE(slimJetsByBtagScore.at(1).pt() * (1.0 - slimJetsByBtagScore.at(1).jecUncertainty()), slimJetsByBtagScore.at(1).eta(), slimJetsByBtagScore.at(1).phi(), slimJetsByBtagScore.at(1).et() * cosh(slimJetsByBtagScore.at(1).eta()) * (1.0 - slimJetsByBtagScore.at(1).jecUncertainty()) );
+				treeVar_bjetB_p4_jerUncUp_.SetPtEtaPhiE(slimJetsByBtagScore.at(1).pt() * slimJetsByBtagScore.at(1).jerUncUp(), slimJetsByBtagScore.at(1).eta(), slimJetsByBtagScore.at(1).phi(), slimJetsByBtagScore.at(1).et() * cosh(slimJetsByBtagScore.at(1).eta()) * slimJetsByBtagScore.at(1).jerUncUp() );
+				treeVar_bjetB_p4_jerUncDown_.SetPtEtaPhiE(slimJetsByBtagScore.at(1).pt() * slimJetsByBtagScore.at(1).jerUncDown(), slimJetsByBtagScore.at(1).eta(), slimJetsByBtagScore.at(1).phi(), slimJetsByBtagScore.at(1).et() * cosh(slimJetsByBtagScore.at(1).eta()) * slimJetsByBtagScore.at(1).jerUncDown() );
 			}
 			if (slimJetsByBtagScore.size() > 2){
 				treeVar_bJetC_tag_score_ = slimJetsByBtagScore.at(2).pfCombinedInclusiveSecondaryVertexV2BJetTags();
-				treeVar_bjetC_p4_.SetPtEtaPhiE(slimJets.at(2).pt(), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) );
-				treeVar_bjetC_p4_jecUncUp_.SetPtEtaPhiE(slimJets.at(2).pt() * (2.0 + slimJets.at(2).jecUncertainty()), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) * (2.0 + slimJets.at(2).jecUncertainty()) );
-				treeVar_bjetC_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(2).pt() * (2.0 - slimJets.at(2).jecUncertainty()), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) * (2.0 - slimJets.at(2).jecUncertainty()) );
-				treeVar_bjetC_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(2).pt() * slimJets.at(2).jerUncUp(), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) * slimJets.at(2).jerUncUp() );
-				treeVar_bjetC_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(2).pt() * slimJets.at(2).jerUncDown(), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) * slimJets.at(2).jerUncDown() );
+				treeVar_bjetC_p4_.SetPtEtaPhiE(slimJetsByBtagScore.at(2).pt(), slimJetsByBtagScore.at(2).eta(), slimJetsByBtagScore.at(2).phi(), slimJetsByBtagScore.at(2).et() * cosh(slimJetsByBtagScore.at(2).eta()) );
+				treeVar_bjetC_p4_jecUncUp_.SetPtEtaPhiE(slimJetsByBtagScore.at(2).pt() * (2.0 + slimJetsByBtagScore.at(2).jecUncertainty()), slimJetsByBtagScore.at(2).eta(), slimJetsByBtagScore.at(2).phi(), slimJetsByBtagScore.at(2).et() * cosh(slimJetsByBtagScore.at(2).eta()) * (2.0 + slimJetsByBtagScore.at(2).jecUncertainty()) );
+				treeVar_bjetC_p4_jecUncDown_.SetPtEtaPhiE(slimJetsByBtagScore.at(2).pt() * (2.0 - slimJetsByBtagScore.at(2).jecUncertainty()), slimJetsByBtagScore.at(2).eta(), slimJetsByBtagScore.at(2).phi(), slimJetsByBtagScore.at(2).et() * cosh(slimJetsByBtagScore.at(2).eta()) * (2.0 - slimJetsByBtagScore.at(2).jecUncertainty()) );
+				treeVar_bjetC_p4_jerUncUp_.SetPtEtaPhiE(slimJetsByBtagScore.at(2).pt() * slimJetsByBtagScore.at(2).jerUncUp(), slimJetsByBtagScore.at(2).eta(), slimJetsByBtagScore.at(2).phi(), slimJetsByBtagScore.at(2).et() * cosh(slimJetsByBtagScore.at(2).eta()) * slimJetsByBtagScore.at(2).jerUncUp() );
+				treeVar_bjetC_p4_jerUncDown_.SetPtEtaPhiE(slimJetsByBtagScore.at(2).pt() * slimJetsByBtagScore.at(2).jerUncDown(), slimJetsByBtagScore.at(2).eta(), slimJetsByBtagScore.at(2).phi(), slimJetsByBtagScore.at(2).et() * cosh(slimJetsByBtagScore.at(2).eta()) * slimJetsByBtagScore.at(2).jerUncDown() );
 			}
 			if (slimJetsByBtagScore.size() > 3){
 				treeVar_bJetD_tag_score_ = slimJetsByBtagScore.at(3).pfCombinedInclusiveSecondaryVertexV2BJetTags();
-				treeVar_bjetD_p4_.SetPtEtaPhiE(slimJets.at(3).pt(), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) );
-				treeVar_bjetD_p4_jecUncUp_.SetPtEtaPhiE(slimJets.at(3).pt() * (3.0 + slimJets.at(3).jecUncertainty()), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) * (3.0 + slimJets.at(3).jecUncertainty()) );
-				treeVar_bjetD_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(3).pt() * (3.0 - slimJets.at(3).jecUncertainty()), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) * (3.0 - slimJets.at(3).jecUncertainty()) );
-				treeVar_bjetD_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(3).pt() * slimJets.at(3).jerUncUp(), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) * slimJets.at(3).jerUncUp() );
-				treeVar_bjetD_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(3).pt() * slimJets.at(3).jerUncDown(), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) * slimJets.at(3).jerUncDown() );
+				treeVar_bjetD_p4_.SetPtEtaPhiE(slimJetsByBtagScore.at(3).pt(), slimJetsByBtagScore.at(3).eta(), slimJetsByBtagScore.at(3).phi(), slimJetsByBtagScore.at(3).et() * cosh(slimJetsByBtagScore.at(3).eta()) );
+				treeVar_bjetD_p4_jecUncUp_.SetPtEtaPhiE(slimJetsByBtagScore.at(3).pt() * (3.0 + slimJetsByBtagScore.at(3).jecUncertainty()), slimJetsByBtagScore.at(3).eta(), slimJetsByBtagScore.at(3).phi(), slimJetsByBtagScore.at(3).et() * cosh(slimJetsByBtagScore.at(3).eta()) * (3.0 + slimJetsByBtagScore.at(3).jecUncertainty()) );
+				treeVar_bjetD_p4_jecUncDown_.SetPtEtaPhiE(slimJetsByBtagScore.at(3).pt() * (3.0 - slimJetsByBtagScore.at(3).jecUncertainty()), slimJetsByBtagScore.at(3).eta(), slimJetsByBtagScore.at(3).phi(), slimJetsByBtagScore.at(3).et() * cosh(slimJetsByBtagScore.at(3).eta()) * (3.0 - slimJetsByBtagScore.at(3).jecUncertainty()) );
+				treeVar_bjetD_p4_jerUncUp_.SetPtEtaPhiE(slimJetsByBtagScore.at(3).pt() * slimJetsByBtagScore.at(3).jerUncUp(), slimJetsByBtagScore.at(3).eta(), slimJetsByBtagScore.at(3).phi(), slimJetsByBtagScore.at(3).et() * cosh(slimJetsByBtagScore.at(3).eta()) * slimJetsByBtagScore.at(3).jerUncUp() );
+				treeVar_bjetD_p4_jerUncDown_.SetPtEtaPhiE(slimJetsByBtagScore.at(3).pt() * slimJetsByBtagScore.at(3).jerUncDown(), slimJetsByBtagScore.at(3).eta(), slimJetsByBtagScore.at(3).phi(), slimJetsByBtagScore.at(3).et() * cosh(slimJetsByBtagScore.at(3).eta()) * slimJetsByBtagScore.at(3).jerUncDown() );
 			}
 
 			// Electrons
@@ -869,43 +919,47 @@ public:
 					treeVar_fatJetA_softDropMassPuppi_jmrUncDown_ = fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) > 0.0 ? fatJetA.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) : 0.0;
 				}
 
-				// fatJetB SoftDropMass+PUPPI
-				std::random_device rdB;
-				std::mt19937 e2B(rdB());
-				double mcMassResolutionToUseB = SoftDropPuppiSF::get_mcMassResolution(yearOfRun);
-				if (mcMassResolutionToUseB > 0.333333 * fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun)) mcMassResolutionToUseB = 0.333333 * fabs(fatJetB.PUPPIsoftdrop_mass()) * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun);
-				std::normal_distribution<> distB(0, mcMassResolutionToUseB);
-				double gaussRandomB = distB(e2B);
-				
-				// nominal resolution and JMS
-				if (SoftDropPuppiSF::get_jetMassResolutionSF(yearOfRun) > 1.0){
-					double smearingValue = gaussRandomB * sqrt(SoftDropPuppiSF::get_jetMassResolutionSF(yearOfRun) * SoftDropPuppiSF::get_jetMassResolutionSF(yearOfRun) - 1);
-					treeVar_fatJetB_softDropMassPuppi_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) + smearingValue > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) + smearingValue : 0.0;
-					treeVar_fatJetB_softDropMassPuppi_jmsUncUp_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFUp(yearOfRun) + smearingValue > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFUp(yearOfRun) + smearingValue : 0.0;
-					treeVar_fatJetB_softDropMassPuppi_jmsUncDown_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFDown(yearOfRun) + smearingValue > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFDown(yearOfRun) + smearingValue : 0.0;
-				}
-				else {
-					treeVar_fatJetB_softDropMassPuppi_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) : 0.0;
-					treeVar_fatJetB_softDropMassPuppi_jmsUncUp_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFUp(yearOfRun) > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFUp(yearOfRun) : 0.0;
-					treeVar_fatJetB_softDropMassPuppi_jmsUncDown_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFDown(yearOfRun) > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFDown(yearOfRun) : 0.0;
-				}
-				
-				// JMR_UP
-				if (SoftDropPuppiSF::get_jetMassResolutionSFUp(yearOfRun) > 1.0){
-					double smearingValue = gaussRandomB * sqrt(SoftDropPuppiSF::get_jetMassResolutionSFUp(yearOfRun) * SoftDropPuppiSF::get_jetMassResolutionSFUp(yearOfRun) - 1);
-					treeVar_fatJetB_softDropMassPuppi_jmrUncUp_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) + smearingValue > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) + smearingValue : 0.0;
-				}
-				else {
-					treeVar_fatJetB_softDropMassPuppi_jmrUncUp_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) > 0.0 : 0.0;
-				}
-				
-				// JMR_DOWN
-				if (SoftDropPuppiSF::get_jetMassResolutionSFDown(yearOfRun) > 1.0){
-					double smearingValue = gaussRandomB * sqrt(SoftDropPuppiSF::get_jetMassResolutionSFDown(yearOfRun) * SoftDropPuppiSF::get_jetMassResolutionSFDown(yearOfRun) - 1);
-					treeVar_fatJetB_softDropMassPuppi_jmrUncDown_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) + smearingValue > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) + smearingValue : 0.0;
-				}
-				else {
-					treeVar_fatJetB_softDropMassPuppi_jmrUncDown_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) : 0.0;
+				if (nrFatJets > 1)
+				{
+
+					// fatJetB SoftDropMass+PUPPI
+					std::random_device rdB;
+					std::mt19937 e2B(rdB());
+					double mcMassResolutionToUseB = SoftDropPuppiSF::get_mcMassResolution(yearOfRun);
+					if (mcMassResolutionToUseB > 0.333333 * fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun)) mcMassResolutionToUseB = 0.333333 * fabs(fatJetB.PUPPIsoftdrop_mass()) * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun);
+					std::normal_distribution<> distB(0, mcMassResolutionToUseB);
+					double gaussRandomB = distB(e2B);
+					
+					// nominal resolution and JMS
+					if (SoftDropPuppiSF::get_jetMassResolutionSF(yearOfRun) > 1.0){
+						double smearingValue = gaussRandomB * sqrt(SoftDropPuppiSF::get_jetMassResolutionSF(yearOfRun) * SoftDropPuppiSF::get_jetMassResolutionSF(yearOfRun) - 1);
+						treeVar_fatJetB_softDropMassPuppi_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) + smearingValue > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) + smearingValue : 0.0;
+						treeVar_fatJetB_softDropMassPuppi_jmsUncUp_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFUp(yearOfRun) + smearingValue > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFUp(yearOfRun) + smearingValue : 0.0;
+						treeVar_fatJetB_softDropMassPuppi_jmsUncDown_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFDown(yearOfRun) + smearingValue > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFDown(yearOfRun) + smearingValue : 0.0;
+					}
+					else {
+						treeVar_fatJetB_softDropMassPuppi_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) : 0.0;
+						treeVar_fatJetB_softDropMassPuppi_jmsUncUp_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFUp(yearOfRun) > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFUp(yearOfRun) : 0.0;
+						treeVar_fatJetB_softDropMassPuppi_jmsUncDown_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFDown(yearOfRun) > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSFDown(yearOfRun) : 0.0;
+					}
+					
+					// JMR_UP
+					if (SoftDropPuppiSF::get_jetMassResolutionSFUp(yearOfRun) > 1.0){
+						double smearingValue = gaussRandomB * sqrt(SoftDropPuppiSF::get_jetMassResolutionSFUp(yearOfRun) * SoftDropPuppiSF::get_jetMassResolutionSFUp(yearOfRun) - 1);
+						treeVar_fatJetB_softDropMassPuppi_jmrUncUp_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) + smearingValue > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) + smearingValue : 0.0;
+					}
+					else {
+						treeVar_fatJetB_softDropMassPuppi_jmrUncUp_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) > 0.0 : 0.0;
+					}
+					
+					// JMR_DOWN
+					if (SoftDropPuppiSF::get_jetMassResolutionSFDown(yearOfRun) > 1.0){
+						double smearingValue = gaussRandomB * sqrt(SoftDropPuppiSF::get_jetMassResolutionSFDown(yearOfRun) * SoftDropPuppiSF::get_jetMassResolutionSFDown(yearOfRun) - 1);
+						treeVar_fatJetB_softDropMassPuppi_jmrUncDown_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) + smearingValue > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) + smearingValue : 0.0;
+					}
+					else {
+						treeVar_fatJetB_softDropMassPuppi_jmrUncDown_ = fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) > 0.0 ? fatJetB.PUPPIsoftdrop_mass() * SoftDropPuppiSF::get_jetMassScaleSF(yearOfRun) : 0.0;
+					}
 				}
 			}
 
@@ -913,17 +967,31 @@ public:
 		} // closes 'if' sampleType does NOT equal DATA
 		
 		else {
-			if (nrFatJets > 0)
+			if (nrFatJets == 0)
+			{
+				treeVar_fatJetA_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_fatJetA_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_fatJetA_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_fatJetA_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_fatJetB_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_fatJetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_fatJetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
+				treeVar_fatJetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
+			}
+			else
 			{
 				treeVar_fatJetA_p4_jecUncUp_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
 				treeVar_fatJetA_p4_jecUncDown_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
 				treeVar_fatJetA_p4_jerUncUp_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
 				treeVar_fatJetA_p4_jerUncDown_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
 
-				treeVar_fatJetB_p4_jecUncUp_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
-				treeVar_fatJetB_p4_jecUncDown_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
-				treeVar_fatJetB_p4_jerUncUp_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
-				treeVar_fatJetB_p4_jerUncDown_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
+				if (nrFatJets > 1)
+				{
+					treeVar_fatJetB_p4_jecUncUp_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
+					treeVar_fatJetB_p4_jecUncDown_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
+					treeVar_fatJetB_p4_jerUncUp_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
+					treeVar_fatJetB_p4_jerUncDown_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
+				}
 			}
 
 			treeVar_ht_jecUncUp_ = ht;
@@ -1022,27 +1090,27 @@ public:
 			}
 			if (slimJetsByBtagScore.size() > 1){
 				treeVar_bJetB_tag_score_ = slimJetsByBtagScore.at(1).pfCombinedInclusiveSecondaryVertexV2BJetTags();
-				treeVar_bjetB_p4_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
-				treeVar_bjetB_p4_jecUncUp_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
-				treeVar_bjetB_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
-				treeVar_bjetB_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
-				treeVar_bjetB_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(1).pt(), slimJets.at(1).eta(), slimJets.at(1).phi(), slimJets.at(1).et() * cosh(slimJets.at(1).eta()) );
+				treeVar_bjetB_p4_.SetPtEtaPhiE(slimJetsByBtagScore.at(1).pt(), slimJetsByBtagScore.at(1).eta(), slimJetsByBtagScore.at(1).phi(), slimJetsByBtagScore.at(1).et() * cosh(slimJetsByBtagScore.at(1).eta()) );
+				treeVar_bjetB_p4_jecUncUp_.SetPtEtaPhiE(slimJetsByBtagScore.at(1).pt(), slimJetsByBtagScore.at(1).eta(), slimJetsByBtagScore.at(1).phi(), slimJetsByBtagScore.at(1).et() * cosh(slimJetsByBtagScore.at(1).eta()) );
+				treeVar_bjetB_p4_jecUncDown_.SetPtEtaPhiE(slimJetsByBtagScore.at(1).pt(), slimJetsByBtagScore.at(1).eta(), slimJetsByBtagScore.at(1).phi(), slimJetsByBtagScore.at(1).et() * cosh(slimJetsByBtagScore.at(1).eta()) );
+				treeVar_bjetB_p4_jerUncUp_.SetPtEtaPhiE(slimJetsByBtagScore.at(1).pt(), slimJetsByBtagScore.at(1).eta(), slimJetsByBtagScore.at(1).phi(), slimJetsByBtagScore.at(1).et() * cosh(slimJetsByBtagScore.at(1).eta()) );
+				treeVar_bjetB_p4_jerUncDown_.SetPtEtaPhiE(slimJetsByBtagScore.at(1).pt(), slimJetsByBtagScore.at(1).eta(), slimJetsByBtagScore.at(1).phi(), slimJetsByBtagScore.at(1).et() * cosh(slimJetsByBtagScore.at(1).eta()) );
 			}
 			if (slimJetsByBtagScore.size() > 2){
 				treeVar_bJetC_tag_score_ = slimJetsByBtagScore.at(2).pfCombinedInclusiveSecondaryVertexV2BJetTags();
-				treeVar_bjetC_p4_.SetPtEtaPhiE(slimJets.at(2).pt(), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) );
-				treeVar_bjetC_p4_jecUncUp_.SetPtEtaPhiE(slimJets.at(2).pt(), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) );
-				treeVar_bjetC_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(2).pt(), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) );
-				treeVar_bjetC_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(2).pt(), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) );
-				treeVar_bjetC_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(2).pt(), slimJets.at(2).eta(), slimJets.at(2).phi(), slimJets.at(2).et() * cosh(slimJets.at(2).eta()) );
+				treeVar_bjetC_p4_.SetPtEtaPhiE(slimJetsByBtagScore.at(2).pt(), slimJetsByBtagScore.at(2).eta(), slimJetsByBtagScore.at(2).phi(), slimJetsByBtagScore.at(2).et() * cosh(slimJetsByBtagScore.at(2).eta()) );
+				treeVar_bjetC_p4_jecUncUp_.SetPtEtaPhiE(slimJetsByBtagScore.at(2).pt(), slimJetsByBtagScore.at(2).eta(), slimJetsByBtagScore.at(2).phi(), slimJetsByBtagScore.at(2).et() * cosh(slimJetsByBtagScore.at(2).eta()) );
+				treeVar_bjetC_p4_jecUncDown_.SetPtEtaPhiE(slimJetsByBtagScore.at(2).pt(), slimJetsByBtagScore.at(2).eta(), slimJetsByBtagScore.at(2).phi(), slimJetsByBtagScore.at(2).et() * cosh(slimJetsByBtagScore.at(2).eta()) );
+				treeVar_bjetC_p4_jerUncUp_.SetPtEtaPhiE(slimJetsByBtagScore.at(2).pt(), slimJetsByBtagScore.at(2).eta(), slimJetsByBtagScore.at(2).phi(), slimJetsByBtagScore.at(2).et() * cosh(slimJetsByBtagScore.at(2).eta()) );
+				treeVar_bjetC_p4_jerUncDown_.SetPtEtaPhiE(slimJetsByBtagScore.at(2).pt(), slimJetsByBtagScore.at(2).eta(), slimJetsByBtagScore.at(2).phi(), slimJetsByBtagScore.at(2).et() * cosh(slimJetsByBtagScore.at(2).eta()) );
 			}
 			if (slimJetsByBtagScore.size() > 3){
 				treeVar_bJetD_tag_score_ = slimJetsByBtagScore.at(3).pfCombinedInclusiveSecondaryVertexV2BJetTags();
-				treeVar_bjetD_p4_.SetPtEtaPhiE(slimJets.at(3).pt(), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) );
-				treeVar_bjetD_p4_jecUncUp_.SetPtEtaPhiE(slimJets.at(3).pt(), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) );
-				treeVar_bjetD_p4_jecUncDown_.SetPtEtaPhiE(slimJets.at(3).pt(), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) );
-				treeVar_bjetD_p4_jerUncUp_.SetPtEtaPhiE(slimJets.at(3).pt(), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) );
-				treeVar_bjetD_p4_jerUncDown_.SetPtEtaPhiE(slimJets.at(3).pt(), slimJets.at(3).eta(), slimJets.at(3).phi(), slimJets.at(3).et() * cosh(slimJets.at(3).eta()) );
+				treeVar_bjetD_p4_.SetPtEtaPhiE(slimJetsByBtagScore.at(3).pt(), slimJetsByBtagScore.at(3).eta(), slimJetsByBtagScore.at(3).phi(), slimJetsByBtagScore.at(3).et() * cosh(slimJetsByBtagScore.at(3).eta()) );
+				treeVar_bjetD_p4_jecUncUp_.SetPtEtaPhiE(slimJetsByBtagScore.at(3).pt(), slimJetsByBtagScore.at(3).eta(), slimJetsByBtagScore.at(3).phi(), slimJetsByBtagScore.at(3).et() * cosh(slimJetsByBtagScore.at(3).eta()) );
+				treeVar_bjetD_p4_jecUncDown_.SetPtEtaPhiE(slimJetsByBtagScore.at(3).pt(), slimJetsByBtagScore.at(3).eta(), slimJetsByBtagScore.at(3).phi(), slimJetsByBtagScore.at(3).et() * cosh(slimJetsByBtagScore.at(3).eta()) );
+				treeVar_bjetD_p4_jerUncUp_.SetPtEtaPhiE(slimJetsByBtagScore.at(3).pt(), slimJetsByBtagScore.at(3).eta(), slimJetsByBtagScore.at(3).phi(), slimJetsByBtagScore.at(3).et() * cosh(slimJetsByBtagScore.at(3).eta()) );
+				treeVar_bjetD_p4_jerUncDown_.SetPtEtaPhiE(slimJetsByBtagScore.at(3).pt(), slimJetsByBtagScore.at(3).eta(), slimJetsByBtagScore.at(3).phi(), slimJetsByBtagScore.at(3).et() * cosh(slimJetsByBtagScore.at(3).eta()) );
 			}
 
 			// Electrons
