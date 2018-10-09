@@ -1415,9 +1415,9 @@ int main(int argc, char** argv){
     ///////////////////////////////////////////////////
 
     // Initial setup from command line inputs /////////
-    if (argc != 5){
+    if (argc != 6){
         std::cout << "Provided wrong number of arguments, the format should be:" << std::endl;
-        std::cout << argv[0] << " <outputRootFilename> <pathToListOfInputFiles> <sampleType> <runInstructionString>" << std::endl;
+        std::cout << argv[0] << " <outputRootFilename> <pathToListOfInputFiles> <sampleType> <yearOfRun> <runInstructionString>" << std::endl;
         std::cout << "Exiting..." << std::endl;
         return -1;
     }
@@ -1426,7 +1426,7 @@ int main(int argc, char** argv){
 
     // Determine whether we are running locally or on batch system
     bool batchMode;
-    std::string runInstructions(argv[4]);
+    std::string runInstructions(argv[5]);
     if (runInstructions == "local") batchMode = false;
     else if (runInstructions == "batch") batchMode = true;
     else {
@@ -1453,7 +1453,7 @@ int main(int argc, char** argv){
         return -1;
     }
 
-	// Check you have provided a valid yearOfRun - used for different scale factors
+    // Check you have provided a valid yearOfRun - used for different scale factors
     unsigned int yearOfRun;
     std::string yearOfRunString(argv[4]);
     if (yearOfRunString == "2016") yearOfRun = 2016;
