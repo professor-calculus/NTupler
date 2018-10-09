@@ -424,9 +424,11 @@ public:
 
 		mainAnaTree_->Branch("nrSlimJets", &treeVar_nrSlimJets_, "nrSlimJets/i");
 		mainAnaTree_->Branch("nrSlimJetsByBtagScore", &treeVar_nrSlimJetsByBtagScore_, "nrSlimJetsByBtagScore/i");
-		mainAnaTree_->Branch("nrSlimBJets", &treeVar_nrSlimBJets_, "nrSlimBJets/i");
+		mainAnaTree_->Branch("nrSlimLooseBJets", &treeVar_nrSlimLooseBJets_, "nrSlimLooseBJets/i");
+		mainAnaTree_->Branch("nrSlimMediumBJets", &treeVar_nrSlimMediumBJets_, "nrSlimMediumBJets/i");
 		mainAnaTree_->Branch("nrSepSlimJets", &treeVar_nrSepSlimJets_, "nrSepSlimJets/i");
-		mainAnaTree_->Branch("nrSepSlimBJets", &treeVar_nrSepSlimBJets_, "nrSepSlimBJets/i");
+		mainAnaTree_->Branch("nrSepSlimLooseBJets", &treeVar_nrSepSlimLooseBJets_, "nrSepSlimLooseBJets/i");
+		mainAnaTree_->Branch("nrSepSlimMediumBJets", &treeVar_nrSepSlimMediumBJets_, "nrSepSlimMediumBJets/i");
 		mainAnaTree_->Branch("nrFatJets", &treeVar_nrFatJets_, "nrFatJets/i");
 		mainAnaTree_->Branch("nrLooseMuons", &treeVar_nrLooseMuons_, "nrLooseMuons/i");
 		mainAnaTree_->Branch("nrTightMuons", &treeVar_nrTightMuons_, "nrTightMuons/i");
@@ -634,11 +636,11 @@ public:
 		treeVar_mht_ = mht;
 		treeVar_mht_phi_ = mht_phi;
 		treeVar_nrSlimJets_ = allSlimJets.size();
-		treeVar_nrSlimLooseBJets_ = allSlimLooseBJets.size();
-		treeVar_nrSlimMediumBJets_ = allSlimMediumBJets.size();
+		treeVar_nrSlimLooseBJets_ = allLooseBJets.size();
+		treeVar_nrSlimMediumBJets_ = allMediumBJets.size();
 		treeVar_nrSepSlimJets_ = slimJets.size();
-		treeVar_nrSepSlimLooseBJets_ = slimLooseBJets.size();
-		treeVar_nrSepSlimMediumBJets_ = allSlimMediumBJets.size();
+		treeVar_nrSepSlimLooseBJets_ = looseBJets.size();
+		treeVar_nrSepSlimMediumBJets_ = mediumBJets.size();
 		treeVar_nrSlimJetsByBtagScore_ = slimJetsByBtagScore.size();
 
 		if (sampleType != "DATA"){
