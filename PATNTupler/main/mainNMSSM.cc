@@ -525,9 +525,24 @@ public:
 
 		if (sampleType == "SIGNAL"){
 
-			treeVar_weight_dbtTag_ = DoubleBTagSF::getDbtTagScaleFactor_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
-			treeVar_weight_dbtTagUp_ = DoubleBTagSF::getDbtTagScaleFactorUp_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
-			treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
+			if (nrFatJets > 1)
+			{
+				treeVar_weight_dbtTag_ = DoubleBTagSF::getDbtTagScaleFactor_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
+				treeVar_weight_dbtTagUp_ = DoubleBTagSF::getDbtTagScaleFactorUp_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
+				treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
+			}
+			else if(nrFatJets == 1)
+			{
+				treeVar_weight_dbtTag_ = DoubleBTagSF::getDbtTagScaleFactor_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), 0, -1, yearOfRun);
+				treeVar_weight_dbtTagUp_ = DoubleBTagSF::getDbtTagScaleFactorUp_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), 0, -1, yearOfRun);
+				treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), 0, -1, yearOfRun);
+			}
+			else
+			{
+				treeVar_weight_dbtTag_ = 1.0;
+				treeVar_weight_dbtTagUp_ = 1.0;
+				treeVar_weight_dbtTagDown_ = 1.0;
+			}
 
 			// calculate isr weights
 			if (nISR > 6) nISR = 6;
@@ -537,15 +552,23 @@ public:
 			treeVar_weight_isrDown_ = corr_isr - 0.5 * (corr_isr - 1);
 
 			// combined nominal scale factor weights
-			treeVar_weight_combined_ = treeVar_weight_dbtTag_ * treeVar_weight_isr_;	
+			treeVar_weight_combined_ = treeVar_weight_dbtTag_ * treeVar_weight_isr_;
 		}
 		
 		else if (sampleType == "TTJETS"){
 
-			treeVar_weight_dbtTag_ = DoubleBTagSF::getDbtTagScaleFactor_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
-			treeVar_weight_dbtTagUp_ = DoubleBTagSF::getDbtTagScaleFactorUp_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
-			treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
-
+			if (nrFatJets > 1)
+			{
+				treeVar_weight_dbtTag_ = DoubleBTagSF::getDbtTagScaleFactor_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
+				treeVar_weight_dbtTagUp_ = DoubleBTagSF::getDbtTagScaleFactorUp_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
+				treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
+			}
+			else if(nrFatJets == 1)
+			{
+				treeVar_weight_dbtTag_ = DoubleBTagSF::getDbtTagScaleFactor_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), 0, -1, yearOfRun);
+				treeVar_weight_dbtTagUp_ = DoubleBTagSF::getDbtTagScaleFactorUp_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), 0, -1, yearOfRun);
+				treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), 0, -1, yearOfRun);
+			}
 			treeVar_weight_isr_ = 1.0;
 			treeVar_weight_isrUp_ = 1.0;
 			treeVar_weight_isrDown_ = 1.0;
@@ -1928,8 +1951,7 @@ int main(int argc, char** argv){
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
 				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun);
+				doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun);
 
 			}
 			else if (nFatJets == 1) {
@@ -1968,8 +1990,7 @@ int main(int argc, char** argv){
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
 				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun);
+				doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun);
 
 			}
 			else {
@@ -2005,8 +2026,7 @@ int main(int argc, char** argv){
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
 				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun);
+				doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun);
 
 			}
 

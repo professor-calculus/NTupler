@@ -539,38 +539,24 @@ namespace DoubleBTagSF{
 		}
 
 		// check fatJets are in the TAG dbt region
-		if (fatJetA_dbt < (-1.0 * fatJetB_dbt + 1.0 + DoubleBTagWPs::dbtNameToDouble("Loose"))) return 1.0;
+		if ( (fatJetA_dbt < 0.3 && fatJetB_dbt < 0.3) || (fatJetA_pt == 0 && fatJetB_pt == 0) ) return 1.0;
 
-		// are fatJets in the Med1 * Med1 square?
-		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Med1") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Med1")){
-			if (yearOfRun == 2016) return getMed1ScaleFactor_signal_2016(fatJetA_pt) * getMed1ScaleFactor_signal_2016(fatJetB_pt);
-			else return getMed1ScaleFactor_signal_2017(fatJetA_pt) * getMed1ScaleFactor_signal_2017(fatJetB_pt);
+		// are fatJets in the Loose * Loose square?
+		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Loose") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+			if (yearOfRun == 2016) return getLooseScaleFactor_signal_2016(fatJetA_pt) * getLooseScaleFactor_signal_2016(fatJetB_pt);
+			else return getLooseScaleFactor_signal_2017(fatJetA_pt) * getLooseScaleFactor_signal_2017(fatJetB_pt);
 		}
-
-		// otherwise, need to do claires trick
-		else{
-
-			double fatJetSpecA_pt, fatJetSpecB_pt;
-			if (fatJetA_dbt > fatJetB_dbt){
-				fatJetSpecA_pt = fatJetA_pt;
-				fatJetSpecB_pt = fatJetB_pt;
-			}
-			else{
-				fatJetSpecA_pt = fatJetB_pt;
-				fatJetSpecB_pt = fatJetA_pt;
-			}
-
-			double sX;
-			double sZ;
-			if (yearOfRun == 2016){
-				sX = getMed2ScaleFactor_signal_2016(fatJetSpecA_pt) * getMed1ScaleFactor_signal_2016(fatJetSpecB_pt);
-				sZ = getMed2ScaleFactor_signal_2016(fatJetSpecA_pt) * getLooseScaleFactor_signal_2016(fatJetSpecB_pt); 
-			}
- 			else{
-				sX = getMed2ScaleFactor_signal_2017(fatJetSpecA_pt) * getMed1ScaleFactor_signal_2017(fatJetSpecB_pt);
-				sZ = getMed2ScaleFactor_signal_2017(fatJetSpecA_pt) * getLooseScaleFactor_signal_2017(fatJetSpecB_pt); 
-			}
-			return (sZ - fX_signal * sX) / fY_signal;
+		else if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+			if (yearOfRun == 2016) return getLooseScaleFactor_signal_2016(fatJetA_pt);
+			else return getMed1ScaleFactor_signal_2017(fatJetA_pt);
+		}
+		else if (fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+			if (yearOfRun == 2016) return getLooseScaleFactor_signal_2016(fatJetB_pt);
+			else return getMed1ScaleFactor_signal_2017(fatJetB_pt);
+		}
+		else
+		{
+			return 1.0;
 		}
 	}
 
@@ -584,39 +570,25 @@ namespace DoubleBTagSF{
             return -222222.1;
 		}
 
-		// check fatJets are in the TAG dbt region
-		if (fatJetA_dbt < (-1.0 * fatJetB_dbt + 1.0 + DoubleBTagWPs::dbtNameToDouble("Loose"))) return 1.0;
+		/// check fatJets are in the TAG dbt region
+		if ( (fatJetA_dbt < 0.3 && fatJetB_dbt < 0.3) || (fatJetA_pt == 0 && fatJetB_pt == 0) ) return 1.0;
 
-		// are fatJets in the Med1 * Med1 square?
-		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Med1") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Med1")){
-			if (yearOfRun == 2016) return getMed1ScaleFactorUp_signal_2016(fatJetA_pt) * getMed1ScaleFactorUp_signal_2016(fatJetB_pt);
-			else return getMed1ScaleFactorUp_signal_2017(fatJetA_pt) * getMed1ScaleFactorUp_signal_2017(fatJetB_pt);
+		// are fatJets in the Loose * Loose square?
+		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Loose") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+			if (yearOfRun == 2016) return getLooseScaleFactorUp_signal_2016(fatJetA_pt) * getLooseScaleFactorUp_signal_2016(fatJetB_pt);
+			else return getLooseScaleFactorUp_signal_2017(fatJetA_pt) * getLooseScaleFactorUp_signal_2017(fatJetB_pt);
 		}
-
-		// otherwise, need to do claires trick
-		else{
-
-			double fatJetSpecA_pt, fatJetSpecB_pt;
-			if (fatJetA_dbt > fatJetB_dbt){
-				fatJetSpecA_pt = fatJetA_pt;
-				fatJetSpecB_pt = fatJetB_pt;
-			}
-			else{
-				fatJetSpecA_pt = fatJetB_pt;
-				fatJetSpecB_pt = fatJetA_pt;
-			}
-
-			double sX;
-			double sZ;
-			if (yearOfRun == 2016){
-				sX = getMed2ScaleFactorUp_signal_2016(fatJetSpecA_pt) * getMed1ScaleFactorUp_signal_2016(fatJetSpecB_pt);
-				sZ = getMed2ScaleFactorUp_signal_2016(fatJetSpecA_pt) * getLooseScaleFactorUp_signal_2016(fatJetSpecB_pt); 
-			}
- 			else{
-				sX = getMed2ScaleFactorUp_signal_2017(fatJetSpecA_pt) * getMed1ScaleFactorUp_signal_2017(fatJetSpecB_pt);
-				sZ = getMed2ScaleFactorUp_signal_2017(fatJetSpecA_pt) * getLooseScaleFactorUp_signal_2017(fatJetSpecB_pt); 
-			}
-			return (sZ - fX_signal * sX) / fY_signal;
+		else if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+			if (yearOfRun == 2016) return getLooseScaleFactorUp_signal_2016(fatJetA_pt);
+			else return getLooseScaleFactorUp_signal_2017(fatJetA_pt);
+		}
+		else if (fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+			if (yearOfRun == 2016) return getLooseScaleFactorUp_signal_2016(fatJetB_pt);
+			else return getLooseScaleFactorUp_signal_2017(fatJetB_pt);
+		}
+		else
+		{
+			return 1.0;
 		}
 	}
 
@@ -630,39 +602,25 @@ namespace DoubleBTagSF{
             return -333333.1;
 		}
 
-		// check fatJets are in the TAG dbt region
-		if (fatJetA_dbt < (-1.0 * fatJetB_dbt + 1.0 + DoubleBTagWPs::dbtNameToDouble("Loose"))) return 1.0;
+		/// check fatJets are in the TAG dbt region
+		if ( (fatJetA_dbt < 0.3 && fatJetB_dbt < 0.3) || (fatJetA_pt == 0 && fatJetB_pt == 0) ) return 1.0;
 
-		// are fatJets in the Med1 * Med1 square?
-		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Med1") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Med1")){
-			if (yearOfRun == 2016) return getMed1ScaleFactorDown_signal_2016(fatJetA_pt) * getMed1ScaleFactorDown_signal_2016(fatJetB_pt);
-			else return getMed1ScaleFactorDown_signal_2017(fatJetA_pt) * getMed1ScaleFactorDown_signal_2017(fatJetB_pt);
+		// are fatJets in the Loose * Loose square?
+		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Loose") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+			if (yearOfRun == 2016) return getLooseScaleFactorDown_signal_2016(fatJetA_pt) * getLooseScaleFactorDown_signal_2016(fatJetB_pt);
+			else return getLooseScaleFactorDown_signal_2017(fatJetA_pt) * getLooseScaleFactorDown_signal_2017(fatJetB_pt);
 		}
-
-		// otherwise, need to do claires trick
-		else{
-
-			double fatJetSpecA_pt, fatJetSpecB_pt;
-			if (fatJetA_dbt > fatJetB_dbt){
-				fatJetSpecA_pt = fatJetA_pt;
-				fatJetSpecB_pt = fatJetB_pt;
-			}
-			else{
-				fatJetSpecA_pt = fatJetB_pt;
-				fatJetSpecB_pt = fatJetA_pt;
-			}
-
-			double sX;
-			double sZ;
-			if (yearOfRun == 2016){
-				sX = getMed2ScaleFactorDown_signal_2016(fatJetSpecA_pt) * getMed1ScaleFactorDown_signal_2016(fatJetSpecB_pt);
-				sZ = getMed2ScaleFactorDown_signal_2016(fatJetSpecA_pt) * getLooseScaleFactorDown_signal_2016(fatJetSpecB_pt); 
-			}
- 			else{
-				sX = getMed2ScaleFactorDown_signal_2017(fatJetSpecA_pt) * getMed1ScaleFactorDown_signal_2017(fatJetSpecB_pt);
-				sZ = getMed2ScaleFactorDown_signal_2017(fatJetSpecA_pt) * getLooseScaleFactorDown_signal_2017(fatJetSpecB_pt); 
-			}
-			return (sZ - fX_signal * sX) / fY_signal;
+		else if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+			if (yearOfRun == 2016) return getLooseScaleFactorDown_signal_2016(fatJetA_pt);
+			else return getLooseScaleFactorDown_signal_2017(fatJetA_pt);
+		}
+		else if (fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+			if (yearOfRun == 2016) return getLooseScaleFactorDown_signal_2016(fatJetB_pt);
+			else return getLooseScaleFactorDown_signal_2017(fatJetB_pt);
+		}
+		else
+		{
+			return 1.0;
 		}
 	}
 
@@ -680,38 +638,24 @@ namespace DoubleBTagSF{
 		}
 
 		// check fatJets are in the TAG dbt region
-		if (fatJetA_dbt < (-1.0 * fatJetB_dbt + 1.0 + DoubleBTagWPs::dbtNameToDouble("Loose"))) return 1.0;
+		if ( (fatJetA_dbt < 0.3 && fatJetB_dbt < 0.3) || (fatJetA_pt == 0 && fatJetB_pt == 0) ) return 1.0;
 
-		// are fatJets in the Med1 * Med1 square?
-		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Med1") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Med1")){
-			if (yearOfRun == 2016) return getMed1ScaleFactor_ttbar_2016(fatJetA_pt) * getMed1ScaleFactor_ttbar_2016(fatJetB_pt);
-			else return getMed1ScaleFactor_ttbar_2017(fatJetA_pt) * getMed1ScaleFactor_ttbar_2017(fatJetB_pt);
+		// are fatJets in the Loose * Loose square?
+		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Loose") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+			if (yearOfRun == 2016) return getLooseScaleFactor_ttbar_2016(fatJetA_pt) * getLooseScaleFactor_ttbar_2016(fatJetB_pt);
+			else return getLooseScaleFactor_ttbar_2017(fatJetA_pt) * getLooseScaleFactor_ttbar_2017(fatJetB_pt);
 		}
-
-		// otherwise, need to do claires trick
-		else{
-
-			double fatJetSpecA_pt, fatJetSpecB_pt;
-			if (fatJetA_dbt > fatJetB_dbt){
-				fatJetSpecA_pt = fatJetA_pt;
-				fatJetSpecB_pt = fatJetB_pt;
-			}
-			else{
-				fatJetSpecA_pt = fatJetB_pt;
-				fatJetSpecB_pt = fatJetA_pt;
-			}
-
-			double sX;
-			double sZ;
-			if (yearOfRun == 2016){
-				sX = getMed2ScaleFactor_ttbar_2016(fatJetSpecA_pt) * getMed1ScaleFactor_ttbar_2016(fatJetSpecB_pt);
-				sZ = getMed2ScaleFactor_ttbar_2016(fatJetSpecA_pt) * getLooseScaleFactor_ttbar_2016(fatJetSpecB_pt); 
-			}
- 			else{
-				sX = getMed2ScaleFactor_ttbar_2017(fatJetSpecA_pt) * getMed1ScaleFactor_ttbar_2017(fatJetSpecB_pt);
-				sZ = getMed2ScaleFactor_ttbar_2017(fatJetSpecA_pt) * getLooseScaleFactor_ttbar_2017(fatJetSpecB_pt); 
-			}
-			return (sZ - fX_ttbar * sX) / fY_ttbar;
+		else if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+			if (yearOfRun == 2016) return getLooseScaleFactor_ttbar_2016(fatJetA_pt);
+			else return getLooseScaleFactor_ttbar_2017(fatJetA_pt);
+		}
+		else if (fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+			if (yearOfRun == 2016) return getLooseScaleFactor_ttbar_2016(fatJetB_pt);
+			else return getLooseScaleFactor_ttbar_2017(fatJetB_pt);
+		}
+		else
+		{
+			return 1.0;
 		}
 	}
 
@@ -727,38 +671,24 @@ namespace DoubleBTagSF{
 		}
 
 		// check fatJets are in the TAG dbt region
-		if (fatJetA_dbt < (-1.0 * fatJetB_dbt + 1.0 + DoubleBTagWPs::dbtNameToDouble("Loose"))) return 1.0;
+		if ( (fatJetA_dbt < 0.3 && fatJetB_dbt < 0.3) || (fatJetA_pt == 0 && fatJetB_pt == 0) ) return 1.0;
 
-		// are fatJets in the Med1 * Med1 square?
-		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Med1") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Med1")){
-			if (yearOfRun == 2016) return getMed1ScaleFactorUp_ttbar_2016(fatJetA_pt) * getMed1ScaleFactorUp_ttbar_2016(fatJetB_pt);
-			else return getMed1ScaleFactorUp_ttbar_2017(fatJetA_pt) * getMed1ScaleFactorUp_ttbar_2017(fatJetB_pt);
+		// are fatJets in the Loose * Loose square?
+		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Loose") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+			if (yearOfRun == 2016) return getLooseScaleFactorUp_ttbar_2016(fatJetA_pt) * getLooseScaleFactorUp_ttbar_2016(fatJetB_pt);
+			else return getLooseScaleFactorUp_ttbar_2017(fatJetA_pt) * getLooseScaleFactorUp_ttbar_2017(fatJetB_pt);
 		}
-
-		// otherwise, need to do claires trick
-		else{
-
-			double fatJetSpecA_pt, fatJetSpecB_pt;
-			if (fatJetA_dbt > fatJetB_dbt){
-				fatJetSpecA_pt = fatJetA_pt;
-				fatJetSpecB_pt = fatJetB_pt;
-			}
-			else{
-				fatJetSpecA_pt = fatJetB_pt;
-				fatJetSpecB_pt = fatJetA_pt;
-			}
-
-			double sX;
-			double sZ;
-			if (yearOfRun == 2016){
-				sX = getMed2ScaleFactorUp_ttbar_2016(fatJetSpecA_pt) * getMed1ScaleFactorUp_ttbar_2016(fatJetSpecB_pt);
-				sZ = getMed2ScaleFactorUp_ttbar_2016(fatJetSpecA_pt) * getLooseScaleFactorUp_ttbar_2016(fatJetSpecB_pt); 
-			}
- 			else{
-				sX = getMed2ScaleFactorUp_ttbar_2017(fatJetSpecA_pt) * getMed1ScaleFactorUp_ttbar_2017(fatJetSpecB_pt);
-				sZ = getMed2ScaleFactorUp_ttbar_2017(fatJetSpecA_pt) * getLooseScaleFactorUp_ttbar_2017(fatJetSpecB_pt); 
-			}
-			return (sZ - fX_ttbar * sX) / fY_ttbar;
+		else if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+			if (yearOfRun == 2016) return getLooseScaleFactorUp_ttbar_2016(fatJetA_pt);
+			else return getLooseScaleFactorUp_ttbar_2017(fatJetA_pt);
+		}
+		else if (fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+			if (yearOfRun == 2016) return getLooseScaleFactorUp_ttbar_2016(fatJetB_pt);
+			else return getLooseScaleFactorUp_ttbar_2017(fatJetB_pt);
+		}
+		else
+		{
+			return 1.0;
 		}
 	}
 
@@ -773,38 +703,24 @@ namespace DoubleBTagSF{
 		}
 
 		// check fatJets are in the TAG dbt region
-		if (fatJetA_dbt < (-1.0 * fatJetB_dbt + 1.0 + DoubleBTagWPs::dbtNameToDouble("Loose"))) return 1.0;
+		if ( (fatJetA_dbt < 0.3 && fatJetB_dbt < 0.3) || (fatJetA_pt == 0 && fatJetB_pt == 0) ) return 1.0;
 
-		// are fatJets in the Med1 * Med1 square?
-		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Med1") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Med1")){
-			if (yearOfRun == 2016) return getMed1ScaleFactorDown_ttbar_2016(fatJetA_pt) * getMed1ScaleFactorDown_ttbar_2016(fatJetB_pt);
-			else return getMed1ScaleFactorDown_ttbar_2017(fatJetA_pt) * getMed1ScaleFactorDown_ttbar_2017(fatJetB_pt);
+		// are fatJets in the Loose * Loose square?
+		if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Loose") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+			if (yearOfRun == 2016) return getLooseScaleFactorDown_ttbar_2016(fatJetA_pt) * getLooseScaleFactorDown_ttbar_2016(fatJetB_pt);
+			else return getLooseScaleFactorDown_ttbar_2017(fatJetA_pt) * getLooseScaleFactorDown_ttbar_2017(fatJetB_pt);
 		}
-
-		// otherwise, need to do claires trick
-		else{
-
-			double fatJetSpecA_pt, fatJetSpecB_pt;
-			if (fatJetA_dbt > fatJetB_dbt){
-				fatJetSpecA_pt = fatJetA_pt;
-				fatJetSpecB_pt = fatJetB_pt;
-			}
-			else{
-				fatJetSpecA_pt = fatJetB_pt;
-				fatJetSpecB_pt = fatJetA_pt;
-			}
-
-			double sX;
-			double sZ;
-			if (yearOfRun == 2016){
-				sX = getMed2ScaleFactorDown_ttbar_2016(fatJetSpecA_pt) * getMed1ScaleFactorDown_ttbar_2016(fatJetSpecB_pt);
-				sZ = getMed2ScaleFactorDown_ttbar_2016(fatJetSpecA_pt) * getLooseScaleFactorDown_ttbar_2016(fatJetSpecB_pt); 
-			}
- 			else{
-				sX = getMed2ScaleFactorDown_ttbar_2017(fatJetSpecA_pt) * getMed1ScaleFactorDown_ttbar_2017(fatJetSpecB_pt);
-				sZ = getMed2ScaleFactorDown_ttbar_2017(fatJetSpecA_pt) * getLooseScaleFactorDown_ttbar_2017(fatJetSpecB_pt); 
-			}
-			return (sZ - fX_ttbar * sX) / fY_ttbar;
+		else if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+			if (yearOfRun == 2016) return getLooseScaleFactorDown_ttbar_2016(fatJetA_pt);
+			else return getLooseScaleFactorDown_ttbar_2017(fatJetA_pt);
+		}
+		else if (fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+			if (yearOfRun == 2016) return getLooseScaleFactorDown_ttbar_2016(fatJetB_pt);
+			else return getLooseScaleFactorDown_ttbar_2017(fatJetB_pt);
+		}
+		else
+		{
+			return 1.0;
 		}
 	}
 
