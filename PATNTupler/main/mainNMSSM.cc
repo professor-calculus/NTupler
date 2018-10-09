@@ -232,9 +232,11 @@ private:
 
 	UInt_t treeVar_nrSlimJets_;
 	UInt_t treeVar_nrSlimJetsByBtagScore_;
-	UInt_t treeVar_nrSlimBJets_;
+	UInt_t treeVar_nrSlimLooseBJets_;
+	UInt_t treeVar_nrSlimMediumBJets_;
 	UInt_t treeVar_nrSepSlimJets_;
-	UInt_t treeVar_nrSepSlimBJets_;
+	UInt_t treeVar_nrSepSlimLooseBJets_;
+	UInt_t treeVar_nrSepSlimMediumBJets_;
 	UInt_t treeVar_nrFatJets_;
 	UInt_t treeVar_nrLooseMuons_;
 	UInt_t treeVar_nrTightMuons_;
@@ -1714,7 +1716,7 @@ int main(int argc, char** argv){
 			// Electron ID and mini isolation
 			for (unsigned int ilep(0); ilep < centralElectrons.size(); ilep++) {
 				ran::NtElectron lep = centralElectrons[ilep];
-				double miniso = getElectronPFIsolation(trackVec, lep, 0.05, 0.2, 10., false);
+				double miniso = electronPFIsolation(trackVec, lep, 0.05, 0.2, 10., false);
 				if( miniso < 0.1 && lep.passHEEPID() )
 				{
 					isolatedElectrons.push_back(lep);
@@ -1724,7 +1726,7 @@ int main(int argc, char** argv){
 			// Loose muon ID and mini isolation
 			for (unsigned int ilep(0); ilep < centralMuons.size(); ilep++) {
 				ran::NtMuon lep = centralMuons[ilep];
-				double miniso = getMuonPFIsolation(trackVec, lep, 0.05, 0.2, 10., false);
+				double miniso = muonPFIsolation(trackVec, lep, 0.05, 0.2, 10., false);
 				if( miniso < 0.2 && lep.isLooseMuon() )
 				{
 					looseMu.push_back(lep);
@@ -1753,7 +1755,7 @@ int main(int argc, char** argv){
 				}
 				else continue;
 
-				double miniso = getPhotonPFIsolation(trackVec, lep, false);
+				double miniso = photonPFIsolation(trackVec, lep, false);
 				if(miniso < 0.2)
 				{
 					isolatedPhotons.push_back(lep);
@@ -1763,7 +1765,7 @@ int main(int argc, char** argv){
 			// Track isolation
 			for (unsigned int ilep(0); ilep < chargedTracks.size(); ilep++) {
 				ran::NtTrack lep = chargedTracks[ilep];
-				double miniso = getTrackPFIsolation(trackVec, lep, false);
+				double miniso = trackPFIsolation(trackVec, lep, false);
 				if(miniso < 0.1)
 				{
 					isolatedTracks.push_back(lep);
