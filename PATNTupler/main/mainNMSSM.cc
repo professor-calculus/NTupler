@@ -1573,8 +1573,8 @@ int main(int argc, char** argv){
 		TTreeReaderValue<int> nPU_tree(treeReader, "nPU");
 		TTreeReaderValue<int> nISR_tree(treeReader, "nISR");
 		TTreeReaderValue<int> nHiggs2bb_tree(treeReader, "nHiggs2bb"); // HACK: need to comment out this line if working on DATA or QCD (the ntuples are missing nGluino info)
-		TTreeReaderValue<double> DelRHiggs2bb_1_tree(treeReader, "Higgs2bbDelR1"); // HACK: need to comment out this line if working on DATA or QCD (the ntuples are missing nGluino info)
-		TTreeReaderValue<double> DelRHiggs2bb_2_tree(treeReader, "Higgs2bbDelR2"); // HACK: need to comment out this line if working on DATA or QCD (the ntuples are missing nGluino info)
+		TTreeReaderValue<float> DelRHiggs2bb_1_tree(treeReader, "Higgs2bbDelR1"); // HACK: need to comment out this line if working on DATA or QCD (the ntuples are missing nGluino info)
+		TTreeReaderValue<float> DelRHiggs2bb_2_tree(treeReader, "Higgs2bbDelR2"); // HACK: need to comment out this line if working on DATA or QCD (the ntuples are missing nGluino info)
 		TTreeReaderValue<int> nGluino_tree(treeReader, "nGluino"); // HACK: need to comment out this line if working on DATA or QCD (the ntuples are missing nGluino info)
 
 
