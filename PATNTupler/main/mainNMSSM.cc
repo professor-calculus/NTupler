@@ -22,6 +22,7 @@
 #include "TriggerPathToIndex.hh"
 #include "deltaR.h"
 #include "DoubleBTagSF.h"
+#include "rhoEACorrections.h"
 #include "IsrWeights.h"
 #include "SoftDropPuppiSF.h"
 
