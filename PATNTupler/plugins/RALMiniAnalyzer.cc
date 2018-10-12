@@ -823,7 +823,7 @@ void RALMiniAnalyzer::ReadInPhotons(const edm::Event& iEvent)
   iEvent.getByToken(photonToken_, photons);
   edm::Handle<double> rho;
   iEvent.getByToken(rhoPhotonToken_, rho);
-  rhoMiniIso_ = rho;
+  rhoMiniIso_ = *rho;
 
   for (const pat::Photon &iphoton : *photons) {
     photonCollection_->push_back(ran::PhotonStruct{}); 
