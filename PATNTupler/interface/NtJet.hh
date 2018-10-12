@@ -25,7 +25,6 @@ namespace ran{
     float pfCombinedDeepCSV_probbb() const {return jet->pfCombinedDeepCSV_probbb;} // For the Deep NN b-tagger
     float pfCombinedDeepCVMA_probb() const {return jet->pfCombinedDeepCVMA_probb;} // For the Deep NN b-tagger
     float pfCombinedDeepCVMA_probbb() const {return jet->pfCombinedDeepCVMA_probbb;} // For the Deep NN b-tagger
-    float pfCombinedDeepCSV_problepb() const {return jet->pfCombinedDeepCSV_problepb;} // For the Deep NN b-tagger
     float pfCombinedMVAV2BJetTags() const {return jet->pfCombinedMVAV2BJetTags;}///< pfCombinedMVABJetTags  b tag discriminator
     float jecFactor_unCorrected() const {return jet->jecFactor_unCorrected;}///< factor applied to jet pt to get uncorrect jet pt
     float jecUncertainty() const {return jet->jecUncertainty;}///< the uncertainty in the JEC applied

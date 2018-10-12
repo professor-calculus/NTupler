@@ -34,6 +34,12 @@ namespace ran{
     float chargedHadronEnergyFraction() const {return jet->chargedHadronEnergyFraction;}///<chargedHadronEnergyFraction
 
     float pfBoostedDoubleSecondaryVertexAK8BJetTags() const {return jet->pfBoostedDoubleSecondaryVertexAK8BJetTags;}///< double b tag discrim
+    float pfCombinedInclusiveSecondaryVertexV2BJetTags() const {return jet->pfCombinedInclusiveSecondaryVertexV2BJetTags;}//<pfCombinedInclusiveSecondaryVertexV2BJetTags b tag discriminator
+    float pfCombinedDeepCSV_probb() const {return jet->pfCombinedDeepCSV_probb;} // For the Deep NN b-tagger
+    float pfCombinedDeepCSV_probbb() const {return jet->pfCombinedDeepCSV_probbb;} // For the Deep NN b-tagger
+    float pfCombinedDeepCVMA_probb() const {return jet->pfCombinedDeepCVMA_probb;} // For the Deep NN b-tagger
+    float pfCombinedDeepCVMA_probbb() const {return jet->pfCombinedDeepCVMA_probbb;} // For the Deep NN b-tagger
+    float pfCombinedMVAV2BJetTags() const {return jet->pfCombinedMVAV2BJetTags;}///< pfCombinedMVABJetTags  b tag discriminator
 
     double NjettinessAK8_tau1() const {return jet->NjettinessAK8_tau1;}///<  Access the n-subjettiness variables
     double NjettinessAK8_tau2() const {return jet->NjettinessAK8_tau2;}///<  Access the n-subjettiness variables

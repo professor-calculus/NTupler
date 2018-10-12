@@ -33,6 +33,12 @@ namespace ran{
     float chargedEmEnergyFraction;///<chargedEmEnergyFraction
     float chargedHadronEnergyFraction;///<chargedHadronEnergyFraction
     float pfBoostedDoubleSecondaryVertexAK8BJetTags;///< double b tag discrim
+    float pfCombinedInclusiveSecondaryVertexV2BJetTags;///< pfCombinedInclusiveSecondaryVertexV2BJetTags b tag discriminator
+    float pfCombinedMVAV2BJetTags;///<  pfCombinedMVABJetTags b tag discriminator
+    float pfCombinedDeepCSV_probb; // Deep NN b-tagger
+    float pfCombinedDeepCSV_probbb; // Deep NN b-tagger
+    float pfCombinedDeepCVMA_probb; // Deep NN b-tagger
+    float pfCombinedDeepCVMA_probbb; // Deep NN b-tagger
 
     double NjettinessAK8_tau1; ///<  Access the n-subjettiness variables
     double NjettinessAK8_tau2;///<  Access the n-subjettiness variables

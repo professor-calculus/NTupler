@@ -1157,6 +1157,15 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncer
 
 
       ithJet.pfBoostedDoubleSecondaryVertexAK8BJetTags =  iJet.bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags");// Double b-tag
+
+      // Single b-tag vars
+      ithJet.pfCombinedInclusiveSecondaryVertexV2BJetTags =  iJet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
+      ithJet.pfCombinedMVAV2BJetTags = iJet.bDiscriminator("pfCombinedMVAV2BJetTags");
+      ithJet.pfCombinedDeepCSV_probb = iJet.bDiscriminator("pfDeepCSVJetTags:probb");
+      ithJet.pfCombinedDeepCSV_probbb = iJet.bDiscriminator("pfDeepCSVJetTags:probbb");
+      ithJet.pfCombinedDeepCVMA_probbb = iJet.bDiscriminator("pfDeepCMVAJetTags:probb");
+      ithJet.pfCombinedDeepCVMA_probbb = iJet.bDiscriminator("pfDeepCMVAJetTags:probbb");
+
       ithJet.partonFlavour = iJet.partonFlavour();
 
       if (c_nom != 0){
