@@ -210,6 +210,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       int nHIGGS2BB_;
       float HIGGS2BB_DR1_;
       float HIGGS2BB_DR2_;
+      float rhoMiniIso_;
       std::vector<ran::ElectronStruct>* electronCollection_;
       std::vector<ran::PhotonStruct>* photonCollection_;
       std::vector<ran::TrackStruct>* trackCollection_;
@@ -291,6 +292,7 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     EventDataTree->Branch("nHiggs2bb", &nHIGGS2BB_, "nHiggs2bb/I");
     EventDataTree->Branch("Higgs2bbDelR1", &HIGGS2BB_DR1_, "Higgs2bbDelR1/F");
     EventDataTree->Branch("Higgs2bbDelR2", &HIGGS2BB_DR2_, "Higgs2bbDelR2/F");
+    EventDataTree->Branch("RhoMiniIso", &rhoMiniIso_, "RhoMiniIso/F");
     EventDataTree->Branch("electronCollection","std::vector<ran::ElectronStruct>", &electronCollection_, 64000, 1); 
     EventDataTree->Branch("muonCollection","std::vector<ran::MuonStruct>", &muonCollection_, 64000, 1);
     EventDataTree->Branch("photonCollection","std::vector<ran::PhotonStruct>", &photonCollection_, 64000, 1);
@@ -545,6 +547,7 @@ void RALMiniAnalyzer::ResetEventByEventVariables(){
   nHIGGS2BB_ = 0;
   HIGGS2BB_DR1_ = -1;
   HIGGS2BB_DR2_ = -1;
+  rhoMiniIso_ = 0;
 }
 
 //------------ For getting the correction factor for the PUPPI softDropMass -------------
@@ -820,6 +823,7 @@ void RALMiniAnalyzer::ReadInPhotons(const edm::Event& iEvent)
   iEvent.getByToken(photonToken_, photons);
   edm::Handle<double> rho;
   iEvent.getByToken(rhoPhotonToken_, rho);
+  rhoMiniIso_ = rho;
 
   for (const pat::Photon &iphoton : *photons) {
     photonCollection_->push_back(ran::PhotonStruct{}); 

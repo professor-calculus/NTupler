@@ -19,7 +19,6 @@ namespace ran{
     float pt;///< photon pt
     float eta;///< photon eta
     float phi;//photon phi
-    float rho;//rho for event, used for isolation corrections
 
     bool gsfTrack_available;///< Is GSF track available
     float scEta;///< super cluster eta

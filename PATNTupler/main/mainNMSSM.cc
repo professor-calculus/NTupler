@@ -244,6 +244,9 @@ private:
 	UInt_t treeVar_nrPhotons_;
 	UInt_t treeVar_nrTracks_;
 
+	UInt_t treeVar_nrPrefireJets_;
+	UInt_t treeVar_nrPrefirePhotons_;
+
 	// Slim jets
 	TLorentzVector* treeVar_jetA_p4Ptr_; TLorentzVector treeVar_jetA_p4_;
 	TLorentzVector* treeVar_jetA_p4Ptr_jecUncUp_; TLorentzVector treeVar_jetA_p4_jecUncUp_;
@@ -459,6 +462,8 @@ public:
 		mainAnaTree_->Branch("nrElectrons", &treeVar_nrElectrons_, "nrElectrons/i");
 		mainAnaTree_->Branch("nrPhotons", &treeVar_nrPhotons_, "nrPhotons/i");
 		mainAnaTree_->Branch("nrTracks", &treeVar_nrTracks_, "nrTracks/i");
+		mainAnaTree_->Branch("nrPrefireJets", &treeVar_nrPrefireJets_, "nrPrefireJets/i");
+		mainAnaTree_->Branch("nrPrefirePhotons", &treeVar_nrPrefirePhotons_, "nrPrefirePhotons/i");
 
 		// Slim jets
 		mainAnaTree_->Branch("slimJetA_p4", &treeVar_jetA_p4Ptr_);
@@ -516,7 +521,8 @@ public:
 					const std::vector<ran::NtJet>& looseBJets, const std::vector<ran::NtJet>& allLooseBJets, const std::vector<ran::NtJet>& mediumBJets, const std::vector<ran::NtJet>& allMediumBJets, unsigned int nrFatJets,
 					const std::vector<ran::NtElectron>& centralElectrons, const std::vector<ran::NtMuon>& tightMuons, unsigned int nrLooseMuons, unsigned int nrTightMuons,
 					const int nrElectrons, const int nrPhotons, const int nrTracks,
-					const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const int& nHiggs2bb, const float& DelRHiggs2bb_1, const float& DelRHiggs2bb_2, const double& D_factor, const unsigned int yearOfRun)
+					const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const int& nHiggs2bb, const float& DelRHiggs2bb_1, const float& DelRHiggs2bb_2, const double& D_factor, const unsigned int yearOfRun,
+					const int& nPrefireJets, const int& nPrefirePhotons)
 	{
 		// Hack: Muon mass for TLorentzVector...
 		double muonMass = 0.105658;
@@ -609,6 +615,8 @@ public:
 		treeVar_nrElectrons_ = nrElectrons;
 		treeVar_nrPhotons_ = nrPhotons;
 		treeVar_nrTracks_ = nrTracks;
+		treeVar_nrPrefireJets_ = nrPrefireJets;
+		treeVar_nrPrefirePhotons_ = nrPrefirePhotons;
 
 		if (nrFatJets == 0)
 		{
@@ -1232,20 +1240,20 @@ std::string getOutputDirFromOutputFile(std::string outputFile)
     return outputDirectory;
 }
 
-double relPFIsoR03 (ran::NtMuon muon) {
-	double relIso = (muon.pfIsoR03_sumChgHadPt()
-					+ std::max(0., muon.pfIsoR03_sumNeutHadPt()
-							+ muon.pfIsoR03_sumPhtEt()
-							- 0.5*muon.pfIsoR03_sumPUPt()))/(muon.pt());
+double relPFIsoR03 (ran::NtMuon muon, float rho, int year) {
+	double CHIso = TMath::Max(0., muon.pfIsoR03_sumChgHadPt() - rho*RhoEACorr::getEA_CH(muon.eta(), year));
+	double NHIso = TMath::Max(0., muon.pfIsoR03_sumNeutHadPt() - rho*RhoEACorr::getEA_NH(muon.eta(), year));
+	double PhotonIso = TMath::Max(0., muon.pfIsoR03_sumPhtEt() - rho*RhoEACorr::getEA_PH(muon.eta(), year));
+	double relIso = (CHIso + std::max(0., NHIso + PhotonIso - 0.5*muon.pfIsoR03_sumPUPt()))/(muon.pt());
 
 	return relIso;
 }
 
-double relPFIsoR04 (ran::NtMuon muon) {
-	double relIso = (muon.pfIsoR04_sumChgHadPt()
-					+ std::max(0., muon.pfIsoR04_sumNeutHadPt()
-							+ muon.pfIsoR04_sumPhtEt()
-							- 0.5*muon.pfIsoR04_sumPUPt()))/(muon.pt());
+double relPFIsoR04 (ran::NtMuon muon, float rho, int year) {
+	double CHIso = TMath::Max(0., muon.pfIsoR04_sumChgHadPt() - rho*RhoEACorr::getEA_CH(muon.eta(), year));
+	double NHIso = TMath::Max(0., muon.pfIsoR04_sumNeutHadPt() - rho*RhoEACorr::getEA_NH(muon.eta(), year));
+	double PhotonIso = TMath::Max(0., muon.pfIsoR04_sumPhtEt() - rho*RhoEACorr::getEA_PH(muon.eta(), year));
+	double relIso = (CHIso + std::max(0., NHIso + PhotonIso - 0.5*muon.pfIsoR04_sumPUPt()))/(muon.pt());
 
 	return relIso;
 }
@@ -1253,7 +1261,7 @@ double relPFIsoR04 (ran::NtMuon muon) {
 double electronPFIsolation(std::vector<ran::NtTrack> pfcands,
                         const ran::NtElectron ptcl,
                         double r_iso_min, double r_iso_max, double kt_scale,
-                        bool charged_only) {
+                        bool charged_only, float rho, int year) {
 	
 	if (ptcl.pt() < 5) return 9999.;
 
@@ -1298,6 +1306,9 @@ double electronPFIsolation(std::vector<ran::NtTrack> pfcands,
         }
       }
     }
+	iso_ch = TMath::Max(0, iso_ch - rho*RhoEACorr::getEA_CH(ptcl.eta(), year));
+	iso_nh = TMath::Max(0, iso_nh - rho*RhoEACorr::getEA_NH(ptcl.eta(), year));
+	iso_ph = TMath::Max(0, iso_ph - rho*RhoEACorr::getEA_PH(ptcl.eta(), year));
     double iso(0.);
     if (charged_only){
       iso = iso_ch;
@@ -1376,7 +1387,7 @@ double muonPFIsolation(std::vector<ran::NtTrack> pfcands,
 
 double photonPFIsolation(std::vector<ran::NtTrack> pfcands,
                         const ran::NtPhoton ptcl,  
-                        bool charged_only) {
+                        bool charged_only, float rho, int year) {
 	
 	if (ptcl.pt() < 5) return 9999.;
 
@@ -1421,6 +1432,9 @@ double photonPFIsolation(std::vector<ran::NtTrack> pfcands,
         }
       }
     }
+	iso_ch = TMath::Max(0, iso_ch - rho*RhoEACorr::getEA_CH(ptcl.eta(), year));
+	iso_nh = TMath::Max(0, iso_nh - rho*RhoEACorr::getEA_NH(ptcl.eta(), year));
+	iso_ph = TMath::Max(0, iso_ph - rho*RhoEACorr::getEA_PH(ptcl.eta(), year));
     double iso(0.);
     if (charged_only){
       iso = iso_ch;
@@ -1498,11 +1512,11 @@ double trackPFIsolation(std::vector<ran::NtTrack> pfcands,
 
 
 
-std::vector<ran::NtMuon> looseMuons (std::vector<ran::NtMuon> muons) {
+std::vector<ran::NtMuon> looseMuons (std::vector<ran::NtMuon> muons, float rho, int year) {
 	std::vector<ran::NtMuon> looseMu;
 	for(unsigned int i=0; i<muons.size(); i++)
 	{
-		if(muons[i].isLooseMuon()  && relPFIsoR04(muons[i]) < 0.25)
+		if(muons[i].isLooseMuon()  && relPFIsoR04(muons[i], year) < 0.25)
 		{
 			looseMu.push_back(muons[i]);
 		}
@@ -1510,16 +1524,35 @@ std::vector<ran::NtMuon> looseMuons (std::vector<ran::NtMuon> muons) {
 	return looseMu;
 }
 
-std::vector<ran::NtMuon> tightMuons (std::vector<ran::NtMuon> muons) {
+std::vector<ran::NtMuon> tightMuons (std::vector<ran::NtMuon> muons, float rho, int year) {
 	std::vector<ran::NtMuon> tightMu;
 	for(unsigned int i=0; i<muons.size(); i++)
 	{
-		if(muons[i].isTightMuon() && relPFIsoR03(muons[i]) < 0.15)
+		if(muons[i].isTightMuon() && relPFIsoR03(muons[i], year) < 0.15)
 		{
 			tightMu.push_back(muons[i]);
 		}
 	}
 	return tightMu;
+}
+
+bool jetIDLoose (ran::NtJet jet) {
+	// looseJetID = (NHF<0.99 && NEMF<0.99 && NumConst>1) && ((abs(eta)<=2.4 && CHF>0 && CHM>0 && CEMF<0.99) || abs(eta)>2.4) && abs(eta)<=2.7
+	bool jetIsLoose = false;
+	if (abs(jet.eta()) < 2.7)
+	{
+		jetIsLoose = ( (jet.neutralHadronEnergyFraction() < 0.99 && jet.neutralEmEnergyFraction() < 0.99 && jet.numberOfDaughters() > 1)
+					  && ((abs(jet.eta()) < 2.4 && jet.chargedHadronEnergyFraction() > 0 && jet.chargedMultiplicity() > 0 && jet.chargedEmEnergyFraction() < 0.99) || abs(jet.eta()) > 2.4) );
+	}
+	else if (abs(jet.eta()) < 3.0)
+	{
+		jetIsLoose = ( jet.neutralEmEnergyFraction() > 0.01 && jet.neutralHadronEnergyFraction() < 0.98 && jet.neutralMultiplicity() > 2 );
+	}
+	else
+	{
+		jetIsLoose = ( jet.neutralEmEnergyFraction() < 0.9 && jet.neutralMultiplicity() > 10);
+	}
+	return jetIsLoose;
 }
 
 int main(int argc, char** argv){
@@ -1667,7 +1700,7 @@ int main(int argc, char** argv){
 		TTreeReaderValue<float> DelRHiggs2bb_1_tree(treeReader, "Higgs2bbDelR1"); // HACK: need to comment out this line if working on DATA or QCD (the ntuples are missing nGluino info)
 		TTreeReaderValue<float> DelRHiggs2bb_2_tree(treeReader, "Higgs2bbDelR2"); // HACK: need to comment out this line if working on DATA or QCD (the ntuples are missing nGluino info)
 		TTreeReaderValue<int> nGluino_tree(treeReader, "nGluino"); // HACK: need to comment out this line if working on DATA or QCD (the ntuples are missing nGluino info)
-
+		TTreeReaderValue<float> rhoMiniIso_tree(treeReader, "RhoMiniIso");
 
 		// Get the 'D' factor for ISR - NOTE THAT THIS IS PER INPUT FILE, NOT THE FULL SAMPLE !
 		double D_factor = 0.0;
@@ -1717,9 +1750,22 @@ int main(int argc, char** argv){
 			const int nHiggs2bb = *nHiggs2bb_tree;
 			const float DelR_bb_Higgs1 = *DelRHiggs2bb_1_tree;
 			const float DelR_bb_Higgs2 = *DelRHiggs2bb_2_tree;
+			const float rho = *rhoMiniIso_tree;
 
 			if (sampleType != "DATA" && yearOfRun == 2017 && nPU < 2) continue; // to veto the zeroPU events in 94X simulation
 			// if (nPU < 28) continue; // HACK: if you only want to use a sample of particular PU
+
+			// Jets which pass ID constraints:
+			std::vector<ran::NtJet> goodJets;
+			int nPrefireJets = 0;
+			for (const ran::NtJet& jet : jetVec)
+			{
+				if jetIDLoose(jet)
+				{
+					goodJets.push_back(jet);
+					if ( jet.pt() > 100 && abs(jet.eta()) > 2.25 && abs(jet.eta()) < 3.0 ) nPrefireJets++;
+				}
+			}
 
 			// HT calculation: Only consider jets with |eta| < 2.4, pt > 40.0
 			double ht = 0.0;
@@ -1727,7 +1773,7 @@ int main(int argc, char** argv){
 			double ht_jecUncDown = 0.0;
 			double ht_jerUncUp = 0.0;
 			double ht_jerUncDown = 0.0;
-			for (const ran::NtJet& jet : jetVec) {
+			for (const ran::NtJet& jet : goodJets) {
 
 				if ( fabs(jet.eta()) <= 2.4 ){
 
@@ -1763,9 +1809,9 @@ int main(int argc, char** argv){
 			double mht_phi_jerUncUp = 0.0;
 			double mht_phi_jerUncDown = 0.0;
 
-			for (const ran::NtJet& jet : jetVec) {
+			for (const ran::NtJet& jet : goodJets) {
 
-				if ( fabs(jet.eta()) <= 3.0 ){
+				if ( fabs(jet.eta()) <= 2.4 ){
 
 					if ( jet.pt() >= 40.0 ) mht_x += jet.pt() * -1 * TMath::Cos(jet.phi());
 					if ( jet.pt() * ( 1.0 + jet.jecUncertainty() ) >= 40.0 ) mht_jecUncUp_x += jet.pt() * -1 * TMath::Cos(jet.phi()) * ( 1.0 + jet.jecUncertainty() );
@@ -1833,7 +1879,7 @@ int main(int argc, char** argv){
 			// Electron ID and mini isolation
 			for (unsigned int ilep(0); ilep < centralElectrons.size(); ilep++) {
 				ran::NtElectron lep = centralElectrons[ilep];
-				double miniso = electronPFIsolation(trackVec, lep, 0.05, 0.2, 10., false);
+				double miniso = electronPFIsolation(trackVec, lep, 0.05, 0.2, 10., false, rho, yearOfRun);
 				if( miniso < 0.1 && lep.passHEEPID() )
 				{
 					isolatedElectrons.push_back(lep);
@@ -1851,6 +1897,7 @@ int main(int argc, char** argv){
 			}
 
 			// Loose photon ID and rel isolation
+			int nPrefirePhotons = 0;
 			for (unsigned int ilep(0); ilep < centralPhotons.size(); ilep++) {
 				ran::NtPhoton lep = centralPhotons[ilep];
 				// 2016 photon ID criteria
@@ -1872,10 +1919,11 @@ int main(int argc, char** argv){
 				}
 				else continue;
 
-				double miniso = photonPFIsolation(trackVec, lep, false);
+				double miniso = photonPFIsolation(trackVec, lep, false, rho, yearOfRun);
 				if(miniso < 0.2)
 				{
 					isolatedPhotons.push_back(lep);
+					if (lep.pt() > 50 && abs(lep.eta()) > 2.25 && abs(lep.eta()) < 3.0 ) nPrefirePhotons++;
 				}
 			}
 
@@ -1889,7 +1937,7 @@ int main(int argc, char** argv){
 				}
 			}
 
-			std::vector<ran::NtMuon> tightMu = tightMuons(centralMuons);
+			std::vector<ran::NtMuon> tightMu = tightMuons(centralMuons, yearOfRun);
 
 			// Number of fat jets
 			unsigned int nFatJets = centralFatJetVec.size();
@@ -1915,7 +1963,7 @@ int main(int argc, char** argv){
 				const ran::NtFatJet& fatJetA = centralFatJetVec.at(0);
 				const ran::NtFatJet& fatJetB = centralFatJetVec.at(1);
 
-				for (const ran::NtJet& jet : jetVec) {
+				for (const ran::NtJet& jet : goodJets) {
 					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
 						continue;
 					allSlimJets.push_back(jet);
@@ -1951,14 +1999,14 @@ int main(int argc, char** argv){
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
 				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun);
+				doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun, nPrefireJets, nPrefirePhotons);
 
 			}
 			else if (nFatJets == 1) {
 				const ran::NtFatJet& fatJetA = centralFatJetVec.at(0);
 				const ran::NtFatJet& fatJetB = centralFatJetVec.at(0);
 
-				for (const ran::NtJet& jet : jetVec) {
+				for (const ran::NtJet& jet : goodJets) {
 					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
 						continue;
 					allSlimJets.push_back(jet);
@@ -1990,14 +2038,14 @@ int main(int argc, char** argv){
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
 				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun);
+				doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun, nPrefireJets, nPrefirePhotons);
 
 			}
 			else {
 				const ran::NtFatJet& fatJetA = ran::NtFatJet();
 				const ran::NtFatJet& fatJetB = ran::NtFatJet();
 
-				for (const ran::NtJet& jet : jetVec) {
+				for (const ran::NtJet& jet : goodJets) {
 					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
 						continue;
 					allSlimJets.push_back(jet);
@@ -2026,7 +2074,7 @@ int main(int argc, char** argv){
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
 				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun);
+				doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun, nPrefireJets, nPrefirePhotons);
 
 			}
 
