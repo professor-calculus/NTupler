@@ -72,6 +72,18 @@ updateJetCollection(
    labelName = 'NewJEC',
    jetSource = cms.InputTag('slimmedJets'),
    jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
+   btagDiscriminators = [
+       'pfDeepCSVJetTags:probudsg',
+       'pfDeepCSVJetTags:probb',
+       'pfDeepCSVJetTags:probc',
+       'pfDeepCSVJetTags:probbb',
+       'pfDeepCSVJetTags:probcc',
+       'pfDeepCMVAJetTags:probudsg',
+       'pfDeepCMVAJetTags:probb',
+       'pfDeepCMVAJetTags:probc',
+       'pfDeepCMVAJetTags:probbb',
+       'pfDeepCMVAJetTags:probcc',
+   ],
 )
 updateJetCollection(
    process,

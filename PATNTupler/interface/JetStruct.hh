@@ -25,6 +25,8 @@ namespace ran{
     float pfCombinedMVAV2BJetTags;///<  pfCombinedMVABJetTags b tag discriminator
     float pfCombinedDeepCSV_probb; // Deep NN b-tagger
     float pfCombinedDeepCSV_probbb; // Deep NN b-tagger
+    float pfCombinedDeepCVMA_probb; // Deep NN b-tagger
+    float pfCombinedDeepCVMA_probbb; // Deep NN b-tagger
     float pfCombinedDeepCSV_problepb; // Deep NN b-tagger
     float jecFactor_unCorrected;///<factor applied to jet pt to get uncorrect jet pt
     float jecUncertainty;///<the uncertainty in the JEC applied
