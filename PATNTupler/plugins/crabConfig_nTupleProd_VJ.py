@@ -122,8 +122,8 @@ config.Data.inputDataset = 'DATASETXYZ' # use the script quickSignalSubmit_crab.
 # config.Data.inputDataset = '/NMSSMCascade_mH-70_mSUSY-2600_TuneCUEP8M1_13TeV-madgraph-pythia8/RunIISummer16MiniAODv2-80X_mcRun2_asymptotic_2016_TrancheIV_v6-v2/MINIAODSIM'
 
 #################################################################################################
-# config.Data.inputDBS = 'global' # for centrally produced data
-config.Data.inputDBS = 'phys03' # for personal simulation
+config.Data.inputDBS = 'global' # for centrally produced data
+# config.Data.inputDBS = 'phys03' # for personal simulation
 config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 1
 #################################################################################################
