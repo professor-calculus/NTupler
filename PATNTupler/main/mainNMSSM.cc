@@ -523,7 +523,7 @@ public:
 					const std::vector<ran::NtElectron>& centralElectrons, const std::vector<ran::NtMuon>& tightMuons, unsigned int nrLooseMuons, unsigned int nrTightMuons,
 					const int nrElectrons, const int nrPhotons, const int nrTracks,
 					const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const int& nHiggs2bb, const float& DelRHiggs2bb_1, const float& DelRHiggs2bb_2, const double& D_factor, const unsigned int yearOfRun,
-					const int& nPrefireJets, const int& nPrefirePhotons)
+					const int& nrPrefireJets, const int& nrPrefirePhotons)
 	{
 		// Hack: Muon mass for TLorentzVector...
 		double muonMass = 0.105658;
@@ -1307,9 +1307,9 @@ double electronPFIsolation(std::vector<ran::NtTrack> pfcands,
         }
       }
     }
-	iso_ch = TMath::Max(0, iso_ch - rho*RhoEACorr::getEA_CH(ptcl.eta(), year));
-	iso_nh = TMath::Max(0, iso_nh - rho*RhoEACorr::getEA_NH(ptcl.eta(), year));
-	iso_ph = TMath::Max(0, iso_ph - rho*RhoEACorr::getEA_PH(ptcl.eta(), year));
+	iso_ch = TMath::Max(0., iso_ch - rho*RhoEACorr::getEA_CH(ptcl.eta(), year));
+	iso_nh = TMath::Max(0., iso_nh - rho*RhoEACorr::getEA_NH(ptcl.eta(), year));
+	iso_ph = TMath::Max(0., iso_ph - rho*RhoEACorr::getEA_PH(ptcl.eta(), year));
     double iso(0.);
     if (charged_only){
       iso = iso_ch;
@@ -1433,9 +1433,9 @@ double photonPFIsolation(std::vector<ran::NtTrack> pfcands,
         }
       }
     }
-	iso_ch = TMath::Max(0, iso_ch - rho*RhoEACorr::getEA_CH(ptcl.eta(), year));
-	iso_nh = TMath::Max(0, iso_nh - rho*RhoEACorr::getEA_NH(ptcl.eta(), year));
-	iso_ph = TMath::Max(0, iso_ph - rho*RhoEACorr::getEA_PH(ptcl.eta(), year));
+	iso_ch = TMath::Max(0., iso_ch - rho*RhoEACorr::getEA_CH(ptcl.eta(), year));
+	iso_nh = TMath::Max(0., iso_nh - rho*RhoEACorr::getEA_NH(ptcl.eta(), year));
+	iso_ph = TMath::Max(0., iso_ph - rho*RhoEACorr::getEA_PH(ptcl.eta(), year));
     double iso(0.);
     if (charged_only){
       iso = iso_ch;
