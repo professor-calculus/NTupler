@@ -1517,7 +1517,7 @@ std::vector<ran::NtMuon> looseMuons (std::vector<ran::NtMuon> muons, float rho, 
 	std::vector<ran::NtMuon> looseMu;
 	for(unsigned int i=0; i<muons.size(); i++)
 	{
-		if(muons[i].isLooseMuon()  && relPFIsoR04(muons[i], year) < 0.25)
+		if(muons[i].isLooseMuon()  && relPFIsoR04(muons[i], rho, year) < 0.25)
 		{
 			looseMu.push_back(muons[i]);
 		}
@@ -1529,7 +1529,7 @@ std::vector<ran::NtMuon> tightMuons (std::vector<ran::NtMuon> muons, float rho, 
 	std::vector<ran::NtMuon> tightMu;
 	for(unsigned int i=0; i<muons.size(); i++)
 	{
-		if(muons[i].isTightMuon() && relPFIsoR03(muons[i], year) < 0.15)
+		if(muons[i].isTightMuon() && relPFIsoR03(muons[i], rho, year) < 0.15)
 		{
 			tightMu.push_back(muons[i]);
 		}
@@ -1761,7 +1761,7 @@ int main(int argc, char** argv){
 			int nPrefireJets = 0;
 			for (const ran::NtJet& jet : jetVec)
 			{
-				if jetIDLoose(jet)
+				if (jetIDLoose(jet))
 				{
 					goodJets.push_back(jet);
 					if ( jet.pt() > 100 && abs(jet.eta()) > 2.25 && abs(jet.eta()) < 3.0 ) nPrefireJets++;
@@ -1938,7 +1938,7 @@ int main(int argc, char** argv){
 				}
 			}
 
-			std::vector<ran::NtMuon> tightMu = tightMuons(centralMuons, yearOfRun);
+			std::vector<ran::NtMuon> tightMu = tightMuons(centralMuons, rho, yearOfRun);
 
 			// Number of fat jets
 			unsigned int nFatJets = centralFatJetVec.size();
