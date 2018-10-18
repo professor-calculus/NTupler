@@ -20,9 +20,9 @@ baseDir = os.environ['CMSSW_BASE']
 
 executable = "nTupAnaNMSSM" # wrt 'main' directory
 code = "mainNMSSM.cc" # wrt 'main' directory
-inputFileListPath = baseDir + "/src/NTupler/PATNTupler/fileLists/8_0_29_correct/TTJets.list"
-outputDirectory = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_2018_10_16_8_0_29_correct/mc/TTJets/" # has to be the full path
-sampleType = "TTJETS" #choose from SIGNAL, DATA, TTJETS, OTHER_MC
+inputFileListPath = baseDir + "/src/NTupler/PATNTupler/fileLists/8_0_29_correct/NAMEXYZ.list"
+outputDirectory = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_2018_10_16_8_0_29_correct/mc/NAMEXYZ/" # has to be the full path
+sampleType = "OTHER_MC" #choose from SIGNAL, DATA, TTJETS, OTHER_MC
 yearOfRun = 2016
 filesPerJob = 30
 logDirectoryBase = "/opt/ppd/scratch/titterton/jobLogs/flatTrees/"
@@ -110,7 +110,7 @@ submitCondorJobs = open(submitCondorJobsFilename,"w")
 
 # Create a DAG script for better job monitoring
 condorDagFilename = outputDirectory + "/tmp/submitCondorJobs.dag"
-condorDagFile = open(condorDagFileName,"w")
+condorDagFile = open(condorDagFilename,"w")
 
 # Create the executable script for each job
 jobNum = 0
@@ -161,3 +161,4 @@ for jobList in filesPerJobList:
     jobNum = jobNum + 1
 
 os.chmod(submitCondorJobsFilename,0755)
+os.chmod(condorDagFilename,0755)
