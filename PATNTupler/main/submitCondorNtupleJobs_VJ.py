@@ -26,6 +26,7 @@ sampleType = "SIGNAL" # choose from SIGNAL, DATA, TTJETS, OTHER_MC
 yearOfRun = 2016
 filesPerJob = 30
 logDirectoryBase = "/opt/ppd/scratch/xap79297/jobLogs/flatTrees/"
+jobName = “NAMEXYZ”
 
 ###########################################################################################################
 ###########################################################################################################
@@ -107,6 +108,9 @@ if (len(tmpList) > 0):
 submitCondorJobsFilename = outputDirectory + "/tmp/submitCondorJobs_" + executable + ".sh"
 submitCondorJobs = open(submitCondorJobsFilename,"w")
 
+# Create a DAG script for better job monitoring
+condorDagFilename = outputDirectory + “/tmp/submitCondorJobs.dag”
+condorDagFile = open(condorDagFileName,“w”)
 
 # Create the executable script for each job
 jobNum = 0
@@ -149,6 +153,11 @@ for jobList in filesPerJobList:
     os.chmod(condorFileName,0755)
 
     submitCondorJobs.write("condor_submit job_" + str(jobNum) + ".condor" + "\n")
+
+    # DAG script writing
+    numDag = jobName + “_” + str(jobNum)
+    condorDagFile.write(“JOB” + “\t” + numDag + “\t” + condorFileName + “\n”) 
+
     jobNum = jobNum + 1
 
 os.chmod(submitCondorJobsFilename,0755)

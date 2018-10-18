@@ -38,8 +38,9 @@ for project in projectsToSubmit:
 
 		f.write("cd %s\n" % projectPath)
 		# f.write("pwd\n") # for testing
-		f.write("./submitCondorJobs_nTupAnaNMSSM.sh\n")
-		f.write("echo\n")
+		# f.write("./submitCondorJobs_nTupAnaNMSSM.sh\n")
+		f.write(“condor_submit_dag submitCondorJobs.dag\n”)
+        f.write("echo\n")
 		f.write("echo\n")
 		f.write("echo\n")
 		f.write("echo\n")
