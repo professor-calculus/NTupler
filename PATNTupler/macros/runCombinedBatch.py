@@ -17,6 +17,7 @@ import time
 
 nuisancesToFreeze = "" # >>> no freezing a thing
 # nuisancesToFreeze = "signalPDF"
+# nuisancesToFreeze = "isrReweight"
 # nuisancesToFreeze = "SigDbtTag2016,SigDbtTag2017"
 # nuisancesToFreeze = "TtDbtTag2016,TtDbtTag2017"
 # nuisancesToFreeze = "XS_TTJets2016,XS_TTJets0L2017,XS_TTJets1L2017,XS_TTJets2L2017"
@@ -29,7 +30,6 @@ nuisancesToFreeze = "" # >>> no freezing a thing
 # nuisancesToFreeze = "jerAK8Unc2016,jerAK8Unc2017"
 # nuisancesToFreeze = "jmsUnc2016,jmsUnc2017"
 # nuisancesToFreeze = "jmrUnc2016,jmrUnc2017"
-# nuisancesToFreeze = "isr2016,isr2017"
 
 #############################
 #############################
