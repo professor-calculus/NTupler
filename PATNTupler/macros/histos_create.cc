@@ -282,6 +282,9 @@ int main(int argc, char** argv){
                     // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/TTToSemiLeptonic_ht1200plus/flatTree.root", cutToApply.c_str(), 365.34, SF_weight.c_str());
                     // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/TTTo2L2Nu_ht1200plus/flatTree.root", cutToApply.c_str(), 88.29, SF_weight.c_str());
 
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 18.69);
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/WJets_ht1200plus/flatTree.root", cutToApply.c_str(), 34.00);
+
                     // SIGNAL 2017
                     // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
 
