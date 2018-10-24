@@ -20,8 +20,14 @@ if sys.argv[1] == "2016":
     keys = signalSamples16.keys()
     for i in range (0, len(keys)):
 
+        susyNameList = keys[i]
+        
+        susyNameOut = susyNameList # FOR ORDINARY production
+        # susyNameOut = susyNameList.replace("Susy", "Squark") # FOR SQUARK-SQUARK production only
+
     	os.system("cp submitCondorNtupleJobs_VJ.py TEMP_submitCondorNtupleJobs_VJ.py")
-    	os.system("sed -i 's:NAMEXYZ:%s:g' TEMP_submitCondorNtupleJobs_VJ.py" % keys[i])
+        os.system("sed -i 's:NAMEXYZ.list:%s.list:g' TEMP_submitCondorNtupleJobs_VJ.py" % susyNameList)
+        os.system("sed -i 's:NAMEXYZ:%s:g' TEMP_submitCondorNtupleJobs_VJ.py" % susyNameOut)
     	# os.system("cat TEMP_submitCondorNtupleJobs_VJ.py") # for testing
     	os.system("python TEMP_submitCondorNtupleJobs_VJ.py") # for running
     	os.system("rm TEMP_submitCondorNtupleJobs_VJ.py")
@@ -31,8 +37,14 @@ elif sys.argv[1] == "2017":
     keys = signalSamples17.keys()
     for i in range (0, len(keys)):
 
+        susyNameList = keys[i]
+
+        susyNameOut = susyNameList # FOR ORDINARY production
+        # susyNameOut = susyNameList.replace("Susy", "Squark") # FOR SQUARK-SQUARK production only
+
         os.system("cp submitCondorNtupleJobs_VJ.py TEMP_submitCondorNtupleJobs_VJ.py")
-        os.system("sed -i 's:NAMEXYZ:%s:g' TEMP_submitCondorNtupleJobs_VJ.py" % keys[i])
+        os.system("sed -i 's:NAMEXYZ.list:%s.list:g' TEMP_submitCondorNtupleJobs_VJ.py" % susyNameList)
+        os.system("sed -i 's:NAMEXYZ:%s:g' TEMP_submitCondorNtupleJobs_VJ.py" % susyNameOut)
         # os.system("cat TEMP_submitCondorNtupleJobs_VJ.py") # for testing
         os.system("python TEMP_submitCondorNtupleJobs_VJ.py") # for running
         os.system("rm TEMP_submitCondorNtupleJobs_VJ.py")
