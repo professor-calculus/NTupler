@@ -83,7 +83,7 @@ int main(){
 	histoStack.push_back(ttbar);
 
 	PlotEntry ZJets = PlotEntry("Z+jets", hTemplate, varToPlot.c_str(), luminosity);
-	ZJets.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/ZJetsToQQ_HT600toInf/flatTree.root", cutToApply.c_str(), 5.67);
+	ZJets.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2017_05_18/ZJetsToQQ_HT600toInf/flatTree.root", cutToApply.c_str(), 52.79);
 	histoStack.push_back(ZJets);
 
 	PlotEntry WJets = PlotEntry("W+jets", hTemplate, varToPlot.c_str(), luminosity);

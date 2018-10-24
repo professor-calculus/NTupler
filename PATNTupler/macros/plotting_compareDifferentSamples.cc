@@ -144,7 +144,7 @@ int main(int argc, char** argv){
                     plotEntryVec.push_back(WJets);
 
                     PlotEntry ZJets = PlotEntry("ZJets", hTemplate, varToPlot.c_str(), luminosity);
-                    ZJets.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 5.67);
+                    ZJets.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 52.79);
                     // ZJets.NormalisePlot(); // OPTIONAL: toggle on or off
                     plotEntryVec.push_back(ZJets);
 

@@ -187,7 +187,7 @@ int main(int argc, char** argv){
                     // STILL ON OLD 80X VERSION AS DON"T KNOW WHEN I WILL NEED THEM
                     // ZJets
                     // PlotEntry plotElement = PlotEntry(legendName.c_str(), hTemplate, varToPlot.c_str(), luminosity);
-                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 5.67);
+                    // plotElement.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 52.79);
                     // plotElement.NormalisePlot(); // OPTIONAL: toggle on or off
 
                     // WJets
