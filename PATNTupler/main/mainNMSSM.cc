@@ -870,11 +870,11 @@ int main(int argc, char** argv){
 			const int nPU = *nPU_tree;
 			const float nTrueInt = *nTrueInt_tree;
 			const int nISR = *nISR_tree;
-			// const int nGluino = 0; // HACK: use this option if working on DATA or QCD (the ntuples are missing nGluino info)
 			const int nGluino = *nGluino_tree;
-			
+		
 			if (sampleType != "DATA" && yearOfRun == 2017 && nPU < 2) continue; // to veto the zeroPU events in 94X simulation
 			// if (nPU < 28) continue; // HACK: if you only want to use a sample of particular PU
+			// if (nGluino != 0) continue; // HACK: if you only want to select squark-squark samples
 
 			// Muon Information
 			double muon_maxPt = 0.0;
