@@ -325,8 +325,8 @@ void GetHistograms2017(std::map<std::string,TH1D*>& h_)
     histoNameVec.push_back("TTJets0L");
     histoNameVec.push_back("TTJets1L");
     histoNameVec.push_back("TTJets2L");
-    // histoNameVec.push_back("ZJets");
-    // histoNameVec.push_back("WJets");
+    histoNameVec.push_back("ZJets");
+    histoNameVec.push_back("WJets");
     histoNameVec.push_back("mH30_mSusy800");
     histoNameVec.push_back("mH50_mSusy800");
     histoNameVec.push_back("mH70_mSusy800");
