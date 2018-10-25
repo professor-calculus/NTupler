@@ -33,11 +33,11 @@ import argparse as a
 mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600, 2800]
 mHiggsVec = [30, 35, 40, 50, 70, 90, 125]
 inputDirStandard = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_10_24/2016_and_2017_wrong2017MassSystematics/TESTING_allSys/"
-inputDirComparison = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_10_24/2016_and_2017_wrong2017MassSystematics/TESTING_noSignalPdf/"
+inputDirComparison = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_10_24/2016_and_2017_wrong2017MassSystematics/TESTING_noIsrReweight/"
 outputDir = inputDirComparison + "/a_limit_plot_comparison_intp1_noObs/"
 
 standardLabel = ""
-comparsionLabel = "(No sigPDF Sys)"
+comparsionLabel = "(No ISR Sys)"
 legendTextSize = 13.0
 
 plotObserved = False
@@ -156,13 +156,15 @@ if (plotObserved):
 
 #########################################
 # FIND VALUE OF MSUSY WHERE MH=FIXED AND Z=1
-nDivisions = 3000
+nDivisions = 3200
 massHiggsForPrintOut = 70
 mHIndex = nDivisions * (massHiggsForPrintOut - mHiggsVec[0]) / (mHiggsVec[-1] - mHiggsVec[0]) 
+susyDivisionWidth = 1.0 * (mSusyVec[-1] - mSusyVec[0]) / nDivisions
 
 vecSusy, vecHiggs, vecLimit = interp2(exp_50p0, 'linear', nDivisions) # expected values
 
 f_OUT = open("%s/OUTPUT.txt" % outputDir, 'w')
+f_OUT.write("NB, smallest SUSY divison width is: " + str(susyDivisionWidth) + " GeV\n")
 f_OUT.write("For a Higgs mass of: " + str(vecHiggs[mHIndex][0]) + " GeV\n")
 
 for iSusy in range(0, nDivisions):
