@@ -69,7 +69,7 @@ int main(){
     // THREE: Samples To Use (different project for each signal sample)
     const std::string dataSample = "Data";
     std::vector<std::string> signalVec = { // the different signal samples you wish to use
-                                            // "mH30_mSusy800",                                      "mH50_mSusy800",  "mH70_mSusy800",  "mH90_mSusy800",  "mH125_mSusy800",
+                                            // "mH30_mSusy800",                                   "mH50_mSusy800",  "mH70_mSusy800",  "mH90_mSusy800",  "mH125_mSusy800",
                                             "mH30_mSusy1200", "mH35_mSusy1200", "mH40_mSusy1200", "mH50_mSusy1200", "mH70_mSusy1200", "mH90_mSusy1200", "mH125_mSusy1200",
                                             "mH30_mSusy1600", "mH35_mSusy1600", "mH40_mSusy1600", "mH50_mSusy1600", "mH70_mSusy1600", "mH90_mSusy1600", "mH125_mSusy1600",
                                             "mH30_mSusy2000", "mH35_mSusy2000", "mH40_mSusy2000", "mH50_mSusy2000", "mH70_mSusy2000", "mH90_mSusy2000", "mH125_mSusy2000",
@@ -78,6 +78,16 @@ int main(){
                                             "mH30_mSusy2600", "mH35_mSusy2600", "mH40_mSusy2600", "mH50_mSusy2600", "mH70_mSusy2600", "mH90_mSusy2600", "mH125_mSusy2600", 
                                             "mH30_mSusy2800", "mH35_mSusy2800", "mH40_mSusy2800", "mH50_mSusy2800", "mH70_mSusy2800", "mH90_mSusy2800", "mH125_mSusy2800", 
                                         };
+    // std::vector<std::string> signalVec = { // the different signal samples you wish to use: SQUARK PRODUCTION ONLY
+    //                                         // "mH30_mSquark800",                                       "mH50_mSquark800",  "mH70_mSquark800",  "mH90_mSquark800",  "mH125_mSquark800",
+    //                                         "mH30_mSquark1200", "mH35_mSquark1200", "mH40_mSquark1200", "mH50_mSquark1200", "mH70_mSquark1200", "mH90_mSquark1200", "mH125_mSquark1200",
+    //                                         "mH30_mSquark1600", "mH35_mSquark1600", "mH40_mSquark1600", "mH50_mSquark1600", "mH70_mSquark1600", "mH90_mSquark1600", "mH125_mSquark1600",
+    //                                         "mH30_mSquark2000", "mH35_mSquark2000", "mH40_mSquark2000", "mH50_mSquark2000", "mH70_mSquark2000", "mH90_mSquark2000", "mH125_mSquark2000",
+    //                                         "mH30_mSquark2200", "mH35_mSquark2200", "mH40_mSquark2200", "mH50_mSquark2200", "mH70_mSquark2200", "mH90_mSquark2200", "mH125_mSquark2200",
+    //                                         "mH30_mSquark2400", "mH35_mSquark2400", "mH40_mSquark2400", "mH50_mSquark2400", "mH70_mSquark2400", "mH90_mSquark2400", "mH125_mSquark2400",
+    //                                         "mH30_mSquark2600", "mH35_mSquark2600", "mH40_mSquark2600", "mH50_mSquark2600", "mH70_mSquark2600", "mH90_mSquark2600", "mH125_mSquark2600", 
+    //                                         "mH30_mSquark2800", "mH35_mSquark2800", "mH40_mSquark2800", "mH50_mSquark2800", "mH70_mSquark2800", "mH90_mSquark2800", "mH125_mSquark2800", 
+    //                                     };                                        
     std::map<unsigned int, std::vector<std::string>> mcbkVec;
     mcbkVec[2016] = {"TTJets", "ZJets", "WJets"}; // the 2016 MC background samples
     mcbkVec[2017] = {"TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}; // the 2017 MC background samples
@@ -465,6 +475,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("TTJets2L");
     histoNameVec.push_back("ZJets");
     histoNameVec.push_back("WJets");
+    
     histoNameVec.push_back("mH30_mSusy800");
     histoNameVec.push_back("mH50_mSusy800");
     histoNameVec.push_back("mH70_mSusy800");
@@ -519,6 +530,61 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("mH70_mSusy2800");
     histoNameVec.push_back("mH90_mSusy2800");
     histoNameVec.push_back("mH125_mSusy2800");
+
+    histoNameVec.push_back("mH30_mSquark800");
+    histoNameVec.push_back("mH50_mSquark800");
+    histoNameVec.push_back("mH70_mSquark800");
+    histoNameVec.push_back("mH90_mSquark800");
+    histoNameVec.push_back("mH125_mSquark800");
+    histoNameVec.push_back("mH30_mSquark1200");
+    histoNameVec.push_back("mH35_mSquark1200");
+    histoNameVec.push_back("mH40_mSquark1200");
+    histoNameVec.push_back("mH50_mSquark1200");
+    histoNameVec.push_back("mH70_mSquark1200");
+    histoNameVec.push_back("mH90_mSquark1200");
+    histoNameVec.push_back("mH125_mSquark1200");
+    histoNameVec.push_back("mH30_mSquark1600");
+    histoNameVec.push_back("mH35_mSquark1600");
+    histoNameVec.push_back("mH40_mSquark1600");
+    histoNameVec.push_back("mH50_mSquark1600");
+    histoNameVec.push_back("mH70_mSquark1600");
+    histoNameVec.push_back("mH90_mSquark1600");
+    histoNameVec.push_back("mH125_mSquark1600");
+    histoNameVec.push_back("mH30_mSquark2000");
+    histoNameVec.push_back("mH35_mSquark2000");
+    histoNameVec.push_back("mH40_mSquark2000");
+    histoNameVec.push_back("mH50_mSquark2000");
+    histoNameVec.push_back("mH70_mSquark2000");
+    histoNameVec.push_back("mH90_mSquark2000");
+    histoNameVec.push_back("mH125_mSquark2000");
+    histoNameVec.push_back("mH30_mSquark2200");
+    histoNameVec.push_back("mH35_mSquark2200");
+    histoNameVec.push_back("mH40_mSquark2200");
+    histoNameVec.push_back("mH50_mSquark2200");
+    histoNameVec.push_back("mH70_mSquark2200");
+    histoNameVec.push_back("mH90_mSquark2200");
+    histoNameVec.push_back("mH125_mSquark2200");
+    histoNameVec.push_back("mH30_mSquark2400");
+    histoNameVec.push_back("mH35_mSquark2400");
+    histoNameVec.push_back("mH40_mSquark2400");
+    histoNameVec.push_back("mH50_mSquark2400");
+    histoNameVec.push_back("mH70_mSquark2400");
+    histoNameVec.push_back("mH90_mSquark2400");
+    histoNameVec.push_back("mH125_mSquark2400");
+    histoNameVec.push_back("mH30_mSquark2600");
+    histoNameVec.push_back("mH35_mSquark2600");
+    histoNameVec.push_back("mH40_mSquark2600");
+    histoNameVec.push_back("mH50_mSquark2600");
+    histoNameVec.push_back("mH70_mSquark2600");
+    histoNameVec.push_back("mH90_mSquark2600");
+    histoNameVec.push_back("mH125_mSquark2600");
+    histoNameVec.push_back("mH30_mSquark2800");
+    histoNameVec.push_back("mH35_mSquark2800");
+    histoNameVec.push_back("mH40_mSquark2800");
+    histoNameVec.push_back("mH50_mSquark2800");
+    histoNameVec.push_back("mH70_mSquark2800");
+    histoNameVec.push_back("mH90_mSquark2800");
+    histoNameVec.push_back("mH125_mSquark2800");
 
     std::vector<std::string> nonTrivialSysVec;
     nonTrivialSysVec.push_back("NOSYS");
