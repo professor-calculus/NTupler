@@ -154,7 +154,23 @@ if (plotObserved):
 # if (plotObserved):
 #     xk, yk, zk = interp2(obs, 'linear', 200) # observed line
 
-####################################
+#########################################
+# FIND VALUE OF MSUSY WHERE MH=FIXED AND Z=1
+nDivisions = 3000
+massHiggsForPrintOut = 70
+mHIndex = nDivisions * (massHiggsForPrintOut - mHiggsVec[0]) / (mHiggsVec[-1] - mHiggsVec[0]) 
+
+vecSusy, vecHiggs, vecLimit = interp2(exp_50p0, 'linear', nDivisions) # expected values
+
+f_OUT = open("%s/OUTPUT.txt" % outputDir, 'w')
+f_OUT.write("For a Higgs mass of: " + str(vecHiggs[mHIndex][0]) + " GeV\n")
+
+for iSusy in range(0, nDivisions):
+    if vecLimit[mHIndex][iSusy] > 1.0:
+        f_OUT.write("The standard expected mSusy limit is: " + str(vecSusy[mHIndex][iSusy]) + " GeV\n")
+        break
+
+#########################################
 
 # Plotting & Aesthetics
 v = np.logspace(minMu, maxMu, 500) # z axis: min_base10, max_base10, number of samples (squeeze to the point of black spaces)
@@ -271,6 +287,17 @@ if (plotObserved):
 # xj84, yj84, zj84 = interp2(exp_84p0, 'linear', 200) # expected line (+1 sigma)
 # if (plotObserved):
 #     xk, yk, zk = interp2(obs, 'linear', 200) # observed line
+
+#########################################
+# FIND VALUE OF MSUSY WHERE MH=FIXED AND Z=1
+vecSusy, vecHiggs, vecLimit = interp2(exp_50p0, 'linear', nDivisions) # expected values
+
+for iSusy in range(0, nDivisions):
+    if vecLimit[mHIndex][iSusy] > 1.0:
+        f_OUT.write("and the NEW expected mSusy limit is:  " + str(vecSusy[mHIndex][iSusy]) + " GeV\n")
+        break 
+f_OUT.close()
+#########################################
 
 if (plotObserved):
     plt_obs = plt.contour(xk, yk, zk, [1.0], colors='r')
