@@ -78,6 +78,9 @@ for signalDir in signalDirs:
         if (signalDir[i:i+6] == "_mSusy"):
             c2 = i + 6
             break
+        if (signalDir[i:i+8] == "_mSquark"):
+            c2 = i + 8
+            break
 
     for i in range(c2, len(signalDir)):
         if (signalDir[i].isdigit() == False):
