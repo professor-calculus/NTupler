@@ -28,11 +28,12 @@ for project in projectsToHadd:
 	projectPath = os.path.join(motherDir,project)
 	if os.path.isdir(projectPath) and subDirs in project:
 	
-		rootFiles = os.path.join(projectPath,"tmp","flatTree_*.root") 
+		rootFilePath = os.path.join(projectPath,"tmp")
+		rootFiles = os.path.join(projectPath,"tmp","flatTree_*.root")
 		jobFiles = os.path.join(projectPath,"tmp","job_*.sh")
 		
 		# check that the numberOfRootFiles from jobs = numberOfJobFiles and is > 0 
-		numberOfRootFiles = os.popen("ls -l %s | wc -l" % rootFiles).readline()
+		numberOfRootFiles = os.popen("find %s -size +1M -name flatTree_*.root | wc -l" % rootFilePath).readline() # root file must be over 1MB
 		numberOfRootFiles = numberOfRootFiles[:-1]
 		numberOfJobFiles = os.popen("ls -l %s | wc -l" % jobFiles).readline()
 		numberOfJobFiles = numberOfJobFiles[:-1]
