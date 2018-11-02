@@ -999,32 +999,15 @@ public:
 		} // closes 'if' sampleType does NOT equal DATA
 		
 		else {
-			if (nrFatJets == 0)
-			{
-				treeVar_fatJetA_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_fatJetA_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_fatJetA_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_fatJetA_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_fatJetB_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_fatJetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_fatJetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_fatJetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
-			}
-			else
-			{
-				treeVar_fatJetA_p4_jecUncUp_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
-				treeVar_fatJetA_p4_jecUncDown_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
-				treeVar_fatJetA_p4_jerUncUp_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
-				treeVar_fatJetA_p4_jerUncDown_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
+			treeVar_fatJetA_p4_jecUncUp_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
+			treeVar_fatJetA_p4_jecUncDown_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
+			treeVar_fatJetA_p4_jerUncUp_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
+			treeVar_fatJetA_p4_jerUncDown_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
 
-				if (nrFatJets > 1)
-				{
-					treeVar_fatJetB_p4_jecUncUp_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
-					treeVar_fatJetB_p4_jecUncDown_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
-					treeVar_fatJetB_p4_jerUncUp_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
-					treeVar_fatJetB_p4_jerUncDown_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
-				}
-			}
+			treeVar_fatJetB_p4_jecUncUp_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
+			treeVar_fatJetB_p4_jecUncDown_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
+			treeVar_fatJetB_p4_jerUncUp_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
+			treeVar_fatJetB_p4_jerUncDown_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
 
 			treeVar_ht_jecUncUp_ = ht;
 			treeVar_ht_jecUncDown_ = ht;
@@ -1768,15 +1751,15 @@ int main(int argc, char** argv){
 				}
 			}
 
-			// HT calculation: Only consider jets with |eta| < 2.4, pt > 40.0
+			// HT calculation: Only consider jets with |eta| < 3.0, pt > 40.0
 			double ht = 0.0;
 			double ht_jecUncUp = 0.0;
 			double ht_jecUncDown = 0.0;
 			double ht_jerUncUp = 0.0;
 			double ht_jerUncDown = 0.0;
-			for (const ran::NtJet& jet : goodJets) {
+			for (const ran::NtJet& jet : jetVec) {
 
-				if ( fabs(jet.eta()) <= 2.4 ){
+				if ( fabs(jet.eta()) <= 3.0 ){
 
 					if ( jet.pt() >= 40.0 ) ht += jet.pt();
 					if ( jet.pt() * ( 1.0 + jet.jecUncertainty() ) >= 40.0 ) ht_jecUncUp += jet.pt() * ( 1.0 + jet.jecUncertainty() );
@@ -1810,9 +1793,9 @@ int main(int argc, char** argv){
 			double mht_phi_jerUncUp = 0.0;
 			double mht_phi_jerUncDown = 0.0;
 
-			for (const ran::NtJet& jet : goodJets) {
+			for (const ran::NtJet& jet : jetVec) {
 
-				if ( fabs(jet.eta()) <= 2.4 ){
+				if ( fabs(jet.eta()) <= 3.0 ){
 
 					if ( jet.pt() >= 40.0 ) mht_x += jet.pt() * -1 * TMath::Cos(jet.phi());
 					if ( jet.pt() * ( 1.0 + jet.jecUncertainty() ) >= 40.0 ) mht_jecUncUp_x += jet.pt() * -1 * TMath::Cos(jet.phi()) * ( 1.0 + jet.jecUncertainty() );
@@ -1842,9 +1825,9 @@ int main(int argc, char** argv){
 			mht_phi_jerUncDown = TMath::ATan2(mht_jerUncDown_y, mht_jerUncDown_x);
 
 
-			std::vector<ran::NtFatJet> centralFatJetVec; // get the *central* fatJets
+			std::vector<ran::NtFatJet> centralFatJetVec; // get the *central* fatJets with pT > 300GeV
 			for (const ran::NtFatJet& fatJet : fatJetVec) {
-				if (fabs(fatJet.eta()) < 2.4) centralFatJetVec.push_back(fatJet);
+				if ( fabs(fatJet.eta()) < 2.4 && fatJet.PUPPIsoftdrop_mass() > -1.0 ) centralFatJetVec.push_back(fatJet);
 			}
 
 
@@ -1987,81 +1970,6 @@ int main(int argc, char** argv){
 						continue;
 					slimJets.push_back(jet);
 				}
-				// Sort the jets by pt, but the b-jets by b-tag discriminator score
-				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
-				std::sort(slimJetsByBtagScore.begin(), slimJetsByBtagScore.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
-				std::sort(allSlimJets.begin(), allSlimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
-				std::sort(slimLooseBJets.begin(), slimLooseBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
-				std::sort(allSlimLooseBJets.begin(), allSlimLooseBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
-				std::sort(slimMediumBJets.begin(), slimMediumBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
-				std::sort(allSlimMediumBJets.begin(), allSlimMediumBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
-				std::sort(centralElectrons.begin(), centralElectrons.end(), [](const ran::NtElectron& a, const ran::NtElectron& b) {return b.pt() < a.pt();} );
-				std::sort(centralMuons.begin(), centralMuons.end(), [](const ran::NtMuon& a, const ran::NtMuon& b) {return b.pt() < a.pt();} );
-
-				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
-				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun, nPrefireJets, nPrefirePhotons);
-
-			}
-			else if (nFatJets == 1) {
-				const ran::NtFatJet& fatJetA = centralFatJetVec.at(0);
-				const ran::NtFatJet& fatJetB = centralFatJetVec.at(0);
-
-				for (const ran::NtJet& jet : goodJets) {
-					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
-						continue;
-					allSlimJets.push_back(jet);
-					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
-                        allSlimMediumBJets.push_back(jet);
-					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.5426)
-                        allSlimLooseBJets.push_back(jet);
-					if (deltaR2(jet.eta(), jet.phi(), fatJetA.eta(), fatJetA.phi()) < (1.4 * 1.4) && fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags() > 0.3)
-						continue;
-					slimJetsByBtagScore.push_back(jet);
-					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
-						slimMediumBJets.push_back(jet);
-					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.5426)
-                        slimLooseBJets.push_back(jet);
-					if (deltaR2(jet.eta(), jet.phi(), fatJetA.eta(), fatJetA.phi()) < (1.4 * 1.4))
-						continue;
-					slimJets.push_back(jet);
-				}
-				// Sort the jets by pt, but the b-jets by b-tag discriminator score
-				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
-				std::sort(slimJetsByBtagScore.begin(), slimJetsByBtagScore.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
-				std::sort(allSlimJets.begin(), allSlimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
-				std::sort(slimLooseBJets.begin(), slimLooseBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
-				std::sort(allSlimLooseBJets.begin(), allSlimLooseBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
-				std::sort(slimMediumBJets.begin(), slimMediumBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
-				std::sort(allSlimMediumBJets.begin(), allSlimMediumBJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
-				std::sort(centralElectrons.begin(), centralElectrons.end(), [](const ran::NtElectron& a, const ran::NtElectron& b) {return b.pt() < a.pt();} );
-				std::sort(centralMuons.begin(), centralMuons.end(), [](const ran::NtMuon& a, const ran::NtMuon& b) {return b.pt() < a.pt();} );
-
-				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
-				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun, nPrefireJets, nPrefirePhotons);
-
-			}
-			else {
-				const ran::NtFatJet& fatJetA = ran::NtFatJet();
-				const ran::NtFatJet& fatJetB = ran::NtFatJet();
-
-				for (const ran::NtJet& jet : goodJets) {
-					if (fabs(jet.eta())>2.4 || jet.pt() < 40.0)
-						continue;
-					allSlimJets.push_back(jet);
-					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
-                        allSlimMediumBJets.push_back(jet);
-					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.5426)
-                        allSlimLooseBJets.push_back(jet);
-					slimJets.push_back(jet);
-					slimJetsByBtagScore.push_back(jet);
-					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.8484)
-						slimMediumBJets.push_back(jet);
-					if (jet.pfCombinedInclusiveSecondaryVertexV2BJetTags() > 0.5426)
-                        slimLooseBJets.push_back(jet);
-				}
-
 				// Sort the jets by pt, but the b-jets by b-tag discriminator score
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 				std::sort(slimJetsByBtagScore.begin(), slimJetsByBtagScore.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pfCombinedInclusiveSecondaryVertexV2BJetTags() < a.pfCombinedInclusiveSecondaryVertexV2BJetTags();} );
