@@ -105,10 +105,10 @@ int main(int argc, char** argv){
         // get the full set of cuts for the table
         std::vector<std::string> cutToApplyVec;
         cutToApplyVec.push_back("weight_isr");
-        cutToApplyVec.push_back(Form("weight_isr * fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d", cut3_ak8Pt[iTab], cut3_ak8Pt[iTab]));
-        cutToApplyVec.push_back(Form("weight_isr * fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d", cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]));
-        cutToApplyVec.push_back(Form("weight_isr * fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d", cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut4_ht[iTab][0], cut4_ht[iTab][1], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]));
-        cutToApplyVec.push_back(Form("weight_combined * %s && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d", dbtCut.c_str(), cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut4_ht[iTab][0], cut4_ht[iTab][1], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]));
+        cutToApplyVec.push_back(Form("weight_isr * (fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d)", cut3_ak8Pt[iTab], cut3_ak8Pt[iTab]));
+        cutToApplyVec.push_back(Form("weight_isr * (fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d)", cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]));
+        cutToApplyVec.push_back(Form("weight_isr * (fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d)", cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut4_ht[iTab][0], cut4_ht[iTab][1], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]));
+        cutToApplyVec.push_back(Form("weight_combined * (%s && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d)", dbtCut.c_str(), cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut4_ht[iTab][0], cut4_ht[iTab][1], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]));
         // get the required count info for the table
         std::vector<std::vector<PlotEntry>> cutFlowObject; // all cut stages, for all samples
         for (int iC = 0; iC != 5; ++iC){
