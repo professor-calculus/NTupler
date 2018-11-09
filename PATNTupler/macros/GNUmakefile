@@ -57,6 +57,8 @@ histos_plot: histos_plot.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o $
 # makeCombinedDataCards: makeCombinedDataCards.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	# $(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
 makeCombineDataCardsBOTHYEARS: makeCombineDataCardsBOTHYEARS.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
+	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)
+makeLatexTables: makeLatexTables.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
 histos_plot_special: histos_plot_special.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEntry2D.o ${SRCMACDIR}/Plotter.o ${SRCMACDIR}/MassRegionCuts.o ${OBJDIR}/NtpReader.o ${OBJDIR}/EventInfo.o ${OBJDIR}/GoodLumiChecker.o ${OBJDIR}/libRalParticle.so
 	$(LD) $(LDFLAGS) -o $@ $^ $(GLIBS)	
@@ -96,5 +98,6 @@ clean:
 	rm -rf histos_plot histos_plot.o ${OBJDIR}/*
 	# rm -rf makeCombinedDataCards makeCombinedDataCards.o ${OBJDIR}/*
 	rm -rf makeCombineDataCardsBOTHYEARS makeCombineDataCardsBOTHYEARS.o ${OBJDIR}/*
+	rm -rf makeLatexTables makeLatexTables.o ${OBJDIR}/*
 	rm -rf histos_plot_special histos_plot_special.o ${OBJDIR}/*
 	rm -rf plotting_brazil plotting_brazil.o ${OBJDIR}/*

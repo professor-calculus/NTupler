@@ -175,14 +175,31 @@ int main(){
             dataCard << "\n";
             dataCard << "\n";
             dataCard << "\n";
+            dataCard << "\\clearpage \n";
 
             dataCard << "\\begin{table}[hbtp] \n";
             dataCard << "\\centering \n";
 
             dataCard << "\\topcaption{ \n";
-            dataCard << "INSERT A CAPTION \n";
+
+            dataCard << "The event yield information for search region ";
+            dataCard << iBin;
+            dataCard << ", using ";
+            dataCard << yearOfRun;
+            dataCard << " data and MC.\n";
+            dataCard << "For both the signal and sideband mass regions,\n";
+            dataCard << "the observed data yield and the MC yields are provided.\n";
+            dataCard << "For each systematic,\n";
+            dataCard << "the factors by which the MC yields change under 1$\\sigma$ variation is also given.\n";
+            dataCard << "The signal sample corresponds to the signal model\n";
+            dataCard << "with parameters $M_{H} = 70$~GeV and $M_{\\textrm{SUSY}} = 2400$~GeV.\n";
+            dataCard << "At the bottom of the table, the $F_{i}$ factor,\n";
+            dataCard << "which is used for the QCD estimation, is provided.\n";
+            dataCard << "All numbers are given to three decimal places.\n";
+
             dataCard << "} \n";
 
+            dataCard << "\\makebox[\\textwidth]{ \n";
             dataCard << "\\begin{tabular}{|c||";
             for (unsigned int count = 0; count < rate_mcbkVec_S.size() + 1; count++)
                 dataCard << "c|";
@@ -333,7 +350,7 @@ int main(){
 
 
             // TABLE OUTRO
-            dataCard << "\\end{tabular} \n";
+            dataCard << "\\end{tabular}} \n";
             dataCard << "\\label{table:yieldTable_bin";
             dataCard << binLabel;
             dataCard << "} \n";
