@@ -679,6 +679,13 @@ namespace DoubleBTagSF{
             return -444444.1;
 		}
 
+		// // HACK FOR TTJETS EVENTS IN tagPRIME DBT REGION
+		// if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Loose") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+		// 	if (yearOfRun == 2016) return getLooseScaleFactor_ttbar_2016(fatJetA_pt) * getLooseScaleFactor_ttbar_2016(fatJetB_pt);
+		// 	else return getLooseScaleFactor_ttbar_2017(fatJetA_pt) * getLooseScaleFactor_ttbar_2017(fatJetB_pt);
+		// }
+		// else return 1.0;
+
 		// check fatJets are in the TAG dbt region
 		if (fatJetA_dbt < (-1.0 * fatJetB_dbt + 1.0 + DoubleBTagWPs::dbtNameToDouble("Loose"))) return 1.0;
 
@@ -726,6 +733,13 @@ namespace DoubleBTagSF{
             return -555555.1;
 		}
 
+		// // HACK FOR TTJETS EVENTS IN tagPRIME DBT REGION
+		// if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Loose") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+		// 	if (yearOfRun == 2016) return getLooseScaleFactorUp_ttbar_2016(fatJetA_pt) * getLooseScaleFactorUp_ttbar_2016(fatJetB_pt);
+		// 	else return getLooseScaleFactorUp_ttbar_2017(fatJetA_pt) * getLooseScaleFactorUp_ttbar_2017(fatJetB_pt);
+		// }
+		// else return 1.0;
+
 		// check fatJets are in the TAG dbt region
 		if (fatJetA_dbt < (-1.0 * fatJetB_dbt + 1.0 + DoubleBTagWPs::dbtNameToDouble("Loose"))) return 1.0;
 
@@ -771,6 +785,13 @@ namespace DoubleBTagSF{
             std::cout << "Returning a dummy value of -666666.1" << std::endl;
             return -666666.1;
 		}
+
+		// // HACK FOR TTJETS EVENTS IN tagPRIME DBT REGION
+		// if (fatJetA_dbt > DoubleBTagWPs::dbtNameToDouble("Loose") && fatJetB_dbt > DoubleBTagWPs::dbtNameToDouble("Loose")){
+		// 	if (yearOfRun == 2016) return getLooseScaleFactorDown_ttbar_2016(fatJetA_pt) * getLooseScaleFactorDown_ttbar_2016(fatJetB_pt);
+		// 	else return getLooseScaleFactorDown_ttbar_2017(fatJetA_pt) * getLooseScaleFactorDown_ttbar_2017(fatJetB_pt);
+		// }
+		// else return 1.0;
 
 		// check fatJets are in the TAG dbt region
 		if (fatJetA_dbt < (-1.0 * fatJetB_dbt + 1.0 + DoubleBTagWPs::dbtNameToDouble("Loose"))) return 1.0;
