@@ -44,10 +44,10 @@ config.JobType.inputFiles = ['puppiCorr.root']
 # config.Data.inputDataset = '/QCD_HT1500to2000_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_old_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM'
 
 # QCD HT2000+: 5.4M events: (use three units per job)
-config.Data.inputDataset = '/QCD_HT2000toInf_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_old_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM'
+# config.Data.inputDataset = '/QCD_HT2000toInf_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_old_pmx_94X_mc2017_realistic_v14-v1/MINIAODSIM'
 
 # SIGNAL SAMPLES: 200K events & 150 files (use 30 units per job)
-# config.Data.inputDataset = 'DATASETXYZ' # use the script quickSignalSubmit_crab.py to deploy
+config.Data.inputDataset = 'DATASETXYZ' # use the script quickSignalSubmit_crab.py to deploy
 
 # CENTRAL PRODUCTION SIGNAL: (use one unit per job)
 # config.Data.inputDataset = '/NMSSMCascade_mH-70_mSUSY-1200_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM'
@@ -63,6 +63,6 @@ config.Data.unitsPerJob = 10
 
 config.Data.totalUnits = -1 # '-1' does them all
 config.Data.publication = False
-config.Data.outLFNDirBase = '/store/user/atittert/ntuples_MC17_Oct2018' # Wherever you want the ntuples to go on the RAL T2
+config.Data.outLFNDirBase = '/store/user/atittert/ntuples_MC17_Nov2018' # Wherever you want the ntuples to go on the RAL T2
 
 config.Site.storageSite = 'T2_UK_SGrid_RALPP'
