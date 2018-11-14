@@ -32,7 +32,7 @@ int main(){
 
 
     // ONE: save info & luminosity
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2016_80X/testingTTJets_v2/threeBinz/dbtNom/theTest_wQcdErr15/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2016_80X/testingTTJets_v2/threeBinz/dbtNom/theTest_wQcdErr15/test/"; // where we are going to save the output plots (should include the samples name, and any important features)
     double luminosity = 35.867; // NB this is just a label for the plot. It should match the lumi of the histograms!
     // double luminosity = 41.370; // 2017 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
     
@@ -147,8 +147,6 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
 {
     // ************************
     // *** histos locations ***
-
-    std::string ttbarDbtSysToUse = "NOSYS";
     
     std::string preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_08_03/MassCutsSpecialV06/run2016_v2/";  
     // std::string preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_08_03/MassCutsSpecialV06/run2017_v2/";  
@@ -176,12 +174,9 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
         // 2. tag, anti --> refers to 2*DBT space (using 'tag' for LooseMaxLooseMax)
         // 3. sample name on the end
 
-        std::string systematicAppend = "NOSYS";
-        if (histoToUse == "TTJets") systematicAppend = ttbarDbtSysToUse;
-
-        h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get( Form("S_dbtLooseMaxAndLooseMax_%s", systematicAppend.c_str() ) );
-        h_[Form("U_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get( Form("U_dbtLooseMaxAndLooseMax_%s", systematicAppend.c_str() ) );
-        h_[Form("D_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get( Form("D_dbtLooseMaxAndLooseMax_%s", systematicAppend.c_str() ) );
+        h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtLooseMaxAndLooseMax_NOSYS");
+        h_[Form("U_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtLooseMaxAndLooseMax_NOSYS");
+        h_[Form("D_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtLooseMaxAndLooseMax_NOSYS");
         
         h_[Form("S_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtOffLooseAndOffLoose_NOSYS");
         h_[Form("U_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtOffLooseAndOffLoose_NOSYS");
@@ -192,6 +187,41 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
 
         h_[Form("UnD_anti_%s", histoToUse.c_str())] = (TH1D*)h_[Form("U_anti_%s", histoToUse.c_str())]->Clone();
         h_[Form("UnD_anti_%s", histoToUse.c_str())]->Add(h_[Form("D_anti_%s", histoToUse.c_str())]);
+
+        if (histoToUse == "TTJets"){
+
+            h_["tt_S_up"] = (TH1D*)f->Get("S_dbtLooseMaxAndLooseMax_dbtTagUp");
+            
+            h_["tt_S_down"] = (TH1D*)f->Get("S_dbtLooseMaxAndLooseMax_dbtTagDown");
+            
+            h_["tt_UnD_up"] = (TH1D*)f->Get("U_dbtLooseMaxAndLooseMax_dbtTagUp");
+            h_["tt_UnD_up"]->Add((TH1D*)f->Get("D_dbtLooseMaxAndLooseMax_dbtTagUp"));
+            
+            h_["tt_UnD_down"] = (TH1D*)f->Get("U_dbtLooseMaxAndLooseMax_dbtTagDown");
+            h_["tt_UnD_down"]->Add((TH1D*)f->Get("D_dbtLooseMaxAndLooseMax_dbtTagDown"));
+
+            TH1D * h_errS = new TH1D("h_errS", "", 3, 0, 3);
+            h_errS->SetBinContent(1,1.0);
+            h_errS->SetBinContent(2,1.0);
+            h_errS->SetBinContent(3,1.0);
+            TH1D * h_errUnD = new TH1D("h_errUnD", "", 3, 0, 3);
+            h_errUnD->SetBinContent(1,1.0);
+            h_errUnD->SetBinContent(2,1.0);
+            h_errUnD->SetBinContent(3,1.0);
+
+            // LOOP THRU BIN ENTRIES
+            for (int i = 1; i < 4; ++i){
+
+                double tt_S_dbtErr = 0.5 * (h_["tt_S_up"]->GetBinContent(i) - h_["tt_S_down"]->GetBinContent(i)) / h_["S_tag_TTJets"]->GetBinContent(i);
+                h_errS->SetBinError(i, tt_S_dbtErr);
+                double tt_UnD_dbtErr = 0.5 * (h_["tt_UnD_up"]->GetBinContent(i) - h_["tt_UnD_down"]->GetBinContent(i)) / h_["UnD_tag_TTJets"]->GetBinContent(i);
+                h_errUnD->SetBinError(i, tt_UnD_dbtErr);               
+            }
+
+            h_["S_tag_TTJets"]->Multiply(h_errS);
+            h_["UnD_tag_TTJets"]->Multiply(h_errUnD);
+
+        } // closes 'if' histosToUse == TTJets
 
     } // closes loop through histoNameVec
 }
