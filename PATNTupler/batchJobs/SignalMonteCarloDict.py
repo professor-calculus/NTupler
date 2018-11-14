@@ -99,22 +99,29 @@ bkgSamples16 = {
 
 signalSamples17 = {
 
-'P3_2700sq_R0p99': [0.000540, '/nmssmSignalCascadeV01_13TeV2017_P3_2700sq/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P3_2700sq-65c6b29ab922da94b788da955c09b417/USER'],
-'P3_2500sq_R0p99': [0.001341, '/nmssmSignalCascadeV01_13TeV2017_P3_2500sq/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P3_2500sq-65c6b29ab922da94b788da955c09b417/USER'],
-'P3_2300sq_R0p99': [0.003334, '/nmssmSignalCascadeV01_13TeV2017_P3_2300sq/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P3_2300sq-65c6b29ab922da94b788da955c09b417/USER'],
-'P3_2100sq_R0p99': [0.008446, '/nmssmSignalCascadeV01_13TeV2017_P3_2100sq/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P3_2100sq-65c6b29ab922da94b788da955c09b417/USER'],
-'P3_1900sq_R0p99': [0.0219, '/nmssmSignalCascadeV01_13TeV2017_P3_1900sq/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P3_1900sq-65c6b29ab922da94b788da955c09b417/USER'],
-'P3_1700sq_R0p99': [0.059090, '/nmssmSignalCascadeV01_13TeV2017_P3_1700sq/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P3_1700sq-65c6b29ab922da94b788da955c09b417/USER'],
-'P3_1500sq_R0p99': [0.168990, '/nmssmSignalCascadeV01_13TeV2017_P3_1500sq/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P3_1500sq-65c6b29ab922da94b788da955c09b417/USER'],
-'P3_1300sq_R0p99': [0.5267, '/nmssmSignalCascadeV01_13TeV2017_P3_1300sq/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P3_1300sq-65c6b29ab922da94b788da955c09b417/USER'],
-'P1_2600sq_R0p99': [0.000629, '/nmssmSignalCascadeV01_13TeV2017_P1_2600sq/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P1_2600sq-65c6b29ab922da94b788da955c09b417/USER'],
-'P1_2400sq_R0p99': [0.001531, '/nmssmSignalCascadeV01_13TeV2017_P1_2400sq/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P1_2400sq-65c6b29ab922da94b788da955c09b417/USER'],
-'P1_2200sq_R0p99': [0.003747, '/nmssmSignalCascadeV01_13TeV2017_P1_2200sq/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P1_2200sq-65c6b29ab922da94b788da955c09b417/USER'],
-'P1_2000sq_R0p99': [0.009245, '/nmssmSignalCascadeV01_13TeV2017_P1_2000sq/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P1_2000sq-65c6b29ab922da94b788da955c09b417/USER'],
-'P1_1800sq_R0p99': [0.023290, '/nmssmSignalCascadeV01_13TeV2017_P1_1800sq/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P1_1800sq-65c6b29ab922da94b788da955c09b417/USER'],
-'P1_1600sq_R0p99': [0.060990, '/nmssmSignalCascadeV01_13TeV2017_P1_1600sq/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P1_1600sq-65c6b29ab922da94b788da955c09b417/USER'],
-'P1_1400sq_R0p99': [0.1679, '/nmssmSignalCascadeV01_13TeV2017_P1_1400sq/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P1_1400sq-65c6b29ab922da94b788da955c09b417/USER'],
-'P1_1200sq_R0p99': [0.4969, '/nmssmSignalCascadeV01_13TeV2017_P1_1200sq/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P1_1200sq-65c6b29ab922da94b788da955c09b417/USER'],
+'P3_2700sq_R0p99': [0.000540, '/nmssmSignalCascadeV01_13TeV2017_P3_2700sq_R0p99/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P3_2700sq_R0p99-65c6b29ab922da94b788da955c09b417/USER'],
+'P3_2500sq_R0p99': [0.001341, '/nmssmSignalCascadeV01_13TeV2017_P3_2500sq_R0p99/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P3_2500sq_R0p99-65c6b29ab922da94b788da955c09b417/USER'],
+'P3_2300sq_R0p99': [0.003334, '/nmssmSignalCascadeV01_13TeV2017_P3_2300sq_R0p99/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P3_2300sq_R0p99-65c6b29ab922da94b788da955c09b417/USER'],
+'P3_2100sq_R0p99': [0.008446, '/nmssmSignalCascadeV01_13TeV2017_P3_2100sq_R0p99/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P3_2100sq_R0p99-65c6b29ab922da94b788da955c09b417/USER'],
+'P3_1900sq_R0p99': [0.0219, '/nmssmSignalCascadeV01_13TeV2017_P3_1900sq_R0p99/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P3_1900sq_R0p99-65c6b29ab922da94b788da955c09b417/USER'],
+'P3_1700sq_R0p99': [0.059090, '/nmssmSignalCascadeV01_13TeV2017_P3_1700sq_R0p99/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P3_1700sq_R0p99-65c6b29ab922da94b788da955c09b417/USER'],
+'P3_1500sq_R0p99': [0.168990, '/nmssmSignalCascadeV01_13TeV2017_P3_1500sq_R0p99/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P3_1500sq_R0p99-65c6b29ab922da94b788da955c09b417/USER'],
+#'P3_1300sq_R0p99': [0.5267, '/nmssmSignalCascadeV01_13TeV2016_P3_1300sq/atittert-nmssmSignalCascadeV01_13TeV2016_processMc04_8_0_31_titterton_P3_1300sq-902d895b047f7fa3ab2846aac451feb1/USER'],
+
+'P1_2600sq_R0p99': [0.000629, '/nmssmSignalCascadeV01_13TeV2017_P1_2600sq_R0p99/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P1_2600sq_R0p99-65c6b29ab922da94b788da955c09b417/USER'],
+'P1_2400sq_R0p99': [0.001531, '/nmssmSignalCascadeV01_13TeV2017_P1_2400sq_R0p99/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P1_2400sq_R0p99-65c6b29ab922da94b788da955c09b417/USER'],
+'P1_2200sq_R0p99': [0.003747, '/nmssmSignalCascadeV01_13TeV2017_P1_2200sq_R0p99/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P1_2200sq_R0p99-65c6b29ab922da94b788da955c09b417/USER'],
+'P1_2000sq_R0p99': [0.009245, '/nmssmSignalCascadeV01_13TeV2017_P1_2000sq_R0p99/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P1_2000sq_R0p99-65c6b29ab922da94b788da955c09b417/USER'],
+'P1_1800sq_R0p99': [0.023290, '/nmssmSignalCascadeV01_13TeV2017_P1_1800sq_R0p99/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P1_1800sq_R0p99-65c6b29ab922da94b788da955c09b417/USER'],
+'P1_1600sq_R0p99': [0.060990, '/nmssmSignalCascadeV01_13TeV2017_P1_1600sq_R0p99/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P1_1600sq_R0p99-65c6b29ab922da94b788da955c09b417/USER'],
+'P1_1400sq_R0p99': [0.1679, '/nmssmSignalCascadeV01_13TeV2017_P1_1400sq_R0p99/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P1_1400sq_R0p99-65c6b29ab922da94b788da955c09b417/USER'],
+#'P1_1200sq_R0p99': [0.4969, '/nmssmSignalCascadeV01_13TeV2016_P1_1200sq/atittert-nmssmSignalCascadeV01_13TeV2016_processMc04_8_0_31_titterton_P1_1200sq-902d895b047f7fa3ab2846aac451feb1/USER'],
+
+'P3_2100sq_R0p555': [0.008446, '/nmssmSignalCascadeV01_13TeV2017_P3_2100sq_R0p555/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P3_2100sq_R0p555-65c6b29ab922da94b788da955c09b417/USER'],
+'P3_1900sq_R0p555': [0.0219, '/nmssmSignalCascadeV01_13TeV2017_P3_1900sq_R0p555/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P3_1900sq_R0p555-65c6b29ab922da94b788da955c09b417/USER'],
+
+'P1_2000sq_R0p555': [0.009245, '/nmssmSignalCascadeV01_13TeV2017_P1_2000sq_R0p555/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P1_2000sq_R0p555-65c6b29ab922da94b788da955c09b417/USER'],
+'P1_1800sq_R0p555': [0.023290, '/nmssmSignalCascadeV01_13TeV2017_P1_1800sq_R0p555/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P1_1800sq_R0p555-65c6b29ab922da94b788da955c09b417/USER'],
 
 }
 
