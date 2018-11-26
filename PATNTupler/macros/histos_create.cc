@@ -115,9 +115,9 @@ int main(int argc, char** argv){
 
     // SIX: systematics to run over. only need to use them for TAG dbt. start with 'SF_' for scale factors.
     // const std::vector<std::string> systematicNameVec = {"NOSYS"}; // >> data & no systematic
-    // const std::vector<std::string> systematicNameVec = {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown", "jecAK8UncUp", "jecAK8UncDown", "jerAK8UncUp", "jerAK8UncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown"}; // >> WJets and ZJets
-    // const std::vector<std::string> systematicNameVec = {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown", "jecAK8UncUp", "jecAK8UncDown", "jerAK8UncUp", "jerAK8UncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown"}; // >> TTJets
-    const std::vector<std::string> systematicNameVec = {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown", "jecAK8UncUp", "jecAK8UncDown", "jerAK8UncUp", "jerAK8UncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown"}; // >> SIGNAL
+    // const std::vector<std::string> systematicNameVec = {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown", "jecAK8UncUp", "jecAK8UncDown", "jerAK8UncUp", "jerAK8UncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_prefireUp", "SF_prefireDown"}; // >> WJets and ZJets
+    // const std::vector<std::string> systematicNameVec = {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown", "jecAK8UncUp", "jecAK8UncDown", "jerAK8UncUp", "jerAK8UncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_prefireUp", "SF_prefireDown"}; // >> TTJets
+    const std::vector<std::string> systematicNameVec = {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown", "jecAK8UncUp", "jecAK8UncDown", "jerAK8UncUp", "jerAK8UncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown"}; // >> SIGNAL
 
 
     // SEVEN: variables to use AND the systematics that affect their distributions
@@ -250,13 +250,13 @@ int main(int argc, char** argv){
                     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
                     // 2016 (80X)
 
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1206);
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 120.4);
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 25.25);
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1206, SF_weight.c_str());
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 120.4, SF_weight.c_str());
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 25.25, SF_weight.c_str());
 
                     // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/TTJets_ht1200plus/flatTree.root", cutToApply.c_str(), 831.76, SF_weight.c_str());
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 52.79);
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/WJets_ht1200plus/flatTree.root", cutToApply.c_str(), 95.14);
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 52.79, SF_weight.c_str());
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/WJets_ht1200plus/flatTree.root", cutToApply.c_str(), 95.14, SF_weight.c_str());
 
                     // SIGNAL 2016
                     plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
@@ -269,16 +269,16 @@ int main(int argc, char** argv){
                     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. 
                     // 2017 (94X)
 
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1005);
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 101.8);
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 20.54);
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1005, SF_weight.c_str());
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 101.8, SF_weight.c_str());
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 20.54, SF_weight.c_str());
 
                     // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/TTToHadronic_ht1200plus/flatTree.root", cutToApply.c_str(), 377.96, SF_weight.c_str());
                     // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/TTToSemiLeptonic_ht1200plus/flatTree.root", cutToApply.c_str(), 365.34, SF_weight.c_str());
                     // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/TTTo2L2Nu_ht1200plus/flatTree.root", cutToApply.c_str(), 88.29, SF_weight.c_str());
 
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 18.69);
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/WJets_ht1200plus/flatTree.root", cutToApply.c_str(), 34.00);
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 18.69, SF_weight.c_str());
+                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/WJets_ht1200plus/flatTree.root", cutToApply.c_str(), 34.00, SF_weight.c_str());
 
                     // SIGNAL 2017
                     // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc17_WMS/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
