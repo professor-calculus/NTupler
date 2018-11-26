@@ -150,6 +150,8 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       ///For reading in the ISR information
       void ReadInIsrInfo(const edm::Event&);
 
+      ///For reading in the Prefire information
+      void ReadInPrefireInfo(const edm::Event&);
 
       // ----------member data ---------------------------
 
@@ -183,6 +185,10 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       edm::EDGetTokenT<pat::PackedTriggerPrescales> triggerPrescales_;
       std::vector<std::string> targetTriggerPaths_;
 
+      edm::EDGetTokenT<double> prefweightToken_;
+      edm::EDGetTokenT<double> prefweightupToken_;
+      edm::EDGetTokenT<double> prefweightdownToken_;
+
       edm::EDGetTokenT<double> rhoToken_;
       
       //Ntuple Tree
@@ -198,6 +204,9 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       int nPU_;
       int nISR_;
       int nGLUINO_;
+      float prefweight_;
+      float prefweightup_;
+      float prefweightdown_;
       std::vector<ran::ElectronStruct>* electronCollection_;
       std::vector<ran::MuonStruct>* muonCollection_;
       std::vector<ran::JetStruct>* jetCollection_;
@@ -249,6 +258,10 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     triggerPrescales_(consumes<pat::PackedTriggerPrescales>(iConfig.getParameter<edm::InputTag>("prescales"))),
     targetTriggerPaths_(iConfig.getParameter<std::vector<std::string> >("selectedTriggerPaths")),
 
+    prefweightToken_(consumes<double>(edm::InputTag("prefiringweight:NonPrefiringProb"))),
+    prefweightupToken_(consumes<double>(edm::InputTag("prefiringweight:NonPrefiringProbUp"))),
+    prefweightdownToken_(consumes<double>(edm::InputTag("prefiringweight:NonPrefiringProbDown"))),
+
     rhoToken_(consumes<double>(iConfig.getParameter<edm::InputTag>("rho")))
     //cuts_(iConfig)
 {
@@ -279,6 +292,9 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     EventDataTree->Branch("metCollection","std::vector<ran::MetStruct>", &metCollection_, 64000, 1);
     EventDataTree->Branch("recordedTriggers", &recordedTriggers_);
     //EventDataTree->Branch("recordedTriggers","std::vector<char>", &recordedTriggers_, 64000, 1);
+    EventDataTree->Branch("prefweight", &prefweight_, "prefweight/F");
+    EventDataTree->Branch("prefweightup", &prefweightup_, "prefweightup/F");
+    EventDataTree->Branch("prefweightdown", &prefweightdown_, "prefweightdown/F");
 
     //Seperate tree to store trigger names
     TriggerPathsTree = fHistos->make<TTree>("TriggerPathsTree", "Trigger Paths tree");
@@ -401,6 +417,10 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
      //Read in ISR info
      if (isMC_)
        ReadInIsrInfo(iEvent);
+
+     //Read in pre-fire info
+     if (isMC_)
+       ReadInPrefireInfo(iEvent);
 
      //Fill Ntuple
      EventDataTree->Fill();	
@@ -1192,6 +1212,20 @@ void RALMiniAnalyzer::ReadInIsrInfo(const edm::Event& iEvent)
     nGLUINO_ = nGluino;
 }
 
+void RALMiniAnalyzer::ReadInPrefireInfo(const edm::Event& iEvent)
+{
+  edm::Handle<double> theprefweight;
+  iEvent.getByToken(prefweightToken_, theprefweight ) ;
+  prefweight_ =(*theprefweight);
+
+  edm::Handle<double> theprefweightup;
+  iEvent.getByToken(prefweightupToken_, theprefweightup ) ;
+  prefweightup_ =(*theprefweightup);
+
+  edm::Handle<double> theprefweightdown;
+  iEvent.getByToken(prefweightdownToken_, theprefweightdown ) ;
+  prefweightdown_ =(*theprefweightdown);
+}
 
 //------------ method for reading in the values of the standard GSF electron variables ---------------
 //----------------------------------------------------------------------------------------------------
