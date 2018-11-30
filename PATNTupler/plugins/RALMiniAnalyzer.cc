@@ -1037,10 +1037,7 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncer
         // softDropMass with PUPPI
         double puppi_pt             = iJet.userFloat("ak8PFJetsPuppiValueMap:pt");
         double puppi_eta           = iJet.userFloat("ak8PFJetsPuppiValueMap:eta");
-        // double puppi_phi           = iJet.userFloat("ak8PFJetsPuppiValueMap:phi");
-        // double puppi_mass       = iJet.userFloat("ak8PFJetsPuppiValueMap:mass");
-        // double puppi_tau1         = iJet.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau1");
-        // double puppi_tau2         = iJet.userFloat("ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau2");
+        float puppiCorr = getPUPPIweight( puppi_pt , puppi_eta );
 
         TLorentzVector puppi_softdrop, puppi_softdrop_subjet;
         auto const & sdSubjetsPuppi = iJet.subjets("SoftDropPuppi");
@@ -1049,7 +1046,6 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncer
           puppi_softdrop += puppi_softdrop_subjet;
         }
 
-        float puppiCorr = getPUPPIweight( puppi_pt , puppi_eta );
         float puppi_softdrop_masscorr = puppi_softdrop.M() * puppiCorr;
         ithJet.PUPPIsoftdrop_mass = puppi_softdrop_masscorr;
       } // closes 2016 jet masses and nJettiness
@@ -1064,8 +1060,24 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncer
         ithJet.CHSsoftdrop_mass = iJet.userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSSoftDropMass"); // access to soft drop mass
         ithJet.CHSpruned_mass = iJet.userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSPrunedMass");     // access to pruned mass
       
+        // softDropMass with PUPPI
+        double puppi_pt             = iJet.pt();
+        double puppi_eta           = iJet.eta();
+        float puppiCorr = getPUPPIweight( puppi_pt , puppi_eta );
+
+        TLorentzVector puppi_softdrop, puppi_softdrop_subjet;
+        auto const & sdSubjetsPuppi = iJet.subjets("SoftDropPuppi");
+        for ( auto const & it : sdSubjetsPuppi ) {
+          puppi_softdrop_subjet.SetPtEtaPhiM(it->correctedP4(0).pt(), it->correctedP4(0).eta(), it->correctedP4(0).phi(), it->correctedP4(0).mass());
+          puppi_softdrop += puppi_softdrop_subjet;
+        }
+
+        float puppi_softdrop_masscorr = puppi_softdrop.M() * puppiCorr;
+        ithJet.PUPPIsoftdrop_mass = puppi_softdrop_masscorr;
+
+        // OLD - softdrop mass drawn directly
         // ithJet.PUPPIsoftdrop_mass = iJet.userFloat("ak8PFJetsPuppiSoftDropMass");
-        ithJet.PUPPIsoftdrop_mass = iJet.userFloat("ak8PFJetsPuppiSoftDropMass") * getPUPPIweight( iJet.pt() , iJet.eta() );
+        // ithJet.PUPPIsoftdrop_mass = iJet.userFloat("ak8PFJetsPuppiSoftDropMass") * puppiCorr;
 
       } // closes 2017 jet masses and nJettiness
 
