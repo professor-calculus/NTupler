@@ -531,6 +531,9 @@ void RALMiniAnalyzer::ResetEventByEventVariables(){
   nPU_ = 0;
   nISR_ = 0;
   nGLUINO_ = 0;
+  prefweight_ = 0;
+  prefweightup_ = 0;
+  prefweightdown_ = 0;
 }
 
 //------------ For getting the correction factor for the PUPPI softDropMass -------------
