@@ -46,6 +46,42 @@ the lumi json file does not need to be included
 */
 
 
+// function to check whether jet passes looseID
+bool isJetLooseID(const ran::NtJet jet)
+{
+	const double absEta = fabs( jet.eta() );
+	const double NHF  = jet.neutralHadronEnergyFraction();
+	const double NEMF = jet.neutralEmEnergyFraction();
+	const double CHF  = jet.chargedHadronEnergyFraction();
+	// const double MUF  = jet.muonEnergyFraction();
+	const double CEMF = jet.chargedEmEnergyFraction();
+	const int NumConst = jet.chargedMultiplicity()+jet.neutralMultiplicity();
+	const int NumNeutralParticles =jet.neutralMultiplicity();
+	const int CHM      = jet.chargedMultiplicity(); 
+
+	if (absEta <= 2.7){
+		if ( (NHF<0.99 && NEMF<0.99 && NumConst>1) && ((absEta<=2.4 && CHF>0 && CHM>0 && CEMF<0.99) || absEta>2.4) )
+			return true;
+		else
+			return false;
+	}
+
+	else if (absEta <= 3.0){
+		if ( NHF<0.98 && NEMF>0.01 && NumNeutralParticles>2 )
+			return true;
+		else
+			return false;
+	}
+
+	else{
+		if ( NEMF<0.90 && NumNeutralParticles>10 )
+			return true;
+		else
+			return false;
+	}
+
+}
+
 
 namespace tsw {
 
@@ -945,6 +981,9 @@ int main(int argc, char** argv){
 			unsigned int nPrefireCandidates = 0;
 			for (const ran::NtJet& jet : jetVec) {
 
+				if (isJetLooseID(jet)==false)
+					continue;
+
 				if ( jet.pt() >= 40.0 && fabs(jet.eta()) > 2.2 && fabs(jet.eta()) < 3.0 )
 					nPrefireCandidates++;
 
@@ -971,7 +1010,7 @@ int main(int argc, char** argv){
 
 				std::vector<ran::NtJet> slimJets;
 				for (const ran::NtJet& jet : jetVec) {
-					if (fabs(jet.eta())>3.0)
+					if (fabs(jet.eta())>3.0 || isJetLooseID(jet)==false)
 						continue;
 					if (deltaR2(jet.eta(), jet.phi(), fatJetA.eta(), fatJetA.phi()) < (1.4 * 1.4))
 						continue;
