@@ -36,7 +36,7 @@ from Configuration.AlCa.autoCond import autoCond
 process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v12', '') #
 
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(2000) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
 process.source = cms.Source ("PoolSource",fileNames = cms.untracked.vstring(
         'root://dcap.pp.rl.ac.uk:1094/pnfs/pp.rl.ac.uk/data/cms/store/mc/RunIIFall17DRPremix/ZJetsToQQ_HT-800toInf_TuneCP5_13TeV-madgraphMLM-pythia8/AODSIM/94X_mc2017_realistic_v10-v1/40000/000A17B8-2D05-E811-87F8-0CC47AD98F74.root'
 )
@@ -45,9 +45,12 @@ process.source = cms.Source ("PoolSource",fileNames = cms.untracked.vstring(
 useMiniAOD=True
 
 if useMiniAOD==True:
-    # process.source.fileNames=cms.untracked.vstring('/store/user/taylor/nmssmSignalCascadeV05_13TeV2017_mH70p0_mSusy2200p0_ratio0p99_splitting0p1/nmssmSignalCascadeV05_13TeV2017_processMc04_ed94Xv8_mH70p0_mSusy2200p0_ratio0p99_splitting0p1/180509_094757/0000/nmssmSignal_MINIAODSIM_1.root',)
     process.source.fileNames=cms.untracked.vstring('file:/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/exampleMiniAOD/nmssmSignal_MINIAODSIM_94X.root')
     # process.source.fileNames=cms.untracked.vstring('file:/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/exampleMiniAOD/TT_MINIAODSIM_94X.root')
+    # process.source.fileNames=cms.untracked.vstring('/store/user/taylor/nmssmSignalCascadeV05_13TeV2017_mH70p0_mSusy2200p0_ratio0p99_splitting0p1/nmssmSignalCascadeV05_13TeV2017_processMc04_ed94Xv8_mH70p0_mSusy2200p0_ratio0p99_splitting0p1/180509_094757/0000/nmssmSignal_MINIAODSIM_1.root',)
+    # process.source.fileNames=cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/NMSSMCascade_mH-70_mSUSY-1200_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/50000/6C52837D-D175-E811-8038-001E67E713EF.root')
+    # process.source.fileNames=cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/NMSSMCascade_mH-70_mSUSY-2000_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/30000/B857D95D-F975-E811-98AA-00259021A526.root')
+    # process.source.fileNames=cms.untracked.vstring('/store/mc/RunIIFall17MiniAODv2/NMSSMCascade_mH-70_mSUSY-2600_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/30000/34A29165-3A77-E811-A360-A0369F8362E8.root')
 
 #setup the VID with HEEP 7.0
 from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
