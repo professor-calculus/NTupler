@@ -153,6 +153,9 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       ///For reading in the Prefire information
       void ReadInPrefireInfo(const edm::Event&);
 
+      ///For reading in the PDF weights
+      void ReadInPdfWeights(const edm::Event&);
+
       // ----------member data ---------------------------
 
       bool isThis2016_;
@@ -189,7 +192,11 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       edm::EDGetTokenT<double> prefweightupToken_;
       edm::EDGetTokenT<double> prefweightdownToken_;
 
+      edm::EDGetTokenT<GenEventInfoProduct> GEIPtoken_;
+      edm::EDGetTokenT<LHEEventProduct> LHEEPtoken_;
+
       edm::EDGetTokenT<double> rhoToken_;
+
       
       //Ntuple Tree
       edm::Service<TFileService> fHistos;
@@ -207,6 +214,10 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       float prefweight_;
       float prefweightup_;
       float prefweightdown_;
+      float scaleWeightUp_;
+      float scaleWeightDown_;
+      float pdfWeightUp_;
+      float pdfWeightDown_;
       std::vector<ran::ElectronStruct>* electronCollection_;
       std::vector<ran::MuonStruct>* muonCollection_;
       std::vector<ran::JetStruct>* jetCollection_;
@@ -262,6 +273,9 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     prefweightupToken_(consumes<double>(edm::InputTag("prefiringweight:NonPrefiringProbUp"))),
     prefweightdownToken_(consumes<double>(edm::InputTag("prefiringweight:NonPrefiringProbDown"))),
 
+    GEIPtoken_(consumes<GenEventInfoProduct>(edm::InputTag("generator"))),
+    LHEEPtoken_(consumes<LHEEventProduct>(edm::InputTag("externalLHEProducer"))),
+
     rhoToken_(consumes<double>(iConfig.getParameter<edm::InputTag>("rho")))
     //cuts_(iConfig)
 {
@@ -295,6 +309,10 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     EventDataTree->Branch("prefweight", &prefweight_, "prefweight/F");
     EventDataTree->Branch("prefweightup", &prefweightup_, "prefweightup/F");
     EventDataTree->Branch("prefweightdown", &prefweightdown_, "prefweightdown/F");
+    EventDataTree->Branch("scaleWeightUp", &scaleWeightUp_, "scaleWeightUp/F");
+    EventDataTree->Branch("scaleWeightDown", &scaleWeightDown_, "scaleWeightDown/F");
+    EventDataTree->Branch("pdfWeightUp", &pdfWeightUp_, "pdfWeightUp/F");
+    EventDataTree->Branch("pdfWeightDown", &pdfWeightDown_, "pdfWeightDown/F");
 
     //Seperate tree to store trigger names
     TriggerPathsTree = fHistos->make<TTree>("TriggerPathsTree", "Trigger Paths tree");
@@ -422,6 +440,10 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
      if (isMC_)
        ReadInPrefireInfo(iEvent);
 
+     //Read in pre-fire info
+     if (isMC_)
+       ReadInPdfWeights(iEvent);
+
      //Fill Ntuple
      EventDataTree->Fill();	
 
@@ -531,9 +553,13 @@ void RALMiniAnalyzer::ResetEventByEventVariables(){
   nPU_ = 0;
   nISR_ = 0;
   nGLUINO_ = 0;
-  prefweight_ = 0;
-  prefweightup_ = 0;
-  prefweightdown_ = 0;
+  prefweight_ = 0.0;
+  prefweightup_ = 0.0;
+  prefweightdown_ = 0.0;
+  scaleWeightUp_ = 0.0;
+  scaleWeightDown_ = 0.0;
+  pdfWeightUp_ = 0.0;
+  pdfWeightDown_ = 0.0;
 }
 
 //------------ For getting the correction factor for the PUPPI softDropMass -------------
@@ -1240,6 +1266,119 @@ void RALMiniAnalyzer::ReadInPrefireInfo(const edm::Event& iEvent)
   edm::Handle<double> theprefweightdown;
   iEvent.getByToken(prefweightdownToken_, theprefweightdown ) ;
   prefweightdown_ =(*theprefweightdown);
+}
+
+void RALMiniAnalyzer::ReadInPdfWeights(const edm::Event& iEvent)
+{
+  edm::Handle<GenEventInfoProduct> genEvtInfo;
+  iEvent.getByToken(GEIPtoken_, genEvtInfo);
+  double genWeight = genEvtInfo->weight()/fabs(genEvtInfo->weight());
+  // std::cout << genWeight << std::endl;
+
+  // put initial variation info into vectors
+  std::vector<double> LHEweights;
+  std::vector<int> LHEweightids;
+  edm::Handle<LHEEventProduct> EvtHandle;
+  if ( iEvent.getByToken(LHEEPtoken_, EvtHandle) ){    
+    std::string weightidstr;
+    int weightid;
+    if (EvtHandle->weights().size() > 0){    
+      for (unsigned int i = 0; i < EvtHandle->weights().size(); i++){
+        weightidstr = EvtHandle->weights()[i].id;
+        weightid = std::stoi(weightidstr);
+        LHEweights.push_back(EvtHandle->weights()[i].wgt / EvtHandle->originalXWGTUP());
+        LHEweightids.push_back(weightid);
+        // std::cout << weightid << "   " << EvtHandle->weights()[i].wgt / EvtHandle->originalXWGTUP() << std::endl;
+      }
+    }
+  } // closes 'if' can access LHEEP
+
+  // Storing LHE weights https://twiki.cern.ch/twiki/bin/viewauth/CMS/LHEReaderCMSSW
+  // for MC@NLO renormalization and factorization scale. 
+  // ID numbers 1001 - 1009. (muR,muF) = 
+  // 1001: (1,1)     1004: (2,1)     1007: (0.5,1)  
+  // 1002: (1,2)     1005: (2,2)     1008: (0.5,2)  
+  // 1003: (1,0.5)   1006: (2,0.5)   1009: (0.5,0.5)
+  // for PDF variations: ID numbers > 2000
+
+  // PDF and RENORM weights
+  std::vector<double> renorm;
+  std::vector<double> pdf;
+  for(unsigned int i = 0; i < LHEweightids.size(); i++){
+    
+    if (LHEweightids[0] == 1){
+
+      if(LHEweightids.at(i) > 1 && LHEweightids.at(i) < 10){
+        if(LHEweightids.at(i) == 6 || LHEweightids.at(i) == 8) continue;
+        renorm.push_back(LHEweights.at(i));
+      }
+      if(LHEweightids.at(i) > 10 && LHEweightids.at(i) < 111){
+        pdf.push_back(LHEweights.at(i));
+      }
+    }
+
+    else if (LHEweightids[0] == 1001){
+      
+      if(LHEweightids.at(i) > 1001 && LHEweightids.at(i) < 1010){
+        if(LHEweightids.at(i) == 1006 || LHEweightids.at(i) == 1008) continue;
+        renorm.push_back(LHEweights.at(i));
+      }
+      if(LHEweightids.at(i) > 2000 && LHEweightids.at(i) < 2101){
+        pdf.push_back(LHEweights.at(i));
+      }
+    }
+
+  } // closes loop through different LHE weights
+
+  // Now check the sizes of the RENORM vector
+  // if it is okay, calculate the up/down variations of the scale weights
+  double scaleWeightUp = 1.0;
+  double scaleWeightDown = 1.0;
+
+  if (renorm.size() == 6){
+    
+    // vector elements NOW (muR, muF) =
+    // 0 = (1,2)
+    // 1 = (1,0.5)
+    // 2 = (2,1)
+    // 3 = (2,2)
+    // 4 = (0.5,1)
+    // 5 = (0.5,0.5)
+    // std::cout << renorm[0] << "  " << renorm[1] << "  " << renorm[2] << "  " << renorm[3] << "  " << renorm[4] << "  " << renorm[5] << std::endl;
+    scaleWeightUp = genWeight * renorm[5];
+    scaleWeightDown = genWeight * renorm[3];
+    // std::cout << scaleWeightDown << "   " << scaleWeightUp << std::endl;   
+  }
+
+  // Now check the sizes of the PDF vector
+  // if it is okay, calculate the up/down variations of the PDF weights
+  double averagePdfWeight = 0.0;
+  double variancePdfWeight = 0.0;
+  double standardDevPdfWeight = 0.0;
+  double pdfWeightUp = 1.0;
+  double pdfWeightDown = 1.0;
+
+  if (pdf.size() == 100){
+    
+    for (unsigned int i = 0; i < pdf.size(); i++) averagePdfWeight += pdf[i];
+    averagePdfWeight = averagePdfWeight / pdf.size();
+
+    for (unsigned int i = 0; i < pdf.size(); i++) variancePdfWeight += (pdf[i]-averagePdfWeight) * (pdf[i]-averagePdfWeight);
+    variancePdfWeight = variancePdfWeight / pdf.size();
+    standardDevPdfWeight = sqrt(variancePdfWeight);
+    // std::cout << averagePdfWeight << "   " << standardDevPdfWeight << std::endl;
+    
+    pdfWeightUp = genWeight * (1.0 + standardDevPdfWeight);
+    pdfWeightDown = genWeight * (1.0 - standardDevPdfWeight);
+    // std::cout << pdfWeightDown << "   " << pdfWeightUp << std::endl;
+  }
+
+  // Store info in Ntuples
+  scaleWeightUp_ = scaleWeightUp;
+  scaleWeightDown_ = scaleWeightDown;
+  pdfWeightUp_ = pdfWeightUp;
+  pdfWeightDown_ = pdfWeightDown;
+
 }
 
 //------------ method for reading in the values of the standard GSF electron variables ---------------
