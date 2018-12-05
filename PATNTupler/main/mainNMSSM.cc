@@ -1010,7 +1010,7 @@ int main(int argc, char** argv){
 				if (isJetLooseID(jet)==false)
 					continue;
 
-				if ( jet.pt() >= 40.0 && fabs(jet.eta()) > 2.2 && fabs(jet.eta()) < 3.0 )
+				if ( jet.pt()*(jet.chargedEmEnergyFraction()+jet.neutralEmEnergyFraction()) > 30.0 && fabs(jet.eta()) > 2.25 && fabs(jet.eta()) < 3.00)
 					nPrefireCandidates++;
 
 				if ( fabs(jet.eta()) <= 3.0 ){
