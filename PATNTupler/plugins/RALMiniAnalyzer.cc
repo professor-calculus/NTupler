@@ -1360,11 +1360,17 @@ void RALMiniAnalyzer::ReadInPdfWeights(const edm::Event& iEvent)
 
   if (pdf.size() == 100){
     
-    for (unsigned int i = 0; i < pdf.size(); i++) averagePdfWeight += pdf[i];
-    averagePdfWeight = averagePdfWeight / pdf.size();
+    std::sort(pdf.begin(), pdf.end());
 
-    for (unsigned int i = 0; i < pdf.size(); i++) variancePdfWeight += (pdf[i]-averagePdfWeight) * (pdf[i]-averagePdfWeight);
-    variancePdfWeight = variancePdfWeight / pdf.size();
+    const int nCentralToUse = 68;
+    const int nLowToUse = 0.5 * (pdf.size() - nCentralToUse);
+    const int nHighToUse = pdf.size() - nLowToUse;
+
+    for (int i = nLowToUse; i < nHighToUse; i++) averagePdfWeight += pdf[i];
+    averagePdfWeight = averagePdfWeight / nCentralToUse;
+
+    for (int i = nLowToUse; i < nHighToUse; i++) variancePdfWeight += (pdf[i]-averagePdfWeight) * (pdf[i]-averagePdfWeight);
+    variancePdfWeight = variancePdfWeight / nCentralToUse;
     standardDevPdfWeight = sqrt(variancePdfWeight);
     // std::cout << averagePdfWeight << "   " << standardDevPdfWeight << std::endl;
     
