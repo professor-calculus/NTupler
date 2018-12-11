@@ -538,18 +538,6 @@ public:
 				treeVar_weight_dbtTagUp_ = DoubleBTagSF::getDbtTagScaleFactorUp_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
 				treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
 			}
-			else if(nrFatJets == 1)
-			{
-				treeVar_weight_dbtTag_ = DoubleBTagSF::getDbtTagScaleFactor_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), 0, -1, yearOfRun);
-				treeVar_weight_dbtTagUp_ = DoubleBTagSF::getDbtTagScaleFactorUp_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), 0, -1, yearOfRun);
-				treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), 0, -1, yearOfRun);
-			}
-			else
-			{
-				treeVar_weight_dbtTag_ = 1.0;
-				treeVar_weight_dbtTagUp_ = 1.0;
-				treeVar_weight_dbtTagDown_ = 1.0;
-			}
 
 			// calculate isr weights
 			if (nISR > 6) nISR = 6;
@@ -569,12 +557,6 @@ public:
 				treeVar_weight_dbtTag_ = DoubleBTagSF::getDbtTagScaleFactor_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
 				treeVar_weight_dbtTagUp_ = DoubleBTagSF::getDbtTagScaleFactorUp_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
 				treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
-			}
-			else if(nrFatJets == 1)
-			{
-				treeVar_weight_dbtTag_ = DoubleBTagSF::getDbtTagScaleFactor_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), 0, -1, yearOfRun);
-				treeVar_weight_dbtTagUp_ = DoubleBTagSF::getDbtTagScaleFactorUp_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), 0, -1, yearOfRun);
-				treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), 0, -1, yearOfRun);
 			}
 			treeVar_weight_isr_ = 1.0;
 			treeVar_weight_isrUp_ = 1.0;
@@ -619,110 +601,38 @@ public:
 		treeVar_nrPrefireJets_ = nrPrefireJets;
 		treeVar_nrPrefirePhotons_ = nrPrefirePhotons;
 
-		if (nrFatJets == 0)
-		{
-			treeVar_fatJetA_p4_.SetPtEtaPhiE(0, 0, 0, 0);
-			treeVar_fatJetB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
+		
+		treeVar_fatJetA_p4_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
+		treeVar_fatJetB_p4_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
 
-			treeVar_fatJetA_doubleBtagDiscrim_ = -2;
-			treeVar_fatJetB_doubleBtagDiscrim_ = -2;
+		treeVar_fatJetA_doubleBtagDiscrim_ = fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags();
+		treeVar_fatJetB_doubleBtagDiscrim_ = fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags();
 
-			treeVar_fatJetA_mass_ = -1;
-			treeVar_fatJetB_mass_ = -1;
+		treeVar_fatJetA_mass_ = fatJetA.mass();
+		treeVar_fatJetB_mass_ = fatJetB.mass();
 
-			treeVar_fatJetA_eta_ = 0;
-			treeVar_fatJetB_eta_ = 0;
+		treeVar_fatJetA_eta_ = fatJetA.eta();
+		treeVar_fatJetB_eta_ = fatJetB.eta();
 
-			treeVar_fatJetA_phi_ = 0;
-			treeVar_fatJetB_phi_ = 0;
+		treeVar_fatJetA_phi_ = fatJetA.phi();
+		treeVar_fatJetB_phi_ = fatJetB.phi();
 
-			treeVar_fatJetA_prunedMass_ = 0;
-			treeVar_fatJetB_prunedMass_ = 0;
+		treeVar_fatJetA_prunedMass_ = fatJetA.CHSpruned_mass();
+		treeVar_fatJetB_prunedMass_ = fatJetB.CHSpruned_mass();
 
-			treeVar_fatJetA_softDropMassCHS_ = 0;
-			treeVar_fatJetB_softDropMassCHS_ = 0;
+		treeVar_fatJetA_softDropMassCHS_ = fatJetA.CHSsoftdrop_mass();
+		treeVar_fatJetB_softDropMassCHS_ = fatJetB.CHSsoftdrop_mass();
 
-			treeVar_fatJetA_nSubjettinessTau1_ = 0;
-			treeVar_fatJetA_nSubjettinessTau2_ = 0;
-			treeVar_fatJetB_nSubjettinessTau1_ = 0;
-			treeVar_fatJetB_nSubjettinessTau2_ = 0;
+		treeVar_fatJetA_nSubjettinessTau1_ = fatJetA.NjettinessAK8_tau1();
+		treeVar_fatJetA_nSubjettinessTau2_ = fatJetA.NjettinessAK8_tau2();
+		treeVar_fatJetB_nSubjettinessTau1_ = fatJetB.NjettinessAK8_tau1();
+		treeVar_fatJetB_nSubjettinessTau2_ = fatJetB.NjettinessAK8_tau2();
 
-			treeVar_fatJetA_electronEnergyFraction_ = 0;
-			treeVar_fatJetB_electronEnergyFraction_ = 0;
+		treeVar_fatJetA_electronEnergyFraction_ = fatJetA.electronEnergyFraction();
+		treeVar_fatJetB_electronEnergyFraction_ = fatJetB.electronEnergyFraction();
 
-			treeVar_fatJetA_muonEnergyFraction_ = 0;
-			treeVar_fatJetB_muonEnergyFraction_ = 0;
-		}
-		else if(nrFatJets == 1)
-		{
-			{
-			treeVar_fatJetA_p4_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
-			treeVar_fatJetB_p4_.SetPtEtaPhiE(0, 0, 0, 0);
-
-			treeVar_fatJetA_doubleBtagDiscrim_ = fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags();
-			treeVar_fatJetB_doubleBtagDiscrim_ = -2;
-
-			treeVar_fatJetA_mass_ = fatJetA.mass();
-			treeVar_fatJetB_mass_ = -1;
-
-			treeVar_fatJetA_eta_ = fatJetA.eta();
-			treeVar_fatJetB_eta_ = 0;
-
-			treeVar_fatJetA_phi_ = fatJetA.phi();
-			treeVar_fatJetB_phi_ = 0;
-
-			treeVar_fatJetA_prunedMass_ = fatJetA.CHSpruned_mass();
-			treeVar_fatJetB_prunedMass_ = 0;
-
-			treeVar_fatJetA_softDropMassCHS_ = fatJetA.CHSsoftdrop_mass();
-			treeVar_fatJetB_softDropMassCHS_ = 0;
-
-			treeVar_fatJetA_nSubjettinessTau1_ = fatJetA.NjettinessAK8_tau1();
-			treeVar_fatJetA_nSubjettinessTau2_ = fatJetA.NjettinessAK8_tau2();
-			treeVar_fatJetB_nSubjettinessTau1_ = 0;
-			treeVar_fatJetB_nSubjettinessTau2_ = 0;
-
-			treeVar_fatJetA_electronEnergyFraction_ = fatJetA.electronEnergyFraction();
-			treeVar_fatJetB_electronEnergyFraction_ = 0;
-
-			treeVar_fatJetA_muonEnergyFraction_ = fatJetA.muonEnergyFraction();
-			treeVar_fatJetB_muonEnergyFraction_ = 0;
-		}
-		}
-		else
-		{
-			treeVar_fatJetA_p4_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
-			treeVar_fatJetB_p4_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
-
-			treeVar_fatJetA_doubleBtagDiscrim_ = fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags();
-			treeVar_fatJetB_doubleBtagDiscrim_ = fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags();
-
-			treeVar_fatJetA_mass_ = fatJetA.mass();
-			treeVar_fatJetB_mass_ = fatJetB.mass();
-
-			treeVar_fatJetA_eta_ = fatJetA.eta();
-			treeVar_fatJetB_eta_ = fatJetB.eta();
-
-			treeVar_fatJetA_phi_ = fatJetA.phi();
-			treeVar_fatJetB_phi_ = fatJetB.phi();
-
-			treeVar_fatJetA_prunedMass_ = fatJetA.CHSpruned_mass();
-			treeVar_fatJetB_prunedMass_ = fatJetB.CHSpruned_mass();
-
-			treeVar_fatJetA_softDropMassCHS_ = fatJetA.CHSsoftdrop_mass();
-			treeVar_fatJetB_softDropMassCHS_ = fatJetB.CHSsoftdrop_mass();
-
-			treeVar_fatJetA_nSubjettinessTau1_ = fatJetA.NjettinessAK8_tau1();
-			treeVar_fatJetA_nSubjettinessTau2_ = fatJetA.NjettinessAK8_tau2();
-			treeVar_fatJetB_nSubjettinessTau1_ = fatJetB.NjettinessAK8_tau1();
-			treeVar_fatJetB_nSubjettinessTau2_ = fatJetB.NjettinessAK8_tau2();
-
-			treeVar_fatJetA_electronEnergyFraction_ = fatJetA.electronEnergyFraction();
-			treeVar_fatJetB_electronEnergyFraction_ = fatJetB.electronEnergyFraction();
-
-			treeVar_fatJetA_muonEnergyFraction_ = fatJetA.muonEnergyFraction();
-			treeVar_fatJetB_muonEnergyFraction_ = fatJetB.muonEnergyFraction();
-		}
+		treeVar_fatJetA_muonEnergyFraction_ = fatJetA.muonEnergyFraction();
+		treeVar_fatJetB_muonEnergyFraction_ = fatJetB.muonEnergyFraction();
 
 		treeVar_ht_ = ht;
 		treeVar_mht_ = mht;
@@ -736,32 +646,15 @@ public:
 		treeVar_nrSlimJetsByBtagScore_ = slimJetsByBtagScore.size();
 
 		if (sampleType != "DATA"){
-			if (nrFatJets == 0)
-			{
-				treeVar_fatJetA_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_fatJetA_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_fatJetA_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_fatJetA_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_fatJetB_p4_jecUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_fatJetB_p4_jecUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_fatJetB_p4_jerUncUp_.SetPtEtaPhiE(0, 0, 0, 0);
-				treeVar_fatJetB_p4_jerUncDown_.SetPtEtaPhiE(0, 0, 0, 0);
-			}
-			else
-			{
-				treeVar_fatJetA_p4_jecUncUp_.SetPtEtaPhiE(fatJetA.pt() * (1.0 + fatJetA.jecUncertainty()), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * (1.0 + fatJetA.jecUncertainty()) );
-				treeVar_fatJetA_p4_jecUncDown_.SetPtEtaPhiE(fatJetA.pt() * (1.0 - fatJetA.jecUncertainty()), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * (1.0 - fatJetA.jecUncertainty()) );
-				treeVar_fatJetA_p4_jerUncUp_.SetPtEtaPhiE(fatJetA.pt() * fatJetA.jerUncUp(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * fatJetA.jerUncUp() );
-				treeVar_fatJetA_p4_jerUncDown_.SetPtEtaPhiE(fatJetA.pt() * fatJetA.jerUncDown(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * fatJetA.jerUncDown() );
+			treeVar_fatJetA_p4_jecUncUp_.SetPtEtaPhiE(fatJetA.pt() * (1.0 + fatJetA.jecUncertainty()), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * (1.0 + fatJetA.jecUncertainty()) );
+			treeVar_fatJetA_p4_jecUncDown_.SetPtEtaPhiE(fatJetA.pt() * (1.0 - fatJetA.jecUncertainty()), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * (1.0 - fatJetA.jecUncertainty()) );
+			treeVar_fatJetA_p4_jerUncUp_.SetPtEtaPhiE(fatJetA.pt() * fatJetA.jerUncUp(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * fatJetA.jerUncUp() );
+			treeVar_fatJetA_p4_jerUncDown_.SetPtEtaPhiE(fatJetA.pt() * fatJetA.jerUncDown(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()) * fatJetA.jerUncDown() );
 
-				if (nrFatJets > 1)
-				{
-					treeVar_fatJetB_p4_jecUncUp_.SetPtEtaPhiE(fatJetB.pt() * (1.0 + fatJetB.jecUncertainty()), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * (1.0 + fatJetB.jecUncertainty()) );
-					treeVar_fatJetB_p4_jecUncDown_.SetPtEtaPhiE(fatJetB.pt() * (1.0 - fatJetB.jecUncertainty()), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * (1.0 - fatJetB.jecUncertainty()) );
-					treeVar_fatJetB_p4_jerUncUp_.SetPtEtaPhiE(fatJetB.pt() * fatJetB.jerUncUp(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * fatJetB.jerUncUp() );
-					treeVar_fatJetB_p4_jerUncDown_.SetPtEtaPhiE(fatJetB.pt() * fatJetB.jerUncDown(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * fatJetB.jerUncDown() );
-				}
-			}
+			treeVar_fatJetB_p4_jecUncUp_.SetPtEtaPhiE(fatJetB.pt() * (1.0 + fatJetB.jecUncertainty()), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * (1.0 + fatJetB.jecUncertainty()) );
+			treeVar_fatJetB_p4_jecUncDown_.SetPtEtaPhiE(fatJetB.pt() * (1.0 - fatJetB.jecUncertainty()), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * (1.0 - fatJetB.jecUncertainty()) );
+			treeVar_fatJetB_p4_jerUncUp_.SetPtEtaPhiE(fatJetB.pt() * fatJetB.jerUncUp(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * fatJetB.jerUncUp() );
+			treeVar_fatJetB_p4_jerUncDown_.SetPtEtaPhiE(fatJetB.pt() * fatJetB.jerUncDown(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()) * fatJetB.jerUncDown() );
 
 			treeVar_ht_jecUncUp_ = ht_jecUncUp;
 			treeVar_ht_jecUncDown_ = ht_jecUncDown;
