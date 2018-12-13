@@ -64,6 +64,22 @@ for idmod in my_id_modules:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 
 
+from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
+# update slimmedJets with new JECs
+updateJetCollection(
+   process,
+   labelName = 'NewJEC',
+   jetSource = cms.InputTag('slimmedJets'),
+   jetCorrections = ('AK4PFPuppi', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual']), 'None'),
+)
+# update slimmedJetsAK8 with new JECs
+updateJetCollection(
+   process,
+   labelName = 'AK8NewJEC',
+   jetSource = cms.InputTag('slimmedJetsAK8'),
+   jetCorrections = ('AK8PFPuppi', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual']), 'None'),
+)
+
 #this is our example analysis module reading the results
 process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        isThis2016 = cms.bool(False),
@@ -76,8 +92,8 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        puInfo = cms.InputTag("slimmedAddPileupInfo"),
                                        muons = cms.InputTag("slimmedMuons"),
                                        electrons = cms.InputTag("slimmedElectrons"),
-                                       jets = cms.InputTag("slimmedJets"),
-                                       fatjets = cms.InputTag("slimmedJetsAK8"),
+                                       jets = cms.InputTag("updatedPatJetsNewJEC"),
+                                       fatjets = cms.InputTag("updatedPatJetsAK8NewJEC"),
                                        genjets = cms.InputTag("slimmedGenJets"),
                                        genjetsAK8 = cms.InputTag("slimmedGenJetsAK8"),
                                        genParticles = cms.InputTag("prunedGenParticles"),
@@ -94,5 +110,9 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        )
 
 process.p = cms.Path(
-    process.egmGsfElectronIDSequence* 
+    process.egmGsfElectronIDSequence*
+    process.patJetCorrFactorsNewJEC*
+    process.updatedPatJetsNewJEC*
+    process.patJetCorrFactorsAK8NewJEC*
+    process.updatedPatJetsAK8NewJEC*
     process.demo) #our analysing example module, replace with your module
