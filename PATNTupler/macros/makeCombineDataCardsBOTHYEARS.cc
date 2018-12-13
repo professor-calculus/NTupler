@@ -112,12 +112,10 @@ int main(){
     CommonSystematicVec[2016].push_back( CommonSystematic("XS_TTJets2016 lnN", 1.5, {"TTJets"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("XS_ZJets2016 lnN", 1.5, {"ZJets"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("XS_WJets2016 lnN", 1.5, {"WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("jecAK4Unc2016 lnN", "jecAK4Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("jerAK4Unc2016 lnN", "jerAK4Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("jecAK8Unc2016 lnN", "jecAK8Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("jerAK8Unc2016 lnN", "jerAK8Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("jmsUnc2016 lnN", "jmsUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("jmrUnc2016 lnN", "jmrUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("jecAKXUnc lnN", "jecAKXUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // correlated to 2017
+    CommonSystematicVec[2016].push_back( CommonSystematic("jerAKXUnc2016 lnN", "jerAKXUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("jmsUnc lnN", "jmsUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // correlated to 2017
+    CommonSystematicVec[2016].push_back( CommonSystematic("jmrUnc lnN", "jmrUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // correlated to 2017
     CommonSystematicVec[2016].push_back( CommonSystematic("SigDbtTag2016 lnN", "dbtTag", {"SIGNAL"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("TtDbtTag2016 lnN", "dbtTag", {"TTJets"}) );
     // *** 2017 ***
@@ -129,12 +127,10 @@ int main(){
     CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets2L2017 lnN", 1.5, {"TTJets2L"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("XS_ZJets2017 lnN", 1.5, {"ZJets"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("XS_WJets2017 lnN", 1.5, {"WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("jecAK4Unc2017 lnN", "jecAK4Unc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("jerAK4Unc2017 lnN", "jerAK4Unc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("jecAK8Unc2017 lnN", "jecAK8Unc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("jerAK8Unc2017 lnN", "jerAK8Unc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("jmsUnc2017 lnN", "jmsUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("jmrUnc2017 lnN", "jmrUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("jecAKXUnc lnN", "jecAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
+    CommonSystematicVec[2017].push_back( CommonSystematic("jerAKXUnc2017 lnN", "jerAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("jmsUnc lnN", "jmsUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
+    CommonSystematicVec[2017].push_back( CommonSystematic("jmrUnc lnN", "jmrUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
     CommonSystematicVec[2017].push_back( CommonSystematic("SigDbtTag2017 lnN", "dbtTag", {"SIGNAL"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("TtDbtTag2017 lnN", "dbtTag", {"TTJets0L", "TTJets1L", "TTJets2L"}) );
 
