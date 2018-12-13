@@ -109,8 +109,8 @@ int main(int argc, char** argv){
 
 
     // FIVE: set up the luminosity
-    const double luminosity = 35.867; // 2016 DATASET
-    // const double luminosity = 41.370; // 2017 DATASET
+    const double luminosity = 35.922; // 2016 DATASET
+    // const double luminosity = 41.529; // 2017 DATASET
 
 
     // SIX: systematics to run over. only need to use them for TAG dbt. start with 'SF_' for scale factors.
