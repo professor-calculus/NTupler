@@ -49,6 +49,6 @@ config.Data.unitsPerJob = 5
 config.Data.inputDBS = 'global' # for centrally produced data
 config.Data.totalUnits = -1 # '-1' does them all
 config.Data.publication = False
-config.Data.outLFNDirBase = '/store/user/taylor/ntuples_DATA_AUG2018' # Wherever you want the ntuples to go on the RAL T2
+config.Data.outLFNDirBase = '/store/user/taylor/ntuples_DATA16_Jan2019' # Wherever you want the ntuples to go on the RAL T2
 
 config.Site.storageSite = 'T2_UK_SGrid_RALPP'
