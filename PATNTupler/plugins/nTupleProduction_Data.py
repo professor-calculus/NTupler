@@ -64,20 +64,22 @@ my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.heepElectronI
 for idmod in my_id_modules:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 
-# # update slimmedJetsAK8 to include version4 of the double-b tagger
-# from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
-# updateJetCollection(
-#    process,
-#    labelName = 'AK8wDBTV4',
-#    jetSource = cms.InputTag('slimmedJetsAK8'),
-#    pvSource = cms.InputTag('offlineSlimmedPrimaryVertices'),
-#    svSource = cms.InputTag('slimmedSecondaryVertices'),
-#    rParam = 0.8,
-#    jetCorrections = ('AK8PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
-#    btagDiscriminators = [
-#       'pfBoostedDoubleSecondaryVertexAK8BJetTags',
-#    ],
-# )
+
+from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
+# update slimmedJets with new JECs
+updateJetCollection(
+   process,
+   labelName = 'NewJEC',
+   jetSource = cms.InputTag('slimmedJets'),
+   jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual']), 'None'),
+)
+# update slimmedJetsAK8 with new JECs
+updateJetCollection(
+   process,
+   labelName = 'AK8NewJEC',
+   jetSource = cms.InputTag('slimmedJetsAK8'),
+   jetCorrections = ('AK8PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual']), 'None'),
+)
 
 #this is our example analysis module reading the results
 process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
@@ -91,8 +93,8 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        puInfo = cms.InputTag("slimmedAddPileupInfo"),
                                        muons = cms.InputTag("slimmedMuons"),
                                        electrons = cms.InputTag("slimmedElectrons"),
-                                       jets = cms.InputTag("slimmedJets"),
-                                       fatjets = cms.InputTag("slimmedJetsAK8"),
+                                       jets = cms.InputTag("updatedPatJetsNewJEC"),
+                                       fatjets = cms.InputTag("updatedPatJetsAK8NewJEC"),
                                        genjets = cms.InputTag("slimmedGenJets"),
                                        genjetsAK8 = cms.InputTag("slimmedGenJetsAK8"),
                                        genParticles = cms.InputTag("prunedGenParticles"),
