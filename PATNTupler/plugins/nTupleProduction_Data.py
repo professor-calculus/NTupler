@@ -32,7 +32,7 @@ process.TFileService = cms.Service("TFileService", fileName=cms.string('nTuple.r
 #setup global tag
 from Configuration.AlCa.GlobalTag import GlobalTag
 from Configuration.AlCa.autoCond import autoCond
-process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016LegacyRepro_v4', '') #
+process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_2016SeptRepro_v7', '') #
 
 process.options = cms.untracked.PSet( allowUnscheduled = cms.untracked.bool(True) )
 
