@@ -2,7 +2,7 @@
 # 1. Global Tag
 # 2. dataset (for local running only)
 # 3. HLT trigger path
-# 4. puppiCorr.root file
+# 4. puppiCorr.root & L1PrefiringMaps_new.root file
 
 import FWCore.ParameterSet.Config as cms
 

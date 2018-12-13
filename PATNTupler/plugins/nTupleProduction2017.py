@@ -3,7 +3,7 @@
 # 2. dataset (for local running only)
 # 3. HLT trigger path
 # 4. LHE calculation properties (currently not using)
-# 5. puppiCorr.root file
+# 5. puppiCorr.root & L1PrefiringMaps_new.root file
 
 import FWCore.ParameterSet.Config as cms
 
