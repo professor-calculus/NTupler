@@ -115,21 +115,21 @@ int main(int argc, char** argv){
 
     // SIX: systematics to run over. only need to use them for TAG dbt. start with 'SF_' for scale factors.
     // const std::vector<std::string> systematicNameVec = {"NOSYS"}; // >> data & no systematic
-    // const std::vector<std::string> systematicNameVec = {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown", "jecAK8UncUp", "jecAK8UncDown", "jerAK8UncUp", "jerAK8UncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_prefireUp", "SF_prefireDown"}; // >> WJets and ZJets
-    // const std::vector<std::string> systematicNameVec = {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown", "jecAK8UncUp", "jecAK8UncDown", "jerAK8UncUp", "jerAK8UncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_prefireUp", "SF_prefireDown"}; // >> TTJets
-    const std::vector<std::string> systematicNameVec = {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown", "jecAK8UncUp", "jecAK8UncDown", "jerAK8UncUp", "jerAK8UncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown"}; // >> SIGNAL
+    // const std::vector<std::string> systematicNameVec = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_prefireUp", "SF_prefireDown"}; // >> WJets and ZJets
+    // const std::vector<std::string> systematicNameVec = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_prefireUp", "SF_prefireDown"}; // >> TTJets
+    const std::vector<std::string> systematicNameVec = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown"}; // >> SIGNAL
 
 
     // SEVEN: variables to use AND the systematics that affect their distributions
-    CutVariable fatJetA_pt_CV = CutVariable("fatJetA_p4.Pt()", {"jecAK8UncUp", "jecAK8UncDown", "jerAK8UncUp", "jerAK8UncDown"});
-    CutVariable fatJetB_pt_CV = CutVariable("fatJetB_p4.Pt()", {"jecAK8UncUp", "jecAK8UncDown", "jerAK8UncUp", "jerAK8UncDown"});
+    CutVariable fatJetA_pt_CV = CutVariable("fatJetA_p4.Pt()", {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown"});
+    CutVariable fatJetB_pt_CV = CutVariable("fatJetB_p4.Pt()", {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown"});
     CutVariable fatJetA_mass_CV = CutVariable("fatJetA_softDropMassPuppi", {"jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown"});
     CutVariable fatJetB_mass_CV = CutVariable("fatJetB_softDropMassPuppi", {"jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown"});
     CutVariable fatJetA_dbt_CV = CutVariable("fatJetA_doubleBtagDiscrim", {});
     CutVariable fatJetB_dbt_CV = CutVariable("fatJetB_doubleBtagDiscrim", {});
-    CutVariable slimJetA_pt_CV = CutVariable("slimJetA_p4.Pt()", {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown"});
-    CutVariable slimJetB_pt_CV = CutVariable("slimJetB_p4.Pt()", {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown"});
-    CutVariable ht_CV = CutVariable("ht", {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown"});
+    CutVariable slimJetA_pt_CV = CutVariable("slimJetA_p4.Pt()", {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown"});
+    CutVariable slimJetB_pt_CV = CutVariable("slimJetB_p4.Pt()", {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown"});
+    CutVariable ht_CV = CutVariable("ht", {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown"});
 
 
     // EIGHT: >>>BELOW<<<
@@ -183,15 +183,22 @@ int main(int argc, char** argv){
     for (size_t iSys = 0; iSys < systematicNameVec.size(); ++iSys){
         const std::string systematicName = systematicNameVec[iSys];
 
-        const std::string fatJetA_pt_name = fatJetA_pt_CV.GetCutVariableName(systematicName.c_str());
-        const std::string fatJetB_pt_name = fatJetB_pt_CV.GetCutVariableName(systematicName.c_str());
-        const std::string fatJetA_mass_name = fatJetA_mass_CV.GetCutVariableName(systematicName.c_str());
-        const std::string fatJetB_mass_name = fatJetB_mass_CV.GetCutVariableName(systematicName.c_str());
-        const std::string fatJetA_dbt_name = fatJetA_dbt_CV.GetCutVariableName(systematicName.c_str());
-        const std::string fatJetB_dbt_name = fatJetB_dbt_CV.GetCutVariableName(systematicName.c_str());
-        const std::string slimJetA_pt_name = slimJetA_pt_CV.GetCutVariableName(systematicName.c_str());
-        const std::string slimJetB_pt_name = slimJetB_pt_CV.GetCutVariableName(systematicName.c_str());
-        const std::string ht_name = ht_CV.GetCutVariableName(systematicName.c_str());
+        std::string fatJetA_pt_name = fatJetA_pt_CV.GetCutVariableName(systematicName.c_str());
+        std::string fatJetB_pt_name = fatJetB_pt_CV.GetCutVariableName(systematicName.c_str());
+        std::string fatJetA_mass_name = fatJetA_mass_CV.GetCutVariableName(systematicName.c_str());
+        std::string fatJetB_mass_name = fatJetB_mass_CV.GetCutVariableName(systematicName.c_str());
+        std::string fatJetA_dbt_name = fatJetA_dbt_CV.GetCutVariableName(systematicName.c_str());
+        std::string fatJetB_dbt_name = fatJetB_dbt_CV.GetCutVariableName(systematicName.c_str());
+        std::string slimJetA_pt_name = slimJetA_pt_CV.GetCutVariableName(systematicName.c_str());
+        std::string slimJetB_pt_name = slimJetB_pt_CV.GetCutVariableName(systematicName.c_str());
+        std::string ht_name = ht_CV.GetCutVariableName(systematicName.c_str());
+
+        // HACK to correlate AK4<->AK8 JECs and JERs
+        std::replace(fatJetA_pt_name.begin(), fatJetA_pt_name.end(), 'X', '8');
+        std::replace(fatJetB_pt_name.begin(), fatJetB_pt_name.end(), 'X', '8');
+        std::replace(slimJetA_pt_name.begin(), slimJetA_pt_name.end(), 'X', '4');
+        std::replace(slimJetB_pt_name.begin(), slimJetB_pt_name.end(), 'X', '4');
+        std::replace(ht_name.begin(), ht_name.end(), 'X', '4');
 
         MassRegionCuts MassCutsObject = MassRegionCuts(massCutObjectName.c_str(), S1_Node1, S1_Node2, SMAX_Node1, SMAX_Node2, SN_Nodes, fatJetA_mass_name, fatJetB_mass_name, sideBandScaleFactor);
 
