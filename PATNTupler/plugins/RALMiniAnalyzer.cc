@@ -57,6 +57,7 @@
 #include "SHarper/HEEPAnalyzer/interface/HEEPCutCodes.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
+#include "DataFormats/BTauReco/interface/BoostedDoubleSVTagInfo.h"
 
 #include "JetMETCorrections/Modules/interface/JetResolution.h"
 #include "JetMETCorrections/Objects/interface/JetCorrectionsRecord.h"
@@ -1112,6 +1113,13 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncer
 
 
       ithJet.pfBoostedDoubleSecondaryVertexAK8BJetTags =  iJet.bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags");// Double b-tag
+
+      // for(auto &label : iJet.tagInfoLabels())
+      //   std::cout << label << std::endl;
+      // const reco::BoostedDoubleSVTagInfo * bdsvTagInfo = iJet.tagInfoBoostedDoubleSV("pfBoostedDoubleSVAK8");
+      // const reco::TaggingVariableList vars = bdsvTagInfo->taggingVariables();
+      // std::cout << vars.get(reco::btau::z_ratio) << std::endl;
+      
       ithJet.partonFlavour = iJet.partonFlavour();
 
       if (c_nom != 0){
