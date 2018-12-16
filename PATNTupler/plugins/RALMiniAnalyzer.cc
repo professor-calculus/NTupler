@@ -1116,10 +1116,39 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncer
 
       // for(auto &label : iJet.tagInfoLabels())
       //   std::cout << label << std::endl;
-      // const reco::BoostedDoubleSVTagInfo * bdsvTagInfo = iJet.tagInfoBoostedDoubleSV("pfBoostedDoubleSVAK8");
-      // const reco::TaggingVariableList vars = bdsvTagInfo->taggingVariables();
-      // std::cout << vars.get(reco::btau::z_ratio) << std::endl;
-      
+      const reco::BoostedDoubleSVTagInfo * bdsvTagInfo = iJet.tagInfoBoostedDoubleSV("pfBoostedDoubleSVAK8");
+      if (bdsvTagInfo != NULL){
+
+        const reco::TaggingVariableList vars = bdsvTagInfo->taggingVariables();
+        ithJet.dbtVar_z_ratio = vars.get(reco::btau::z_ratio);
+        ithJet.dbtVar_trackSipdSig_3 = vars.get(reco::btau::trackSip3dSig_3);
+        ithJet.dbtVar_trackSipdSig_2 = vars.get(reco::btau::trackSip3dSig_2);
+        ithJet.dbtVar_trackSipdSig_1 = vars.get(reco::btau::trackSip3dSig_1);
+        ithJet.dbtVar_trackSipdSig_0 = vars.get(reco::btau::trackSip3dSig_0);
+        ithJet.dbtVar_trackSipdSig_1_0 = vars.get(reco::btau::tau2_trackSip3dSig_0);
+        ithJet.dbtVar_trackSipdSig_0_0 = vars.get(reco::btau::tau1_trackSip3dSig_0);
+        ithJet.dbtVar_trackSipdSig_1_1 = vars.get(reco::btau::tau2_trackSip3dSig_1);
+        ithJet.dbtVar_trackSipdSig_0_1 = vars.get(reco::btau::tau1_trackSip3dSig_1);
+        ithJet.dbtVar_trackSip2dSigAboveCharm_0 = vars.get(reco::btau::trackSip2dSigAboveCharm);
+        ithJet.dbtVar_trackSip2dSigAboveBottom_0 = vars.get(reco::btau::trackSip2dSigAboveBottom_0);
+        ithJet.dbtVar_trackSip2dSigAboveBottom_1 = vars.get(reco::btau::trackSip2dSigAboveBottom_1);
+        ithJet.dbtVar_tau1_trackEtaRel_0 = vars.get(reco::btau::tau2_trackEtaRel_0);
+        ithJet.dbtVar_tau1_trackEtaRel_1 = vars.get(reco::btau::tau2_trackEtaRel_1);
+        ithJet.dbtVar_tau1_trackEtaRel_2 = vars.get(reco::btau::tau2_trackEtaRel_2);
+        ithJet.dbtVar_tau0_trackEtaRel_0 = vars.get(reco::btau::tau1_trackEtaRel_0);
+        ithJet.dbtVar_tau0_trackEtaRel_1 = vars.get(reco::btau::tau1_trackEtaRel_1);
+        ithJet.dbtVar_tau0_trackEtaRel_2 = vars.get(reco::btau::tau1_trackEtaRel_2);
+        ithJet.dbtVar_tau_vertexMass_0 = vars.get(reco::btau::tau1_vertexMass);
+        ithJet.dbtVar_tau_vertexEnergyRatio_0 = vars.get(reco::btau::tau1_vertexEnergyRatio);
+        ithJet.dbtVar_tau_vertexDeltaR_0 = vars.get(reco::btau::tau1_vertexDeltaR);
+        ithJet.dbtVar_tau_flightDistance2dSig_0 = vars.get(reco::btau::tau1_flightDistance2dSig);
+        ithJet.dbtVar_tau_vertexMass_1 = vars.get(reco::btau::tau2_vertexMass);
+        ithJet.dbtVar_tau_vertexEnergyRatio_1 = vars.get(reco::btau::tau2_vertexEnergyRatio);
+        ithJet.dbtVar_tau_flightDistance2dSig_1 = vars.get(reco::btau::tau2_flightDistance2dSig);
+        ithJet.dbtVar_jetNTracks = vars.get(reco::btau::jetNTracks);
+        ithJet.dbtVar_nSV = vars.get(reco::btau::jetNSecondaryVertices);
+      }
+    
       ithJet.partonFlavour = iJet.partonFlavour();
 
       if (c_nom != 0){

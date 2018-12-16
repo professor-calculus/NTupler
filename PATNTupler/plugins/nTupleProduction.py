@@ -89,7 +89,11 @@ updateJetCollection(
    btagDiscriminators = [
       'pfBoostedDoubleSecondaryVertexAK8BJetTags',
    ],
+   btagInfos = ['pfBoostedDoubleSVAK8TagInfos']
 )
+
+process.updatedPatJetsTransientCorrectedAK8wDBTV4AndNewJEC.addTagInfos = cms.bool(True) 
+# process.updatedPatJetsTransientCorrectedAK8wDBTV4AndNewJEC.addBTagInfo = cms.bool(True)
 
 process.prefiringweight = cms.EDProducer("L1ECALPrefiringWeightProducer",
                                  ThePhotons = cms.InputTag("slimmedPhotons"),

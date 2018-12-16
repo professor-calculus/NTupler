@@ -48,6 +48,34 @@ namespace ran{
     double puppi_tau2;
     double puppi_tau3;*/
 
+    // DBT tagging variables
+    float dbtVar_z_ratio;
+    float dbtVar_trackSipdSig_3;
+    float dbtVar_trackSipdSig_2;
+    float dbtVar_trackSipdSig_1;
+    float dbtVar_trackSipdSig_0;
+    float dbtVar_trackSipdSig_1_0;
+    float dbtVar_trackSipdSig_0_0;
+    float dbtVar_trackSipdSig_1_1;
+    float dbtVar_trackSipdSig_0_1;
+    float dbtVar_trackSip2dSigAboveCharm_0;
+    float dbtVar_trackSip2dSigAboveBottom_0;
+    float dbtVar_trackSip2dSigAboveBottom_1;
+    float dbtVar_tau1_trackEtaRel_0;
+    float dbtVar_tau1_trackEtaRel_1;
+    float dbtVar_tau1_trackEtaRel_2;
+    float dbtVar_tau0_trackEtaRel_0;
+    float dbtVar_tau0_trackEtaRel_1;
+    float dbtVar_tau0_trackEtaRel_2;
+    float dbtVar_tau_vertexMass_0;
+    float dbtVar_tau_vertexEnergyRatio_0;
+    float dbtVar_tau_vertexDeltaR_0;
+    float dbtVar_tau_flightDistance2dSig_0;
+    float dbtVar_tau_vertexMass_1;
+    float dbtVar_tau_vertexEnergyRatio_1;
+    float dbtVar_tau_flightDistance2dSig_1;
+    float dbtVar_jetNTracks;
+    float dbtVar_nSV;
 
     int partonFlavour;///<  MC parton flavour (sensible values for MC only obviously!) 
     ClassDef(FatJetStruct,2)//Struct class definition
