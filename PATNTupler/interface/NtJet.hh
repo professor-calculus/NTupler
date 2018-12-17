@@ -21,6 +21,10 @@ namespace ran{
     float pfSimpleSecondaryVertexHighPurBJetTags() const {return jet->pfSimpleSecondaryVertexHighPurBJetTags;}///< pfSimpleSecondaryVertexHighPurBJetTags b tag discriminator
     float pfCombinedSecondaryVertexV2BJetTags() const {return jet->pfCombinedSecondaryVertexV2BJetTags;}///< pfCombinedSecondaryVertexV2BJetTags b tag discriminator
     float pfCombinedInclusiveSecondaryVertexV2BJetTags() const {return jet->pfCombinedInclusiveSecondaryVertexV2BJetTags;}//<pfCombinedInclusiveSecondaryVertexV2BJetTags b tag discriminator
+    float pfCombinedDeepCSV_probb() const {return jet->pfCombinedDeepCSV_probb;} // For the Deep NN b-tagger
+    float pfCombinedDeepCSV_probbb() const {return jet->pfCombinedDeepCSV_probbb;} // For the Deep NN b-tagger
+    float pfCombinedDeepCVMA_probb() const {return jet->pfCombinedDeepCVMA_probb;} // For the Deep NN b-tagger
+    float pfCombinedDeepCVMA_probbb() const {return jet->pfCombinedDeepCVMA_probbb;} // For the Deep NN b-tagger
     float pfCombinedMVAV2BJetTags() const {return jet->pfCombinedMVAV2BJetTags;}///< pfCombinedMVABJetTags  b tag discriminator
     float jecFactor_unCorrected() const {return jet->jecFactor_unCorrected;}///< factor applied to jet pt to get uncorrect jet pt
     float jecUncertainty() const {return jet->jecUncertainty;}///< the uncertainty in the JEC applied

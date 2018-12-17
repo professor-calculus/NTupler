@@ -23,6 +23,10 @@ namespace ran{
     float pfCombinedSecondaryVertexV2BJetTags;///< pfCombinedSecondaryVertexV2BJetTags b tag discriminator
     float pfCombinedInclusiveSecondaryVertexV2BJetTags;///< pfCombinedInclusiveSecondaryVertexV2BJetTags b tag discriminator
     float pfCombinedMVAV2BJetTags;///<  pfCombinedMVABJetTags b tag discriminator
+    float pfCombinedDeepCSV_probb; // Deep NN b-tagger
+    float pfCombinedDeepCSV_probbb; // Deep NN b-tagger
+    float pfCombinedDeepCVMA_probb; // Deep NN b-tagger
+    float pfCombinedDeepCVMA_probbb; // Deep NN b-tagger
     float jecFactor_unCorrected;///<factor applied to jet pt to get uncorrect jet pt
     float jecUncertainty;///<the uncertainty in the JEC applied
     float jerUncUp;///<the uncertainty in the JER (up)

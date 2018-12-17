@@ -18,6 +18,8 @@
 //RAL PARTICLE HEADERS
 #include "../interface/EventInfo.hh"
 #include "../interface/NtElectron.hh"
+#include "../interface/NtPhoton.hh"
+#include "../interface/NtTrack.hh"
 #include "../interface/NtMuon.hh"
 #include "../interface/NtJet.hh"
 #include "../interface/NtFatJet.hh"
@@ -28,6 +30,8 @@
 
 using std::unique_ptr;
 using ran::ElectronStruct;
+using ran::PhotonStruct;
+using ran::TrackStruct;
 using ran::MuonStruct;
 using ran::JetStruct;
 using std::string;
@@ -61,6 +65,8 @@ private:
   TBranch* eventInfoBranch; ///< Event info branch
   TBranch* electronBranch; ///< Electron branch
   TBranch* jetBranch; ///< Jet branch
+  TBranch* photonBranch; ///< Jet branch
+  TBranch* trackBranch; ///< Jet branch
   TBranch* muonBranch; ///< Muon branch
 };
 

@@ -76,6 +76,18 @@ updateJetCollection(
    labelName = 'NewJEC',
    jetSource = cms.InputTag('slimmedJets'),
    jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
+   btagDiscriminators = [
+      'pfDeepCSVJetTags:probudsg',
+      'pfDeepCSVJetTags:probb',
+      'pfDeepCSVJetTags:probc',
+      'pfDeepCSVJetTags:probbb',
+      'pfDeepCSVJetTags:probcc',
+      'pfDeepCMVAJetTags:probudsg',
+      'pfDeepCMVAJetTags:probb',
+      'pfDeepCMVAJetTags:probc',
+      'pfDeepCMVAJetTags:probbb',
+      'pfDeepCMVAJetTags:probcc',
+   ],
 )
 # update slimmedJetsAK8 to include version4 of the double-b tagger (and redo JECs)
 updateJetCollection(
@@ -117,6 +129,8 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
                                        puInfo = cms.InputTag("slimmedAddPileupInfo"),
                                        muons = cms.InputTag("slimmedMuons"),
+                                       photons = cms.InputTag("slimmedPhotons"),
+                                       tracks = cms.InputTag("packedPFCandidates"),
                                        electrons = cms.InputTag("slimmedElectrons"),
                                        jets = cms.InputTag("updatedPatJetsNewJEC"),
                                        fatjets = cms.InputTag("updatedPatJetsTransientCorrectedAK8wDBTV4AndNewJEC"),
@@ -131,8 +145,9 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        elesAOD=cms.InputTag("gedGsfElectrons"),
                                        elesMiniAOD=cms.InputTag("slimmedElectrons"),
                                        trkIsolMap=cms.InputTag("heepIDVarValueMaps","eleTrkPtIso"),
-                                       vid=cms.InputTag("egmGsfElectronIDs:heepElectronID-HEEPV70"),
-                                       rho=cms.InputTag("fixedGridRhoAll")
+                                       vid=cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-loose"),
+                                       rho=cms.InputTag("fixedGridRhoAll"),
+                                       rhoPhoton=cms.InputTag("fixedGridRhoFastjetAll")
                                        )
 
 process.p = cms.Path(
