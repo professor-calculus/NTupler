@@ -85,6 +85,7 @@ int main(int argc, char** argv){
     const int cut3_ak8Pt = 300;
     const std::vector<std::vector<int>> cut4_ht = { {1500,2500}, {2500,3500}, {3500,99999} }; // HT BIN
     // const std::vector<std::vector<int>> cut4_ht = { {1500,99999} }; // HT BIN
+    const std::vector<std::vector<int>> cut6_mht = { {0,200}, {200,99999} }; // MHT BIN
     const std::vector<int> cut5_ak4Pt = {300,-1}; // 1st element for leading pt, 2nd element for secondary pt
     // const std::vector<int> cut5_ak4Pt = {-1,-1}; // 1st element for leading pt, 2nd element for secondary pt
 
@@ -130,6 +131,7 @@ int main(int argc, char** argv){
     CutVariable slimJetA_pt_CV = CutVariable("slimJetA_p4.Pt()", {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown"});
     CutVariable slimJetB_pt_CV = CutVariable("slimJetB_p4.Pt()", {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown"});
     CutVariable ht_CV = CutVariable("ht", {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown"});
+    CutVariable mht_CV = CutVariable("mht", {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown"});
 
 
     // EIGHT: do you want to accept events with gluinos, default = true (only affects signal samples)
@@ -211,7 +213,7 @@ int main(int argc, char** argv){
             }
         }
 
-        const unsigned int numberOfCutsForCodeTodo = (MassCutsObject.Get_SN_Nodes().size() + 1) * cut4_ht.size() * cut2_ak8Dbt.size() * 3;
+        const unsigned int numberOfCutsForCodeTodo = (MassCutsObject.Get_SN_Nodes().size() + 1) * cut4_ht.size() * cut2_ak8Dbt.size() * cut6_mht.size() * 3;
         unsigned int counter = 1;
         for (size_t iCut2 = 0; iCut2 < cut2_ak8Dbt.size(); ++iCut2){
             
