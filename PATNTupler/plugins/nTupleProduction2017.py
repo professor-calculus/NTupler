@@ -81,7 +81,7 @@ updateJetCollection(
    process,
    labelName = 'AK8NewJEC',
    jetSource = cms.InputTag('slimmedJetsAK8'),
-   jetCorrections = ('AK4PFPuppi', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
+   jetCorrections = ('AK8PFPuppi', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
 )
 
 process.prefiringweight = cms.EDProducer("L1ECALPrefiringWeightProducer",
@@ -130,7 +130,6 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
 process.p = cms.Path(
     process.egmGsfElectronIDSequence*
     process.prefiringweight*
-    process.egmGsfElectronIDSequence*
     process.patJetCorrFactorsNewJEC*
     process.updatedPatJetsNewJEC*
     process.patJetCorrFactorsAK8NewJEC*
