@@ -135,6 +135,12 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
 
       ///For reading in the electron information, and dumping it into ran::Event class ...
       void ReadInElectrons(const edm::Event&);
+
+      ///For reading in the photon information, and dumping it into ran::Event class ...
+      void ReadInPhotons(const edm::Event&);
+
+      ///For reading in the PF candidate track information, and dumping it into ran::Event class ...
+      void ReadInTracks(const edm::Event&);
   
       ///For reading in the muon information, and dumping it into ran::Event class ...
       void ReadInMuons(const edm::Event&);
@@ -171,6 +177,8 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       edm::EDGetTokenT<std::vector<PileupSummaryInfo>> puInfoToken_;
       edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
       edm::EDGetTokenT<pat::MuonCollection> muonToken_;
+      edm::EDGetTokenT<pat::PhotonCollection> photonToken_;
+      edm::EDGetTokenT<pat::PackedCandidateCollection> trackToken_;
       edm::EDGetTokenT<edm::View<reco::GsfElectron> > electronToken_;
   //edm::EDGetTokenT<edm::ValueMap<int> > heepIdToken_;
       edm::EDGetTokenT<pat::JetCollection> jetToken_;
@@ -197,6 +205,7 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       edm::EDGetTokenT<LHEEventProduct> LHEEPtoken_;
 
       edm::EDGetTokenT<double> rhoToken_;
+      edm::EDGetTokenT<double> rhoPhotonToken_;
 
       
       //Ntuple Tree
@@ -212,6 +221,8 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       int nPU_;
       int nISR_;
       int nGLUINO_;
+      int nHIGGS2BB_;
+      float rhoMiniIso_;
       float prefweight_;
       float prefweightup_;
       float prefweightdown_;
@@ -220,6 +231,8 @@ class RALMiniAnalyzer : public edm::EDAnalyzer {
       float pdfWeightUp_;
       float pdfWeightDown_;
       std::vector<ran::ElectronStruct>* electronCollection_;
+      std::vector<ran::PhotonStruct>* photonCollection_;
+      std::vector<ran::TrackStruct>* trackCollection_;
       std::vector<ran::MuonStruct>* muonCollection_;
       std::vector<ran::JetStruct>* jetCollection_;
       std::vector<ran::FatJetStruct>* fatjetCollection_;
@@ -253,6 +266,8 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     puInfoToken_(consumes<std::vector<PileupSummaryInfo>>(iConfig.getParameter<edm::InputTag>("puInfo"))),
     vtxToken_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
     muonToken_(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"))),
+    photonToken_(consumes<pat::PhotonCollection>(iConfig.getParameter<edm::InputTag>("photons"))),
+    trackToken_(consumes<pat::PackedCandidateCollection>(iConfig.getParameter<edm::InputTag>("tracks"))),
     electronToken_(consumes<edm::View<reco::GsfElectron> >(iConfig.getParameter<edm::InputTag>("electrons"))),
     jetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("jets"))),
     fatjetToken_(consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("fatjets"))),
@@ -277,7 +292,8 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     GEIPtoken_(consumes<GenEventInfoProduct>(edm::InputTag("generator"))),
     LHEEPtoken_(consumes<LHEEventProduct>(edm::InputTag("externalLHEProducer"))),
 
-    rhoToken_(consumes<double>(iConfig.getParameter<edm::InputTag>("rho")))
+    rhoToken_(consumes<double>(iConfig.getParameter<edm::InputTag>("rho"))),
+    rhoPhotonToken_(consumes<double>(iConfig.getParameter<edm::InputTag>("rhoPhoton")))
     //cuts_(iConfig)
 {
     std::cout << "*,. *,. *,. *,. *,. *,. *,." << std::endl;
@@ -300,8 +316,12 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     EventDataTree->Branch("nPU", &nPU_, "nPU/I");
     EventDataTree->Branch("nISR", &nISR_, "nISR/I");
     EventDataTree->Branch("nGluino", &nGLUINO_, "nGluino/I");
+    EventDataTree->Branch("nHiggs2bb", &nHIGGS2BB_, "nHiggs2bb/I");
+    EventDataTree->Branch("RhoMiniIso", &rhoMiniIso_, "RhoMiniIso/F");
     EventDataTree->Branch("electronCollection","std::vector<ran::ElectronStruct>", &electronCollection_, 64000, 1); 
-    EventDataTree->Branch("muonCollection","std::vector<ran::MuonStruct>", &muonCollection_, 64000, 1); 
+    EventDataTree->Branch("muonCollection","std::vector<ran::MuonStruct>", &muonCollection_, 64000, 1);
+    EventDataTree->Branch("photonCollection","std::vector<ran::PhotonStruct>", &photonCollection_, 64000, 1);
+    EventDataTree->Branch("trackCollection","std::vector<ran::TrackStruct>", &trackCollection_, 64000, 1);
     EventDataTree->Branch("jetCollection","std::vector<ran::JetStruct>", &jetCollection_, 64000, 1);
     EventDataTree->Branch("fatjetCollection","std::vector<ran::FatJetStruct>", &fatjetCollection_, 64000, 1);
     EventDataTree->Branch("metCollection","std::vector<ran::MetStruct>", &metCollection_, 64000, 1);
@@ -375,6 +395,8 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
      electronCollection_ = new std::vector<ran::ElectronStruct>();
      muonCollection_ = new std::vector<ran::MuonStruct>();
+     photonCollection_ = new std::vector<ran::PhotonStruct>();
+     trackCollection_ = new std::vector<ran::TrackStruct>();
      jetCollection_ = new std::vector<ran::JetStruct>();
      fatjetCollection_ = new std::vector<ran::FatJetStruct>();
      metCollection_ = new std::vector<ran::MetStruct>();
@@ -424,6 +446,12 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
      //Read in Electrons
      ReadInElectrons(iEvent);
 
+     //Read in Photons
+     ReadInPhotons(iEvent);
+
+     //Read in PF Tracks
+     ReadInTracks(iEvent);
+
      //Read in Jets
      ReadInJets(iEvent, jecUncObj_AK4, resolution_AK4, resolutionSF_AK4);
 
@@ -454,6 +482,8 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
      delete electronCollection_;
      delete muonCollection_;
+     delete photonCollection_;
+     delete trackCollection_;
      delete fatjetCollection_;
      delete jetCollection_;
      delete metCollection_;
@@ -554,6 +584,8 @@ void RALMiniAnalyzer::ResetEventByEventVariables(){
   nPU_ = 0;
   nISR_ = 0;
   nGLUINO_ = 0;
+  nHIGGS2BB_ = 0;
+  rhoMiniIso_ = 0;
   prefweight_ = 0.0;
   prefweightup_ = 0.0;
   prefweightdown_ = 0.0;
@@ -829,6 +861,71 @@ void RALMiniAnalyzer::ReadInElectrons(const edm::Event& iEvent)
     //++eleNr;   
   }
 }
+
+// Read in photons
+void RALMiniAnalyzer::ReadInPhotons(const edm::Event& iEvent)
+{
+  edm::Handle<pat::PhotonCollection> photons;
+  iEvent.getByToken(photonToken_, photons);
+  edm::Handle<double> rho;
+  iEvent.getByToken(rhoPhotonToken_, rho);
+  rhoMiniIso_ = *rho;
+
+  for (const pat::Photon &iphoton : *photons) {
+    photonCollection_->push_back(ran::PhotonStruct{}); 
+    ran::PhotonStruct &aPhoton = photonCollection_->back();     
+
+    aPhoton.et = iphoton.et();
+    aPhoton.pt = iphoton.pt();
+    aPhoton.eta = iphoton.eta();
+    aPhoton.phi = iphoton.phi();    
+
+    aPhoton.gsfTrack_available = iphoton.gsfTrack().isAvailable();
+    aPhoton.scEta = iphoton.superCluster()->eta();
+    aPhoton.scEnergy = iphoton.superCluster()->energy(); 
+    aPhoton.sigmaIetaIeta = iphoton.sigmaIetaIeta();
+    aPhoton.full5x5_sigmaIetaIeta = iphoton.full5x5_sigmaIetaIeta();
+    //aPhoton.passConversionVeto = iphoton.passConversionVeto();
+    aPhoton.e5x5 = iphoton.e5x5();
+    aPhoton.e1x5 = iphoton.e1x5();
+    aPhoton.hadronicOverEm = iphoton.hadronicOverEm();
+    //aPhoton.nrMissHits = iphoton.gsfTrack().trackerExpectedHitsInner().numberOfHits();
+    aPhoton.pfIso_chHadrIso = iphoton.getPflowIsolationVariables().chargedHadronIso;
+    aPhoton.pfIso_neuHadrIso = iphoton.getPflowIsolationVariables().neutralHadronIso;
+    aPhoton.pfIso_photonIso = iphoton.getPflowIsolationVariables().photonIso;
+    aPhoton.passElectronVeto = iphoton.passElectronVeto();
+    //aPhoton.pfIso_chgHad = iphoton.pfIsolationVariables().chargedHadronIso;
+    //aPhoton.pfIso_neutHad = iphoton.pfIsolationVariables().neutralHadronIso;
+    //aPhoton.pfIso_pht = iphoton.pfIsolationVariables().photonIso;
+    // aPhoton.inner_missing_hits =  iphoton.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
+    aPhoton.isEB = iphoton.isEB();
+    aPhoton.isEE = iphoton.isEE(); 
+  }
+}
+
+// Read in tracks
+void RALMiniAnalyzer::ReadInTracks(const edm::Event& iEvent)
+{
+  edm::Handle<pat::PackedCandidateCollection> tracks;
+  iEvent.getByToken(trackToken_, tracks);
+
+  for (const pat::PackedCandidate &itrack : *tracks) {
+    trackCollection_->push_back(ran::TrackStruct{}); 
+    ran::TrackStruct &aTrack = trackCollection_->back();     
+
+    aTrack.et = itrack.et();
+    aTrack.pt = itrack.pt();
+    aTrack.eta = itrack.eta();
+    aTrack.phi = itrack.phi();
+    aTrack.charge = itrack.charge();
+
+    aTrack.fromPV = itrack.fromPV();
+    aTrack.pdgId = itrack.pdgId();
+    aTrack.dz_pV = itrack.dz();
+  }
+}
+
+
 //Read in jet vars
 void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent, JetCorrectionUncertainty * jecUncObj, JME::JetResolution& resolution, JME::JetResolutionScaleFactor& resolutionSF)
 {
@@ -947,6 +1044,10 @@ void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent, JetCorrectionUncertai
       ithJet.pfCombinedSecondaryVertexV2BJetTags =  iJet.bDiscriminator("pfCombinedSecondaryVertexV2BJetTags");//
       ithJet.pfCombinedInclusiveSecondaryVertexV2BJetTags =  iJet.bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
       ithJet.pfCombinedMVAV2BJetTags = iJet.bDiscriminator("pfCombinedMVAV2BJetTags");
+      ithJet.pfCombinedDeepCSV_probb = iJet.bDiscriminator("pfDeepCSVJetTags:probb");
+      ithJet.pfCombinedDeepCSV_probbb = iJet.bDiscriminator("pfDeepCSVJetTags:probbb");
+      ithJet.pfCombinedDeepCVMA_probbb = iJet.bDiscriminator("pfDeepCMVAJetTags:probb");
+      ithJet.pfCombinedDeepCVMA_probbb = iJet.bDiscriminator("pfDeepCMVAJetTags:probbb");
 
       ithJet.partonFlavour = iJet.partonFlavour();
 
@@ -1280,14 +1381,23 @@ void RALMiniAnalyzer::ReadInIsrInfo(const edm::Event& iEvent)
 
     // additional info for signal processes - count the number of gluinos in the event
     unsigned int nGluino = 0;
+    unsigned int nHiggs2bb = 0;
     for (const reco::GenParticle &iGenParticle: *genParticles){
 
       if (iGenParticle.pdgId()==1000021 && iGenParticle.numberOfDaughters()==2)
         nGluino++;
+      else if (iGenParticle.pdgId()==35 && iGenParticle.numberOfDaughters()==2)
+      {
+        if ( abs(iGenParticle.daughter(0)->pdgId()) == 5  && abs(iGenParticle.daughter(1)->pdgId()) == 5 )
+        {
+          nHiggs2bb++; // Number of Higgs which decay to bb (should be all in Joe's samples, 58 percent in Alex's)
+        }
+      }
 
     } // closes loop through genParticles
     // std::cout << "number of gluinos: " << nGluino << "\n" << std::endl;
     nGLUINO_ = nGluino;
+    nHIGGS2BB_ = nHiggs2bb;
 }
 
 void RALMiniAnalyzer::ReadInPrefireInfo(const edm::Event& iEvent)
@@ -1448,6 +1558,9 @@ void RALMiniAnalyzer::ReadInMuons(const edm::Event& iEvent){
       aMuon.p4                 = imuon.p4();
       aMuon.charge             = imuon.charge();
       aMuon.isGlobalMuon       = imuon.isGlobalMuon();
+      aMuon.isPFMuon           = imuon.isPFMuon();
+      aMuon.isLooseMuon        = imuon.isLooseMuon();
+      aMuon.isTightMuon        = imuon.isTightMuon(pV);
       aMuon.isTrackerMuon      = imuon.isTrackerMuon();
       aMuon.isStandAloneMuon   = imuon.isStandAloneMuon();
       aMuon.isHighPtMuon       = imuon.isHighPtMuon(pV);
