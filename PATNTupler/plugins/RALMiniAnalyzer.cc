@@ -1249,6 +1249,35 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncer
         ithJet.dbtVar_jetNTracks = vars.get(reco::btau::jetNTracks);
         ithJet.dbtVar_nSV = vars.get(reco::btau::jetNSecondaryVertices);
       }
+      else{
+        ithJet.dbtVar_z_ratio = -99999.99;
+        ithJet.dbtVar_trackSipdSig_3 = -99999.99;
+        ithJet.dbtVar_trackSipdSig_2 = -99999.99;
+        ithJet.dbtVar_trackSipdSig_1 = -99999.99;
+        ithJet.dbtVar_trackSipdSig_0 = -99999.99;
+        ithJet.dbtVar_trackSipdSig_1_0 = -99999.99;
+        ithJet.dbtVar_trackSipdSig_0_0 = -99999.99;
+        ithJet.dbtVar_trackSipdSig_1_1 = -99999.99;
+        ithJet.dbtVar_trackSipdSig_0_1 = -99999.99;
+        ithJet.dbtVar_trackSip2dSigAboveCharm_0 = -99999.99;
+        ithJet.dbtVar_trackSip2dSigAboveBottom_0 = -99999.99;
+        ithJet.dbtVar_trackSip2dSigAboveBottom_1 = -99999.99;
+        ithJet.dbtVar_tau1_trackEtaRel_0 = -99999.99;
+        ithJet.dbtVar_tau1_trackEtaRel_1 = -99999.99;
+        ithJet.dbtVar_tau1_trackEtaRel_2 = -99999.99;
+        ithJet.dbtVar_tau0_trackEtaRel_0 = -99999.99;
+        ithJet.dbtVar_tau0_trackEtaRel_1 = -99999.99;
+        ithJet.dbtVar_tau0_trackEtaRel_2 = -99999.99;
+        ithJet.dbtVar_tau_vertexMass_0 = -99999.99;
+        ithJet.dbtVar_tau_vertexEnergyRatio_0 = -99999.99;
+        ithJet.dbtVar_tau_vertexDeltaR_0 = -99999.99;
+        ithJet.dbtVar_tau_flightDistance2dSig_0 = -99999.99;
+        ithJet.dbtVar_tau_vertexMass_1 = -99999.99;
+        ithJet.dbtVar_tau_vertexEnergyRatio_1 = -99999.99;
+        ithJet.dbtVar_tau_flightDistance2dSig_1 = -99999.99;
+        ithJet.dbtVar_jetNTracks = -99999.99;
+        ithJet.dbtVar_nSV = -99999.99;
+      }
     
       ithJet.partonFlavour = iJet.partonFlavour();
 
