@@ -213,6 +213,12 @@ private:
 	Float_t treeVar_mht_jerAK4UncUp_;
 	Float_t treeVar_mht_jerAK4UncDown_;
 
+	Float_t treeVar_mht_phi_;
+	Float_t treeVar_mht_phi_jecUncUp_;
+	Float_t treeVar_mht_phi_jecUncDown_;
+	Float_t treeVar_mht_phi_jerUncUp_;
+	Float_t treeVar_mht_phi_jerUncDown_;
+
 	UInt_t treeVar_nrVetoObjects_;
 
 	UInt_t treeVar_nrSlimJets_;
@@ -338,6 +344,12 @@ public:
 		mainAnaTree_->Branch("mht_jerAK4UncUp", &treeVar_mht_jerAK4UncUp_, "mht_jerAK4UncUp/F");
 		mainAnaTree_->Branch("mht_jerAK4UncDown", &treeVar_mht_jerAK4UncDown_, "mht_jerAK4UncDown/F");
 
+		mainAnaTree_->Branch("mht_phi", &treeVar_mht_phi_, "mht/F");
+		mainAnaTree_->Branch("mht_phi_jecUncUp", &treeVar_mht_phi_jecUncUp_, "mht_jecUncUp/F");
+		mainAnaTree_->Branch("mht_phi_jecUncDown", &treeVar_mht_phi_jecUncDown_, "mht_jecUncDown/F");
+		mainAnaTree_->Branch("mht_phi_jerUncUp", &treeVar_mht_phi_jerUncUp_, "mht_jerUncUp/F");
+		mainAnaTree_->Branch("mht_phi_jerUncDown", &treeVar_mht_phi_jerUncDown_, "mht_jerUncDown/F");
+
 		mainAnaTree_->Branch("nrVetoObjects", &treeVar_nrVetoObjects_, "nrVetoObjects/i");
 
 		mainAnaTree_->Branch("nrSlimJets", &treeVar_nrSlimJets_, "nrSlimJets/i");
@@ -360,7 +372,7 @@ public:
 
 	~FatDoubleBJetPairTree(){}
 
-	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecAK4UncUp, const float& ht_jecAK4UncDown, const float& ht_jerAK4UncUp, const float& ht_jerAK4UncDown, const float& mht, const float& mht_jecAK4UncUp, const float& mht_jecAK4UncDown, const float& mht_jerAK4UncUp, const float& mht_jerAK4UncDown, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision, const int& nPU, const float& nTrueInt, int nISR, const int& nGluino, const double& D_factor, const unsigned int& yearOfRun, const double& muon_maxPt, const double& muon_sumPt, const int& nVetoObjects)
+	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecAK4UncUp, const float& ht_jecAK4UncDown, const float& ht_jerAK4UncUp, const float& ht_jerAK4UncDown, const float& mht, const float& mht_jecAK4UncUp, const float& mht_jecAK4UncDown, const float& mht_jerAK4UncUp, const float& mht_jerAK4UncDown, const float& mhtPhi, const float& mhtPhi_jecAK4UncUp, const float& mhtPhi_jecAK4UncDown, const float& mhtPhi_jerAK4UncUp, const float& mhtPhi_jerAK4UncDown, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision, const int& nPU, const float& nTrueInt, int nISR, const int& nGluino, const double& D_factor, const unsigned int& yearOfRun, const double& muon_maxPt, const double& muon_sumPt, const int& nVetoObjects)
 	{
 		
 		// DO THE WEIGHTS
@@ -450,6 +462,7 @@ public:
 
 		treeVar_ht_ = ht;
 		treeVar_mht_ = mht;
+		treeVar_mht_phi_ = mhtPhi;
 		treeVar_nrSlimJets_ = slimJets.size();
 		
 		treeVar_muon_maxPt_ = muon_maxPt;
@@ -475,6 +488,11 @@ public:
 			treeVar_mht_jecAK4UncDown_ = mht_jecAK4UncDown;
 			treeVar_mht_jerAK4UncUp_ = mht_jerAK4UncUp;
 			treeVar_mht_jerAK4UncDown_ = mht_jerAK4UncDown;
+
+			treeVar_mht_phi_jecUncUp_ = mhtPhi_jecAK4UncUp;
+			treeVar_mht_phi_jecUncDown_ = mhtPhi_jecAK4UncDown;
+			treeVar_mht_phi_jerUncUp_ = mhtPhi_jerAK4UncUp;
+			treeVar_mht_phi_jerUncDown_ = mhtPhi_jerAK4UncDown;
 
 			if (slimJets.size() > 1){
 				treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
@@ -617,6 +635,11 @@ public:
 			treeVar_mht_jecAK4UncDown_ = mht;
 			treeVar_mht_jerAK4UncUp_ = mht;
 			treeVar_mht_jerAK4UncDown_ = mht;
+
+			treeVar_mht_phi_jecUncUp_ = mhtPhi;
+			treeVar_mht_phi_jecUncDown_ = mhtPhi;
+			treeVar_mht_phi_jerUncUp_ = mhtPhi;
+			treeVar_mht_phi_jerUncDown_ = mhtPhi;
 
 			if (slimJets.size() > 1){
 				treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
@@ -1440,8 +1463,8 @@ int main(int argc, char** argv){
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt, nVetoObjects);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt, nVetoObjects);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt, nVetoObjects);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt, nVetoObjects);
 
 				// Fat Jets ordered by DBT discriminator score
 				// doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt);
