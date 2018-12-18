@@ -1408,9 +1408,6 @@ int main(int argc, char** argv){
 
 			std::vector<ran::NtMuon> tightMu = tightMuons(centralMuons, rho, yearOfRun);
 
-			// Number of fat jets
-			unsigned int nFatJets = centralFatJetVec.size();
-
 			// Number of muons
 			unsigned int nLooseMuons = looseMu.size();
 			unsigned int nTightMuons = tightMu.size();
