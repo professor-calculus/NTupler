@@ -244,6 +244,8 @@ private:
 	UInt_t treeVar_nrElectrons_;
 	UInt_t treeVar_nrPhotons_;
 	UInt_t treeVar_nrTracks_;
+	UInt_t treeVar_nrVetoObjects_;
+	UInt_t treeVar_mht200NoVetoObjects_;
 
 	UInt_t treeVar_nrPrefireJets_;
 	UInt_t treeVar_nrPrefirePhotons_;
@@ -463,6 +465,8 @@ public:
 		mainAnaTree_->Branch("nrElectrons", &treeVar_nrElectrons_, "nrElectrons/i");
 		mainAnaTree_->Branch("nrPhotons", &treeVar_nrPhotons_, "nrPhotons/i");
 		mainAnaTree_->Branch("nrTracks", &treeVar_nrTracks_, "nrTracks/i");
+		mainAnaTree_->Branch("nrVetoObjects", &treeVar_nrVetoObjects_, "nrVetoObjects/i");
+		mainAnaTree_->Branch("mht200NoVetoObjects", &treeVar_mht200NoVetoObjects_, "mht200NoVetoObjects/I");
 		mainAnaTree_->Branch("nrPrefireJets", &treeVar_nrPrefireJets_, "nrPrefireJets/i");
 		mainAnaTree_->Branch("nrPrefirePhotons", &treeVar_nrPrefirePhotons_, "nrPrefirePhotons/i");
 
@@ -521,7 +525,7 @@ public:
 					const float& mht_phi_jerUncUp, const float& mht_phi_jerUncDown, const std::vector<ran::NtJet>& slimJets, const std::vector<ran::NtJet>& allSlimJets, const std::vector<ran::NtJet>& slimJetsByBtagScore,
 					const std::vector<ran::NtJet>& looseBJets, const std::vector<ran::NtJet>& allLooseBJets, const std::vector<ran::NtJet>& mediumBJets, const std::vector<ran::NtJet>& allMediumBJets, unsigned int nrFatJets,
 					const std::vector<ran::NtElectron>& centralElectrons, const std::vector<ran::NtMuon>& tightMuons, unsigned int nrLooseMuons, unsigned int nrTightMuons,
-					const int nrElectrons, const int nrPhotons, const int nrTracks,
+					const int nrElectrons, const int nrPhotons, const int nrTracks, const int nrVetoObjects,
 					const bool& trigDecision, const int& nPU, int nISR, const int& nGluino, const int& nHiggs2bb, const float& DelRHiggs2bb_1, const float& DelRHiggs2bb_2, const double& D_factor, const unsigned int yearOfRun,
 					const int& nrPrefireJets, const int& nrPrefirePhotons)
 	{
@@ -598,9 +602,22 @@ public:
 		treeVar_nrElectrons_ = nrElectrons;
 		treeVar_nrPhotons_ = nrPhotons;
 		treeVar_nrTracks_ = nrTracks;
+		treevar_nrVetoObjects_ = nrVetoObjects;
 		treeVar_nrPrefireJets_ = nrPrefireJets;
 		treeVar_nrPrefirePhotons_ = nrPrefirePhotons;
-
+		
+		if(mht >= 200 && nrVetoObjects == 0)
+		{
+			treeVar_mht200NoVetoObjects_ = 2;
+		}
+		else if(mht < 200)
+		{
+			treeVar_mht200NoVetoObjects_ = 1;
+		}
+		else
+		{
+			treeVar_mht200NoVetoObjects_ = 0;
+		}
 		
 		treeVar_fatJetA_p4_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
 		treeVar_fatJetB_p4_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
@@ -1826,6 +1843,8 @@ int main(int argc, char** argv){
 			unsigned int nIsolatedElectrons = isolatedElectrons.size();
 			unsigned int nIsolatedTracks = isolatedTracks.size();
 
+			unsigned int nVetoObjects = nLooseMuons + nIsolatedPhotons + nIsolatedElectrons + nIsolatedTracks;
+
 			std::vector<ran::NtJet> slimJets;
 			std::vector<ran::NtJet> slimLooseBJets;
 			std::vector<ran::NtJet> slimMediumBJets;
@@ -1876,8 +1895,8 @@ int main(int argc, char** argv){
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
 				// But it doesn't matter since there's only one AK8 jet: set both to be that jet but look out for this in the cut and count code!
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun, nPrefireJets, nPrefirePhotons);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun, nPrefireJets, nPrefirePhotons);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, nVetoObjects, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun, nPrefireJets, nPrefirePhotons);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecUncUp, ht_jecUncDown, ht_jerUncUp, ht_jerUncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, allSlimJets, slimJetsByBtagScore, slimLooseBJets, allSlimLooseBJets, slimMediumBJets, allSlimMediumBJets, nFatJets, centralElectrons, tightMu, nLooseMuons, nTightMuons, nIsolatedElectrons, nIsolatedPhotons, nIsolatedTracks, nVetoObjects, doesEventPassTrigger, nPU, nISR, nGluino, nHiggs2bb, DelR_bb_Higgs1, DelR_bb_Higgs2, D_factor, yearOfRun, nPrefireJets, nPrefirePhotons);
 
 			}
 
