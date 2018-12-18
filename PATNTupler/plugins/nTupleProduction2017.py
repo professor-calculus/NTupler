@@ -33,7 +33,7 @@ process.TFileService = cms.Service("TFileService", fileName=cms.string('nTuple.r
 #setup global tag
 from Configuration.AlCa.GlobalTag import GlobalTag
 from Configuration.AlCa.autoCond import autoCond
-process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v12', '') #
+process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v17', '') #
 
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
