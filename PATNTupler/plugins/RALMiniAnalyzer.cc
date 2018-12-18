@@ -1046,8 +1046,10 @@ void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent, JetCorrectionUncertai
       ithJet.pfCombinedMVAV2BJetTags = iJet.bDiscriminator("pfCombinedMVAV2BJetTags");
       ithJet.pfCombinedDeepCSV_probb = iJet.bDiscriminator("pfDeepCSVJetTags:probb");
       ithJet.pfCombinedDeepCSV_probbb = iJet.bDiscriminator("pfDeepCSVJetTags:probbb");
-      ithJet.pfCombinedDeepCVMA_probbb = iJet.bDiscriminator("pfDeepCMVAJetTags:probb");
-      ithJet.pfCombinedDeepCVMA_probbb = iJet.bDiscriminator("pfDeepCMVAJetTags:probbb");
+      // ithJet.pfCombinedDeepCVMA_probbb = iJet.bDiscriminator("pfDeepCMVAJetTags:probb");
+      // ithJet.pfCombinedDeepCVMA_probbb = iJet.bDiscriminator("pfDeepCMVAJetTags:probbb");
+      ithJet.pfCombinedDeepCVMA_probbb = -99999.99;
+      ithJet.pfCombinedDeepCVMA_probbb = -99999.99;
 
       ithJet.partonFlavour = iJet.partonFlavour();
 
