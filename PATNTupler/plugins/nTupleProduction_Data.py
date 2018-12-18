@@ -91,7 +91,14 @@ updateJetCollection(
    labelName = 'AK8NewJEC',
    jetSource = cms.InputTag('slimmedJetsAK8'),
    jetCorrections = ('AK8PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual']), 'None'),
+   btagDiscriminators = [
+      'pfBoostedDoubleSecondaryVertexAK8BJetTags',
+   ],
+   btagInfos = ['pfBoostedDoubleSVAK8TagInfos']
 )
+
+process.updatedPatJetsTransientCorrectedAK8NewJEC.addTagInfos = cms.bool(True) 
+# process.updatedPatJetsTransientCorrectedAK8NewJEC.addBTagInfo = cms.bool(True)
 
 #this is our example analysis module reading the results
 process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
@@ -108,7 +115,7 @@ process.demo = cms.EDAnalyzer("RALMiniAnalyzer",
                                        photons = cms.InputTag("slimmedPhotons"),
                                        tracks = cms.InputTag("packedPFCandidates"),
                                        jets = cms.InputTag("updatedPatJetsNewJEC"),
-                                       fatjets = cms.InputTag("updatedPatJetsAK8NewJEC"),
+                                       fatjets = cms.InputTag("updatedPatJetsTransientCorrectedAK8NewJEC"),
                                        genjets = cms.InputTag("slimmedGenJets"),
                                        genjetsAK8 = cms.InputTag("slimmedGenJetsAK8"),
                                        genParticles = cms.InputTag("prunedGenParticles"),
