@@ -602,7 +602,7 @@ public:
 		treeVar_nrElectrons_ = nrElectrons;
 		treeVar_nrPhotons_ = nrPhotons;
 		treeVar_nrTracks_ = nrTracks;
-		treevar_nrVetoObjects_ = nrVetoObjects;
+		treeVar_nrVetoObjects_ = nrVetoObjects;
 		treeVar_nrPrefireJets_ = nrPrefireJets;
 		treeVar_nrPrefirePhotons_ = nrPrefirePhotons;
 		

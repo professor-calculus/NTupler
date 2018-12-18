@@ -271,7 +271,7 @@ int main(int argc, char** argv){
                         // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/WJets_ht1200plus/flatTree.root", cutToApply.c_str(), 95.14);
 
                         // SIGNAL 2016
-                        plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
+                        plotEntry.AddInput("/opt/ppd/scratch/titterton/Joe_NTupler/CMSSW_8_0_31/src/NTupler/PATNTupler/main/P1_1400sq_R0p99/flatTree.root", cutToApply.c_str(), 0.1679, SF_weight.c_str());
 
                         // 2016 GOLDEN JSON DATASET
                         // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/data16/JetHT_Run2016Total_ht1499plus/flatTree.root", cutToApply.c_str());
