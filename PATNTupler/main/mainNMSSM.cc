@@ -724,6 +724,321 @@ std::string getOutputDirFromOutputFile(std::string outputFile)
 }
 
 
+double relPFIsoR03 (ran::NtMuon muon, float rho, int year) {
+	double CHIso = TMath::Max(0., muon.pfIsoR03_sumChgHadPt() - rho*RhoEACorr::getEA_CH(muon.eta(), year));
+	double NHIso = TMath::Max(0., muon.pfIsoR03_sumNeutHadPt() - rho*RhoEACorr::getEA_NH(muon.eta(), year));
+	double PhotonIso = TMath::Max(0., muon.pfIsoR03_sumPhtEt() - rho*RhoEACorr::getEA_PH(muon.eta(), year));
+	double relIso = (CHIso + std::max(0., NHIso + PhotonIso - 0.5*muon.pfIsoR03_sumPUPt()))/(muon.pt());
+
+	return relIso;
+}
+
+double relPFIsoR04 (ran::NtMuon muon, float rho, int year) {
+	double CHIso = TMath::Max(0., muon.pfIsoR04_sumChgHadPt() - rho*RhoEACorr::getEA_CH(muon.eta(), year));
+	double NHIso = TMath::Max(0., muon.pfIsoR04_sumNeutHadPt() - rho*RhoEACorr::getEA_NH(muon.eta(), year));
+	double PhotonIso = TMath::Max(0., muon.pfIsoR04_sumPhtEt() - rho*RhoEACorr::getEA_PH(muon.eta(), year));
+	double relIso = (CHIso + std::max(0., NHIso + PhotonIso - 0.5*muon.pfIsoR04_sumPUPt()))/(muon.pt());
+
+	return relIso;
+}
+
+double electronPFIsolation(std::vector<ran::NtTrack> pfcands,
+                        const ran::NtElectron ptcl,
+                        double r_iso_min, double r_iso_max, double kt_scale,
+                        bool charged_only, float rho, int year) {
+	
+	if (ptcl.pt() < 5) return 9999.;
+
+	double deadcone_nh(0.), deadcone_ch(0.), deadcone_ph(0.), deadcone_pu(0.);
+    if (fabs(ptcl.eta())>1.479) {deadcone_ch = 0.015; deadcone_pu = 0.015; deadcone_ph = 0.08;}
+
+    double iso_nh(0.); double iso_ch(0.); 
+    double iso_ph(0.); double iso_pu(0.);
+    double ptThresh(0.);
+    double r_iso = TMath::Max(r_iso_min,TMath::Min(r_iso_max, kt_scale/ptcl.pt()));
+    for (unsigned int iTrk = 0; iTrk < pfcands.size(); iTrk++) {
+	  ran::NtTrack pfc = pfcands[iTrk];
+      if (abs(pfc.pdgId())<7) continue;
+
+      double dr = deltaR(pfc, ptcl);
+      if (dr > r_iso) continue;
+      
+      //////////////////  NEUTRALS  /////////////////////////
+      if (pfc.charge()==0){
+        if (pfc.pt()>ptThresh) {
+          /////////// PHOTONS ////////////
+          if (abs(pfc.pdgId())==22) {
+            if(dr < deadcone_ph) continue;
+            iso_ph += pfc.pt();
+	    /////////// NEUTRAL HADRONS ////////////
+          } else if (abs(pfc.pdgId())==130) {
+            if(dr < deadcone_nh) continue;
+            iso_nh += pfc.pt();
+          }
+        }
+        //////////////////  CHARGED from PV  /////////////////////////
+      } else if (pfc.fromPV()>1){
+        if (abs(pfc.pdgId())==211) {
+          if(dr < deadcone_ch) continue;
+          iso_ch += pfc.pt();
+        }
+        //////////////////  CHARGED from PU  /////////////////////////
+      } else {
+        if (pfc.pt()>ptThresh){
+          if(dr < deadcone_pu) continue;
+          iso_pu += pfc.pt();
+        }
+      }
+    }
+	iso_ch = TMath::Max(0., iso_ch - rho*RhoEACorr::getEA_CH(ptcl.eta(), year));
+	iso_nh = TMath::Max(0., iso_nh - rho*RhoEACorr::getEA_NH(ptcl.eta(), year));
+	iso_ph = TMath::Max(0., iso_ph - rho*RhoEACorr::getEA_PH(ptcl.eta(), year));
+    double iso(0.);
+    if (charged_only){
+      iso = iso_ch;
+    } else {
+      iso = iso_ph + iso_nh;
+      iso -= 0.5*iso_pu;
+      if (iso>0) iso += iso_ch;
+      else iso = iso_ch;
+    }
+    iso = iso/ptcl.pt();
+
+    return iso;
+}
+
+double muonPFIsolation(std::vector<ran::NtTrack> pfcands,
+                        const ran::NtMuon ptcl,  
+                        double r_iso_min, double r_iso_max, double kt_scale,
+                        bool charged_only) {
+	
+	if (ptcl.pt() < 5) return 9999.;
+
+	double deadcone_nh(0.), deadcone_ch(0.), deadcone_ph(0.), deadcone_pu(0.);
+    deadcone_ch = 0.0001; deadcone_pu = 0.01; deadcone_ph = 0.01;deadcone_nh = 0.01;  
+
+    double iso_nh(0.); double iso_ch(0.); 
+    double iso_ph(0.); double iso_pu(0.);
+    double ptThresh(0.5);
+    double r_iso = TMath::Max(r_iso_min,TMath::Min(r_iso_max, kt_scale/ptcl.pt()));
+    for (unsigned int iTrk = 0; iTrk < pfcands.size(); iTrk++) {
+	  ran::NtTrack pfc = pfcands[iTrk];
+      if (abs(pfc.pdgId())<7) continue;
+
+      double dr = deltaR(pfc, ptcl);
+      if (dr > r_iso) continue;
+      
+      //////////////////  NEUTRALS  /////////////////////////
+      if (pfc.charge()==0){
+        if (pfc.pt()>ptThresh) {
+          /////////// PHOTONS ////////////
+          if (abs(pfc.pdgId())==22) {
+            if(dr < deadcone_ph) continue;
+            iso_ph += pfc.pt();
+	    /////////// NEUTRAL HADRONS ////////////
+          } else if (abs(pfc.pdgId())==130) {
+            if(dr < deadcone_nh) continue;
+            iso_nh += pfc.pt();
+          }
+        }
+        //////////////////  CHARGED from PV  /////////////////////////
+      } else if (pfc.fromPV()>1){
+        if (abs(pfc.pdgId())==211) {
+          if(dr < deadcone_ch) continue;
+          iso_ch += pfc.pt();
+        }
+        //////////////////  CHARGED from PU  /////////////////////////
+      } else {
+        if (pfc.pt()>ptThresh){
+          if(dr < deadcone_pu) continue;
+          iso_pu += pfc.pt();
+        }
+      }
+    }
+    double iso(0.);
+    if (charged_only){
+      iso = iso_ch;
+    } else {
+      iso = iso_ph + iso_nh;
+      iso -= 0.5*iso_pu;
+      if (iso>0) iso += iso_ch;
+      else iso = iso_ch;
+    }
+    iso = iso/ptcl.pt();
+
+    return iso;
+}
+
+double photonPFIsolation(std::vector<ran::NtTrack> pfcands,
+                        const ran::NtPhoton ptcl,  
+                        bool charged_only, float rho, int year) {
+	
+	if (ptcl.pt() < 5) return 9999.;
+
+	double deadcone_nh(0.), deadcone_ch(0.), deadcone_ph(0.), deadcone_pu(0.);
+    deadcone_ch = 0.0001; deadcone_pu = 0.01; deadcone_ph = 0.01;deadcone_nh = 0.01;
+
+    double iso_nh(0.); double iso_ch(0.); 
+    double iso_ph(0.); double iso_pu(0.);
+    double ptThresh(0.5);
+    double r_iso = 0.3;
+    for (unsigned int iTrk(0); iTrk < pfcands.size(); iTrk++) {
+	  ran::NtTrack pfc = pfcands[iTrk];
+      if (abs(pfc.pdgId())<7) continue;
+
+      double dr = deltaR(pfc, ptcl);
+      if (dr > r_iso) continue;
+      
+      //////////////////  NEUTRALS  /////////////////////////
+      if (pfc.charge()==0){
+        if (pfc.pt()>ptThresh) {
+          /////////// PHOTONS ////////////
+          if (abs(pfc.pdgId())==22) {
+            if(dr < deadcone_ph) continue;
+            iso_ph += pfc.pt();
+	    /////////// NEUTRAL HADRONS ////////////
+          } else if (abs(pfc.pdgId())==130) {
+            if(dr < deadcone_nh) continue;
+            iso_nh += pfc.pt();
+          }
+        }
+        //////////////////  CHARGED from PV  /////////////////////////
+      } else if (pfc.fromPV()>1){
+        if (abs(pfc.pdgId())==211) {
+          if(dr < deadcone_ch) continue;
+          iso_ch += pfc.pt();
+        }
+        //////////////////  CHARGED from PU  /////////////////////////
+      } else {
+        if (pfc.pt()>ptThresh){
+          if(dr < deadcone_pu) continue;
+          iso_pu += pfc.pt();
+        }
+      }
+    }
+	iso_ch = TMath::Max(0., iso_ch - rho*RhoEACorr::getEA_CH(ptcl.eta(), year));
+	iso_nh = TMath::Max(0., iso_nh - rho*RhoEACorr::getEA_NH(ptcl.eta(), year));
+	iso_ph = TMath::Max(0., iso_ph - rho*RhoEACorr::getEA_PH(ptcl.eta(), year));
+    double iso(0.);
+    if (charged_only){
+      iso = iso_ch;
+    } else {
+      iso = iso_ph + iso_nh;
+      iso -= 0.5*iso_pu;
+      if (iso>0) iso += iso_ch;
+      else iso = iso_ch;
+    }
+    iso = iso/ptcl.pt();
+
+    return iso;
+}
+
+double trackPFIsolation(std::vector<ran::NtTrack> pfcands,
+                        const ran::NtTrack ptcl,  
+                        bool charged_only) {
+	
+	if (ptcl.pt() < 5) return 9999.;
+
+	double deadcone_nh(0.), deadcone_ch(0.), deadcone_ph(0.), deadcone_pu(0.);
+    deadcone_ch = 0.0001; deadcone_pu = 0.01; deadcone_ph = 0.01;deadcone_nh = 0.01;
+
+    double iso_nh(0.); double iso_ch(0.); 
+    double iso_ph(0.); double iso_pu(0.);
+    double ptThresh(0.5);
+    double r_iso = 0.3;
+    for (unsigned int iTrk = 0; iTrk < pfcands.size(); iTrk++) {
+	  ran::NtTrack pfc = pfcands[iTrk];
+      if (abs(pfc.pdgId())<7) continue;
+
+      double dr = deltaR(pfc, ptcl);
+      if (dr > r_iso) continue;
+      
+      //////////////////  NEUTRALS  /////////////////////////
+      if (pfc.charge()==0){
+        if (pfc.pt()>ptThresh) {
+          /////////// PHOTONS ////////////
+          if (abs(pfc.pdgId())==22) {
+            if(dr < deadcone_ph) continue;
+            iso_ph += pfc.pt();
+	    /////////// NEUTRAL HADRONS ////////////
+          } else if (abs(pfc.pdgId())==130) {
+            if(dr < deadcone_nh) continue;
+            iso_nh += pfc.pt();
+          }
+        }
+        //////////////////  CHARGED from PV  /////////////////////////
+      } else if (pfc.fromPV()>1){
+        if (abs(pfc.pdgId())==211) {
+          if(dr < deadcone_ch) continue;
+          iso_ch += pfc.pt();
+        }
+        //////////////////  CHARGED from PU  /////////////////////////
+      } else {
+        if (pfc.pt()>ptThresh){
+          if(dr < deadcone_pu) continue;
+          iso_pu += pfc.pt();
+        }
+      }
+    }
+    double iso(0.);
+    if (charged_only){
+      iso = iso_ch;
+    } else {
+      iso = iso_ph + iso_nh;
+      iso -= 0.5*iso_pu;
+      if (iso>0) iso += iso_ch;
+      else iso = iso_ch;
+    }
+    iso = iso/ptcl.pt();
+
+    return iso;
+}
+
+
+
+std::vector<ran::NtMuon> looseMuons (std::vector<ran::NtMuon> muons, float rho, int year) {
+	std::vector<ran::NtMuon> looseMu;
+	for(unsigned int i=0; i<muons.size(); i++)
+	{
+		if(muons[i].isLooseMuon()  && relPFIsoR04(muons[i], rho, year) < 0.25)
+		{
+			looseMu.push_back(muons[i]);
+		}
+	}
+	return looseMu;
+}
+
+std::vector<ran::NtMuon> tightMuons (std::vector<ran::NtMuon> muons, float rho, int year) {
+	std::vector<ran::NtMuon> tightMu;
+	for(unsigned int i=0; i<muons.size(); i++)
+	{
+		if(muons[i].isTightMuon() && relPFIsoR03(muons[i], rho, year) < 0.15)
+		{
+			tightMu.push_back(muons[i]);
+		}
+	}
+	return tightMu;
+}
+
+bool jetIDLoose (ran::NtJet jet) {
+	// looseJetID = (NHF<0.99 && NEMF<0.99 && NumConst>1) && ((abs(eta)<=2.4 && CHF>0 && CHM>0 && CEMF<0.99) || abs(eta)>2.4) && abs(eta)<=2.7
+	bool jetIsLoose = false;
+	if (abs(jet.eta()) < 2.7)
+	{
+		jetIsLoose = ( (jet.neutralHadronEnergyFraction() < 0.99 && jet.neutralEmEnergyFraction() < 0.99 && jet.numberOfDaughters() > 1)
+					  && ((abs(jet.eta()) < 2.4 && jet.chargedHadronEnergyFraction() > 0 && jet.chargedMultiplicity() > 0 && jet.chargedEmEnergyFraction() < 0.99) || abs(jet.eta()) > 2.4) );
+	}
+	else if (abs(jet.eta()) < 3.0)
+	{
+		jetIsLoose = ( jet.neutralEmEnergyFraction() > 0.01 && jet.neutralHadronEnergyFraction() < 0.98 && jet.neutralMultiplicity() > 2 );
+	}
+	else
+	{
+		jetIsLoose = ( jet.neutralEmEnergyFraction() < 0.9 && jet.neutralMultiplicity() > 10);
+	}
+	return jetIsLoose;
+}
+
 
 int main(int argc, char** argv){
 
@@ -831,12 +1146,22 @@ int main(int argc, char** argv){
 			// std::cout << "ERROR setting up reader for event info branch (status = " << evtInfo.GetSetupStatus() << ")" << std::endl;
 			// return 1;
 		// }
-		// TTreeReaderValue<std::vector<ran::ElectronStruct>> eleBranchValue(treeReader, "electronCollection");
+		TTreeReaderValue<std::vector<ran::ElectronStruct>> eleBranchValue(treeReader, "electronCollection");
 		// if (eleBranchValue.GetSetupStatus() < 0) {
 			// std::cout << "ERROR setting up reader for electronCollection branch (status = " << eleBranchValue.GetSetupStatus() << ")" << std::endl;
 			// return 1;
 		// }
 		TTreeReaderValue<std::vector<ran::MuonStruct>> muonBranchValue(treeReader, "muonCollection");
+		// if (muonBranchValue.GetSetupStatus() < 0) {
+			// std::cout << "ERROR setting up reader for muonCollection branch (status = " << muonBranchValue.GetSetupStatus() << ")" << std::endl; 
+			// return 1;
+		// }
+		TTreeReaderValue<std::vector<ran::PhotonStruct>> photonBranchValue(treeReader, "photonCollection");
+		// if (muonBranchValue.GetSetupStatus() < 0) {
+			// std::cout << "ERROR setting up reader for muonCollection branch (status = " << muonBranchValue.GetSetupStatus() << ")" << std::endl; 
+			// return 1;
+		// }
+		TTreeReaderValue<std::vector<ran::TrackStruct>> trackBranchValue(treeReader, "trackCollection");
 		// if (muonBranchValue.GetSetupStatus() < 0) {
 			// std::cout << "ERROR setting up reader for muonCollection branch (status = " << muonBranchValue.GetSetupStatus() << ")" << std::endl; 
 			// return 1;
@@ -858,6 +1183,7 @@ int main(int argc, char** argv){
 		TTreeReaderValue<float> nTrueInt_tree(treeReader, "nTrueInt");
 		TTreeReaderValue<int> nISR_tree(treeReader, "nISR");
 		TTreeReaderValue<int> nGluino_tree(treeReader, "nGluino"); // HACK: need to comment out this line if working on DATA or QCD (the ntuples are missing nGluino info)
+		TTreeReaderValue<float> rhoMiniIso_tree(treeReader, "RhoMiniIso");
 
 
 		// Get the 'D' factor for ISR - NOTE THAT THIS IS PER INPUT FILE, NOT THE FULL SAMPLE !
@@ -880,8 +1206,10 @@ int main(int argc, char** argv){
 		// Loop over the events
 		while (treeReader.Next()) {
 
-			// const std::vector<ran::NtElectron> electronVec(eleBranchValue->begin(), eleBranchValue->end());
+			const std::vector<ran::NtElectron> electronVec(eleBranchValue->begin(), eleBranchValue->end());
 			const std::vector<ran::NtMuon> muonVec(muonBranchValue->begin(), muonBranchValue->end());
+			const std::vector<ran::NtPhoton> photonVec(photonBranchValue->begin(), photonBranchValue->end());
+			const std::vector<ran::NtTrack> trackVec(trackBranchValue->begin(), trackBranchValue->end());
 			const std::vector<ran::NtJet> jetVec(jetBranchValue->begin(), jetBranchValue->end());
 			std::vector<ran::NtFatJet> fatJetVec(fatJetBranchValue->begin(), fatJetBranchValue->end());
 			// std::sort(fatJetVec.begin(), fatJetVec.end(), [](const ran::NtFatJet& a, const ran::NtFatJet& b) {return b.pt() < a.pt();} );
@@ -900,6 +1228,7 @@ int main(int argc, char** argv){
 			const float nTrueInt = *nTrueInt_tree;
 			const int nISR = *nISR_tree;
 			const int nGluino = *nGluino_tree;
+			const float rho = *rhoMiniIso_tree;
 		
 			if (sampleType != "DATA" && yearOfRun == 2017 && nPU < 2) continue; // to veto the zeroPU events in 94X simulation
 			// if (nPU < 28) continue; // HACK: if you only want to use a sample of particular PU
@@ -1114,8 +1443,8 @@ int main(int argc, char** argv){
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, mht, mht_jecAK4UncUp, mht_jecAK4UncDown, mht_jerAK4UncUp, mht_jerAK4UncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt, nVetoObjects);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, mht, mht_jecAK4UncUp, mht_jecAK4UncDown, mht_jerAK4UncUp, mht_jerAK4UncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt, nVetoObjects);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt, nVetoObjects);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt, nVetoObjects);
 
 				// Fat Jets ordered by DBT discriminator score
 				// doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt);
