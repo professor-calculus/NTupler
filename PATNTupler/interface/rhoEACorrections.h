@@ -12,17 +12,17 @@ namespace RhoEACorr{
 
 	double getRhoEA_CH_2016(const double& electron_eta)
 	{
-		if (abs(electron_eta) < 1.0)
+		if (fabs(electron_eta) < 1.0)
 			return 0.0360;
-		else if (abs(electron_eta) < 1.479)
+		else if (fabs(electron_eta) < 1.479)
 			return 0.0377;
-		else if (abs(electron_eta) < 2.0)
+		else if (fabs(electron_eta) < 2.0)
 			return 0.0306;
-		else if (abs(electron_eta) < 2.2)
+		else if (fabs(electron_eta) < 2.2)
 			return 0.0283;
-        else if (abs(electron_eta) < 2.3)
+        else if (fabs(electron_eta) < 2.3)
 			return 0.0254;
-        else if (abs(electron_eta) < 2.4)
+        else if (fabs(electron_eta) < 2.4)
 			return 0.0217;
 		else
 			return 0.0167;
@@ -30,17 +30,17 @@ namespace RhoEACorr{
 
 	double getRhoEA_NH_2016(const double& electron_eta)
 	{
-		if (abs(electron_eta) < 1.0)
+		if (fabs(electron_eta) < 1.0)
 			return 0.0597;
-		else if (abs(electron_eta) < 1.479)
+		else if (fabs(electron_eta) < 1.479)
 			return 0.0807;
-		else if (abs(electron_eta) < 2.0)
+		else if (fabs(electron_eta) < 2.0)
 			return 0.0629;
-		else if (abs(electron_eta) < 2.2)
+		else if (fabs(electron_eta) < 2.2)
 			return 0.0197;
-        else if (abs(electron_eta) < 2.3)
+        else if (fabs(electron_eta) < 2.3)
 			return 0.0184;
-        else if (abs(electron_eta) < 2.4)
+        else if (fabs(electron_eta) < 2.4)
 			return 0.0284;
 		else
 			return 0.0591;
@@ -48,17 +48,17 @@ namespace RhoEACorr{
 
 	double getRhoEA_PH_2016(const double& electron_eta)
 	{
-		if (abs(electron_eta) < 1.0)
+		if (fabs(electron_eta) < 1.0)
 			return 0.1210;
-		else if (abs(electron_eta) < 1.479)
+		else if (fabs(electron_eta) < 1.479)
 			return 0.1107;
-		else if (abs(electron_eta) < 2.0)
+		else if (fabs(electron_eta) < 2.0)
 			return 0.0699;
-		else if (abs(electron_eta) < 2.2)
+		else if (fabs(electron_eta) < 2.2)
 			return 0.1056;
-        else if (abs(electron_eta) < 2.3)
+        else if (fabs(electron_eta) < 2.3)
 			return 0.1457;
-        else if (abs(electron_eta) < 2.4)
+        else if (fabs(electron_eta) < 2.4)
 			return 0.1719;
 		else
 			return 0.1998;
@@ -68,17 +68,17 @@ namespace RhoEACorr{
 
 	double getRhoEA_CH_2017(const double& electron_eta)
 	{
-		if (abs(electron_eta) < 1.0)
+		if (fabs(electron_eta) < 1.0)
 			return 0.0360;
-		else if (abs(electron_eta) < 1.479)
+		else if (fabs(electron_eta) < 1.479)
 			return 0.0377;
-		else if (abs(electron_eta) < 2.0)
+		else if (fabs(electron_eta) < 2.0)
 			return 0.0306;
-		else if (abs(electron_eta) < 2.2)
+		else if (fabs(electron_eta) < 2.2)
 			return 0.0283;
-        else if (abs(electron_eta) < 2.3)
+        else if (fabs(electron_eta) < 2.3)
 			return 0.0254;
-        else if (abs(electron_eta) < 2.4)
+        else if (fabs(electron_eta) < 2.4)
 			return 0.0217;
 		else
 			return 0.0167;
@@ -86,17 +86,17 @@ namespace RhoEACorr{
 
 	double getRhoEA_NH_2017(const double& electron_eta)
 	{
-		if (abs(electron_eta) < 1.0)
+		if (fabs(electron_eta) < 1.0)
 			return 0.0597;
-		else if (abs(electron_eta) < 1.479)
+		else if (fabs(electron_eta) < 1.479)
 			return 0.0807;
-		else if (abs(electron_eta) < 2.0)
+		else if (fabs(electron_eta) < 2.0)
 			return 0.0629;
-		else if (abs(electron_eta) < 2.2)
+		else if (fabs(electron_eta) < 2.2)
 			return 0.0197;
-        else if (abs(electron_eta) < 2.3)
+        else if (fabs(electron_eta) < 2.3)
 			return 0.0184;
-        else if (abs(electron_eta) < 2.4)
+        else if (fabs(electron_eta) < 2.4)
 			return 0.0284;
 		else
 			return 0.0591;
@@ -104,17 +104,17 @@ namespace RhoEACorr{
 
 	double getRhoEA_PH_2017(const double& electron_eta)
 	{
-		if (abs(electron_eta) < 1.0)
+		if (fabs(electron_eta) < 1.0)
 			return 0.1210;
-		else if (abs(electron_eta) < 1.479)
+		else if (fabs(electron_eta) < 1.479)
 			return 0.1107;
-		else if (abs(electron_eta) < 2.0)
+		else if (fabs(electron_eta) < 2.0)
 			return 0.0699;
-		else if (abs(electron_eta) < 2.2)
+		else if (fabs(electron_eta) < 2.2)
 			return 0.1056;
-        else if (abs(electron_eta) < 2.3)
+        else if (fabs(electron_eta) < 2.3)
 			return 0.1457;
-        else if (abs(electron_eta) < 2.4)
+        else if (fabs(electron_eta) < 2.4)
 			return 0.1719;
 		else
 			return 0.1998;
