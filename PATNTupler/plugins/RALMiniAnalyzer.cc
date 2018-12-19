@@ -317,14 +317,14 @@ RALMiniAnalyzer::RALMiniAnalyzer(const edm::ParameterSet& iConfig):
     EventDataTree->Branch("nISR", &nISR_, "nISR/I");
     EventDataTree->Branch("nGluino", &nGLUINO_, "nGluino/I");
     EventDataTree->Branch("nHiggs2bb", &nHIGGS2BB_, "nHiggs2bb/I");
-    EventDataTree->Branch("RhoMiniIso", &rhoMiniIso_, "RhoMiniIso/F");
-    EventDataTree->Branch("electronCollection","std::vector<ran::ElectronStruct>", &electronCollection_, 64000, 1); 
+    // EventDataTree->Branch("RhoMiniIso", &rhoMiniIso_, "RhoMiniIso/F");
+    // EventDataTree->Branch("electronCollection","std::vector<ran::ElectronStruct>", &electronCollection_, 64000, 1); 
     EventDataTree->Branch("muonCollection","std::vector<ran::MuonStruct>", &muonCollection_, 64000, 1);
-    EventDataTree->Branch("photonCollection","std::vector<ran::PhotonStruct>", &photonCollection_, 64000, 1);
-    EventDataTree->Branch("trackCollection","std::vector<ran::TrackStruct>", &trackCollection_, 64000, 1);
+    // EventDataTree->Branch("photonCollection","std::vector<ran::PhotonStruct>", &photonCollection_, 64000, 1);
+    // EventDataTree->Branch("trackCollection","std::vector<ran::TrackStruct>", &trackCollection_, 64000, 1);
     EventDataTree->Branch("jetCollection","std::vector<ran::JetStruct>", &jetCollection_, 64000, 1);
     EventDataTree->Branch("fatjetCollection","std::vector<ran::FatJetStruct>", &fatjetCollection_, 64000, 1);
-    EventDataTree->Branch("metCollection","std::vector<ran::MetStruct>", &metCollection_, 64000, 1);
+    // EventDataTree->Branch("metCollection","std::vector<ran::MetStruct>", &metCollection_, 64000, 1);
     EventDataTree->Branch("recordedTriggers", &recordedTriggers_);
     //EventDataTree->Branch("recordedTriggers","std::vector<char>", &recordedTriggers_, 64000, 1);
     EventDataTree->Branch("prefweight", &prefweight_, "prefweight/F");
@@ -444,13 +444,13 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
      ReadInMuons(iEvent);
             
      //Read in Electrons
-     ReadInElectrons(iEvent);
+     // ReadInElectrons(iEvent);
 
      //Read in Photons
-     ReadInPhotons(iEvent);
+     // ReadInPhotons(iEvent);
 
      //Read in PF Tracks
-     ReadInTracks(iEvent);
+     // ReadInTracks(iEvent);
 
      //Read in Jets
      ReadInJets(iEvent, jecUncObj_AK4, resolution_AK4, resolutionSF_AK4);
@@ -459,7 +459,7 @@ RALMiniAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
      ReadInFatJets(iEvent, jecUncObj_AK8, resolution_AK8, resolutionSF_AK8);
 
      //Read in Met
-     ReadInMets(iEvent);
+     // ReadInMets(iEvent);
 
      //Read in ISR info
      if (isMC_)
