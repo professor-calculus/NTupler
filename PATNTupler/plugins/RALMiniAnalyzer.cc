@@ -1008,15 +1008,30 @@ void RALMiniAnalyzer::ReadInJets(const edm::Event& iEvent, JetCorrectionUncertai
       ithJet.phi = iJet.phi();
       ithJet.mass = iJet.mass();
       ithJet.numberOfDaughters = iJet.numberOfDaughters();
-      ithJet.chargedMultiplicity = iJet.chargedMultiplicity();
-      ithJet.neutralMultiplicity = iJet.neutralMultiplicity();
-      ithJet.muonEnergyFraction = iJet.muonEnergyFraction();
-      ithJet.electronEnergyFraction = iJet.electronEnergyFraction();
-      ithJet.neutralHadronEnergyFraction = iJet.neutralHadronEnergyFraction();
-      ithJet.HFHadronEnergyFraction = iJet.HFHadronEnergyFraction();
-      ithJet.neutralEmEnergyFraction = iJet.neutralEmEnergyFraction();
-      ithJet.chargedEmEnergyFraction = iJet.chargedEmEnergyFraction();
-      ithJet.chargedHadronEnergyFraction = iJet.chargedHadronEnergyFraction();
+      
+      if (iJet.isPFJet() || iJet.isJPTJet()){
+        ithJet.chargedMultiplicity = iJet.chargedMultiplicity();
+        ithJet.neutralMultiplicity = iJet.neutralMultiplicity();
+        ithJet.muonEnergyFraction = iJet.muonEnergyFraction();
+        ithJet.electronEnergyFraction = iJet.electronEnergyFraction();
+        ithJet.neutralHadronEnergyFraction = iJet.neutralHadronEnergyFraction();
+        ithJet.HFHadronEnergyFraction = iJet.HFHadronEnergyFraction();
+        ithJet.neutralEmEnergyFraction = iJet.neutralEmEnergyFraction();
+        ithJet.chargedEmEnergyFraction = iJet.chargedEmEnergyFraction();
+        ithJet.chargedHadronEnergyFraction = iJet.chargedHadronEnergyFraction();
+      }
+      else{
+        ithJet.chargedMultiplicity = -1234;
+        ithJet.neutralMultiplicity = -1234;
+        ithJet.muonEnergyFraction = 1234.56;
+        ithJet.electronEnergyFraction = 1234.56;
+        ithJet.neutralHadronEnergyFraction = 1234.56;
+        ithJet.HFHadronEnergyFraction = 1234.56;
+        ithJet.neutralEmEnergyFraction = 1234.56;
+        ithJet.chargedEmEnergyFraction = 1234.56;
+        ithJet.chargedHadronEnergyFraction = 1234.56;
+      }
+
       ithJet.userFloat_pileupJetId_fullDiscriminant = iJet.userFloat("pileupJetId:fullDiscriminant");
 
       ithJet.jecFactor_unCorrected = iJet.jecFactor("Uncorrected");
@@ -1139,17 +1154,30 @@ void RALMiniAnalyzer::ReadInFatJets(const edm::Event& iEvent, JetCorrectionUncer
       ithJet.eta = iJet.eta();
       ithJet.phi = iJet.phi();
       ithJet.mass = iJet.mass();
-
       ithJet.numberOfDaughters = iJet.numberOfDaughters();
-      ithJet.chargedMultiplicity = iJet.chargedMultiplicity();
-      ithJet.neutralMultiplicity = iJet.neutralMultiplicity();
-      ithJet.muonEnergyFraction = iJet.muonEnergyFraction();
-      ithJet.electronEnergyFraction = iJet.electronEnergyFraction();
-      ithJet.neutralHadronEnergyFraction = iJet.neutralHadronEnergyFraction();
-      ithJet.HFHadronEnergyFraction = iJet.HFHadronEnergyFraction();
-      ithJet.neutralEmEnergyFraction = iJet.neutralEmEnergyFraction();
-      ithJet.chargedEmEnergyFraction = iJet.chargedEmEnergyFraction();
-      ithJet.chargedHadronEnergyFraction = iJet.chargedHadronEnergyFraction();
+
+      if (iJet.isPFJet() || iJet.isJPTJet()){
+        ithJet.chargedMultiplicity = iJet.chargedMultiplicity();
+        ithJet.neutralMultiplicity = iJet.neutralMultiplicity();
+        ithJet.muonEnergyFraction = iJet.muonEnergyFraction();
+        ithJet.electronEnergyFraction = iJet.electronEnergyFraction();
+        ithJet.neutralHadronEnergyFraction = iJet.neutralHadronEnergyFraction();
+        ithJet.HFHadronEnergyFraction = iJet.HFHadronEnergyFraction();
+        ithJet.neutralEmEnergyFraction = iJet.neutralEmEnergyFraction();
+        ithJet.chargedEmEnergyFraction = iJet.chargedEmEnergyFraction();
+        ithJet.chargedHadronEnergyFraction = iJet.chargedHadronEnergyFraction();
+      }
+      else{
+        ithJet.chargedMultiplicity = -1234;
+        ithJet.neutralMultiplicity = -1234;
+        ithJet.muonEnergyFraction = 1234.56;
+        ithJet.electronEnergyFraction = 1234.56;
+        ithJet.neutralHadronEnergyFraction = 1234.56;
+        ithJet.HFHadronEnergyFraction = 1234.56;
+        ithJet.neutralEmEnergyFraction = 1234.56;
+        ithJet.chargedEmEnergyFraction = 1234.56;
+        ithJet.chargedHadronEnergyFraction = 1234.56;
+      }
 
       ithJet.jecFactor_unCorrected = iJet.jecFactor("Uncorrected");
       jecUncObj->setJetEta( iJet.eta() );
