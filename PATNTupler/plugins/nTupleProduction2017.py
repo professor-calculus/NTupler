@@ -74,7 +74,7 @@ updateJetCollection(
    process,
    labelName = 'NewJEC',
    jetSource = cms.InputTag('slimmedJets'),
-   jetCorrections = ('AK4PFPuppi', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
+   jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
 )
 # update slimmedJetsAK8 with new JECs
 updateJetCollection(
