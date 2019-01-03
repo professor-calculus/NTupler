@@ -68,7 +68,7 @@ plotting_brazil: plotting_brazil.o ${SRCMACDIR}/PlotEntry.o ${SRCMACDIR}/PlotEnt
 %.o: 	%.cc %.hh
 	$(info generic.o target's commands)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-${OBJDIR}/libRalParticle.so:	${OBJDIR}/JetStruct.o  ${OBJDIR}/FatJetStruct.o ${OBJDIR}/ElectronStruct.o ${OBJDIR}/MuonStruct.o ${OBJDIR}/MetStruct.o ${OBJDIR}/ParticleDict.o 
+${OBJDIR}/libRalParticle.so:	${OBJDIR}/JetStruct.o  ${OBJDIR}/FatJetStruct.o ${OBJDIR}/ElectronStruct.o ${OBJDIR}/MuonStruct.o ${OBJDIR}/MetStruct.o ${OBJDIR}/TrackStruct.o ${OBJDIR}/PhotonStruct.o ${OBJDIR}/ParticleDict.o 
 	$(LD) $(SOFLAGS) -o $@ $^ $(GLIBS)	
 ${OBJDIR}/ParticleDict.o: ${TMPDIR}/ParticleDict.cc
 	$(CXX) $(CXXFLAGS) -c $< -o $@
