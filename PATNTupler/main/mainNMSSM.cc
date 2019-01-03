@@ -986,7 +986,7 @@ int main(int argc, char** argv){
 			const float corr_scaleUp = *scaleUp_tree;
 			const float corr_scaleDown = *scaleDown_tree;
 
-			if (sampleType != "DATA" && yearOfRun == 2017 && nPU < 2) continue; // to veto the zeroPU events in 94X simulation
+			if (sampleType != "DATA" && yearOfRun == 2017 && nPU < 1) continue; // to veto the zeroPU events in 94X simulation
 			// if (nPU < 28) continue; // HACK: if you only want to use a sample of particular PU
 			// if (nGluino != 0) continue; // HACK: if you only want to select squark-squark samples
 
