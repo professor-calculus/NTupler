@@ -13,7 +13,7 @@ public:
 	~PlotEntry();
 
 	void AddInput(const std::string&, const std::string&); // flatTree address, selection cut (this is for data)
-	void AddInput(const std::string&, const std::string&, const double&); // flatTree address, selection cut, sample cross-section (this is for MC)
+	void AddInput(const std::string&, const std::string&, const double&, const std::string& = ""); // flatTree address, selection cut, sample cross-section (this is for MC), string of the SF weights
 	void AddInputEfficiency(const std::string&, const std::string&, const std::string&); // flatTree address, common cut (to numerator and denominator), additional cut for the numerator
 	std::string GetPlotEntryName() const;
 	TH1D* GetHistogram() const;

@@ -97,7 +97,7 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 	std::cout << std::endl;
 }
 
-void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& selectionCut, const double& crossSection)
+void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& selectionCut, const double& crossSection, const std::string& scaleFactorWeightStr)
 {
 	TFile * f = TFile::Open(flatTreeAddress.c_str());
     TTree * evT = (TTree*)f->Get("eventCountTree");
@@ -127,14 +127,27 @@ void PlotEntry::AddInput(const std::string& flatTreeAddress, const std::string& 
 	std::string drawStringB;
 	if (!selectionCut.empty()) drawStringB = Form("%.15f*(%s)", eventWeighting, selectionCut.c_str());
 	else drawStringB = Form("%.15f", eventWeighting);
+	if (!scaleFactorWeightStr.empty()) drawStringB += Form("*(%s)", scaleFactorWeightStr.c_str());
     std::cout << "Filling for TTree: " << flatTreeAddress << std::endl;
 	std::cout << "Variable used: " << variableToPlot << std::endl;
+	if (!scaleFactorWeightStr.empty()) std::cout << ">>> Using Scale Factor Weights" << std::endl;
+	else std::cout << ">>> NOT Using Scale Factor Weights" << std::endl;
 	if (!selectionCut.empty()) std::cout << "Event Weighting * Cut applied: " << drawStringB << std::endl;
 	else std::cout << "Event Weighting: " << drawStringB << "\nNB: no cut applied." << std::endl;
+	
+	double scaleFactorWeight = 1.0; // need to find average scale factor weight
+	if (!scaleFactorWeightStr.empty()){
+		TH1D * hSFW = new TH1D("hSFW", "", 1, -99999.9, 99999.9);
+		std::string drawStringA_sf = Form("(%s)>>hSFW", scaleFactorWeightStr.c_str());
+		T->Draw(drawStringA_sf.c_str(), selectionCut.c_str(), "");
+		if (hSFW->GetMean() != 0) scaleFactorWeight = hSFW->GetMean();
+		// std::cout << "Average Scale Factor Weighting: " << scaleFactorWeight << std::endl;
+	}
+
 	T->Draw(drawStringA.c_str(), drawStringB.c_str(), "");
 	for (int iBin = 0; iBin < hContainer.GetNbinsX()+2; ++iBin){
 		hTotal->AddBinContent(iBin, hContainer.GetBinContent(iBin));
-		statErrorSquared[iBin] += hContainer.GetBinContent(iBin) * eventWeighting;
+		statErrorSquared[iBin] += hContainer.GetBinContent(iBin) * eventWeighting * scaleFactorWeight;
 	}
 	delete T;
 	delete evT;
