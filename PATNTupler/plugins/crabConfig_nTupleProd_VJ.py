@@ -6,7 +6,7 @@ config = config()
 # EDIT the following:
 # uniqueName, config.Data.inputDataset, config.Data.inputDBS, config.Data.unitsPerJob
 
-uniqueName = 'NAMEXYZ_CMSSW8029wDBTV4_fbd67939' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+uniqueName = 'NAMEXYZ_CMSSW8031' # name for this ntuple production (include commit hash so it is unique and can be traced) 
 
 config.General.requestName = uniqueName # name of the crab job project (eg on dashboard)
 config.General.workArea = 'crab_projects' # name of directory where crab project info is stored
@@ -67,6 +67,6 @@ config.Data.unitsPerJob = 10
 
 config.Data.totalUnits = -1 # '-1' does them all
 config.Data.publication = False
-config.Data.outLFNDirBase = '/store/user/taylor/ntuples_MC16_Jan2019' # Wherever you want the ntuples to go on the RAL T2
+config.Data.outLFNDirBase = '/store/user/atittert/ntuples_MC16_Jan2019' # Wherever you want the ntuples to go on the RAL T2
 
 config.Site.storageSite = 'T2_UK_SGrid_RALPP'
