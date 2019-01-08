@@ -16,64 +16,52 @@ namespace QcdSidebandCorr{
 			std::vector<double> corrVec;
 			
 			// ht1500to2500 - normal method
-			corrVec.push_back(1.6117647059);
-			corrVec.push_back(0.7819068438);
-			corrVec.push_back(0.8270412643);
-			corrVec.push_back(0.9380234506);
-			corrVec.push_back(1.0082107424);
-			corrVec.push_back(1.1371107266);
-			corrVec.push_back(1.1930379747);
-			corrVec.push_back(1.1702970297);
-			corrVec.push_back(1.0292028414);
-			corrVec.push_back(1.1413911060);
+			corrVec.push_back(1.6064209275);
+			corrVec.push_back(0.7789782091);
+			corrVec.push_back(0.8267942584);
+			corrVec.push_back(0.9253012048);
+			corrVec.push_back(0.9914814815);
+			corrVec.push_back(1.1304957905);
+			corrVec.push_back(1.1731970471);
+			corrVec.push_back(1.1436619718);
+			corrVec.push_back(1.0693493151);
+			corrVec.push_back(1.1156626506);
 
 			// ht1500to2500 - calculation (data)
-			// corrVec.push_back(1.56105538676);
-			// corrVec.push_back(0.792299026394);
-			// corrVec.push_back(0.889936752445);
-			// corrVec.push_back(0.947097864249);
-			// corrVec.push_back(0.989311312588);
-			// corrVec.push_back(1.02784719536);
-			// corrVec.push_back(1.06845446476);
-			// corrVec.push_back(1.11428452007);
-			// corrVec.push_back(1.16515340653);
-			// corrVec.push_back(1.21160736675);
+			// corrVec.push_back(1.55293913318);
+			// corrVec.push_back(0.78491606676);
+			// corrVec.push_back(0.885498640061);
+			// corrVec.push_back(0.946245611227);
+			// corrVec.push_back(0.990664428178);
+			// corrVec.push_back(1.0305087463);
+			// corrVec.push_back(1.0719120106);
+			// corrVec.push_back(1.11813646669);
+			// corrVec.push_back(1.16872864);
+			// corrVec.push_back(1.21319670302);
 
 			// ht2500to3500 - calculation (data)
-			corrVec.push_back(1.42166748165);
-			corrVec.push_back(0.669549128221);
-			corrVec.push_back(0.792822431347);
-			corrVec.push_back(0.878879303559);
-			corrVec.push_back(0.937638694061);
-			corrVec.push_back(0.98046015031);
-			corrVec.push_back(1.01337834624);
-			corrVec.push_back(1.03750844502);
-			corrVec.push_back(1.04875007842);
-			corrVec.push_back(1.03653473091);
-
-			// ht3500toInf - calculation (data - DONT USE OTHER THAN FOR TESTING)
-			// corrVec.push_back(1.48651067592);
-			// corrVec.push_back(0.635513771772);
-			// corrVec.push_back(0.727779037684);
-			// corrVec.push_back(0.817995095171);
-			// corrVec.push_back(0.892466574728);
-			// corrVec.push_back(0.954343628094);
-			// corrVec.push_back(1.00894930602);
-			// corrVec.push_back(1.06081800203);
-			// corrVec.push_back(1.11236822796);
-			// corrVec.push_back(1.16134135229);
+			corrVec.push_back(1.41807821395);
+			corrVec.push_back(0.661581716844);
+			corrVec.push_back(0.783590911042);
+			corrVec.push_back(0.871323261773);
+			corrVec.push_back(0.931618022073);
+			corrVec.push_back(0.975564306489);
+			corrVec.push_back(1.00977765424);
+			corrVec.push_back(1.03656901524);
+			corrVec.push_back(1.05396133163);
+			corrVec.push_back(1.05459175319);
 
 			// ht3500toInf - calculation (mc)
-			corrVec.push_back(1.54454642992);
-			corrVec.push_back(0.626045049413);
-			corrVec.push_back(0.699470534868);
-			corrVec.push_back(0.790415782096);
-			corrVec.push_back(0.868625490307);
-			corrVec.push_back(0.931039189643);
-			corrVec.push_back(0.97896497494);
-			corrVec.push_back(1.01224337229);
-			corrVec.push_back(1.02620541694);
-			corrVec.push_back(1.00999287037);
+			corrVec.push_back(1.52832414925);
+			corrVec.push_back(0.633843685648);
+			corrVec.push_back(0.711003843484);
+			corrVec.push_back(0.795489036673);
+			corrVec.push_back(0.865761298856);
+			corrVec.push_back(0.921327681259);
+			corrVec.push_back(0.964265274597);
+			corrVec.push_back(0.995196004563);
+			corrVec.push_back(1.0114604017);
+			corrVec.push_back(1.0059811867);
 
 			if (binIndex > 0 && binIndex < corrVec.size() + 1 ) return corrVec[binIndex - 1];
 			else{
@@ -92,52 +80,52 @@ namespace QcdSidebandCorr{
 			std::vector<double> corrVec;
 
 			// ht1500to2500 - normal method
-			corrVec.push_back(1.6940559441);
-			corrVec.push_back(0.7933126202);
-			corrVec.push_back(0.8462135922);
-			corrVec.push_back(0.8496479673);
-			corrVec.push_back(1.0245398773);
-			corrVec.push_back(1.1229689808);
-			corrVec.push_back(1.1445940078);
-			corrVec.push_back(1.1751662971);
-			corrVec.push_back(1.1205626256);
-			corrVec.push_back(1.1140035907);
+			corrVec.push_back(1.7026466009);
+			corrVec.push_back(0.7909370200);
+			corrVec.push_back(0.8413654618);
+			corrVec.push_back(0.8451202263);
+			corrVec.push_back(1.0144796380);
+			corrVec.push_back(1.0905271199);
+			corrVec.push_back(1.1422745809);
+			corrVec.push_back(1.1844380403);
+			corrVec.push_back(1.0975778547);
+			corrVec.push_back(1.0845724907);
 
 			// ht1500to2500 - calculation (data)
-			// corrVec.push_back(1.56773033051);
-			// corrVec.push_back(0.798787444199);
-			// corrVec.push_back(0.896064074759);
-			// corrVec.push_back(0.953870377466);
-			// corrVec.push_back(0.996625124185);
-			// corrVec.push_back(1.03593158979);
-			// corrVec.push_back(1.07805514982);
-			// corrVec.push_back(1.12700691212);
-			// corrVec.push_back(1.184241969);
-			// corrVec.push_back(1.24318923937);
+			// corrVec.push_back(1.57341219788);
+			// corrVec.push_back(0.80184834314);
+			// corrVec.push_back(0.897431373921);
+			// corrVec.push_back(0.953956438434);
+			// corrVec.push_back(0.995976449777);
+			// corrVec.push_back(1.03481842038);
+			// corrVec.push_back(1.07654104956);
+			// corrVec.push_back(1.12496368094);
+			// corrVec.push_back(1.18125975218);
+			// corrVec.push_back(1.2383590285);
 
 			// ht2500to3500 - calculation (data)
-			corrVec.push_back(1.41435606799);
-			corrVec.push_back(0.683767852841);
-			corrVec.push_back(0.811049770514);
-			corrVec.push_back(0.893125933632);
-			corrVec.push_back(0.947513233695);
-			corrVec.push_back(0.986921125125);
-			corrVec.push_back(1.01737060935);
-			corrVec.push_back(1.03985622243);
-			corrVec.push_back(1.05040877646);
-			corrVec.push_back(1.03897771658);
+			corrVec.push_back(1.42918156306);
+			corrVec.push_back(0.679755341741);
+			corrVec.push_back(0.802359530496);
+			corrVec.push_back(0.887182179816);
+			corrVec.push_back(0.945227120672);
+			corrVec.push_back(0.987763215906);
+			corrVec.push_back(1.02043537474);
+			corrVec.push_back(1.0436803335);
+			corrVec.push_back(1.05218236907);
+			corrVec.push_back(1.03353107535);
 
-			// ht3500toInf - calculation (data)
-			corrVec.push_back(1.57941107132);
-			corrVec.push_back(0.695522760024);
-			corrVec.push_back(0.77401166431);
-			corrVec.push_back(0.850143377131);
-			corrVec.push_back(0.9113400316);
-			corrVec.push_back(0.960810806759);
-			corrVec.push_back(1.0011396109);
-			corrVec.push_back(1.03118830076);
-			corrVec.push_back(1.04352959767);
-			corrVec.push_back(1.02178803851);
+			// ht3500toInf - calculation (mc)
+			corrVec.push_back(1.52121148578);
+			corrVec.push_back(0.614623424388);
+			corrVec.push_back(0.685781722398);
+			corrVec.push_back(0.771740450118);
+			corrVec.push_back(0.849108401454);
+			corrVec.push_back(0.914688904111);
+			corrVec.push_back(0.969800933375);
+			corrVec.push_back(1.01619503533);
+			corrVec.push_back(1.05362809173);
+			corrVec.push_back(1.07743843374);
 
 			if (binIndex > 0 && binIndex < corrVec.size() + 1 ) return corrVec[binIndex - 1];
 			else{
@@ -168,16 +156,16 @@ namespace QcdSidebandCorr{
 			std::vector<double> corrErrVec;
 
 			// ht1500to2500 - normal method
-			corrErrVec.push_back(0.0339370552);
-			corrErrVec.push_back(0.0153063287);
-			corrErrVec.push_back(0.0182115080);
-			corrErrVec.push_back(0.0225280484);
-			corrErrVec.push_back(0.0263187886);
-			corrErrVec.push_back(0.0324205946);
-			corrErrVec.push_back(0.0371476242);
-			corrErrVec.push_back(0.0409450422);
-			corrErrVec.push_back(0.0405998951);
-			corrErrVec.push_back(0.0527916751);
+			corrErrVec.push_back(0.0352796250);
+			corrErrVec.push_back(0.0159298571);
+			corrErrVec.push_back(0.0190088308);
+			corrErrVec.push_back(0.0231644431);
+			corrErrVec.push_back(0.0270426071);
+			corrErrVec.push_back(0.0335637876);
+			corrErrVec.push_back(0.0380500609);
+			corrErrVec.push_back(0.0415511282);
+			corrErrVec.push_back(0.0435266537);
+			corrErrVec.push_back(0.0533274246);
 
 			// ht1500to2500 - calculation (data)
 			// corrErrVec.push_back(0.15);
@@ -204,16 +192,16 @@ namespace QcdSidebandCorr{
 			corrErrVec.push_back(0.15);
 
 			// ht3500toInf - calculation (mc)
-			corrErrVec.push_back(0.15);
-			corrErrVec.push_back(0.15);
-			corrErrVec.push_back(0.15);
-			corrErrVec.push_back(0.15);
-			corrErrVec.push_back(0.15);
-			corrErrVec.push_back(0.15);
-			corrErrVec.push_back(0.15);
-			corrErrVec.push_back(0.15);
-			corrErrVec.push_back(0.15);
-			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
 
 			if (binIndex > 0 && binIndex < corrErrVec.size() + 1 ) return corrErrVec[binIndex - 1];
 			else{
@@ -232,16 +220,16 @@ namespace QcdSidebandCorr{
 			std::vector<double> corrErrVec;
 
 			// ht1500to2500 - normal method
-			corrErrVec.push_back(0.0337613765);
-			corrErrVec.push_back(0.0145080472);
-			corrErrVec.push_back(0.0174171606);
-			corrErrVec.push_back(0.0188925121);
-			corrErrVec.push_back(0.0246163780);
-			corrErrVec.push_back(0.0296709447);
-			corrErrVec.push_back(0.0326476036);
-			corrErrVec.push_back(0.0376424281);
-			corrErrVec.push_back(0.0398945632);
-			corrErrVec.push_back(0.0459783689);
+			corrErrVec.push_back(0.0345542152);
+			corrErrVec.push_back(0.0147509712);
+			corrErrVec.push_back(0.0176379321);
+			corrErrVec.push_back(0.0191728313);
+			corrErrVec.push_back(0.0248291208);
+			corrErrVec.push_back(0.0295094637);
+			corrErrVec.push_back(0.0332982690);
+			corrErrVec.push_back(0.0386168015);
+			corrErrVec.push_back(0.0399156117);
+			corrErrVec.push_back(0.0458386330);
 
 			// ht1500to2500 - calculation (data)
 			// corrErrVec.push_back(0.15);
@@ -268,16 +256,16 @@ namespace QcdSidebandCorr{
 			corrErrVec.push_back(0.15);
 
 			// ht3500toInf - calculation (mc)
-			corrErrVec.push_back(0.15);
-			corrErrVec.push_back(0.15);
-			corrErrVec.push_back(0.15);
-			corrErrVec.push_back(0.15);
-			corrErrVec.push_back(0.15);
-			corrErrVec.push_back(0.15);
-			corrErrVec.push_back(0.15);
-			corrErrVec.push_back(0.15);
-			corrErrVec.push_back(0.15);
-			corrErrVec.push_back(0.15);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
+			corrErrVec.push_back(0.30);
 
 			if (binIndex > 0 && binIndex < corrErrVec.size() + 1 ) return corrErrVec[binIndex - 1];
 			else{
