@@ -204,7 +204,7 @@ signalSamples17 = {
 'P6_1800sq_R0p384': [0.023290, '/nmssmSignalCascadeV01_13TeV2017_P6_1800sq_R0p384/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P6_1800sq_R0p384-65c6b29ab922da94b788da955c09b417/USER'],
 'P6_1400sq_R0p99': [0.1679, '/nmssmSignalCascadeV01_13TeV2017_P6_1400sq_R0p99/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P6_1400sq_R0p99-65c6b29ab922da94b788da955c09b417/USER'],
 'P6_1400sq_R0p555': [0.1679, '/nmssmSignalCascadeV01_13TeV2017_P6_1400sq_R0p555/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P6_1400sq_R0p555-65c6b29ab922da94b788da955c09b417/USER'],
-'P6_1400sq_R0p384': [0.1679, '/nmssmSignalCascadeV01_13TeV2017_P6_1400sq_R0384/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P6_1400sq_R0p384-65c6b29ab922da94b788da955c09b417/USER'],
+'P6_1400sq_R0p384': [0.1679, '/nmssmSignalCascadeV01_13TeV2017_P6_1400sq_R0p384/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P6_1400sq_R0p384-65c6b29ab922da94b788da955c09b417/USER'],
 'P6_1200sq_R0p99': [0.4969, '/nmssmSignalCascadeV01_13TeV2017_P6_1200sq_R0p99/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P6_1200sq_R0p99-65c6b29ab922da94b788da955c09b417/USER'],
 'P6_1200sq_R0p555': [0.4969, '/nmssmSignalCascadeV01_13TeV2017_P6_1200sq_R0p555/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P6_1200sq_R0p555-65c6b29ab922da94b788da955c09b417/USER'],
 'P6_1200sq_R0p384': [0.4969, '/nmssmSignalCascadeV01_13TeV2017_P6_1200sq_R0p384/atittert-nmssmSignalCascadeV01_13TeV2017_processMc04_94X_titterton_P6_1200sq_R0p384-65c6b29ab922da94b788da955c09b417/USER'],
