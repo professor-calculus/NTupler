@@ -442,7 +442,7 @@ int main(){
         std::cout << "SIGNAL SAMPLE = " << signal << ": " << outputDir << std::endl;
         std::system( Form("source %scomboCommand.sh", outputDir.c_str()) );
         std::system( Form("sed -i \"s:number of nuisance parameters:number of nuisance parameters\\n---------------\\nshapes * * FAKE\\n---------------:\" %sallbins.txt", outputDir.c_str()) );
-        std::system( Form("text2workspace.py %sallbins.txt", outputDir.c_str()) );
+        // std::system( Form("text2workspace.py %sallbins.txt", outputDir.c_str()) );
         std::cout << std::endl;
     }
 
