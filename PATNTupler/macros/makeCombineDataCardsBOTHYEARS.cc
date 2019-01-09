@@ -67,7 +67,7 @@ int main(){
 
 
     // THREE: Samples To Use (different project for each signal sample)
-    const std::string dataSample = "Data";
+    const std::string dataSample = "data";
     std::vector<std::string> signalVec = { // the different signal samples you wish to use
                                             // "mH30_mSusy800",                                   "mH50_mSusy800",  "mH70_mSusy800",  "mH90_mSusy800",  "mH110_mSusy800",  "mH125_mSusy800",
                                             "mH30_mSusy1200", "mH35_mSusy1200", "mH40_mSusy1200", "mH50_mSusy1200", "mH70_mSusy1200", "mH90_mSusy1200", "mH110_mSusy1200", "mH125_mSusy1200",
@@ -106,31 +106,31 @@ int main(){
     // NB1 - make the sure the sample names match to the above (for the given year)
     // NB2 - "SIGNAL" refers all signal samples
     // *** 2016 ***
-    // CommonSystematicVec[2016].push_back( CommonSystematic("signalPDF lnN", 1.1, {"SIGNAL"}) ); // correlated to 2017
-    CommonSystematicVec[2016].push_back( CommonSystematic("isrReweight lnN", "isr", {"SIGNAL"}) ); // correlated to 2017
+    // CommonSystematicVec[2016].push_back( CommonSystematic("signalPdfBOTH lnN", 1.1, {"SIGNAL"}) ); // correlated to 2017
+    CommonSystematicVec[2016].push_back( CommonSystematic("isrReweightBOTH lnN", "isr", {"SIGNAL"}) ); // correlated to 2017
     CommonSystematicVec[2016].push_back( CommonSystematic("luminosity2016 lnN", 1.025, {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("XS_TTJets2016 lnN", 1.5, {"TTJets"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("XS_ZJets2016 lnN", 1.5, {"ZJets"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("XS_WJets2016 lnN", 1.5, {"WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("jecAKXUnc lnN", "jecAKXUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // correlated to 2017
+    CommonSystematicVec[2016].push_back( CommonSystematic("jecAKXUncBOTH lnN", "jecAKXUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // correlated to 2017
     CommonSystematicVec[2016].push_back( CommonSystematic("jerAKXUnc2016 lnN", "jerAKXUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("jmsUnc lnN", "jmsUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // correlated to 2017
-    CommonSystematicVec[2016].push_back( CommonSystematic("jmrUnc lnN", "jmrUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // correlated to 2017
+    CommonSystematicVec[2016].push_back( CommonSystematic("jmsUncBOTH lnN", "jmsUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // correlated to 2017
+    CommonSystematicVec[2016].push_back( CommonSystematic("jmrUncBOTH lnN", "jmrUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // correlated to 2017
     CommonSystematicVec[2016].push_back( CommonSystematic("SigDbtTag2016 lnN", "dbtTag", {"SIGNAL"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("TtDbtTag2016 lnN", "dbtTag", {"TTJets"}) );
     // *** 2017 ***
-    // CommonSystematicVec[2017].push_back( CommonSystematic("signalPDF lnN", 1.1, {"SIGNAL"}) ); // correlated to 2016
-    CommonSystematicVec[2017].push_back( CommonSystematic("isrReweight lnN", "isr", {"SIGNAL"}) ); // correlated to 2016
+    // CommonSystematicVec[2017].push_back( CommonSystematic("signalPdfBOTH lnN", 1.1, {"SIGNAL"}) ); // correlated to 2016
+    CommonSystematicVec[2017].push_back( CommonSystematic("isrReweightBOTH lnN", "isr", {"SIGNAL"}) ); // correlated to 2016
     CommonSystematicVec[2017].push_back( CommonSystematic("luminosity2017 lnN", 1.023, {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets0L2017 lnN", 1.5, {"TTJets0L"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets1L2017 lnN", 1.5, {"TTJets1L"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets2L2017 lnN", 1.5, {"TTJets2L"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("XS_ZJets2017 lnN", 1.5, {"ZJets"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("XS_WJets2017 lnN", 1.5, {"WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("jecAKXUnc lnN", "jecAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
+    CommonSystematicVec[2017].push_back( CommonSystematic("jecAKXUncBOTH lnN", "jecAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
     CommonSystematicVec[2017].push_back( CommonSystematic("jerAKXUnc2017 lnN", "jerAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("jmsUnc lnN", "jmsUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
-    CommonSystematicVec[2017].push_back( CommonSystematic("jmrUnc lnN", "jmrUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
+    CommonSystematicVec[2017].push_back( CommonSystematic("jmsUncBOTH lnN", "jmsUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
+    CommonSystematicVec[2017].push_back( CommonSystematic("jmrUncBOTH lnN", "jmrUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
     CommonSystematicVec[2017].push_back( CommonSystematic("SigDbtTag2017 lnN", "dbtTag", {"SIGNAL"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("TtDbtTag2017 lnN", "dbtTag", {"TTJets0L", "TTJets1L", "TTJets2L"}) );
 
@@ -457,12 +457,12 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     std::string postamble = "";
 
     if (yearOfRun == 2016){
-        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_08_03/MassCutsV09/run2016/";
+        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2016/";
         postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
     }
     else if (yearOfRun == 2017){
-        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_08_03/MassCutsV09/run2017/";
-        postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi41.root";
+        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2017/";
+        postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi42.root";
     }
     else{
         std::cout << "You have not given GetHistograms a valid year" << std::endl;
@@ -470,7 +470,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     }
 
     std::vector<std::string> histoNameVec;
-    histoNameVec.push_back("Data");
+    histoNameVec.push_back("data");
     histoNameVec.push_back("TTJets");
     histoNameVec.push_back("TTJets0L");
     histoNameVec.push_back("TTJets1L");
@@ -482,6 +482,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("mH50_mSusy800");
     histoNameVec.push_back("mH70_mSusy800");
     histoNameVec.push_back("mH90_mSusy800");
+    histoNameVec.push_back("mH110_mSusy800");
     histoNameVec.push_back("mH125_mSusy800");
     histoNameVec.push_back("mH30_mSusy1200");
     histoNameVec.push_back("mH35_mSusy1200");
@@ -489,6 +490,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("mH50_mSusy1200");
     histoNameVec.push_back("mH70_mSusy1200");
     histoNameVec.push_back("mH90_mSusy1200");
+    histoNameVec.push_back("mH110_mSusy1200");
     histoNameVec.push_back("mH125_mSusy1200");
     histoNameVec.push_back("mH30_mSusy1600");
     histoNameVec.push_back("mH35_mSusy1600");
@@ -496,6 +498,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("mH50_mSusy1600");
     histoNameVec.push_back("mH70_mSusy1600");
     histoNameVec.push_back("mH90_mSusy1600");
+    histoNameVec.push_back("mH110_mSusy1600");
     histoNameVec.push_back("mH125_mSusy1600");
     histoNameVec.push_back("mH30_mSusy2000");
     histoNameVec.push_back("mH35_mSusy2000");
@@ -503,6 +506,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("mH50_mSusy2000");
     histoNameVec.push_back("mH70_mSusy2000");
     histoNameVec.push_back("mH90_mSusy2000");
+    histoNameVec.push_back("mH110_mSusy2000");
     histoNameVec.push_back("mH125_mSusy2000");
     histoNameVec.push_back("mH30_mSusy2200");
     histoNameVec.push_back("mH35_mSusy2200");
@@ -510,6 +514,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("mH50_mSusy2200");
     histoNameVec.push_back("mH70_mSusy2200");
     histoNameVec.push_back("mH90_mSusy2200");
+    histoNameVec.push_back("mH110_mSusy2200");
     histoNameVec.push_back("mH125_mSusy2200");
     histoNameVec.push_back("mH30_mSusy2400");
     histoNameVec.push_back("mH35_mSusy2400");
@@ -517,6 +522,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("mH50_mSusy2400");
     histoNameVec.push_back("mH70_mSusy2400");
     histoNameVec.push_back("mH90_mSusy2400");
+    histoNameVec.push_back("mH110_mSusy2400");
     histoNameVec.push_back("mH125_mSusy2400");
     histoNameVec.push_back("mH30_mSusy2600");
     histoNameVec.push_back("mH35_mSusy2600");
@@ -524,6 +530,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("mH50_mSusy2600");
     histoNameVec.push_back("mH70_mSusy2600");
     histoNameVec.push_back("mH90_mSusy2600");
+    histoNameVec.push_back("mH110_mSusy2600");
     histoNameVec.push_back("mH125_mSusy2600");
     histoNameVec.push_back("mH30_mSusy2800");
     histoNameVec.push_back("mH35_mSusy2800");
@@ -531,12 +538,14 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("mH50_mSusy2800");
     histoNameVec.push_back("mH70_mSusy2800");
     histoNameVec.push_back("mH90_mSusy2800");
+    histoNameVec.push_back("mH110_mSusy2800");
     histoNameVec.push_back("mH125_mSusy2800");
 
     histoNameVec.push_back("mH30_mSquark800");
     histoNameVec.push_back("mH50_mSquark800");
     histoNameVec.push_back("mH70_mSquark800");
     histoNameVec.push_back("mH90_mSquark800");
+    histoNameVec.push_back("mH110_mSquark800");
     histoNameVec.push_back("mH125_mSquark800");
     histoNameVec.push_back("mH30_mSquark1200");
     histoNameVec.push_back("mH35_mSquark1200");
@@ -544,6 +553,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("mH50_mSquark1200");
     histoNameVec.push_back("mH70_mSquark1200");
     histoNameVec.push_back("mH90_mSquark1200");
+    histoNameVec.push_back("mH110_mSquark1200");
     histoNameVec.push_back("mH125_mSquark1200");
     histoNameVec.push_back("mH30_mSquark1600");
     histoNameVec.push_back("mH35_mSquark1600");
@@ -551,6 +561,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("mH50_mSquark1600");
     histoNameVec.push_back("mH70_mSquark1600");
     histoNameVec.push_back("mH90_mSquark1600");
+    histoNameVec.push_back("mH110_mSquark1600");
     histoNameVec.push_back("mH125_mSquark1600");
     histoNameVec.push_back("mH30_mSquark2000");
     histoNameVec.push_back("mH35_mSquark2000");
@@ -558,6 +569,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("mH50_mSquark2000");
     histoNameVec.push_back("mH70_mSquark2000");
     histoNameVec.push_back("mH90_mSquark2000");
+    histoNameVec.push_back("mH110_mSquark2000");
     histoNameVec.push_back("mH125_mSquark2000");
     histoNameVec.push_back("mH30_mSquark2200");
     histoNameVec.push_back("mH35_mSquark2200");
@@ -565,6 +577,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("mH50_mSquark2200");
     histoNameVec.push_back("mH70_mSquark2200");
     histoNameVec.push_back("mH90_mSquark2200");
+    histoNameVec.push_back("mH110_mSquark2200");
     histoNameVec.push_back("mH125_mSquark2200");
     histoNameVec.push_back("mH30_mSquark2400");
     histoNameVec.push_back("mH35_mSquark2400");
@@ -572,6 +585,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("mH50_mSquark2400");
     histoNameVec.push_back("mH70_mSquark2400");
     histoNameVec.push_back("mH90_mSquark2400");
+    histoNameVec.push_back("mH110_mSquark2400");
     histoNameVec.push_back("mH125_mSquark2400");
     histoNameVec.push_back("mH30_mSquark2600");
     histoNameVec.push_back("mH35_mSquark2600");
@@ -579,6 +593,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("mH50_mSquark2600");
     histoNameVec.push_back("mH70_mSquark2600");
     histoNameVec.push_back("mH90_mSquark2600");
+    histoNameVec.push_back("mH110_mSquark2600");
     histoNameVec.push_back("mH125_mSquark2600");
     histoNameVec.push_back("mH30_mSquark2800");
     histoNameVec.push_back("mH35_mSquark2800");
@@ -586,18 +601,15 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("mH50_mSquark2800");
     histoNameVec.push_back("mH70_mSquark2800");
     histoNameVec.push_back("mH90_mSquark2800");
+    histoNameVec.push_back("mH110_mSquark2800");
     histoNameVec.push_back("mH125_mSquark2800");
 
     std::vector<std::string> nonTrivialSysVec;
     nonTrivialSysVec.push_back("NOSYS");
-    nonTrivialSysVec.push_back("jecAK4UncUp");
-    nonTrivialSysVec.push_back("jecAK4UncDown");
-    nonTrivialSysVec.push_back("jerAK4UncUp");
-    nonTrivialSysVec.push_back("jerAK4UncDown");
-    nonTrivialSysVec.push_back("jecAK8UncUp");
-    nonTrivialSysVec.push_back("jecAK8UncDown");
-    nonTrivialSysVec.push_back("jerAK8UncUp");
-    nonTrivialSysVec.push_back("jerAK8UncDown");
+    nonTrivialSysVec.push_back("jecAKXUncUp");
+    nonTrivialSysVec.push_back("jecAKXUncDown");
+    nonTrivialSysVec.push_back("jerAKXUncUp");
+    nonTrivialSysVec.push_back("jerAKXUncDown");
     nonTrivialSysVec.push_back("jmsUncUp");
     nonTrivialSysVec.push_back("jmsUncDown");
     nonTrivialSysVec.push_back("jmrUncUp");
