@@ -56,7 +56,7 @@ int main(){
 
 
     // ONE: save info (signal specific directories beneath this)
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_10_24/2016_and_2017_wrong2017MassSystematics/TESTING_allSys/";
+    const std::string outputDirGeneral = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_08/2016_and_2017_wrong2017MassSystematics/TESTING_allSys/";
   
 
 
@@ -69,14 +69,96 @@ int main(){
     // THREE: Samples To Use (different project for each signal sample)
     const std::string dataSample = "Data";
     std::vector<std::string> signalVec = { // the different signal samples you wish to use
-                                            // "mH30_mSusy800",                                   "mH50_mSusy800",  "mH70_mSusy800",  "mH90_mSusy800",  "mH125_mSusy800",
-                                            "mH30_mSusy1200", "mH35_mSusy1200", "mH40_mSusy1200", "mH50_mSusy1200", "mH70_mSusy1200", "mH90_mSusy1200", "mH125_mSusy1200",
-                                            "mH30_mSusy1600", "mH35_mSusy1600", "mH40_mSusy1600", "mH50_mSusy1600", "mH70_mSusy1600", "mH90_mSusy1600", "mH125_mSusy1600",
-                                            "mH30_mSusy2000", "mH35_mSusy2000", "mH40_mSusy2000", "mH50_mSusy2000", "mH70_mSusy2000", "mH90_mSusy2000", "mH125_mSusy2000",
-                                            "mH30_mSusy2200", "mH35_mSusy2200", "mH40_mSusy2200", "mH50_mSusy2200", "mH70_mSusy2200", "mH90_mSusy2200", "mH125_mSusy2200",
-                                            "mH30_mSusy2400", "mH35_mSusy2400", "mH40_mSusy2400", "mH50_mSusy2400", "mH70_mSusy2400", "mH90_mSusy2400", "mH125_mSusy2400",
-                                            "mH30_mSusy2600", "mH35_mSusy2600", "mH40_mSusy2600", "mH50_mSusy2600", "mH70_mSusy2600", "mH90_mSusy2600", "mH125_mSusy2600", 
-                                            "mH30_mSusy2800", "mH35_mSusy2800", "mH40_mSusy2800", "mH50_mSusy2800", "mH70_mSusy2800", "mH90_mSusy2800", "mH125_mSusy2800", 
+                                            "P1_1200sq_R0p384",
+                                            "P1_1200sq_R0p555",
+                                            "P1_1200sq_R0p99",
+                                            "P1_1400sq_R0p384",
+                                            "P1_1400sq_R0p555",
+                                            "P1_1400sq_R0p99",
+                                            "P1_1800sq_R0p384",
+                                            "P1_1800sq_R0p555",
+                                            "P1_1800sq_R0p99",
+                                            "P1_2200sq_R0p384",
+                                            "P1_2200sq_R0p555",
+                                            "P1_2200sq_R0p99",
+                                            "P1_2600sq_R0p384",
+                                            "P1_2600sq_R0p555",
+                                            "P1_2600sq_R0p99",
+                                            "P3_1300sq_R0p384",
+                                            "P3_1300sq_R0p555",
+                                            "P3_1300sq_R0p99",
+                                            "P3_1500sq_R0p384",
+                                            "P3_1500sq_R0p555",
+                                            "P3_1500sq_R0p99",
+                                            "P3_1900sq_R0p384",
+                                            "P3_1900sq_R0p555",
+                                            "P3_1900sq_R0p99",
+                                            "P3_2300sq_R0p384",
+                                            "P3_2300sq_R0p555",
+                                            "P3_2300sq_R0p99",
+                                            "P3_2700sq_R0p384",
+                                            "P3_2700sq_R0p555",
+                                            "P3_2700sq_R0p99",
+                                            "P5_1200sq_R0p384",
+                                            "P5_1200sq_R0p555",
+                                            "P5_1200sq_R0p99",
+                                            "P5_1400sq_R0p384",
+                                            "P5_1400sq_R0p555",
+                                            "P5_1400sq_R0p99",
+                                            "P5_1800sq_R0p384",
+                                            "P5_1800sq_R0p555",
+                                            "P5_1800sq_R0p99",
+                                            "P5_2200sq_R0p384",
+                                            "P5_2200sq_R0p555",
+                                            "P5_2200sq_R0p99",
+                                            "P5_2600sq_R0p384",
+                                            "P5_2600sq_R0p555",
+                                            "P5_2600sq_R0p99",
+                                            "P6_1200sq_R0p384",
+                                            "P6_1200sq_R0p555",
+                                            "P6_1200sq_R0p99",
+                                            "P6_1400sq_R0p384",
+                                            "P6_1400sq_R0p555",
+                                            "P6_1400sq_R0p99",
+                                            "P6_1800sq_R0p384",
+                                            "P6_1800sq_R0p555",
+                                            "P6_1800sq_R0p99",
+                                            "P6_2200sq_R0p384",
+                                            "P6_2200sq_R0p555",
+                                            "P6_2200sq_R0p99",
+                                            "P6_2600sq_R0p384",
+                                            "P6_2600sq_R0p555",
+                                            "P6_2600sq_R0p99",
+                                            "P7_1300sq_R0p384",
+                                            "P7_1300sq_R0p555",
+                                            "P7_1300sq_R0p99",
+                                            "P7_1500sq_R0p384",
+                                            "P7_1500sq_R0p555",
+                                            "P7_1500sq_R0p99",
+                                            "P7_1900sq_R0p384",
+                                            "P7_1900sq_R0p555",
+                                            "P7_1900sq_R0p99",
+                                            "P7_2300sq_R0p384",
+                                            "P7_2300sq_R0p555",
+                                            "P7_2300sq_R0p99",
+                                            "P7_2700sq_R0p384",
+                                            "P7_2700sq_R0p555",
+                                            "P7_2700sq_R0p99",
+                                            "P8_1300sq_R0p384",
+                                            "P8_1300sq_R0p555",
+                                            "P8_1300sq_R0p99",
+                                            "P8_1500sq_R0p384",
+                                            "P8_1500sq_R0p555",
+                                            "P8_1500sq_R0p99",
+                                            "P8_1900sq_R0p384",
+                                            "P8_1900sq_R0p555",
+                                            "P8_1900sq_R0p99",
+                                            "P8_2300sq_R0p384",
+                                            "P8_2300sq_R0p555",
+                                            "P8_2300sq_R0p99",
+                                            "P8_2700sq_R0p384",
+                                            "P8_2700sq_R0p555",
+                                            "P8_2700sq_R0p99",
                                         };
     // std::vector<std::string> signalVec = { // the different signal samples you wish to use: SQUARK PRODUCTION ONLY
     //                                         // "mH30_mSquark800",                                       "mH50_mSquark800",  "mH70_mSquark800",  "mH90_mSquark800",  "mH125_mSquark800",
@@ -451,11 +533,11 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     std::string postamble = "";
 
     if (yearOfRun == 2016){
-        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_08_03/MassCutsV09/run2016/";
+        preamble = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_2019_01_08/MassCutsV09/run2016/";
         postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
     }
     else if (yearOfRun == 2017){
-        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_08_03/MassCutsV09/run2017/";
+        preamble = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_2019_01_08/MassCutsV09/run2017/";
         postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi41.root";
     }
     else{
@@ -472,115 +554,96 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     histoNameVec.push_back("ZJets");
     histoNameVec.push_back("WJets");
     
-    histoNameVec.push_back("mH30_mSusy800");
-    histoNameVec.push_back("mH50_mSusy800");
-    histoNameVec.push_back("mH70_mSusy800");
-    histoNameVec.push_back("mH90_mSusy800");
-    histoNameVec.push_back("mH125_mSusy800");
-    histoNameVec.push_back("mH30_mSusy1200");
-    histoNameVec.push_back("mH35_mSusy1200");
-    histoNameVec.push_back("mH40_mSusy1200");
-    histoNameVec.push_back("mH50_mSusy1200");
-    histoNameVec.push_back("mH70_mSusy1200");
-    histoNameVec.push_back("mH90_mSusy1200");
-    histoNameVec.push_back("mH125_mSusy1200");
-    histoNameVec.push_back("mH30_mSusy1600");
-    histoNameVec.push_back("mH35_mSusy1600");
-    histoNameVec.push_back("mH40_mSusy1600");
-    histoNameVec.push_back("mH50_mSusy1600");
-    histoNameVec.push_back("mH70_mSusy1600");
-    histoNameVec.push_back("mH90_mSusy1600");
-    histoNameVec.push_back("mH125_mSusy1600");
-    histoNameVec.push_back("mH30_mSusy2000");
-    histoNameVec.push_back("mH35_mSusy2000");
-    histoNameVec.push_back("mH40_mSusy2000");
-    histoNameVec.push_back("mH50_mSusy2000");
-    histoNameVec.push_back("mH70_mSusy2000");
-    histoNameVec.push_back("mH90_mSusy2000");
-    histoNameVec.push_back("mH125_mSusy2000");
-    histoNameVec.push_back("mH30_mSusy2200");
-    histoNameVec.push_back("mH35_mSusy2200");
-    histoNameVec.push_back("mH40_mSusy2200");
-    histoNameVec.push_back("mH50_mSusy2200");
-    histoNameVec.push_back("mH70_mSusy2200");
-    histoNameVec.push_back("mH90_mSusy2200");
-    histoNameVec.push_back("mH125_mSusy2200");
-    histoNameVec.push_back("mH30_mSusy2400");
-    histoNameVec.push_back("mH35_mSusy2400");
-    histoNameVec.push_back("mH40_mSusy2400");
-    histoNameVec.push_back("mH50_mSusy2400");
-    histoNameVec.push_back("mH70_mSusy2400");
-    histoNameVec.push_back("mH90_mSusy2400");
-    histoNameVec.push_back("mH125_mSusy2400");
-    histoNameVec.push_back("mH30_mSusy2600");
-    histoNameVec.push_back("mH35_mSusy2600");
-    histoNameVec.push_back("mH40_mSusy2600");
-    histoNameVec.push_back("mH50_mSusy2600");
-    histoNameVec.push_back("mH70_mSusy2600");
-    histoNameVec.push_back("mH90_mSusy2600");
-    histoNameVec.push_back("mH125_mSusy2600");
-    histoNameVec.push_back("mH30_mSusy2800");
-    histoNameVec.push_back("mH35_mSusy2800");
-    histoNameVec.push_back("mH40_mSusy2800");
-    histoNameVec.push_back("mH50_mSusy2800");
-    histoNameVec.push_back("mH70_mSusy2800");
-    histoNameVec.push_back("mH90_mSusy2800");
-    histoNameVec.push_back("mH125_mSusy2800");
-
-    histoNameVec.push_back("mH30_mSquark800");
-    histoNameVec.push_back("mH50_mSquark800");
-    histoNameVec.push_back("mH70_mSquark800");
-    histoNameVec.push_back("mH90_mSquark800");
-    histoNameVec.push_back("mH125_mSquark800");
-    histoNameVec.push_back("mH30_mSquark1200");
-    histoNameVec.push_back("mH35_mSquark1200");
-    histoNameVec.push_back("mH40_mSquark1200");
-    histoNameVec.push_back("mH50_mSquark1200");
-    histoNameVec.push_back("mH70_mSquark1200");
-    histoNameVec.push_back("mH90_mSquark1200");
-    histoNameVec.push_back("mH125_mSquark1200");
-    histoNameVec.push_back("mH30_mSquark1600");
-    histoNameVec.push_back("mH35_mSquark1600");
-    histoNameVec.push_back("mH40_mSquark1600");
-    histoNameVec.push_back("mH50_mSquark1600");
-    histoNameVec.push_back("mH70_mSquark1600");
-    histoNameVec.push_back("mH90_mSquark1600");
-    histoNameVec.push_back("mH125_mSquark1600");
-    histoNameVec.push_back("mH30_mSquark2000");
-    histoNameVec.push_back("mH35_mSquark2000");
-    histoNameVec.push_back("mH40_mSquark2000");
-    histoNameVec.push_back("mH50_mSquark2000");
-    histoNameVec.push_back("mH70_mSquark2000");
-    histoNameVec.push_back("mH90_mSquark2000");
-    histoNameVec.push_back("mH125_mSquark2000");
-    histoNameVec.push_back("mH30_mSquark2200");
-    histoNameVec.push_back("mH35_mSquark2200");
-    histoNameVec.push_back("mH40_mSquark2200");
-    histoNameVec.push_back("mH50_mSquark2200");
-    histoNameVec.push_back("mH70_mSquark2200");
-    histoNameVec.push_back("mH90_mSquark2200");
-    histoNameVec.push_back("mH125_mSquark2200");
-    histoNameVec.push_back("mH30_mSquark2400");
-    histoNameVec.push_back("mH35_mSquark2400");
-    histoNameVec.push_back("mH40_mSquark2400");
-    histoNameVec.push_back("mH50_mSquark2400");
-    histoNameVec.push_back("mH70_mSquark2400");
-    histoNameVec.push_back("mH90_mSquark2400");
-    histoNameVec.push_back("mH125_mSquark2400");
-    histoNameVec.push_back("mH30_mSquark2600");
-    histoNameVec.push_back("mH35_mSquark2600");
-    histoNameVec.push_back("mH40_mSquark2600");
-    histoNameVec.push_back("mH50_mSquark2600");
-    histoNameVec.push_back("mH70_mSquark2600");
-    histoNameVec.push_back("mH90_mSquark2600");
-    histoNameVec.push_back("mH125_mSquark2600");
-    histoNameVec.push_back("mH30_mSquark2800");
-    histoNameVec.push_back("mH35_mSquark2800");
-    histoNameVec.push_back("mH40_mSquark2800");
-    histoNameVec.push_back("mH50_mSquark2800");
-    histoNameVec.push_back("mH70_mSquark2800");
-    histoNameVec.push_back("mH90_mSquark2800");
-    histoNameVec.push_back("mH125_mSquark2800");
+    histoNameVec.push_back("P1_1200sq_R0p384");
+    histoNameVec.push_back("P1_1200sq_R0p555");
+    histoNameVec.push_back("P1_1200sq_R0p99");
+    histoNameVec.push_back("P1_1400sq_R0p384");
+    histoNameVec.push_back("P1_1400sq_R0p555");
+    histoNameVec.push_back("P1_1400sq_R0p99");
+    histoNameVec.push_back("P1_1800sq_R0p384");
+    histoNameVec.push_back("P1_1800sq_R0p555");
+    histoNameVec.push_back("P1_1800sq_R0p99");
+    histoNameVec.push_back("P1_2200sq_R0p384");
+    histoNameVec.push_back("P1_2200sq_R0p555");
+    histoNameVec.push_back("P1_2200sq_R0p99");
+    histoNameVec.push_back("P1_2600sq_R0p384");
+    histoNameVec.push_back("P1_2600sq_R0p555");
+    histoNameVec.push_back("P1_2600sq_R0p99");
+    histoNameVec.push_back("P3_1300sq_R0p384");
+    histoNameVec.push_back("P3_1300sq_R0p555");
+    histoNameVec.push_back("P3_1300sq_R0p99");
+    histoNameVec.push_back("P3_1500sq_R0p384");
+    histoNameVec.push_back("P3_1500sq_R0p555");
+    histoNameVec.push_back("P3_1500sq_R0p99");
+    histoNameVec.push_back("P3_1900sq_R0p384");
+    histoNameVec.push_back("P3_1900sq_R0p555");
+    histoNameVec.push_back("P3_1900sq_R0p99");
+    histoNameVec.push_back("P3_2300sq_R0p384");
+    histoNameVec.push_back("P3_2300sq_R0p555");
+    histoNameVec.push_back("P3_2300sq_R0p99");
+    histoNameVec.push_back("P3_2700sq_R0p384");
+    histoNameVec.push_back("P3_2700sq_R0p555");
+    histoNameVec.push_back("P3_2700sq_R0p99");
+    histoNameVec.push_back("P5_1200sq_R0p384");
+    histoNameVec.push_back("P5_1200sq_R0p555");
+    histoNameVec.push_back("P5_1200sq_R0p99");
+    histoNameVec.push_back("P5_1400sq_R0p384");
+    histoNameVec.push_back("P5_1400sq_R0p555");
+    histoNameVec.push_back("P5_1400sq_R0p99");
+    histoNameVec.push_back("P5_1800sq_R0p384");
+    histoNameVec.push_back("P5_1800sq_R0p555");
+    histoNameVec.push_back("P5_1800sq_R0p99");
+    histoNameVec.push_back("P5_2200sq_R0p384");
+    histoNameVec.push_back("P5_2200sq_R0p555");
+    histoNameVec.push_back("P5_2200sq_R0p99");
+    histoNameVec.push_back("P5_2600sq_R0p384");
+    histoNameVec.push_back("P5_2600sq_R0p555");
+    histoNameVec.push_back("P5_2600sq_R0p99");
+    histoNameVec.push_back("P6_1200sq_R0p384");
+    histoNameVec.push_back("P6_1200sq_R0p555");
+    histoNameVec.push_back("P6_1200sq_R0p99");
+    histoNameVec.push_back("P6_1400sq_R0p384");
+    histoNameVec.push_back("P6_1400sq_R0p555");
+    histoNameVec.push_back("P6_1400sq_R0p99");
+    histoNameVec.push_back("P6_1800sq_R0p384");
+    histoNameVec.push_back("P6_1800sq_R0p555");
+    histoNameVec.push_back("P6_1800sq_R0p99");
+    histoNameVec.push_back("P6_2200sq_R0p384");
+    histoNameVec.push_back("P6_2200sq_R0p555");
+    histoNameVec.push_back("P6_2200sq_R0p99");
+    histoNameVec.push_back("P6_2600sq_R0p384");
+    histoNameVec.push_back("P6_2600sq_R0p555");
+    histoNameVec.push_back("P6_2600sq_R0p99");
+    histoNameVec.push_back("P7_1300sq_R0p384");
+    histoNameVec.push_back("P7_1300sq_R0p555");
+    histoNameVec.push_back("P7_1300sq_R0p99");
+    histoNameVec.push_back("P7_1500sq_R0p384");
+    histoNameVec.push_back("P7_1500sq_R0p555");
+    histoNameVec.push_back("P7_1500sq_R0p99");
+    histoNameVec.push_back("P7_1900sq_R0p384");
+    histoNameVec.push_back("P7_1900sq_R0p555");
+    histoNameVec.push_back("P7_1900sq_R0p99");
+    histoNameVec.push_back("P7_2300sq_R0p384");
+    histoNameVec.push_back("P7_2300sq_R0p555");
+    histoNameVec.push_back("P7_2300sq_R0p99");
+    histoNameVec.push_back("P7_2700sq_R0p384");
+    histoNameVec.push_back("P7_2700sq_R0p555");
+    histoNameVec.push_back("P7_2700sq_R0p99");
+    histoNameVec.push_back("P8_1300sq_R0p384");
+    histoNameVec.push_back("P8_1300sq_R0p555");
+    histoNameVec.push_back("P8_1300sq_R0p99");
+    histoNameVec.push_back("P8_1500sq_R0p384");
+    histoNameVec.push_back("P8_1500sq_R0p555");
+    histoNameVec.push_back("P8_1500sq_R0p99");
+    histoNameVec.push_back("P8_1900sq_R0p384");
+    histoNameVec.push_back("P8_1900sq_R0p555");
+    histoNameVec.push_back("P8_1900sq_R0p99");
+    histoNameVec.push_back("P8_2300sq_R0p384");
+    histoNameVec.push_back("P8_2300sq_R0p555");
+    histoNameVec.push_back("P8_2300sq_R0p99");
+    histoNameVec.push_back("P8_2700sq_R0p384");
+    histoNameVec.push_back("P8_2700sq_R0p555");
+    histoNameVec.push_back("P8_2700sq_R0p99");
 
     std::vector<std::string> nonTrivialSysVec;
     nonTrivialSysVec.push_back("NOSYS");
