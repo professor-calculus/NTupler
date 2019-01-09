@@ -346,3 +346,6 @@ namespace ObjectID{
         }
         return jetIsLoose;
     }
+
+} // closes namespace ObjectID
+#endif
