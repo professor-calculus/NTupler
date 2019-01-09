@@ -56,7 +56,7 @@ int main(){
 
 
     // ONE: save info (signal specific directories beneath this)
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_10_24/2016_and_2017_wrong2017MassSystematics/TESTING_allSys/";
+    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/guess_S/";
   
 
 
@@ -69,24 +69,24 @@ int main(){
     // THREE: Samples To Use (different project for each signal sample)
     const std::string dataSample = "Data";
     std::vector<std::string> signalVec = { // the different signal samples you wish to use
-                                            // "mH30_mSusy800",                                   "mH50_mSusy800",  "mH70_mSusy800",  "mH90_mSusy800",  "mH125_mSusy800",
-                                            "mH30_mSusy1200", "mH35_mSusy1200", "mH40_mSusy1200", "mH50_mSusy1200", "mH70_mSusy1200", "mH90_mSusy1200", "mH125_mSusy1200",
-                                            "mH30_mSusy1600", "mH35_mSusy1600", "mH40_mSusy1600", "mH50_mSusy1600", "mH70_mSusy1600", "mH90_mSusy1600", "mH125_mSusy1600",
-                                            "mH30_mSusy2000", "mH35_mSusy2000", "mH40_mSusy2000", "mH50_mSusy2000", "mH70_mSusy2000", "mH90_mSusy2000", "mH125_mSusy2000",
-                                            "mH30_mSusy2200", "mH35_mSusy2200", "mH40_mSusy2200", "mH50_mSusy2200", "mH70_mSusy2200", "mH90_mSusy2200", "mH125_mSusy2200",
-                                            "mH30_mSusy2400", "mH35_mSusy2400", "mH40_mSusy2400", "mH50_mSusy2400", "mH70_mSusy2400", "mH90_mSusy2400", "mH125_mSusy2400",
-                                            "mH30_mSusy2600", "mH35_mSusy2600", "mH40_mSusy2600", "mH50_mSusy2600", "mH70_mSusy2600", "mH90_mSusy2600", "mH125_mSusy2600", 
-                                            "mH30_mSusy2800", "mH35_mSusy2800", "mH40_mSusy2800", "mH50_mSusy2800", "mH70_mSusy2800", "mH90_mSusy2800", "mH125_mSusy2800", 
+                                            // "mH30_mSusy800",                                   "mH50_mSusy800",  "mH70_mSusy800",  "mH90_mSusy800",  "mH110_mSusy800",  "mH125_mSusy800",
+                                            "mH30_mSusy1200", "mH35_mSusy1200", "mH40_mSusy1200", "mH50_mSusy1200", "mH70_mSusy1200", "mH90_mSusy1200", "mH110_mSusy1200", "mH125_mSusy1200",
+                                            "mH30_mSusy1600", "mH35_mSusy1600", "mH40_mSusy1600", "mH50_mSusy1600", "mH70_mSusy1600", "mH90_mSusy1600", "mH110_mSusy1600", "mH125_mSusy1600",
+                                            "mH30_mSusy2000", "mH35_mSusy2000", "mH40_mSusy2000", "mH50_mSusy2000", "mH70_mSusy2000", "mH90_mSusy2000", "mH110_mSusy2000", "mH125_mSusy2000",
+                                            "mH30_mSusy2200", "mH35_mSusy2200", "mH40_mSusy2200", "mH50_mSusy2200", "mH70_mSusy2200", "mH90_mSusy2200", "mH110_mSusy2200", "mH125_mSusy2200",
+                                            "mH30_mSusy2400", "mH35_mSusy2400", "mH40_mSusy2400", "mH50_mSusy2400", "mH70_mSusy2400", "mH90_mSusy2400", "mH110_mSusy2400", "mH125_mSusy2400",
+                                            "mH30_mSusy2600", "mH35_mSusy2600", "mH40_mSusy2600", "mH50_mSusy2600", "mH70_mSusy2600", "mH90_mSusy2600", "mH110_mSusy2600", "mH125_mSusy2600", 
+                                            "mH30_mSusy2800", "mH35_mSusy2800", "mH40_mSusy2800", "mH50_mSusy2800", "mH70_mSusy2800", "mH90_mSusy2800", "mH110_mSusy2800", "mH125_mSusy2800", 
                                         };
     // std::vector<std::string> signalVec = { // the different signal samples you wish to use: SQUARK PRODUCTION ONLY
-    //                                         // "mH30_mSquark800",                                       "mH50_mSquark800",  "mH70_mSquark800",  "mH90_mSquark800",  "mH125_mSquark800",
-    //                                         "mH30_mSquark1200", "mH35_mSquark1200", "mH40_mSquark1200", "mH50_mSquark1200", "mH70_mSquark1200", "mH90_mSquark1200", "mH125_mSquark1200",
-    //                                         "mH30_mSquark1600", "mH35_mSquark1600", "mH40_mSquark1600", "mH50_mSquark1600", "mH70_mSquark1600", "mH90_mSquark1600", "mH125_mSquark1600",
-    //                                         "mH30_mSquark2000", "mH35_mSquark2000", "mH40_mSquark2000", "mH50_mSquark2000", "mH70_mSquark2000", "mH90_mSquark2000", "mH125_mSquark2000",
-    //                                         "mH30_mSquark2200", "mH35_mSquark2200", "mH40_mSquark2200", "mH50_mSquark2200", "mH70_mSquark2200", "mH90_mSquark2200", "mH125_mSquark2200",
-    //                                         "mH30_mSquark2400", "mH35_mSquark2400", "mH40_mSquark2400", "mH50_mSquark2400", "mH70_mSquark2400", "mH90_mSquark2400", "mH125_mSquark2400",
-    //                                         "mH30_mSquark2600", "mH35_mSquark2600", "mH40_mSquark2600", "mH50_mSquark2600", "mH70_mSquark2600", "mH90_mSquark2600", "mH125_mSquark2600", 
-    //                                         "mH30_mSquark2800", "mH35_mSquark2800", "mH40_mSquark2800", "mH50_mSquark2800", "mH70_mSquark2800", "mH90_mSquark2800", "mH125_mSquark2800", 
+    //                                         // "mH30_mSquark800",                                       "mH50_mSquark800",  "mH70_mSquark800",  "mH90_mSquark800",  "mH110_mSquark800",  "mH125_mSquark800",
+    //                                         "mH30_mSquark1200", "mH35_mSquark1200", "mH40_mSquark1200", "mH50_mSquark1200", "mH70_mSquark1200", "mH90_mSquark1200", "mH110_mSquark1200", "mH125_mSquark1200",
+    //                                         "mH30_mSquark1600", "mH35_mSquark1600", "mH40_mSquark1600", "mH50_mSquark1600", "mH70_mSquark1600", "mH90_mSquark1600", "mH110_mSquark1600", "mH125_mSquark1600",
+    //                                         "mH30_mSquark2000", "mH35_mSquark2000", "mH40_mSquark2000", "mH50_mSquark2000", "mH70_mSquark2000", "mH90_mSquark2000", "mH110_mSquark2000", "mH125_mSquark2000",
+    //                                         "mH30_mSquark2200", "mH35_mSquark2200", "mH40_mSquark2200", "mH50_mSquark2200", "mH70_mSquark2200", "mH90_mSquark2200", "mH110_mSquark2200", "mH125_mSquark2200",
+    //                                         "mH30_mSquark2400", "mH35_mSquark2400", "mH40_mSquark2400", "mH50_mSquark2400", "mH70_mSquark2400", "mH90_mSquark2400", "mH110_mSquark2400", "mH125_mSquark2400",
+    //                                         "mH30_mSquark2600", "mH35_mSquark2600", "mH40_mSquark2600", "mH50_mSquark2600", "mH70_mSquark2600", "mH90_mSquark2600", "mH110_mSquark2600", "mH125_mSquark2600", 
+    //                                         "mH30_mSquark2800", "mH35_mSquark2800", "mH40_mSquark2800", "mH50_mSquark2800", "mH70_mSquark2800", "mH90_mSquark2800", "mH110_mSquark2800", "mH125_mSquark2800", 
     //                                     };                                        
     std::map<unsigned int, std::vector<std::string>> mcbkVec;
     mcbkVec[2016] = {"TTJets", "ZJets", "WJets"}; // the 2016 MC background samples
@@ -106,7 +106,7 @@ int main(){
     // NB1 - make the sure the sample names match to the above (for the given year)
     // NB2 - "SIGNAL" refers all signal samples
     // *** 2016 ***
-    CommonSystematicVec[2016].push_back( CommonSystematic("signalPDF lnN", 1.1, {"SIGNAL"}) ); // correlated to 2017
+    // CommonSystematicVec[2016].push_back( CommonSystematic("signalPDF lnN", 1.1, {"SIGNAL"}) ); // correlated to 2017
     CommonSystematicVec[2016].push_back( CommonSystematic("isrReweight lnN", "isr", {"SIGNAL"}) ); // correlated to 2017
     CommonSystematicVec[2016].push_back( CommonSystematic("luminosity2016 lnN", 1.025, {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("XS_TTJets2016 lnN", 1.5, {"TTJets"}) );
@@ -119,7 +119,7 @@ int main(){
     CommonSystematicVec[2016].push_back( CommonSystematic("SigDbtTag2016 lnN", "dbtTag", {"SIGNAL"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("TtDbtTag2016 lnN", "dbtTag", {"TTJets"}) );
     // *** 2017 ***
-    CommonSystematicVec[2017].push_back( CommonSystematic("signalPDF lnN", 1.1, {"SIGNAL"}) ); // correlated to 2016
+    // CommonSystematicVec[2017].push_back( CommonSystematic("signalPDF lnN", 1.1, {"SIGNAL"}) ); // correlated to 2016
     CommonSystematicVec[2017].push_back( CommonSystematic("isrReweight lnN", "isr", {"SIGNAL"}) ); // correlated to 2016
     CommonSystematicVec[2017].push_back( CommonSystematic("luminosity2017 lnN", 1.023, {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
     CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets0L2017 lnN", 1.5, {"TTJets0L"}) );
@@ -137,7 +137,7 @@ int main(){
 
 
     // SIX: are we blinded ? if true, uses Fi * data_obs_UnD as a dummy for data_obs_S
-    bool areWeBlinded = false;
+    bool areWeBlinded = true;
 
 
 
@@ -217,8 +217,14 @@ int main(){
             for (unsigned int iBin = 1; iBin < numberOfBins + 1; ++iBin){
 
                 unsigned int data_obs_S = hOriginal_[Form("S_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
-                if (areWeBlinded) data_obs_S = ceil( QcdSidebandCorr::GetCorr(iBin, yearOfRun) * hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin)); // use to get a non zero and roughly realistic value whilst we are blinded
-                // if (areWeBlinded) data_obs_S = ceil( QcdSidebandCorr::GetCorr(iBin, yearOfRun) * hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin) + 0.000001); // use to get a non zero and roughly realistic value whilst we are blinded
+                // WHEN BLINDED: USE TO GET AN ESTIMATE OF TRUE YIELD 
+                if (areWeBlinded){
+                    int estimate = round( QcdSidebandCorr::GetCorr(iBin, yearOfRun) * hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin) );
+                    if (yearOfRun==2016 && iBin%2==0) estimate = estimate - 1;
+                    if (yearOfRun==2017 && iBin%2!=0) estimate = estimate + 1;
+                    if (estimate < 0) estimate = 0;
+                    data_obs_S = estimate;
+                }
                 const unsigned int data_obs_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
                 const double rate_signal_S = hOriginal_[Form("S_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);
                 const double rate_signal_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);;
