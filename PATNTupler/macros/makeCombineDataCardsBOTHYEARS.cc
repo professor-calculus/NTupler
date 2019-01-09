@@ -399,8 +399,9 @@ int main(){
                     }
                 }
                 
-                unsigned int iHtIndex = floor( (iBin - 1) / (numberOfBins / numberOfHtDivisions) ); 
-                double qcdUnDLowerBound = qcdUnDLowerBoundInHtDivison[iHtIndex];
+                // unsigned int iHtIndex = floor( (iBin - 1) / (numberOfBins / numberOfHtDivisions) ); 
+                // double qcdUnDLowerBound = qcdUnDLowerBoundInHtDivison[iHtIndex]; // COMPLICATED LOWER BOUND
+                double qcdUnDLowerBound = 0.25; // SIMPLE LOWER BOUND
                 dataCard << "\n# estimate QCD\n";
                 double corrRatio = QcdSidebandCorr::GetCorr(iBin, yearOfRun);
                 double corrRatioError = QcdSidebandCorr::GetCorrErr(iBin, yearOfRun);
