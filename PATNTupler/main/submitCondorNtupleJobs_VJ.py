@@ -20,12 +20,12 @@ baseDir = os.environ['CMSSW_BASE']
 
 executable = "nTupAnaNMSSM" # wrt 'main' directory
 code = "mainNMSSM.cc" # wrt 'main' directory
-inputFileListPath = baseDir + "/src/NTupler/PATNTupler/fileLists/8_0_29_dbtV4_wSys/NAMEXYZ.list"
-outputDirectory = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11_CMSSW_8_0_29_dbtV4/mc/NAMEXYZ/" # has to be the full path
+inputFileListPath = baseDir + "/src/NTupler/PATNTupler/fileLists/8_0_31/NAMEXYZ.list"
+outputDirectory = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_2019_01_08_CMSSW_8_0_31/mc/NAMEXYZ/" # has to be the full path
 sampleType = "SIGNAL" # choose from SIGNAL, DATA, TTJETS, OTHER_MC
 yearOfRun = 2016
 filesPerJob = 30
-logDirectoryBase = "/opt/ppd/scratch/xap79297/jobLogs/flatTrees/"
+logDirectoryBase = "/opt/ppd/scratch/titterton/jobLogs/flatTrees/"
 
 ###########################################################################################################
 ###########################################################################################################
