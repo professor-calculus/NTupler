@@ -24,6 +24,8 @@
 #include "DoubleBTagSF.h"
 #include "IsrWeights.h"
 #include "SoftDropPuppiSF.h"
+#include "rhoEACorrections.h"
+#include "objectIDCalculations.h"
 
 using std::cout;
 using std::ifstream;
@@ -250,6 +252,20 @@ private:
 	Float_t treeVar_ht_jerAK4UncUp_;
 	Float_t treeVar_ht_jerAK4UncDown_;
 
+	Float_t treeVar_mht_;
+	Float_t treeVar_mht_jecAK4UncUp_;
+	Float_t treeVar_mht_jecAK4UncDown_;
+	Float_t treeVar_mht_jerAK4UncUp_;
+	Float_t treeVar_mht_jerAK4UncDown_;
+
+	Float_t treeVar_mht_phi_;
+	Float_t treeVar_mht_phi_jecUncUp_;
+	Float_t treeVar_mht_phi_jecUncDown_;
+	Float_t treeVar_mht_phi_jerUncUp_;
+	Float_t treeVar_mht_phi_jerUncDown_;
+
+	UInt_t treeVar_nrVetoObjects_;
+
 	UInt_t treeVar_nrSlimJets_;
 	
 	TLorentzVector* treeVar_jetA_p4Ptr_; TLorentzVector treeVar_jetA_p4_;
@@ -375,6 +391,20 @@ public:
 		mainAnaTree_->Branch("ht_jerAK4UncUp", &treeVar_ht_jerAK4UncUp_, "ht_jerAK4UncUp/F");
 		mainAnaTree_->Branch("ht_jerAK4UncDown", &treeVar_ht_jerAK4UncDown_, "ht_jerAK4UncDown/F");
 
+		mainAnaTree_->Branch("mht", &treeVar_mht_, "ht/F");
+		mainAnaTree_->Branch("mht_jecAK4UncUp", &treeVar_mht_jecAK4UncUp_, "mht_jecAK4UncUp/F");
+		mainAnaTree_->Branch("mht_jecAK4UncDown", &treeVar_mht_jecAK4UncDown_, "mht_jecAK4UncDown/F");
+		mainAnaTree_->Branch("mht_jerAK4UncUp", &treeVar_mht_jerAK4UncUp_, "mht_jerAK4UncUp/F");
+		mainAnaTree_->Branch("mht_jerAK4UncDown", &treeVar_mht_jerAK4UncDown_, "mht_jerAK4UncDown/F");
+
+		mainAnaTree_->Branch("mht_phi", &treeVar_mht_phi_, "mht/F");
+		mainAnaTree_->Branch("mht_phi_jecUncUp", &treeVar_mht_phi_jecUncUp_, "mht_jecUncUp/F");
+		mainAnaTree_->Branch("mht_phi_jecUncDown", &treeVar_mht_phi_jecUncDown_, "mht_jecUncDown/F");
+		mainAnaTree_->Branch("mht_phi_jerUncUp", &treeVar_mht_phi_jerUncUp_, "mht_jerUncUp/F");
+		mainAnaTree_->Branch("mht_phi_jerUncDown", &treeVar_mht_phi_jerUncDown_, "mht_jerUncDown/F");
+
+		mainAnaTree_->Branch("nrVetoObjects", &treeVar_nrVetoObjects_, "nrVetoObjects/i");
+
 		mainAnaTree_->Branch("nrSlimJets", &treeVar_nrSlimJets_, "nrSlimJets/i");
 		
 		mainAnaTree_->Branch("slimJetA_p4", &treeVar_jetA_p4Ptr_);
@@ -395,7 +425,7 @@ public:
 
 	~FatDoubleBJetPairTree(){}
 
-	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecAK4UncUp, const float& ht_jecAK4UncDown, const float& ht_jerAK4UncUp, const float& ht_jerAK4UncDown, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision, const int& nPU, const float& nTrueInt, int nISR, const int& nGluino, const double& D_factor, const unsigned int& yearOfRun, const double& muon_maxPt, const double& muon_sumPt, const float& corr_prefire, const float& corr_prefireUp, const float& corr_prefireDown, const unsigned int& nPrefireCandidates, const float& corr_scaleUp, const float& corr_scaleDown)
+	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecAK4UncUp, const float& ht_jecAK4UncDown, const float& ht_jerAK4UncUp, const float& ht_jerAK4UncDown, const float& mht, const float& mht_jecAK4UncUp, const float& mht_jecAK4UncDown, const float& mht_jerAK4UncUp, const float& mht_jerAK4UncDown, const float& mhtPhi, const float& mhtPhi_jecAK4UncUp, const float& mhtPhi_jecAK4UncDown, const float& mhtPhi_jerAK4UncUp, const float& mhtPhi_jerAK4UncDown, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision, const int& nPU, const float& nTrueInt, int nISR, const int& nGluino, const double& D_factor, const unsigned int& yearOfRun, const double& muon_maxPt, const double& muon_sumPt, const float& corr_prefire, const float& corr_prefireUp, const float& corr_prefireDown, const unsigned int& nPrefireCandidates, const float& corr_scaleUp, const float& corr_scaleDown, const int& nVetoObjects)
 	{
 		
 		// DO THE WEIGHTS
@@ -504,6 +534,7 @@ public:
 		treeVar_nTrueInt_ = nTrueInt;
 		treeVar_nGluino_ = nGluino;
 		treeVar_nPrefireCandidates_ = nPrefireCandidates;
+		treeVar_nrVetoObjects_ = nVetoObjects;
 
 		treeVar_fatJetA_p4_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
 		treeVar_fatJetB_p4_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
@@ -532,6 +563,8 @@ public:
 		treeVar_fatJetB_muonEnergyFraction_ = fatJetB.muonEnergyFraction();
 
 		treeVar_ht_ = ht;
+		treeVar_mht_ = mht;
+		treeVar_mht_phi_ = mhtPhi;
 		treeVar_nrSlimJets_ = slimJets.size();
 		
 		treeVar_muon_maxPt_ = muon_maxPt;
@@ -552,6 +585,16 @@ public:
 			treeVar_ht_jecAK4UncDown_ = ht_jecAK4UncDown;
 			treeVar_ht_jerAK4UncUp_ = ht_jerAK4UncUp;
 			treeVar_ht_jerAK4UncDown_ = ht_jerAK4UncDown;
+
+			treeVar_mht_jecAK4UncUp_ = mht_jecAK4UncUp;
+			treeVar_mht_jecAK4UncDown_ = mht_jecAK4UncDown;
+			treeVar_mht_jerAK4UncUp_ = mht_jerAK4UncUp;
+			treeVar_mht_jerAK4UncDown_ = mht_jerAK4UncDown;
+
+			treeVar_mht_phi_jecUncUp_ = mhtPhi_jecAK4UncUp;
+			treeVar_mht_phi_jecUncDown_ = mhtPhi_jecAK4UncDown;
+			treeVar_mht_phi_jerUncUp_ = mhtPhi_jerAK4UncUp;
+			treeVar_mht_phi_jerUncDown_ = mhtPhi_jerAK4UncDown;
 
 			if (slimJets.size() > 1){
 				treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
@@ -689,6 +732,16 @@ public:
 			treeVar_ht_jecAK4UncDown_ = ht;
 			treeVar_ht_jerAK4UncUp_ = ht;
 			treeVar_ht_jerAK4UncDown_ = ht;
+
+			treeVar_mht_jecAK4UncUp_ = mht;
+			treeVar_mht_jecAK4UncDown_ = mht;
+			treeVar_mht_jerAK4UncUp_ = mht;
+			treeVar_mht_jerAK4UncDown_ = mht;
+
+			treeVar_mht_phi_jecUncUp_ = mhtPhi;
+			treeVar_mht_phi_jecUncDown_ = mhtPhi;
+			treeVar_mht_phi_jerUncUp_ = mhtPhi;
+			treeVar_mht_phi_jerUncDown_ = mhtPhi;
 
 			if (slimJets.size() > 1){
 				treeVar_jetA_p4_.SetPtEtaPhiE(slimJets.at(0).pt(), slimJets.at(0).eta(), slimJets.at(0).phi(), slimJets.at(0).et() * cosh(slimJets.at(0).eta()) );
@@ -903,12 +956,22 @@ int main(int argc, char** argv){
 			// std::cout << "ERROR setting up reader for event info branch (status = " << evtInfo.GetSetupStatus() << ")" << std::endl;
 			// return 1;
 		// }
-		// TTreeReaderValue<std::vector<ran::ElectronStruct>> eleBranchValue(treeReader, "electronCollection");
+		TTreeReaderValue<std::vector<ran::ElectronStruct>> eleBranchValue(treeReader, "electronCollection");
 		// if (eleBranchValue.GetSetupStatus() < 0) {
 			// std::cout << "ERROR setting up reader for electronCollection branch (status = " << eleBranchValue.GetSetupStatus() << ")" << std::endl;
 			// return 1;
 		// }
 		TTreeReaderValue<std::vector<ran::MuonStruct>> muonBranchValue(treeReader, "muonCollection");
+		// if (muonBranchValue.GetSetupStatus() < 0) {
+			// std::cout << "ERROR setting up reader for muonCollection branch (status = " << muonBranchValue.GetSetupStatus() << ")" << std::endl; 
+			// return 1;
+		// }
+		TTreeReaderValue<std::vector<ran::PhotonStruct>> photonBranchValue(treeReader, "photonCollection");
+		// if (muonBranchValue.GetSetupStatus() < 0) {
+			// std::cout << "ERROR setting up reader for muonCollection branch (status = " << muonBranchValue.GetSetupStatus() << ")" << std::endl; 
+			// return 1;
+		// }
+		TTreeReaderValue<std::vector<ran::TrackStruct>> trackBranchValue(treeReader, "trackCollection");
 		// if (muonBranchValue.GetSetupStatus() < 0) {
 			// std::cout << "ERROR setting up reader for muonCollection branch (status = " << muonBranchValue.GetSetupStatus() << ")" << std::endl; 
 			// return 1;
@@ -958,8 +1021,10 @@ int main(int argc, char** argv){
 		// Loop over the events
 		while (treeReader.Next()) {
 
-			// const std::vector<ran::NtElectron> electronVec(eleBranchValue->begin(), eleBranchValue->end());
+			const std::vector<ran::NtElectron> electronVec(eleBranchValue->begin(), eleBranchValue->end());
 			const std::vector<ran::NtMuon> muonVec(muonBranchValue->begin(), muonBranchValue->end());
+			const std::vector<ran::NtPhoton> photonVec(photonBranchValue->begin(), photonBranchValue->end());
+			const std::vector<ran::NtTrack> trackVec(trackBranchValue->begin(), trackBranchValue->end());
 			const std::vector<ran::NtJet> jetVec(jetBranchValue->begin(), jetBranchValue->end());
 			std::vector<ran::NtFatJet> fatJetVec(fatJetBranchValue->begin(), fatJetBranchValue->end());
 			// std::sort(fatJetVec.begin(), fatJetVec.end(), [](const ran::NtFatJet& a, const ran::NtFatJet& b) {return b.pt() < a.pt();} );
@@ -978,6 +1043,7 @@ int main(int argc, char** argv){
 			const float nTrueInt = *nTrueInt_tree;
 			const int nISR = *nISR_tree;
 			const int nGluino = *nGluino_tree;
+			const float rho = *rhoMiniIso_tree;
 
 			const float corr_prefire = *prefire_tree;
 			const float corr_prefireUp = *prefireUp_tree;
@@ -1023,6 +1089,164 @@ int main(int argc, char** argv){
 				}
 			}
 
+			// Missing-HT calculation: Only consider jets with |eta| < 3.0, pt > 40.0 (Same jets as for scalar HT)
+			double mht_x = 0.0;
+			double mht_y = 0.0;
+			double mht_jecUncUp_x = 0.0;
+			double mht_jecUncUp_y = 0.0;
+			double mht_jecUncDown_x = 0.0;
+			double mht_jecUncDown_y = 0.0;
+			double mht_jerUncUp_x = 0.0;
+			double mht_jerUncUp_y = 0.0;
+			double mht_jerUncDown_x = 0.0;
+			double mht_jerUncDown_y = 0.0;
+
+			double mht = 0.0;
+			double mht_jecUncUp = 0.0;
+			double mht_jecUncDown = 0.0;
+			double mht_jerUncUp = 0.0;
+			double mht_jerUncDown = 0.0;
+
+			double mht_phi = 0.0;
+			double mht_phi_jecUncUp = 0.0;
+			double mht_phi_jecUncDown = 0.0;
+			double mht_phi_jerUncUp = 0.0;
+			double mht_phi_jerUncDown = 0.0;
+
+			for (const ran::NtJet& jet : jetVec) {
+
+				if (isJetLooseID(jet)==false)
+					continue;
+
+				if ( fabs(jet.eta()) <= 3.0 ){
+
+					if ( jet.pt() >= 40.0 ) mht_x += jet.pt() * -1 * TMath::Cos(jet.phi());
+					if ( jet.pt() * ( 1.0 + jet.jecUncertainty() ) >= 40.0 ) mht_jecUncUp_x += jet.pt() * -1 * TMath::Cos(jet.phi()) * ( 1.0 + jet.jecUncertainty() );
+					if ( jet.pt() * ( 1.0 - jet.jecUncertainty() ) >= 40.0 ) mht_jecUncDown_x += jet.pt() * -1 * TMath::Cos(jet.phi()) * ( 1.0 - jet.jecUncertainty() );
+					if ( jet.pt() * jet.jerUncUp() >= 40.0 ) mht_jerUncUp_x += jet.pt() * -1 * TMath::Cos(jet.phi()) * jet.jerUncUp();
+					if ( jet.pt() * jet.jerUncDown() >= 40.0 ) mht_jerUncDown_x += jet.pt() * -1 * TMath::Cos(jet.phi()) * jet.jerUncDown();
+
+					if ( jet.pt() >= 40.0 ) mht_y += jet.pt() * TMath::Sin(jet.phi());
+					if ( jet.pt() * ( 1.0 + jet.jecUncertainty() ) >= 40.0 ) mht_jecUncUp_y += jet.pt() * TMath::Sin(jet.phi()) * ( 1.0 + jet.jecUncertainty() );
+					if ( jet.pt() * ( 1.0 - jet.jecUncertainty() ) >= 40.0 ) mht_jecUncDown_y += jet.pt() * TMath::Sin(jet.phi()) * ( 1.0 - jet.jecUncertainty() );
+					if ( jet.pt() * jet.jerUncUp() >= 40.0 ) mht_jerUncUp_y += jet.pt() * TMath::Sin(jet.phi()) * jet.jerUncUp();
+					if ( jet.pt() * jet.jerUncDown() >= 40.0 ) mht_jerUncDown_y += jet.pt() * TMath::Sin(jet.phi()) * jet.jerUncDown();
+				}
+			}
+
+			mht = TMath::Sqrt(mht_y*mht_y + mht_x*mht_x);
+			//std::cout << mht << std::endl;
+			mht_jecUncUp = TMath::Sqrt(mht_jecUncUp_y*mht_jecUncUp_y + mht_jecUncUp_x*mht_jecUncUp_x);
+			mht_jecUncDown = TMath::Sqrt(mht_jecUncDown_y*mht_jecUncDown_y + mht_jecUncDown_x*mht_jecUncDown_x);
+			mht_jerUncUp = TMath::Sqrt(mht_jerUncUp_y*mht_jerUncUp_y + mht_jerUncUp_x*mht_jerUncUp_x);
+			mht_jerUncDown = TMath::Sqrt(mht_jerUncDown_y*mht_jerUncDown_y + mht_jerUncDown_x*mht_jerUncDown_x);
+
+			mht_phi = TMath::ATan2(mht_y, mht_x);
+			mht_phi_jecUncUp = TMath::ATan2(mht_jecUncUp_y, mht_jecUncUp_x);
+			mht_phi_jecUncDown = TMath::ATan2(mht_jecUncDown_y, mht_jecUncDown_x);
+			mht_phi_jerUncUp = TMath::ATan2(mht_jerUncUp_y, mht_jerUncUp_x);
+			mht_phi_jerUncDown = TMath::ATan2(mht_jerUncDown_y, mht_jerUncDown_x);
+
+			// Do the leptons
+			std::vector<ran::NtElectron> centralElectrons;
+			std::vector<ran::NtElectron> isolatedElectrons;
+			std::vector<ran::NtMuon> centralMuons;
+			std::vector<ran::NtMuon> looseMu;
+			std::vector<ran::NtPhoton> centralPhotons;
+			std::vector<ran::NtPhoton> isolatedPhotons;
+			std::vector<ran::NtTrack> chargedTracks;
+			std::vector<ran::NtTrack> isolatedTracks;
+
+			for (const ran::NtElectron& electron : electronVec) {
+				if (fabs(electron.eta()) < 2.5) centralElectrons.push_back(electron);
+			}
+
+			for (const ran::NtMuon& muon : muonVec) {
+				if (fabs(muon.eta()) < 2.5 && muon.pt() > 10.) centralMuons.push_back(muon);
+			}
+
+			for (const ran::NtPhoton& photon : photonVec) {
+				if (fabs(photon.eta()) < 2.5 && photon.pt() > 25.) centralPhotons.push_back(photon);
+			}
+
+			for (const ran::NtTrack& track : trackVec) {
+				if( abs(track.eta() < 2.5) && track.pt() > 10 && track.fromPV()> 1 && track.pdgId() == 211)
+				{
+					chargedTracks.push_back(track);
+				}
+			}
+
+			// Electron ID and mini isolation
+			for (unsigned int ilep(0); ilep < centralElectrons.size(); ilep++) {
+				ran::NtElectron lep = centralElectrons[ilep];
+				double miniso = ObjectID::electronPFIsolation(trackVec, lep, 0.05, 0.2, 10., false, rho, yearOfRun);
+				if( miniso < 0.1 && lep.passHEEPID() )
+				{
+					isolatedElectrons.push_back(lep);
+				}
+			}
+
+			// Loose muon ID and mini isolation
+			for (unsigned int ilep(0); ilep < centralMuons.size(); ilep++) {
+				ran::NtMuon lep = centralMuons[ilep];
+				double miniso = ObjectID::muonPFIsolation(trackVec, lep, 0.05, 0.2, 10., false);
+				if( miniso < 0.2 && lep.isLooseMuon() )
+				{
+					looseMu.push_back(lep);
+				}
+			}
+
+			// Loose photon ID and rel isolation
+			int nPrefirePhotons = 0;
+			for (unsigned int ilep(0); ilep < centralPhotons.size(); ilep++) {
+				ran::NtPhoton lep = centralPhotons[ilep];
+				// 2016 photon ID criteria
+				if( !lep.passElectronVeto() ) continue;
+				if( lep.hadronicOverEm() > 0.05 ) continue;
+				if( lep.isEB() )
+				{
+					if( lep.sigmaIetaIeta() > 0.0102 ) continue;
+					if( lep.pfIso_chHadrIso() > 3.32 ) continue;
+					if( lep.pfIso_neuHadrIso() > ( 1.92 + 0.014*lep.pt() + 0.000019*lep.pt()*lep.pt() ) ) continue;
+					if( lep.pfIso_photonIso() > ( 0.81 + 0.0053*lep.pt() ) ) continue;
+				}
+				else if( lep.isEE() )
+				{
+					if( lep.sigmaIetaIeta() > 0.0274 ) continue;
+					if( lep.pfIso_chHadrIso() > 1.97 ) continue;
+					if( lep.pfIso_neuHadrIso() > ( 11.86 + 0.014*lep.pt() + 0.000025*lep.pt()*lep.pt() ) ) continue;
+					if( lep.pfIso_photonIso() > ( 0.83 + 0.0034*lep.pt() ) ) continue;
+				}
+				else continue;
+
+				double miniso = ObjectID::photonPFIsolation(trackVec, lep, false, rho, yearOfRun);
+				if(miniso < 0.2)
+				{
+					isolatedPhotons.push_back(lep);
+					if (lep.pt() > 50 && abs(lep.eta()) > 2.25 && abs(lep.eta()) < 3.0 ) nPrefirePhotons++;
+				}
+			}
+
+			// Track isolation
+			for (unsigned int ilep(0); ilep < chargedTracks.size(); ilep++) {
+				ran::NtTrack lep = chargedTracks[ilep];
+				double miniso = ObjectID::trackPFIsolation(trackVec, lep, false);
+				if(miniso < 0.1)
+				{
+					isolatedTracks.push_back(lep);
+				}
+			}
+
+			std::vector<ran::NtMuon> tightMu = ObjectID::tightMuons(centralMuons, rho, yearOfRun);
+
+			// Number of muons
+			unsigned int nLooseMuons = looseMu.size();
+			unsigned int nTightMuons = tightMu.size();
+			unsigned int nIsolatedPhotons = isolatedPhotons.size();
+			unsigned int nIsolatedElectrons = isolatedElectrons.size();
+			unsigned int nIsolatedTracks = isolatedTracks.size();
+			unsigned int nVetoObjects = nLooseMuons + nIsolatedElectrons + nIsolatedPhotons + nIsolatedTracks;
+
 			std::vector<ran::NtFatJet> centralFatJetVec; // get the *central* fatJets
 			for (const ran::NtFatJet& fatJet : fatJetVec) {
 				if (fabs(fatJet.eta()) < 2.4 && fatJet.PUPPIsoftdrop_mass() > -1.0) centralFatJetVec.push_back(fatJet);
@@ -1047,8 +1271,8 @@ int main(int argc, char** argv){
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt, corr_prefire, corr_prefireUp, corr_prefireDown, nPrefireCandidates, corr_scaleUp, corr_scaleDown);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt, corr_prefire, corr_prefireUp, corr_prefireDown, nPrefireCandidates, corr_scaleUp, corr_scaleDown);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDownmht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt, corr_prefire, corr_prefireUp, corr_prefireDown, nPrefireCandidates, corr_scaleUp, corr_scaleDown, nVetoObjects);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDownmht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt, corr_prefire, corr_prefireUp, corr_prefireDown, nPrefireCandidates, corr_scaleUp, corr_scaleDown, nVetoObjects);
 
 				// Fat Jets ordered by DBT discriminator score
 				// doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt, corr_prefire, corr_prefireUp, corr_prefireDown, nPrefireCandidates, corr_scaleUp, corr_scaleDown);
