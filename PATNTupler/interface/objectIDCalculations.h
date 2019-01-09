@@ -17,13 +17,7 @@
 #include <TTreeReaderValue.h>
 
 //RAL PARTICLE HEADERS
-#include "NtpReader.hh"
-#include "GoodLumiChecker.hh"
-#include "TriggerPathToIndex.hh"
 #include "deltaR.h"
-#include "DoubleBTagSF.h"
-#include "IsrWeights.h"
-#include "SoftDropPuppiSF.h"
 #include "rhoEACorrections.h"
 
 namespace ObjectID{
