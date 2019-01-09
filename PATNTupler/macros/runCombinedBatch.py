@@ -16,20 +16,18 @@ import time
 # A COMMA SEPARATED LIST OF NUISANCES THAT YOU WISH TO FREEZE.
 
 nuisancesToFreeze = "" # >>> no freezing a thing
-# nuisancesToFreeze = "signalPDF"
-# nuisancesToFreeze = "isrReweight"
+# nuisancesToFreeze = "signalPdfBOTH"
+# nuisancesToFreeze = "isrReweightBOTH"
 # nuisancesToFreeze = "SigDbtTag2016,SigDbtTag2017"
 # nuisancesToFreeze = "TtDbtTag2016,TtDbtTag2017"
 # nuisancesToFreeze = "XS_TTJets2016,XS_TTJets0L2017,XS_TTJets1L2017,XS_TTJets2L2017"
 # nuisancesToFreeze = "XS_ZJets2016,XS_ZJets2017"
 # nuisancesToFreeze = "XS_WJets2016,XS_WJets2017"
 # nuisancesToFreeze = "luminosity2016,luminosity2017"
-# nuisancesToFreeze = "jecAK4Unc2016,jecAK4Unc2017"
-# nuisancesToFreeze = "jerAK4Unc2016,jerAK4Unc2017"
-# nuisancesToFreeze = "jecAK8Unc2016,jecAK8Unc2017"
-# nuisancesToFreeze = "jerAK8Unc2016,jerAK8Unc2017"
-# nuisancesToFreeze = "jmsUnc2016,jmsUnc2017"
-# nuisancesToFreeze = "jmrUnc2016,jmrUnc2017"
+# nuisancesToFreeze = "jecAKXUncBOTH"
+# nuisancesToFreeze = "jerAKXUnc2016,jerAKXUnc2017"
+# nuisancesToFreeze = "jmsUncBOTH"
+# nuisancesToFreeze = "jmrUncBOTH"
 
 #############################
 #############################
@@ -92,9 +90,11 @@ for signalDir in signalDirs:
 
     higgsMass = signalDir[2:c1]
     susyMass = signalDir[c2:c3]
-    fileToUse = os.path.join(inputDir,signalDir,"allbins.root")
+    fileToUseTXT = os.path.join(inputDir,signalDir,"allbins.txt")
+    fileToUseROOT = os.path.join(inputDir,signalDir,"allbins.root")
     
     print "RUNNING COMBINE FOR mH" + higgsMass + " mSusy" + susyMass
+    print "nuisance to freeze: " + nuisancesToFreeze
 
     condorFileName = signalDir + ".condor"
     jobFileName = signalDir + ".sh"
@@ -118,10 +118,11 @@ for signalDir in signalDirs:
     g.write("cd %s\n" % cmsswBase)
     g.write("eval `scramv1 runtime -sh`\n")
     g.write("cd %s\n" % inputDir)
+    g.write("text2workspace.py %s\n" % fileToUseTXT)
     if (len(nuisancesToFreeze) == 0):
-        g.write("combine -M AsymptoticLimits --mass %s --keyword-value mSusy=%s %s\n" % (higgsMass, susyMass, fileToUse) )
+        g.write("combine -M AsymptoticLimits --mass %s --keyword-value mSusy=%s %s\n" % (higgsMass, susyMass, fileToUseROOT) )
     else:
-        g.write("combine -M AsymptoticLimits --freezeParameter %s --mass %s --keyword-value mSusy=%s %s\n" % (nuisancesToFreeze, higgsMass, susyMass, fileToUse) )
+        g.write("combine -M AsymptoticLimits --freezeParameter %s --mass %s --keyword-value mSusy=%s %s\n" % (nuisancesToFreeze, higgsMass, susyMass, fileToUseROOT) )
     g.close()
     os.chmod("%s/%s" % (batchDir,jobFileName), 0755)
 
