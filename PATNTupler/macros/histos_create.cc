@@ -205,6 +205,10 @@ int main(int argc, char** argv){
 
         std::string SF_weight = "DUMMY"; // only use this on samples with non-trivial scale factors
         if (systematicName.substr(0,3) != "SF_") SF_weight = "weight_combined";
+        else if (systematicName.substr(0,8) == "SF_scale"){
+            if (systematicName.substr(8) == "Up") SF_weight = "weight_combined * weight_scaleUp";
+            else SF_weight = "weight_combined * weight_scaleDown";
+        }
         else{
             std::string SF_name = systematicName.substr(3);
             if ( SF_name.substr(SF_name.size()-2) == "Up") SF_weight = Form("weight_combined * (weight_%s / weight_%s)", SF_name.c_str(), SF_name.substr(0, SF_name.size()-2).c_str());

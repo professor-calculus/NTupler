@@ -31,20 +31,21 @@ import argparse as a
 ### ## # USER INPUTS # ## ###
 
 mSusyVec = [1200, 1600, 2000, 2200, 2400, 2600, 2800]
-mHiggsVec = [30, 35, 40, 50, 70, 90, 125]
-inputDirStandard = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_10_24/2016_and_2017_wrong2017MassSystematics/TESTING_allSys/"
-inputDirComparison = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_10_24/2016_and_2017_wrong2017MassSystematics/TESTING_noIsrReweight/"
+mHiggsVec = [30, 35, 40, 50, 70, 90, 110, 125]
+inputDirStandard = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/"
+inputDirComparison = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/noIsrReweight/"
 outputDir = inputDirComparison + "/a_limit_plot_comparison_intp1_noObs/"
+# outputDir = inputDirComparison + "/a_limit_plot_comparison_intp1_withObs/"
 
 standardLabel = ""
 comparsionLabel = "(No ISR Sys)"
 legendTextSize = 13.0
 
 plotObserved = False
-plotTitle = '77.24 fb$^{-1}$ (13 TeV)'
+plotTitle = '77.5 fb$^{-1}$ (13 TeV)'
 # maximally squeeze the z-axis
 minMu = -2.10
-maxMu = 1.25
+maxMu = 1.30
 
 #############################
 #############################
