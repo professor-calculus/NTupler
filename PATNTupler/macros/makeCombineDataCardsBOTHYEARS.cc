@@ -56,7 +56,7 @@ int main(){
 
 
     // ONE: save info (signal specific directories beneath this)
-    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/guess_S/";
+    const std::string outputDirGeneral = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2019_01_01/withGluino/allSys/";
   
 
 
@@ -217,14 +217,25 @@ int main(){
             for (unsigned int iBin = 1; iBin < numberOfBins + 1; ++iBin){
 
                 unsigned int data_obs_S = hOriginal_[Form("S_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
+                
                 // WHEN BLINDED: USE TO GET AN ESTIMATE OF TRUE YIELD 
                 if (areWeBlinded){
-                    int estimate = round( QcdSidebandCorr::GetCorr(iBin, yearOfRun) * hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin) );
-                    if (yearOfRun==2016 && iBin%2==0) estimate = estimate - 1;
-                    if (yearOfRun==2017 && iBin%2!=0) estimate = estimate + 1;
-                    if (estimate < 0) estimate = 0;
-                    data_obs_S = estimate;
+
+                    double mcCount_S = 0.0;
+                    double mcCount_UnD = 0.0;
+                    for (auto mcbk : mcbkVec[yearOfRun]){
+                        mcCount_S += hOriginal_[Form("S_tag_%s_NOSYS", mcbk.c_str())]->GetBinContent(iBin);               
+                        mcCount_UnD += hOriginal_[Form("UnD_tag_%s_NOSYS", mcbk.c_str())]->GetBinContent(iBin);
+                    }
+                    double dataEstimate = hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
+                    dataEstimate = dataEstimate - mcCount_UnD;
+                    if (dataEstimate < 0) dataEstimate = 0.0;
+                    dataEstimate = dataEstimate * QcdSidebandCorr::GetCorr(iBin, yearOfRun);
+                    dataEstimate = dataEstimate + mcCount_S;
+                    if (dataEstimate < 0) dataEstimate = 0.0;
+                    data_obs_S = round(dataEstimate);
                 }
+
                 const unsigned int data_obs_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())]->GetBinContent(iBin);
                 const double rate_signal_S = hOriginal_[Form("S_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);
                 const double rate_signal_UnD = hOriginal_[Form("UnD_tag_%s_NOSYS", signal.c_str())]->GetBinContent(iBin);;
