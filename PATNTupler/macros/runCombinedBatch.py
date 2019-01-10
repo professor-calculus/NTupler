@@ -28,6 +28,7 @@ nuisancesToFreeze = "" # >>> no freezing a thing
 # nuisancesToFreeze = "jerAKXUnc2016,jerAKXUnc2017"
 # nuisancesToFreeze = "jmsUncBOTH"
 # nuisancesToFreeze = "jmrUncBOTH"
+# nuisancesToFreeze = "prefire2016,prefire2017"
 
 #############################
 #############################
