@@ -632,6 +632,8 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     nonTrivialSysVec.push_back("dbtTagDown");
     nonTrivialSysVec.push_back("isrUp");
     nonTrivialSysVec.push_back("isrDown");
+    nonTrivialSysVec.push_back("prefireUp");
+    nonTrivialSysVec.push_back("prefireDown");
 
     for (size_t iH = 0; iH < histoNameVec.size(); ++iH){
 
