@@ -27,9 +27,9 @@
 //  CREATE THE HISTOGRAMS THAT WE USE TO DO ANALYSIS IN 1D
 
 
-void CreateHistograms(std::map<std::string,TH1D*>& h_, const std::vector<std::vector<std::string>>& cut2_ak8Dbt, const std::vector<std::vector<int>>& cut4_ht, const unsigned int& numberOfSegments, const std::vector<std::string>& systematicNameVec)
+void CreateHistograms(std::map<std::string,TH1D*>& h_, const std::vector<std::vector<std::string>>& cut2_ak8Dbt, const std::vector<std::vector<int>>& cut4_ht, const std::vector<std::vector<int>>& cut6_mht, const unsigned int& numberOfSegments, const std::vector<std::string>& systematicNameVec)
 {
-    unsigned int numberOfBins = cut4_ht.size() * numberOfSegments;
+    unsigned int numberOfBins = cut4_ht.size() * cut6_mht.size() * numberOfSegments;
 
     for (auto systematicName : systematicNameVec){
 
@@ -68,7 +68,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2019_01_01/MassCutsV09/run2016/SLIMXYZ/with_Sys/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_MHT_2019_01_08/MassCutsV09/run2016/SLIMXYZ/"; // where we are going to save the output plots (should include the samples name + binning maybe)
 
 
     // TWO: do we want to blind the S mass region? (true for data, false for everything else)
@@ -78,13 +78,15 @@ int main(int argc, char** argv){
     // THREE: set the cut params.
     std::vector<std::vector<std::string>> cut2_ak8Dbt;
     cut2_ak8Dbt.push_back({"DIAG_UP", "Loose"}); // TAG: Top Diagnol Corner Crossing Axis at...--> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
-    // cut2_ak8Dbt.push_back({"Loose", "Max", "Loose", "Max"}); // tagPRIME for TTJets special
-    // cut2_ak8Dbt.push_back({"Off","Loose","Off","Loose"}); // ANTI: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
-    // cut2_ak8Dbt.push_back({"Loose","Med2","Off","IDBTCv23"}); // CONTROL_A: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
-    // cut2_ak8Dbt.push_back({"Off","IDBTCv23","Loose","Med2"}); // CONTROL_B: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    cut2_ak8Dbt.push_back({"Loose", "Max", "Loose", "Max"}); // tagPRIME for TTJets special
+    cut2_ak8Dbt.push_back({"Off","Loose","Off","Loose"}); // ANTI: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    cut2_ak8Dbt.push_back({"Loose","Med2","Off","IDBTCv23"}); // CONTROL_A: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    cut2_ak8Dbt.push_back({"Off","IDBTCv23","Loose","Med2"}); // CONTROL_B: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     const int cut3_ak8Pt = 300;
     const std::vector<std::vector<int>> cut4_ht = { {1500,2500}, {2500,3500}, {3500,99999} }; // HT BIN
     // const std::vector<std::vector<int>> cut4_ht = { {1500,99999} }; // HT BIN
+    const std::vector<std::vector<int>> cut6_mht = { {0,200}, {200,99999} }; // MHT BIN
+    const std::vector<std::vector<int>> cut6_lepVeto = { {0,9999}, {0,1} }; // Lepton Veto BIN
     const std::vector<int> cut5_ak4Pt = {300,-1}; // 1st element for leading pt, 2nd element for secondary pt
     // const std::vector<int> cut5_ak4Pt = {-1,-1}; // 1st element for leading pt, 2nd element for secondary pt
 
@@ -117,7 +119,7 @@ int main(int argc, char** argv){
     // const std::vector<std::string> systematicNameVec = {"NOSYS"}; // >> data & no systematic
     // const std::vector<std::string> systematicNameVec = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_prefireUp", "SF_prefireDown"}; // >> WJets and ZJets
     // const std::vector<std::string> systematicNameVec = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_prefireUp", "SF_prefireDown"}; // >> TTJets
-    const std::vector<std::string> systematicNameVec = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown"}; // >> SIGNAL
+    const std::vector<std::string> systematicNameVec = {"NOSYS", "jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown"}; // >> SIGNAL
     // const std::vector<std::string> systematicNameVec = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown", "SF_scaleUp", "SF_scaleDown"}; // >> CENTRAL SIGNAL
 
 
@@ -131,6 +133,8 @@ int main(int argc, char** argv){
     CutVariable slimJetA_pt_CV = CutVariable("slimJetA_p4.Pt()", {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown"});
     CutVariable slimJetB_pt_CV = CutVariable("slimJetB_p4.Pt()", {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown"});
     CutVariable ht_CV = CutVariable("ht", {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown"});
+    CutVariable mht_CV = CutVariable("mht", {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown"});
+    CutVariable lepVeto_CV = CutVariable("nrVetoObjects", {});
 
 
     // EIGHT: >>>BELOW<<<
@@ -179,7 +183,7 @@ int main(int argc, char** argv){
     
     const unsigned int numberOfSegments = SN_Nodes.size() + 1;
     std::map<std::string, TH1D*> h_;
-    CreateHistograms(h_, cut2_ak8Dbt, cut4_ht, numberOfSegments, systematicNameVec);
+    CreateHistograms(h_, cut2_ak8Dbt, cut4_ht, cut6_mht, numberOfSegments, systematicNameVec);
 
     for (size_t iSys = 0; iSys < systematicNameVec.size(); ++iSys){
         const std::string systematicName = systematicNameVec[iSys];
@@ -193,6 +197,8 @@ int main(int argc, char** argv){
         std::string slimJetA_pt_name = slimJetA_pt_CV.GetCutVariableName(systematicName.c_str());
         std::string slimJetB_pt_name = slimJetB_pt_CV.GetCutVariableName(systematicName.c_str());
         std::string ht_name = ht_CV.GetCutVariableName(systematicName.c_str());
+        std::string mht_name = mht_CV.GetCutVariableName(systematicName.c_str());
+        std::string lepVeto_name = lepVeto_CV.GetCutVariableName(systematicName.c_str());
 
         // HACK to correlate AK4<->AK8 JECs and JERs
         std::replace(fatJetA_pt_name.begin(), fatJetA_pt_name.end(), 'X', '8');
@@ -219,7 +225,7 @@ int main(int argc, char** argv){
             }
         }
 
-        const unsigned int numberOfCutsForCodeTodo = (MassCutsObject.Get_SN_Nodes().size() + 1) * cut4_ht.size() * cut2_ak8Dbt.size() * 3;
+        const unsigned int numberOfCutsForCodeTodo = (MassCutsObject.Get_SN_Nodes().size() + 1) * cut4_ht.size() * cut2_ak8Dbt.size() * cut6_mht.size() * 3;
         unsigned int counter = 1;
         for (size_t iCut2 = 0; iCut2 < cut2_ak8Dbt.size(); ++iCut2){
             
@@ -237,100 +243,102 @@ int main(int argc, char** argv){
                 if (systematicName.substr(0,3) == "SF_") histogramName += "_" + systematicName.substr(3);
                 else histogramName += "_" + systematicName;
 
-                for (size_t iCut4 = 0; iCut4 < cut4_ht.size(); ++iCut4){
+                for (size_t iCut6 = 0; iCut6 < cut6_mht.size(); ++iCut6){
+                    for (size_t iCut4 = 0; iCut4 < cut4_ht.size(); ++iCut4){
 
-                    std::string dbtCut = "";
-                    if (cut2_ak8Dbt[iCut2].size() == 2 && cut2_ak8Dbt[iCut2][0] == "DIAG_UP")
-                        dbtCut = Form("%s >= (-1.0 * %s + 1.0 + %f) ", fatJetA_dbt_name.c_str(), fatJetB_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][1]) );
-                    if (cut2_ak8Dbt[iCut2].size() == 4)
-                        dbtCut = Form("%s>=%f && %s<%f && %s>=%f && %s<%f ", fatJetA_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][0]), fatJetA_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][1]), fatJetB_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][2]), fatJetB_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][3]) );
-                    std::string cutToApply = Form("%s && %s>%d && %s>%d && %s>=%d && %s<%d && %s>%d && %s>%d", dbtCut.c_str(), fatJetA_pt_name.c_str(), cut3_ak8Pt, fatJetB_pt_name.c_str(), cut3_ak8Pt, ht_name.c_str(), cut4_ht[iCut4][0], ht_name.c_str(), cut4_ht[iCut4][1], slimJetA_pt_name.c_str(), cut5_ak4Pt[0], slimJetB_pt_name.c_str(), cut5_ak4Pt[1]);
+                        std::string dbtCut = "";
+                        if (cut2_ak8Dbt[iCut2].size() == 2 && cut2_ak8Dbt[iCut2][0] == "DIAG_UP")
+                            dbtCut = Form("%s >= (-1.0 * %s + 1.0 + %f) ", fatJetA_dbt_name.c_str(), fatJetB_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][1]) );
+                        if (cut2_ak8Dbt[iCut2].size() == 4)
+                            dbtCut = Form("%s>=%f && %s<%f && %s>=%f && %s<%f ", fatJetA_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][0]), fatJetA_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][1]), fatJetB_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][2]), fatJetB_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][3]) );
+                        std::string cutToApply = Form("%s && %s>%d && %s>%d && %s>=%d && %s<%d && %s>%d && %s>%d && %s>=%d && %s<%d && %s>=%d && %s<%d", dbtCut.c_str(), fatJetA_pt_name.c_str(), cut3_ak8Pt, fatJetB_pt_name.c_str(), cut3_ak8Pt, ht_name.c_str(), cut4_ht[iCut4][0], ht_name.c_str(), cut4_ht[iCut4][1], slimJetA_pt_name.c_str(), cut5_ak4Pt[0], slimJetB_pt_name.c_str(), cut5_ak4Pt[1], mht_name.c_str(), cut6_mht[iCut6][0], mht_name.c_str(), cut6_mht[iCut6][1], lepVeto_name.c_str(), cut6_lepVeto[iCut6][0], lepVeto_name.c_str(), cut6_lepVeto[iCut6][1]);
 
-                    cutToApply += " && " + MassCutsObject.GetAllCuts()[iMassRegion];
-                    // TH2D hTemplate = TH2D("hTemplate", ";fatJetA_MassType (GeV);fatJetB_MassType (GeV)", 600, 0, 300, 600, 0, 300);
-                    TH2D hTemplate = TH2D("hTemplate", ";fatJetA_MassType (GeV);fatJetB_MassType (GeV)", 100, 0, 200, 100, 0, 200);
-                    std::string varToPlot = fatJetB_mass_name + ":" + fatJetA_mass_name;
-                    PlotEntry2D plotEntry = PlotEntry2D("plotEntry", hTemplate, varToPlot.c_str(), luminosity);
+                        cutToApply += " && " + MassCutsObject.GetAllCuts()[iMassRegion];
+                        // TH2D hTemplate = TH2D("hTemplate", ";fatJetA_MassType (GeV);fatJetB_MassType (GeV)", 600, 0, 300, 600, 0, 300);
+                        TH2D hTemplate = TH2D("hTemplate", ";fatJetA_MassType (GeV);fatJetB_MassType (GeV)", 100, 0, 200, 100, 0, 200);
+                        std::string varToPlot = fatJetB_mass_name + ":" + fatJetA_mass_name;
+                        PlotEntry2D plotEntry = PlotEntry2D("plotEntry", hTemplate, varToPlot.c_str(), luminosity);
 
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////
-                    // EIGHT: sample info - SOME SAMPLES NEED SYSTEMATIC WEIGHTS (Signal, TTJets, ...)
-                    // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. 
-                    // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.                    
-                    // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
-                    // 2016 (80X)
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////
+                        // EIGHT: sample info - SOME SAMPLES NEED SYSTEMATIC WEIGHTS (Signal, TTJets, ...)
+                        // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. 
+                        // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.                    
+                        // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
+                        // 2016 (80X)
 
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1206, SF_weight.c_str());
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 120.4, SF_weight.c_str());
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 25.25, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1206, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 120.4, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 25.25, SF_weight.c_str());
 
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/TTJets_ht1200plus/flatTree.root", cutToApply.c_str(), 831.76, SF_weight.c_str());
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 52.79, SF_weight.c_str());
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/WJets_ht1200plus/flatTree.root", cutToApply.c_str(), 95.14, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/TTJets_ht1200plus/flatTree.root", cutToApply.c_str(), 831.76, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 52.79, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/WJets_ht1200plus/flatTree.root", cutToApply.c_str(), 95.14, SF_weight.c_str());
 
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/CPS_h70s1200/flatTree.root", cutToApply.c_str(), 0.4951000*0.840*0.840, SF_weight.c_str());
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/CPS_h70s2000/flatTree.root", cutToApply.c_str(), 0.0091050*0.840*0.840, SF_weight.c_str());
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/CPS_h70s2600/flatTree.root", cutToApply.c_str(), 0.0006167*0.840*0.840, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/CPS_h70s1200/flatTree.root", cutToApply.c_str(), 0.4951000*0.840*0.840, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/CPS_h70s2000/flatTree.root", cutToApply.c_str(), 0.0091050*0.840*0.840, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/CPS_h70s2600/flatTree.root", cutToApply.c_str(), 0.0006167*0.840*0.840, SF_weight.c_str());
 
-                    // SIGNAL 2016
-                    plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
+                        // SIGNAL 2016
+                        plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
 
-                    // 2016 GOLDEN JSON DATASET
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/JetHT_Run2016TOTAL/flatTree.root", cutToApply.c_str());
+                        // 2016 GOLDEN JSON DATASET
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/JetHT_Run2016TOTAL/flatTree.root", cutToApply.c_str());
 
-                    // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
-                    // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
-                    // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. 
-                    // 2017 (94X)
+                        // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
+                        // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
+                        // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. 
+                        // 2017 (94X)
 
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1005, SF_weight.c_str());
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 101.8, SF_weight.c_str());
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 20.54, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/QCD_HT1000to1500_ht1499plus/flatTree.root", cutToApply.c_str(), 1005, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/QCD_HT1500to2000_ht1499plus/flatTree.root", cutToApply.c_str(), 101.8, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/QCD_HT2000toInf_ht1499plus/flatTree.root", cutToApply.c_str(), 20.54, SF_weight.c_str());
 
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/TTToHadronic_ht1200plus/flatTree.root", cutToApply.c_str(), 377.96, SF_weight.c_str());
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/TTToSemiLeptonic_ht1200plus/flatTree.root", cutToApply.c_str(), 365.34, SF_weight.c_str());
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/TTTo2L2Nu_ht1200plus/flatTree.root", cutToApply.c_str(), 88.29, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/TTToHadronic_ht1200plus/flatTree.root", cutToApply.c_str(), 377.96, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/TTToSemiLeptonic_ht1200plus/flatTree.root", cutToApply.c_str(), 365.34, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/TTTo2L2Nu_ht1200plus/flatTree.root", cutToApply.c_str(), 88.29, SF_weight.c_str());
 
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 18.69, SF_weight.c_str());
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/WJets_ht1200plus/flatTree.root", cutToApply.c_str(), 34.00, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 18.69, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/WJets_ht1200plus/flatTree.root", cutToApply.c_str(), 34.00, SF_weight.c_str());
 
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/CPS_h70s1200/flatTree.root", cutToApply.c_str(), 0.4951000*0.840*0.840, SF_weight.c_str());
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/CPS_h70s2000/flatTree.root", cutToApply.c_str(), 0.0091050*0.840*0.840, SF_weight.c_str());
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/CPS_h70s2600/flatTree.root", cutToApply.c_str(), 0.0006167*0.840*0.840, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/CPS_h70s1200/flatTree.root", cutToApply.c_str(), 0.4951000*0.840*0.840, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/CPS_h70s2000/flatTree.root", cutToApply.c_str(), 0.0091050*0.840*0.840, SF_weight.c_str());
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/CPS_h70s2600/flatTree.root", cutToApply.c_str(), 0.0006167*0.840*0.840, SF_weight.c_str());
 
-                    // SIGNAL 2017
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
+                        // SIGNAL 2017
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
 
-                    // 2017 GOLDEN JSON DATASET
-                    // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/JetHT_Run2017TOTAL/flatTree.root", cutToApply.c_str());
+                        // 2017 GOLDEN JSON DATASET
+                        // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/JetHT_Run2017TOTAL/flatTree.root", cutToApply.c_str());
 
-                    // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
-                    // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
-                    // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////
+                        // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
+                        // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
+                        // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                    int binToFill = iCut4 * numberOfSegments + iMassRegion % numberOfSegments + 1;
-                    h_[histogramName.c_str()]->SetBinContent(binToFill, plotEntry.GetNumberOfEventsAfterCuts());
-                    h_[histogramName.c_str()]->SetBinError(binToFill, plotEntry.GetNumberOfEventsAfterCutsStatError());  
+                        int binToFill = (iCut6 + 1) * iCut4 * numberOfSegments + iMassRegion % numberOfSegments + 1;
+                        h_[histogramName.c_str()]->SetBinContent(binToFill, plotEntry.GetNumberOfEventsAfterCuts());
+                        h_[histogramName.c_str()]->SetBinError(binToFill, plotEntry.GetNumberOfEventsAfterCutsStatError());  
 
 
-                    // // this section creates plots to check we trust what is going on
-                    // std::string plotSaveName = outputDir + "/plot_" + histogramName + "_binNum" + std::to_string(binToFill) + ".pdf";
-                    // Plotter plot = Plotter({plotEntry});
-                    // plot.AddLatex(luminosity);
-                    // plot.Save2D(plotSaveName.c_str(), MassCutsObject); // with the grid
-                    
+                        // // this section creates plots to check we trust what is going on
+                        // std::string plotSaveName = outputDir + "/plot_" + histogramName + "_binNum" + std::to_string(binToFill) + ".pdf";
+                        // Plotter plot = Plotter({plotEntry});
+                        // plot.AddLatex(luminosity);
+                        // plot.Save2D(plotSaveName.c_str(), MassCutsObject); // with the grid
+                        
 
-                    std::cout << "Systematic " << iSys+1 << " of " << systematicNameVec.size() << " ::: DONE " << counter << " of " << numberOfCutsForCodeTodo << " fills" << std::endl;
-                    std::cout << std::endl;
-                    counter++;
+                        std::cout << "Systematic " << iSys+1 << " of " << systematicNameVec.size() << " ::: DONE " << counter << " of " << numberOfCutsForCodeTodo << " fills" << std::endl;
+                        std::cout << std::endl;
+                        counter++;
 
-                } // closes loop through the HT bins
+                    } // closes loop through the HT bins
+                } // closes loop through MHT bins
             } // closes loop through S,U,D mass regions
         } // closes loop through DBT configurations
     } // closes loop through systematics
