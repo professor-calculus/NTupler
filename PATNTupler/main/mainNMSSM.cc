@@ -391,7 +391,7 @@ public:
 		mainAnaTree_->Branch("ht_jerAK4UncUp", &treeVar_ht_jerAK4UncUp_, "ht_jerAK4UncUp/F");
 		mainAnaTree_->Branch("ht_jerAK4UncDown", &treeVar_ht_jerAK4UncDown_, "ht_jerAK4UncDown/F");
 
-		mainAnaTree_->Branch("mht", &treeVar_mht_, "ht/F");
+		mainAnaTree_->Branch("mht", &treeVar_mht_, "mht/F");
 		mainAnaTree_->Branch("mht_jecAK4UncUp", &treeVar_mht_jecAK4UncUp_, "mht_jecAK4UncUp/F");
 		mainAnaTree_->Branch("mht_jecAK4UncDown", &treeVar_mht_jecAK4UncDown_, "mht_jecAK4UncDown/F");
 		mainAnaTree_->Branch("mht_jerAK4UncUp", &treeVar_mht_jerAK4UncUp_, "mht_jerAK4UncUp/F");
