@@ -24,7 +24,7 @@
 
 
 void GetHistograms(std::map<std::string,TH1D*>&, const unsigned int&); // NEED TO CHANGE THE FILE PATH IN THIS FUNCTION WHEN USING NEW HISTOGRAMS
-std::vector<double> GetQcdUnDLowerBoundInHtDivison(TH1D*, const unsigned int&);
+std::vector<double> GetQcdUnDLowerBoundInHtDivison(TH1D*, const unsigned int&, const unsigned int&);
 
 class CommonSystematic{
 public:
@@ -63,7 +63,7 @@ int main(){
     // TWO: physics info - to match the histograms that you use
     const unsigned int numberOfBins = 60;
     const unsigned int numberOfHtDivisions = 3;
-
+    const unsigned int numberOfMhtDivisions = 2;
 
 
     // THREE: Samples To Use (different project for each signal sample)
@@ -250,7 +250,7 @@ int main(){
 
         std::map<std::string, TH1D*> hOriginal_;
         GetHistograms(hOriginal_, yearOfRun);
-        std::vector<double> qcdUnDLowerBoundInHtDivison = GetQcdUnDLowerBoundInHtDivison(hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())], numberOfHtDivisions);
+        std::vector<double> qcdUnDLowerBoundInHtDivison = GetQcdUnDLowerBoundInHtDivison(hOriginal_[Form("UnD_tag_%s_NOSYS", dataSample.c_str())], numberOfHtDivisions, numberOfMhtDivisions);
 
         // get event weightings
         std::vector<std::vector<double>> signalWeightVec_S;
@@ -703,25 +703,27 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
 
 } // closes function GetHistograms
 
-std::vector<double> GetQcdUnDLowerBoundInHtDivison(TH1D* dataTagUnD, const unsigned int& numberOfHtDivisions)
+std::vector<double> GetQcdUnDLowerBoundInHtDivison(TH1D* dataTagUnD, const unsigned int& numberOfHtDivisions, const unsigned int& numberOfMhtDivisions)
 {
     std::vector<double> qcdUnDEmptyCountInHtDivison;
     std::vector<double> qcdUnDLowerBoundInHtDivison;
     const unsigned int numberOfBins = dataTagUnD->GetNbinsX();
-    const unsigned int numberOfBinsPerHtDivison = numberOfBins / numberOfHtDivisions;
+    const unsigned int numberOfBinsPerHtDivison = numberOfBins / (numberOfHtDivisions * numberOfMhtDivisions);
 
-    for (unsigned int iHT = 0; iHT < numberOfHtDivisions; iHT++){
+    for (unsigned int iMHT = 0; iMHT < numberOfMhtDivisions; iMHT++){
+        for (unsigned int iHT = 0; iHT < numberOfHtDivisions; iHT++){
+            
+            unsigned int nEmptyInHtDivision = 0;
+            for (unsigned int iBin = 1; iBin <= numberOfBinsPerHtDivison; iBin++){
+
+                const unsigned int iBinCombo = (iHT * numberOfBinsPerHtDivison) + (iMHT * numberOfHtDivisions * numberOfBinsPerHtDivison) + iBin;
+                if (dataTagUnD->GetBinContent(iBinCombo) == 0) nEmptyInHtDivision++;
+
+            } // closes loop through bin indices of a HT division
         
-        unsigned int nEmptyInHtDivision = 0;
-        for (unsigned int iBin = 1; iBin <= numberOfBinsPerHtDivison; iBin++){
-
-            const unsigned int iBinCombo = iHT * numberOfBinsPerHtDivison + iBin;
-            if (dataTagUnD->GetBinContent(iBinCombo) == 0) nEmptyInHtDivision++;
-
-        } // closes loop through bin indices of a HT division
-    
-        qcdUnDEmptyCountInHtDivison.push_back(nEmptyInHtDivision);
-    } // closes loop through HT divisons
+            qcdUnDEmptyCountInHtDivison.push_back(nEmptyInHtDivision);
+        } // closes loop through HT divisons
+    } // closes loop through MHT divisions
 
     for (auto count : qcdUnDEmptyCountInHtDivison){
         if (count == 0) qcdUnDLowerBoundInHtDivison.push_back(1.0);

@@ -322,7 +322,7 @@ int main(int argc, char** argv){
                         //////////////////////////////////////////////////////////////////////////////////////////////////////
                         //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                        int binToFill = ((iCut6 + 1) * binsWithoutMht) + iCut4 * numberOfSegments + iMassRegion % numberOfSegments + 1;
+                        int binToFill = (iCut6 * binsWithoutMht) + iCut4 * numberOfSegments + iMassRegion % numberOfSegments + 1;
                         h_[histogramName.c_str()]->SetBinContent(binToFill, plotEntry.GetNumberOfEventsAfterCuts());
                         h_[histogramName.c_str()]->SetBinError(binToFill, plotEntry.GetNumberOfEventsAfterCutsStatError());  
 
