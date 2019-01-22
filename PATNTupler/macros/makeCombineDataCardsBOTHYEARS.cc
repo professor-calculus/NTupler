@@ -158,7 +158,7 @@ int main(){
                                             "P8_2300sq_R0p99",
                                             "P8_2700sq_R0p384",
                                             "P8_2700sq_R0p555",
-                                            "P8_2700sq_R0p99",                                            
+                                            "P8_2700sq_R0p99",
                                         };
     // std::vector<std::string> signalVec = { // the different signal samples you wish to use: SQUARK PRODUCTION ONLY
     //                                         // "mH30_mSquark800",                                       "mH50_mSquark800",  "mH70_mSquark800",  "mH90_mSquark800",  "mH110_mSquark800",  "mH125_mSquark800",

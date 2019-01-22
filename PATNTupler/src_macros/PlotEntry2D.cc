@@ -45,7 +45,7 @@ PlotEntry2D::PlotEntry2D(const std::string& plotEntryNameDummy, const TH2D& hTem
 //---------destructor---------//
 PlotEntry2D::~PlotEntry2D()
 {
-	delete hTotal;
+	//delete hTotal;
 }
 
 //-----------public-----------//
