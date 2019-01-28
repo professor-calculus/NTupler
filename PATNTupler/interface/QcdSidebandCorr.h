@@ -63,6 +63,9 @@ namespace QcdSidebandCorr{
 			corrVec.push_back(1.0114604017);
 			corrVec.push_back(1.0059811867);
 
+                        // TEMPORARY: Set correction factors to 1 for now for MHT>200 bins
+                        for(int i=0; i<30; i++) corrVec.push_back(1.);
+
 			if (binIndex > 0 && binIndex < corrVec.size() + 1 ) return corrVec[binIndex - 1];
 			else{
 				std::cout << "WARNING: you haven't provided a valid index for the QCD 2016 sideband correction factor" << std::endl;
@@ -126,6 +129,9 @@ namespace QcdSidebandCorr{
 			corrVec.push_back(1.01619503533);
 			corrVec.push_back(1.05362809173);
 			corrVec.push_back(1.07743843374);
+
+			// TEMPORARY: Set correction factors to 1 for now for MHT>200 bins
+			for(int i=0; i<30; i++) corrVec.push_back(1.);
 
 			if (binIndex > 0 && binIndex < corrVec.size() + 1 ) return corrVec[binIndex - 1];
 			else{
@@ -203,6 +209,9 @@ namespace QcdSidebandCorr{
 			corrErrVec.push_back(0.30);
 			corrErrVec.push_back(0.30);
 
+                        // TEMPORARY: Set correction factor errors to 0.1 for now for MHT>200 bins
+                        for(int i=0; i<30; i++) corrErrVec.push_back(0.1);
+
 			if (binIndex > 0 && binIndex < corrErrVec.size() + 1 ) return corrErrVec[binIndex - 1];
 			else{
 				std::cout << "WARNING: you haven't provided a valid index for the QCD 2016 sideband correction factor error" << std::endl;
@@ -266,6 +275,9 @@ namespace QcdSidebandCorr{
 			corrErrVec.push_back(0.30);
 			corrErrVec.push_back(0.30);
 			corrErrVec.push_back(0.30);
+
+                        // TEMPORARY: Set correction factor errors to 0.1 for now for MHT>200 bins
+                        for(int i=0; i<30; i++) corrErrVec.push_back(0.1);
 
 			if (binIndex > 0 && binIndex < corrErrVec.size() + 1 ) return corrErrVec[binIndex - 1];
 			else{

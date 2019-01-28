@@ -62,39 +62,28 @@ for signalDir in signalDirs:
     c2 = -1
     c3 = len(signalDir)
 
-    if (signalDir[-1] != "0"):
+    if signalDir[0:1] != "P":
         continue
 
-    if signalDir[0:2] != "mH":
-        continue
+    susyMass = signalDir[3:7]
+    ratio = signalDir[10:]
 
-    for i in range(2, len(signalDir)):
-        if (signalDir[i] == "_"):
-            c1 = i
-            break
+    print(susyMass, ratio)
 
-    for i in range(c1, len(signalDir)):
-        if (signalDir[i:i+6] == "_mSusy"):
-            c2 = i + 6
-            break
-        if (signalDir[i:i+8] == "_mSquark"):
-            c2 = i + 8
-            break
+    if ratio == 'R0p99':
+        lspMass = '1'
+    elif ratio == 'R0p555':
+        lspMass = '100'
+    elif ratio == 'R0p384':
+        lspMass = '200'
+    else:
+        lspMass = -1
+        exit(1)
 
-    for i in range(c2, len(signalDir)):
-        if (signalDir[i].isdigit() == False):
-            c3 = i
-            break
-
-    if (c1 == -1 or c2 == -1):
-        continue
-
-    higgsMass = signalDir[2:c1]
-    susyMass = signalDir[c2:c3]
     fileToUseTXT = os.path.join(inputDir,signalDir,"allbins.txt")
     fileToUseROOT = os.path.join(inputDir,signalDir,"allbins.root")
     
-    print "RUNNING COMBINE FOR mH" + higgsMass + " mSusy" + susyMass
+    print "RUNNING COMBINE FOR " + susyMass + "squark, " + lspMass + "LSP"
     print "nuisance to freeze: " + nuisancesToFreeze
 
     condorFileName = signalDir + ".condor"
@@ -103,9 +92,9 @@ for signalDir in signalDirs:
     f = open("%s/%s" % (batchDir,condorFileName), 'w')
     f.write("Universe                = vanilla\n")
     f.write("Executable              = %s/%s\n" % (batchDir,jobFileName) )
-    f.write("Log                     = /opt/ppd/scratch/xap79297/jobLogs/combined/%s__%s.log\n" % (timeStamp,signalDir) )
-    f.write("Output                  = /opt/ppd/scratch/xap79297/jobLogs/combined/%s__%s.out\n" % (timeStamp,signalDir) )
-    f.write("Error                   = /opt/ppd/scratch/xap79297/jobLogs/combined/%s__%s.err\n" % (timeStamp,signalDir) )
+    f.write("Log                     = /opt/ppd/scratch/titterton/jobLogs/combined/%s__%s.log\n" % (timeStamp,signalDir) )
+    f.write("Output                  = /opt/ppd/scratch/titterton/jobLogs/combined/%s__%s.out\n" % (timeStamp,signalDir) )
+    f.write("Error                   = /opt/ppd/scratch/titterton/jobLogs/combined/%s__%s.err\n" % (timeStamp,signalDir) )
     f.write("Request_memory          = 1 GB\n")
     f.write("should_transfer_files   = YES\n")
     f.write("when_to_transfer_output = ON_EXIT_OR_EVICT\n")
@@ -121,9 +110,9 @@ for signalDir in signalDirs:
     g.write("cd %s\n" % inputDir)
     g.write("text2workspace.py %s\n" % fileToUseTXT)
     if (len(nuisancesToFreeze) == 0):
-        g.write("combine -M AsymptoticLimits --mass %s --keyword-value mSusy=%s %s\n" % (higgsMass, susyMass, fileToUseROOT) )
+        g.write("combine -M AsymptoticLimits --mass %s --keyword-value mSusy=%s %s\n" % (lspMass, susyMass, fileToUseROOT) )
     else:
-        g.write("combine -M AsymptoticLimits --freezeParameter %s --mass %s --keyword-value mSusy=%s %s\n" % (nuisancesToFreeze, higgsMass, susyMass, fileToUseROOT) )
+        g.write("combine -M AsymptoticLimits --freezeParameter %s --mass %s --keyword-value mSusy=%s %s\n" % (nuisancesToFreeze, lspMass, susyMass, fileToUseROOT) )
     g.close()
     os.chmod("%s/%s" % (batchDir,jobFileName), 0755)
 

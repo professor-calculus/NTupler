@@ -29,7 +29,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/plots_2019_01_15/2016_80X/2d_doubleBTag/QCD/fullKinCuts/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/plots_MHT_2019_01_15/2016_80X/2d_doubleBTag/ZJets/fullKinCuts/"; // where we are going to save the output plots (should include the samples name, and any important features)
 
 
 
@@ -153,21 +153,21 @@ int main(int argc, char** argv){
                         // PlotEntry2D plot2d = PlotEntry2D("data", hTemplate, varToPlot.c_str()); // NO LUMI
                         // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/data16/JetHT_Run2016Total_ht1499plus/flatTree.root", cutToApply.c_str());
 
-                        PlotEntry2D plot2d = PlotEntry2D("QCD", hTemplate, varToPlot.c_str(), luminosity);
-                        plot2d.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/QCD_HT1000to1500/flatTree.root", cutToApply.c_str(), 1206);
-                        plot2d.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/QCD_HT1500to2000/flatTree.root", cutToApply.c_str(), 120.4);
-                        plot2d.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/QCD_HT2000toInf/flatTree.root", cutToApply.c_str(), 25.25);
-                        plot2d.NormalisePlot();
-
-                        // PlotEntry2D plot2d = PlotEntry2D("TTJets", hTemplate, varToPlot.c_str(), luminosity);
-                        // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/TTJets_ht1200plus/flatTree.root", cutToApply.c_str(), 831.76);
+                        // PlotEntry2D plot2d = PlotEntry2D("QCD", hTemplate, varToPlot.c_str(), luminosity);
+                        // plot2d.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/QCD_HT1000to1500/flatTree.root", cutToApply.c_str(), 1206);
+                        // plot2d.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/QCD_HT1500to2000/flatTree.root", cutToApply.c_str(), 120.4);
+                        // plot2d.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/QCD_HT2000toInf/flatTree.root", cutToApply.c_str(), 25.25);
                         // plot2d.NormalisePlot();
 
-                        // PlotEntry2D plot2d = PlotEntry2D("Z+Jets", hTemplate, varToPlot.c_str(), luminosity);
-                        // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/ZJets_ht1200plus/flatTree.root", cutToApply.c_str(), 52.79);
+                        // PlotEntry2D plot2d = PlotEntry2D("TTJets", hTemplate, varToPlot.c_str(), luminosity);
+                        // plot2d.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/TTJets/flatTree.root", cutToApply.c_str(), 831.76);
+                        // plot2d.NormalisePlot();
+
+                        PlotEntry2D plot2d = PlotEntry2D("Z+Jets", hTemplate, varToPlot.c_str(), luminosity);
+                        plot2d.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/ZJets/flatTree.root", cutToApply.c_str(), 52.79);
 
                         // PlotEntry2D plot2d = PlotEntry2D("W+Jets", hTemplate, varToPlot.c_str(), luminosity);
-                        // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/WJets_ht1200plus/flatTree.root", cutToApply.c_str(), 95.14);
+                        // plot2d.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/WJets/flatTree.root", cutToApply.c_str(), 95.14);
 
                         // PlotEntry2D plot2d = PlotEntry2D("mH30_mSusy2000", hTemplate, varToPlot.c_str(), luminosity);
                         // plot2d.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH30p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApply.c_str(), 0.0091050*0.85*0.85);
