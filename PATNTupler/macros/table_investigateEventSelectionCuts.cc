@@ -28,16 +28,18 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_08_03/2016_80X/cutFlowTables/NEW_VERSION_v2/mH70_mSusyAll/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/plots_MHT_2019_01_15/2016_80X/cutFlowTables/NEW_VERSION_v2/P1_2200sq_R0p99/"; // where we are going to save the output plots (should include the samples name, and any important features)
 
 
 
     // TWO: set of cut params (first element is the choice for an individual table, second element is the choice for an individual table, etc.)
-    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"DIAG_UP", "Loose"}, {"DIAG_UP", "Loose"}, {"DIAG_UP", "Loose"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"DIAG_UP", "Loose"}, {"DIAG_UP", "Loose"}, {"DIAG_UP", "Loose"}, {"DIAG_UP", "Loose"}, {"DIAG_UP", "Loose"}, {"DIAG_UP", "Loose"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     // std::vector<std::vector<std::string>> cut2_ak8Dbt = { {"Off","Max","Off","Max"}, {"Off","Max","Off","Max"}, {"Off","Max","Off","Max"} }; // 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
-    std::vector<int> cut3_ak8Pt = {300, 300, 300};
-    std::vector<std::vector<int>>cut4_ht = { {1500,2500}, {2500,3500}, {3500,99999} }; // these are HT bins, not just cuts (NB: use 99999 for a maximum)
-    std::vector<std::vector<int>> cut5_ak4Pt = { {300,-1}, {300,-1}, {300,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
+    std::vector<int> cut3_ak8Pt = {300, 300, 300, 300, 300, 300};
+    std::vector<std::vector<int>> cut4_ht = { {1500,2500}, {2500,3500}, {3500,99999}, {1500,2500}, {2500,3500}, {3500,99999} }; // these are HT bins, not just cuts (NB: use 99999 for a maximum)
+    std::vector<std::vector<int>> cut5_ak4Pt = { {300,-1}, {300,-1}, {300,-1}, {300,-1}, {300,-1}, {300,-1} }; // (2 elements in sub-vector, 1st for leading pt, 2nd for seconary pt)
+    std::vector<std::vector<int>> cut6_mht = { {0,200}, {0,200}, {0,200}, {200,99999}, {200,99999}, {200,99999} }; // MHT BIN
+    std::vector<std::vector<int>> cut6_lepVeto = { {0,9999}, {0,9999}, {0,9999}, {0,1}, {0,1}, {0,1} }; // Lepton Veto BIN
 
 
 
@@ -108,10 +110,11 @@ int main(int argc, char** argv){
         cutToApplyVec.push_back(Form("weight_isr * (fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d)", cut3_ak8Pt[iTab], cut3_ak8Pt[iTab]));
         cutToApplyVec.push_back(Form("weight_isr * (fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d)", cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]));
         cutToApplyVec.push_back(Form("weight_isr * (fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d)", cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut4_ht[iTab][0], cut4_ht[iTab][1], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]));
-        cutToApplyVec.push_back(Form("weight_combined * (%s && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d)", dbtCut.c_str(), cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut4_ht[iTab][0], cut4_ht[iTab][1], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]));
+        cutToApplyVec.push_back(Form("weight_isr * (fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && mht>=%d && mht<%d && nrVetoObjects>=%d && nrVetoObjects<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d)", cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut4_ht[iTab][0], cut4_ht[iTab][1], cut6_mht[iTab][0], cut6_mht[iTab][1], cut6_lepVeto[iTab][0], cut6_lepVeto[iTab][1], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]));
+        cutToApplyVec.push_back(Form("weight_combined * (%s && fatJetA_p4.Pt()>%d && fatJetB_p4.Pt()>%d && ht>=%d && ht<%d && mht>=%d && mht<%d && nrVetoObjects>=%d && nrVetoObjects<%d && slimJetA_p4.Pt()>%d && slimJetB_p4.Pt()>%d)", dbtCut.c_str(), cut3_ak8Pt[iTab], cut3_ak8Pt[iTab], cut4_ht[iTab][0], cut4_ht[iTab][1], cut6_mht[iTab][0], cut6_mht[iTab][1], cut6_lepVeto[iTab][0], cut6_lepVeto[iTab][1], cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]));
         // get the required count info for the table
         std::vector<std::vector<PlotEntry>> cutFlowObject; // all cut stages, for all samples
-        for (int iC = 0; iC != 5; ++iC){
+        for (int iC = 0; iC != 6; ++iC){
 
             std::vector<PlotEntry> givenCutObject; // single cut stage, for all samples
 
@@ -124,8 +127,8 @@ int main(int argc, char** argv){
             // givenCutObject.push_back( PlotEntry("mH50_mSusy800", hTemplate, varToPlot.c_str(), luminosity) );
             // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH50p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 6.4720000*0.85*0.85);
 
-            givenCutObject.push_back( PlotEntry("mH70_mSusy800", hTemplate, varToPlot.c_str(), luminosity) );
-            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH70p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 6.4720000*0.85*0.85);
+            givenCutObject.push_back( PlotEntry("P1_2200sq_R0p99", hTemplate, varToPlot.c_str(), luminosity) );
+            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/P1_2200sq_R0p99/flatTree.root", cutToApplyVec[iC].c_str(), 0.003747);
         
             // givenCutObject.push_back( PlotEntry("mH90_mSusy800", hTemplate, varToPlot.c_str(), luminosity) );
             // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH90p0_mSusy800p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 6.4720000*0.85*0.85);
@@ -140,8 +143,8 @@ int main(int argc, char** argv){
             // givenCutObject.push_back( PlotEntry("mH50_mSusy1200", hTemplate, varToPlot.c_str(), luminosity) );
             // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH50p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.4951000*0.85*0.85);
 
-            givenCutObject.push_back( PlotEntry("mH70_mSusy1200", hTemplate, varToPlot.c_str(), luminosity) );
-            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH70p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.4951000*0.85*0.85);
+            // givenCutObject.push_back( PlotEntry("mH70_mSusy1200", hTemplate, varToPlot.c_str(), luminosity) );
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH70p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.4951000*0.85*0.85);
         
             // givenCutObject.push_back( PlotEntry("mH90_mSusy1200", hTemplate, varToPlot.c_str(), luminosity) );
             // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH90p0_mSusy1200p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.4951000*0.85*0.85);
@@ -156,8 +159,8 @@ int main(int argc, char** argv){
             // givenCutObject.push_back( PlotEntry("mH50_mSusy1600", hTemplate, varToPlot.c_str(), luminosity) );
             // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH50p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0603900*0.85*0.85);
 
-            givenCutObject.push_back( PlotEntry("mH70_mSusy1600", hTemplate, varToPlot.c_str(), luminosity) );
-            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH70p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0603900*0.85*0.85);
+            // givenCutObject.push_back( PlotEntry("mH70_mSusy1600", hTemplate, varToPlot.c_str(), luminosity) );
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH70p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0603900*0.85*0.85);
         
             // givenCutObject.push_back( PlotEntry("mH90_mSusy1600", hTemplate, varToPlot.c_str(), luminosity) );
             // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH90p0_mSusy1600p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0603900*0.85*0.85);
@@ -172,8 +175,8 @@ int main(int argc, char** argv){
             // givenCutObject.push_back( PlotEntry("mH50_mSusy2000", hTemplate, varToPlot.c_str(), luminosity) );
             // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH50p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0091050*0.85*0.85);
 
-            givenCutObject.push_back( PlotEntry("mH70_mSusy2000", hTemplate, varToPlot.c_str(), luminosity) );
-            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH70p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0091050*0.85*0.85);
+            // givenCutObject.push_back( PlotEntry("mH70_mSusy2000", hTemplate, varToPlot.c_str(), luminosity) );
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH70p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0091050*0.85*0.85);
         
             // givenCutObject.push_back( PlotEntry("mH90_mSusy2000", hTemplate, varToPlot.c_str(), luminosity) );
             // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH90p0_mSusy2000p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0091050*0.85*0.85);
@@ -188,8 +191,8 @@ int main(int argc, char** argv){
             // givenCutObject.push_back( PlotEntry("mH50_mSusy2400", hTemplate, varToPlot.c_str(), luminosity) );
             // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH50p0_mSusy2400p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0015050*0.85*0.85);
 
-            givenCutObject.push_back( PlotEntry("mH70_mSusy2400", hTemplate, varToPlot.c_str(), luminosity) );
-            givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH70p0_mSusy2400p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0015050*0.85*0.85);
+            // givenCutObject.push_back( PlotEntry("mH70_mSusy2400", hTemplate, varToPlot.c_str(), luminosity) );
+            // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH70p0_mSusy2400p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0015050*0.85*0.85);
         
             // givenCutObject.push_back( PlotEntry("mH90_mSusy2400", hTemplate, varToPlot.c_str(), luminosity) );
             // givenCutObject[givenCutObject.size()-1].AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_08_03/mc16/mH90p0_mSusy2400p0_ratio0p99_splitting0p1/flatTree.root", cutToApplyVec[iC].c_str(), 0.0015050*0.85*0.85);
@@ -243,6 +246,8 @@ int main(int argc, char** argv){
         cutName += Form("_ak8pt%d", cut3_ak8Pt[iTab]);
         if (cut4_ht[iTab][1]==99999) cutName += Form("_ht%dplus",cut4_ht[iTab][0]);
         else cutName += Form("_ht%dto%d",cut4_ht[iTab][0],cut4_ht[iTab][1]);
+        if (cut6_mht[iTab][1]==99999) cutName += Form("_ht%dplus",cut6_mht[iTab][0]);
+        else cutName += Form("_ht%dto%d",cut6_mht[iTab][0],cut6_mht[iTab][1]);
         cutName += Form("_ak4pt%dn%d", cut5_ak4Pt[iTab][0], cut5_ak4Pt[iTab][1]);
         table.open( Form("%s/cutCount_%.0finvFb__%s.csv", outputDir.c_str(), luminosity, cutName.c_str()) );
         table << "Luminosity = " << luminosity << "fb^-1," << "\n";
@@ -289,15 +294,23 @@ int main(int argc, char** argv){
             if (cutFlowObject[3][i].GetNumberOfEventsAfterCuts() < 0.00000001) table << "0,,";
             else table << cutFlowObject[3][i].GetNumberOfEventsAfterCuts() / holdValueVec[i] << ",,";
             holdValueVec[i] = cutFlowObject[3][i].GetNumberOfEventsAfterCuts();
-        }        
+        }
 
-        if (cut2_ak8Dbt[iTab].size() == 4) table << "\nAK8DBT " << cut2_ak8Dbt[iTab][0].c_str() << cut2_ak8Dbt[iTab][1].c_str() << "&" << cut2_ak8Dbt[iTab][2].c_str() << cut2_ak8Dbt[iTab][3].c_str() << ":,";
-        if (cut2_ak8Dbt[iTab].size() == 2 && cut2_ak8Dbt[iTab][0] == "DIAG_UP") table << "\nAK8DBT_diagUp" << cut2_ak8Dbt[iTab][1].c_str() << ":,";
+        table << "\nMissing-HT " << cut6_mht[iTab][0] << "-" << cut6_mht[iTab][1] << "(GeV):,";
         for (size_t i = 0; i < cutFlowObject[0].size(); ++i){
             table << std::setprecision(6) << cutFlowObject[4][i].GetNumberOfEventsAfterCuts() << ",";
             if (cutFlowObject[4][i].GetNumberOfEventsAfterCuts() < 0.00000001) table << "0,,";
             else table << cutFlowObject[4][i].GetNumberOfEventsAfterCuts() / holdValueVec[i] << ",,";
             holdValueVec[i] = cutFlowObject[4][i].GetNumberOfEventsAfterCuts();
+        }        
+
+        if (cut2_ak8Dbt[iTab].size() == 4) table << "\nAK8DBT " << cut2_ak8Dbt[iTab][0].c_str() << cut2_ak8Dbt[iTab][1].c_str() << "&" << cut2_ak8Dbt[iTab][2].c_str() << cut2_ak8Dbt[iTab][3].c_str() << ":,";
+        if (cut2_ak8Dbt[iTab].size() == 2 && cut2_ak8Dbt[iTab][0] == "DIAG_UP") table << "\nAK8DBT_diagUp" << cut2_ak8Dbt[iTab][1].c_str() << ":,";
+        for (size_t i = 0; i < cutFlowObject[0].size(); ++i){
+            table << std::setprecision(6) << cutFlowObject[5][i].GetNumberOfEventsAfterCuts() << ",";
+            if (cutFlowObject[5][i].GetNumberOfEventsAfterCuts() < 0.00000001) table << "0,,";
+            else table << cutFlowObject[5][i].GetNumberOfEventsAfterCuts() / holdValueVec[i] << ",,";
+            holdValueVec[i] = cutFlowObject[5][i].GetNumberOfEventsAfterCuts();
         }
         
         table << "\n,,";
