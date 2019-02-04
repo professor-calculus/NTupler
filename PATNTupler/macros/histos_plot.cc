@@ -35,7 +35,7 @@ int main(){
 
 
     // ONE: save info & luminosity
-    const std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/plots_MHT_2019_01_15/2016_80X/oneDimensionRepresentation/DATA/control/predNew_calcForHighestTwoHtBins/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/plots_MHT_2019_01_15/2016_80X/oneDimensionRepresentation/BKG/tag/"; // where we are going to save the output plots (should include the samples name, and any important features)
     
     const double luminosity = 35.867; // 2016 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
     // const double luminosity = 41.370; // 2017 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
@@ -92,14 +92,16 @@ int main(){
 
     // TWO: make plot aesthetics and saving
     
-    std::vector<TH1D*> indiHistoVec = {h16_["S_control_data"], h16_["predNew_control_data"]};
+    // std::vector<TH1D*> indiHistoVec = {h16_["S_control_data"], h16_["predNew_control_data"]};
     // std::vector<TH1D*> stackHistoVec = {h16_["S_tag_WJets"], h16_["S_tag_ZJets"], h16_["S_tag_TTJets"], h16_["S_tag_QCD"]};
+    std::vector<TH1D*> indiHistoVec = {h16_["S_tag_TTJets"], h16_["S_tag_QCD"]};
 
     Plotter plot = Plotter(indiHistoVec);
     // Plotter plot = Plotter({}, stackHistoVec);
     // Plotter plot = Plotter(indiHistoVec, stackHistoVec);
 
-    std::vector<std::string> legendNames = {"control", "control prediction"};
+    // std::vector<std::string> legendNames = {"control", "control prediction"};
+    std::vector<std::string> legendNames = {"TTJets", "QCD"};
 
     // plot.AddLegend(legendNames, 0.16, 0.38, 0.64, 0.83, 0.028);
     // plot.AddLegend(legendNames, 0.18, 0.38, 0.18, 0.30, 0.040);
@@ -123,9 +125,10 @@ int main(){
     // plot.SetErrors("only_stack");
     // plot.SetErrors("only_indi");
 
+    std::vector<std::string> mhtVec = {"MHT0-200", "MHT200+"};
     std::vector<std::string> stringVec = {"HT1500-2500", "HT2500-3500", "HT3500+"};
     std::string plotName = "linear";
-    plot.SaveSpec01(Form("%s/%s.pdf", outputDir.c_str(), plotName.c_str()), stringVec);
+    plot.SaveSpec01(Form("%s/%s.pdf", outputDir.c_str(), plotName.c_str()), stringVec, mhtVec);
     
     plotName = "log";
     plot.SetLogY();
@@ -134,7 +137,7 @@ int main(){
     // plot.SetYValueMin(1.10); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(3.10); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(12.10); // REMEMBER THIS PARAM! (only for log)
-    plot.SaveSpec01(Form("%s/%s.pdf", outputDir.c_str(), plotName.c_str()), stringVec);
+    plot.SaveSpec01(Form("%s/%s.pdf", outputDir.c_str(), plotName.c_str()), stringVec, mhtVec);
 
 
 
@@ -150,7 +153,7 @@ int main(){
 void GetHistograms2016(std::map<std::string,TH1D*>& h_)
 {
     // histos locations
-    std::string preamble = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_2018_08_03/MassCutsV09/run2016/";
+    std::string preamble = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_MHT_2019_01_08/MassCutsV09/run2016/";
     
     std::string postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
     std::vector<std::string> histoNameVec;
@@ -159,53 +162,7 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
     histoNameVec.push_back("TTJets");
     histoNameVec.push_back("ZJets");
     histoNameVec.push_back("WJets");
-    histoNameVec.push_back("mH30_mSusy800");
-    histoNameVec.push_back("mH50_mSusy800");
-    histoNameVec.push_back("mH70_mSusy800");
-    histoNameVec.push_back("mH90_mSusy800");
-    histoNameVec.push_back("mH125_mSusy800");
-    histoNameVec.push_back("mH30_mSusy1200");
-    histoNameVec.push_back("mH50_mSusy1200");
-    histoNameVec.push_back("mH70_mSusy1200");
-    histoNameVec.push_back("mH90_mSusy1200");
-    histoNameVec.push_back("mH125_mSusy1200");
-    histoNameVec.push_back("mH30_mSusy1600");
-    histoNameVec.push_back("mH50_mSusy1600");
-    histoNameVec.push_back("mH70_mSusy1600");
-    histoNameVec.push_back("mH90_mSusy1600");
-    histoNameVec.push_back("mH125_mSusy1600");
-    histoNameVec.push_back("mH30_mSusy2000");
-    histoNameVec.push_back("mH50_mSusy2000");
-    histoNameVec.push_back("mH70_mSusy2000");
-    histoNameVec.push_back("mH90_mSusy2000");
-    histoNameVec.push_back("mH125_mSusy2000");
-    histoNameVec.push_back("mH30_mSusy2200");
-    histoNameVec.push_back("mH50_mSusy2200");
-    histoNameVec.push_back("mH70_mSusy2200");
-    histoNameVec.push_back("mH90_mSusy2200");
-    histoNameVec.push_back("mH125_mSusy2200");
-    histoNameVec.push_back("mH30_mSusy2400");
-    histoNameVec.push_back("mH50_mSusy2400");
-    histoNameVec.push_back("mH70_mSusy2400");
-    histoNameVec.push_back("mH90_mSusy2400");
-    histoNameVec.push_back("mH125_mSusy2400");
-    histoNameVec.push_back("mH30_mSusy2600");
-    histoNameVec.push_back("mH50_mSusy2600");
-    histoNameVec.push_back("mH70_mSusy2600");
-    histoNameVec.push_back("mH90_mSusy2600");
-    histoNameVec.push_back("mH125_mSusy2600");
-    histoNameVec.push_back("mH30_mSusy2800");
-    histoNameVec.push_back("mH50_mSusy2800");
-    histoNameVec.push_back("mH70_mSusy2800");
-    histoNameVec.push_back("mH90_mSusy2800");
-    histoNameVec.push_back("mH125_mSusy2800");
-    histoNameVec.push_back("CPS_h70s1200");
-    histoNameVec.push_back("CPS_h70s2000");
-    histoNameVec.push_back("CPS_h70s2600");
-    // histoNameVec.push_back("mH70_mSusy2000_nPuIs23orLess");
-    // histoNameVec.push_back("mH70_mSusy2000_nPuIs24orMore");
-    // histoNameVec.push_back("mH70_mSusy2200_nPuIs23orLess");
-    // histoNameVec.push_back("mH70_mSusy2200_nPuIs24orMore");
+
 
     for (size_t iH = 0; iH < histoNameVec.size(); ++iH){
 
@@ -315,9 +272,9 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
 void GetHistograms2017(std::map<std::string,TH1D*>& h_)
 {
     // histos locations
-    std::string preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_08_03/MassCutsV09/run2017/";
+    std::string preamble = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_MHT_2019_01_08/MassCutsV09/run2017/";
     
-    std::string postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi41.root";
+    std::string postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi42.root";
     std::vector<std::string> histoNameVec;
     histoNameVec.push_back("data");
     histoNameVec.push_back("QCD");
@@ -327,49 +284,6 @@ void GetHistograms2017(std::map<std::string,TH1D*>& h_)
     histoNameVec.push_back("TTJets2L");
     histoNameVec.push_back("ZJets");
     histoNameVec.push_back("WJets");
-    histoNameVec.push_back("mH30_mSusy800");
-    histoNameVec.push_back("mH50_mSusy800");
-    histoNameVec.push_back("mH70_mSusy800");
-    histoNameVec.push_back("mH90_mSusy800");
-    histoNameVec.push_back("mH125_mSusy800");
-    histoNameVec.push_back("mH30_mSusy1200");
-    histoNameVec.push_back("mH50_mSusy1200");
-    histoNameVec.push_back("mH70_mSusy1200");
-    histoNameVec.push_back("mH90_mSusy1200");
-    histoNameVec.push_back("mH125_mSusy1200");
-    histoNameVec.push_back("mH30_mSusy1600");
-    histoNameVec.push_back("mH50_mSusy1600");
-    histoNameVec.push_back("mH70_mSusy1600");
-    histoNameVec.push_back("mH90_mSusy1600");
-    histoNameVec.push_back("mH125_mSusy1600");
-    histoNameVec.push_back("mH30_mSusy2000");
-    histoNameVec.push_back("mH50_mSusy2000");
-    histoNameVec.push_back("mH70_mSusy2000");
-    histoNameVec.push_back("mH90_mSusy2000");
-    histoNameVec.push_back("mH125_mSusy2000");
-    histoNameVec.push_back("mH30_mSusy2200");
-    histoNameVec.push_back("mH50_mSusy2200");
-    histoNameVec.push_back("mH70_mSusy2200");
-    histoNameVec.push_back("mH90_mSusy2200");
-    histoNameVec.push_back("mH125_mSusy2200");
-    histoNameVec.push_back("mH30_mSusy2400");
-    histoNameVec.push_back("mH50_mSusy2400");
-    histoNameVec.push_back("mH70_mSusy2400");
-    histoNameVec.push_back("mH90_mSusy2400");
-    histoNameVec.push_back("mH125_mSusy2400");
-    histoNameVec.push_back("mH30_mSusy2600");
-    histoNameVec.push_back("mH50_mSusy2600");
-    histoNameVec.push_back("mH70_mSusy2600");
-    histoNameVec.push_back("mH90_mSusy2600");
-    histoNameVec.push_back("mH125_mSusy2600");
-    histoNameVec.push_back("mH30_mSusy2800");
-    histoNameVec.push_back("mH50_mSusy2800");
-    histoNameVec.push_back("mH70_mSusy2800");
-    histoNameVec.push_back("mH90_mSusy2800");
-    histoNameVec.push_back("mH125_mSusy2800");
-    histoNameVec.push_back("CPS_h70s1200");
-    histoNameVec.push_back("CPS_h70s2000");
-    histoNameVec.push_back("CPS_h70s2600");
 
     for (size_t iH = 0; iH < histoNameVec.size(); ++iH){
 

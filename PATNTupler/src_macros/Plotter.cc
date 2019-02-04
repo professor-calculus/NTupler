@@ -1142,6 +1142,308 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 } // closes function SaveSpec01
 
 
+// Overloaded SaveSpec01 with MHT divide
+void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::string> htBins, const std::vector<std::string> mhtBins){
+
+	if (th1Indi.empty() && th1Stack.empty()){
+		std::cout << "Plotter::SaveSpec01 @@@ Exiting without saving... no histos @@@" << std::endl;
+		return;
+	}
+
+	std::string hsTitles = ""; // NB, can't set title for THStack after construction
+	if (!th1Stack.empty()) hsTitles = Form("%s;%s;%s", th1Stack[0]->GetTitle(), th1Stack[0]->GetXaxis()->GetTitle(), th1Stack[0]->GetYaxis()->GetTitle());	
+	THStack * hs = new THStack("hs", hsTitles.c_str());
+	for (size_t iTh1S = 0; iTh1S != th1Stack.size(); ++iTh1S)
+		hs->Add(th1Stack[iTh1S], "HIST");
+
+	tdrStyle->cd();
+	TCanvas * c = new TCanvas("c","c");
+	
+	if (addRatioBox){
+		TPad *padUp = new TPad("padUp","padUp",0,0.3,1,1);
+		padUp->SetBottomMargin(0.016);
+		padUp->Draw();
+		padUp->cd();
+		th1Indi[0]->SetLabelOffset(777.7);
+	}
+
+	if (useLogY) gPad->SetLogy();
+
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	// find max and min (don't want zero values for min, they won't work properly for logY plots)
+	double max = 0.0;
+	double min = 0.0; // for logY plots only
+	bool setMin = false;
+
+	for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I){
+		
+		// MAX from th1Indi
+		if (plotWithErrorsIndi == false){
+			if (th1Indi[iTh1I]->GetMaximum() > max || iTh1I == 0) max = th1Indi[iTh1I]->GetMaximum();
+		}
+		else{
+			for (int i=1; i != th1Indi[iTh1I]->GetNbinsX()+1; ++i)
+				if ( (th1Indi[iTh1I]->GetBinContent(i) + th1Indi[iTh1I]->GetBinError(i) > max) || (iTh1I == 0 && i==1) ) max = th1Indi[iTh1I]->GetBinContent(i) + th1Indi[iTh1I]->GetBinError(i);	
+		}
+		
+		// nonzero MIN from th1Indi
+		double histoMinNonZero = 0.0; // lowest non zero value of the histogram
+		bool setHistoMinNonZero = false; // have we found a non zero min value?
+		// first calculate without error bars
+		for (int i=1; i != th1Indi[iTh1I]->GetNbinsX()+1; ++i)
+			if (th1Indi[iTh1I]->GetBinContent(i) > 0 && (th1Indi[iTh1I]->GetBinContent(i) < histoMinNonZero || setHistoMinNonZero == false) ){
+				histoMinNonZero = th1Indi[iTh1I]->GetBinContent(i);
+				setHistoMinNonZero = true;
+			}
+		if (setHistoMinNonZero == true && (histoMinNonZero < min || setMin == false)){
+			min = histoMinNonZero;
+			setMin = true;
+		}
+		// if (plotWithErrorsStack == true){ // CURRENTLY NOT USING ERRORS BARS IN THE MIN EVALUATION
+		// 	for (int i=1; i != th1Indi[iTh1I]->GetNbinsX()+1; ++i)
+		// 		if ( (th1Indi[iTh1I]->GetBinContent(i) - th1Indi[iTh1I]->GetBinError(i) > 0) && ( (th1Indi[iTh1I]->GetBinContent(i) - th1Indi[iTh1I]->GetBinError(i) < histoMinNonZero) || setHistoMinNonZero == false ) ){
+		// 			histoMinNonZero = th1Indi[iTh1I]->GetBinContent(i) - th1Indi[iTh1I]->GetBinError(i);
+		// 			setHistoMinNonZero = true;
+		// 		}
+		// 	if (setHistoMinNonZero == true && (histoMinNonZero < min || setMin == false)){
+		// 		min = histoMinNonZero;
+		// 		setMin = true;
+		// 	}
+		// }
+	} // closes loop through th1Indi elements
+
+	if (!th1Stack.empty()){
+
+		TH1D *histoStackClone = (TH1D*)th1Stack[0]->Clone();
+		for (size_t iTh1S = 1; iTh1S != th1Stack.size(); ++iTh1S) histoStackClone->Add(th1Stack[iTh1S]);
+
+		// MAX from th1Stack
+		if (plotWithErrorsStack == false){
+			if (histoStackClone->GetMaximum() > max) max = histoStackClone->GetMaximum();
+		}
+		else{
+			for (int i=1; i != histoStackClone->GetNbinsX()+1; ++i){
+				if (histoStackClone->GetBinContent(i) + histoStackClone->GetBinError(i) > max) max = histoStackClone->GetBinContent(i) + histoStackClone->GetBinError(i);
+			}
+		}
+
+		// nonzero MIN from th1Stack
+		double histoMinNonZero = 0.0; // lowest non zero value of the histogram
+		bool setHistoMinNonZero = false; // have we found a non zero min value?
+		for (int i=1; i != histoStackClone->GetNbinsX()+1; ++i){
+			if (histoStackClone->GetBinContent(i) > 0 && (histoStackClone->GetBinContent(i) < histoMinNonZero || setHistoMinNonZero == false) ){
+				histoMinNonZero = histoStackClone->GetBinContent(i);
+				setHistoMinNonZero = true;
+			}
+			if (setHistoMinNonZero == true && (histoMinNonZero < min || setMin == false)){
+				min = histoMinNonZero;
+				setMin = true;
+			}
+		}
+	} // closes 'if' th1Stack has entries
+	if (setYValueMin) min = yValueMin;
+
+	/////////////////////////////////////////////////////////////////////////////////////////////
+
+	// set histo max and min and draw
+	double initialMax = 0.0; // use to reset the histo max and min to what it initially was
+	double initialMin = 0.0;
+
+	// max = 2.1; // HACK maxima
+	double graphMaxLin = 1.12 * max;
+	double graphMaxLog = log10(max/min) * max;
+	double graphMinLin = 0.0;
+	double graphMinLog = min/log10(max/min);
+
+	if (!th1Indi.empty() && !th1Stack.empty()){
+		initialMax = th1Indi[0]->GetMaximum();
+		initialMin = th1Indi[0]->GetMinimum();
+		if (useLogY == false){
+			th1Indi[0]->SetMaximum(graphMaxLin);
+			th1Indi[0]->SetMinimum(graphMinLin);
+		}
+		else{
+			th1Indi[0]->SetMaximum(graphMaxLog);
+			th1Indi[0]->SetMinimum(graphMinLog);
+		}
+		if (!plotWithErrorsIndi) th1Indi[0]->Draw("HIST");
+		else th1Indi[0]->Draw("P");
+		hs->Draw("same");
+		for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I)
+			if (plotWithErrorsIndi == false) th1Indi[iTh1I]->Draw("HIST, same");
+			else th1Indi[iTh1I]->Draw("same, P");
+		if (plotWithErrorsStack){
+			TH1D *histoStackClone = (TH1D*)th1Stack[0]->Clone();
+			histoStackClone->SetFillColor(kBlack);
+			histoStackClone->SetFillStyle(3004);
+			for (size_t iTh1S = 1; iTh1S != th1Stack.size(); ++iTh1S) histoStackClone->Add(th1Stack[iTh1S]);
+			histoStackClone->Draw("same, E2");
+		}
+	}
+
+	else if (!th1Indi.empty() && th1Stack.empty()){
+		initialMax = th1Indi[0]->GetMaximum();
+		initialMin = th1Indi[0]->GetMinimum();
+		if (useLogY == false){
+			th1Indi[0]->SetMaximum(graphMaxLin);
+			th1Indi[0]->SetMinimum(graphMinLin);
+		}
+		else{
+			th1Indi[0]->SetMaximum(graphMaxLog);
+			th1Indi[0]->SetMinimum(graphMinLog);
+		}
+		for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I)
+			if (plotWithErrorsIndi == false) th1Indi[iTh1I]->Draw("HIST, same");
+			else{
+				th1Indi[iTh1I]->Draw("same, P");
+				// if (iTh1I > 0){ // lil HACK for A_{i} plotz
+				// 	th1Indi[iTh1I]->SetFillColor(kGreen+1);
+				// 	th1Indi[iTh1I]->SetLineColor(kGreen+1);
+				// 	th1Indi[iTh1I]->SetFillStyle(3002);
+				// 	th1Indi[iTh1I]->Draw("same, e2");
+				// 	th1Indi[0]->SetLineColor(kBlue);
+				// 	th1Indi[0]->Draw("same, P");
+				// }
+			}
+	}
+
+	else if (th1Indi.empty() && !th1Stack.empty()){
+		initialMax = th1Stack[0]->GetMaximum();
+		initialMin = th1Stack[0]->GetMinimum();
+		if (useLogY == false){
+			th1Stack[0]->SetMaximum(graphMaxLin);
+			th1Stack[0]->SetMinimum(graphMinLin);
+		}
+		else{
+			th1Stack[0]->SetMaximum(graphMaxLog);
+			th1Stack[0]->SetMinimum(graphMinLog);
+		}
+		th1Stack[0]->Draw("HIST");
+		hs->Draw("same");
+		if (plotWithErrorsStack){
+			TH1D *histoStackClone = (TH1D*)th1Stack[0]->Clone();
+			histoStackClone->SetFillColor(kBlack);
+			histoStackClone->SetFillStyle(3004);
+			for (size_t iTh1S = 1; iTh1S != th1Stack.size(); ++iTh1S) histoStackClone->Add(th1Stack[iTh1S]);
+			histoStackClone->Draw("same, E2");
+		}
+	}
+
+	if (addLatex) DrawLatex();
+	if (leg != NULL) leg->Draw("same");
+	if (leg2Cols != NULL) leg2Cols->Draw("same");
+	gPad->RedrawAxis();
+
+	/////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Add the HT and MHT division Lines
+	if (!htBins.empty() && !mhtBins.empty()){
+		c->Update();
+		unsigned int numberOfBins = 0;
+		if (!th1Indi.empty()) numberOfBins = th1Indi[0]->GetNbinsX();
+		else numberOfBins = th1Stack[0]->GetNbinsX();
+		unsigned int binsPerDivision = numberOfBins / ( htBins.size() * mhtBins.size() );
+		for (unsigned int c = 0; c < numberOfBins; c = c + binsPerDivision){
+			
+			double lineMax = 0.0;
+			double lineAlmostMax = 0.0;
+			if (useLogY == false) lineMax = 1.03 * max;
+			else lineMax = pow(10, 0.92 * (log10(graphMaxLog) - log10(graphMinLog)) + log10(graphMinLog));
+
+			if (useLogY == false) lineAlmostMax = 0.96*lineMax;
+			else lineAlmostMax = 0.7*lineMax;
+
+			if (c != 0){
+				TLine * line = new TLine(c, 0, c, lineMax); // xmin, ymin, xmax, ymax
+				line->SetLineStyle(2);
+				line->SetLineWidth(3);
+				line->Draw();
+			}
+			TLatex * latexHT = new TLatex();
+		        latexHT->SetTextFont(42);
+                        latexHT->SetTextSize(0.04);
+		        latexHT->SetTextAlign(11); // align from left
+		        latexHT->DrawLatex(c+1, lineAlmostMax, htBins[(c/binsPerDivision) % htBins.size()].c_str());
+			if( c/binsPerDivision % htBins.size() == 0 ) latexHT->DrawLatex(c+1, lineMax, mhtBins[c/( htBins.size() * binsPerDivision )].c_str());
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////
+
+	// do ratio box plot if implemented
+	if (addRatioBox){
+		c->cd();
+		TPad *padDown = new TPad("padDown","padDown",0,0,1,0.3);
+		padDown->SetTopMargin(0.0);
+		padDown->SetBottomMargin(0.30);
+		padDown->Draw("same");
+		padDown->cd();
+
+		TH1D * ratioPlotEntry;
+		Int_t nBins = th1Indi[0]->GetNbinsX();
+		if (th1Indi[0]->GetXaxis()->GetXbins()->GetArray() == NULL) ratioPlotEntry = new TH1D("ratioPlotEntry", Form("%s;%s;%s", th1Indi[0]->GetTitle(), th1Indi[0]->GetXaxis()->GetTitle(), th1Indi[0]->GetYaxis()->GetTitle()), nBins, th1Indi[0]->GetBinLowEdge(1), th1Indi[0]->GetBinLowEdge(nBins+1));
+		else ratioPlotEntry = new TH1D("hTotal", Form("%s;%s;%s", th1Indi[0]->GetTitle(), th1Indi[0]->GetXaxis()->GetTitle(), th1Indi[0]->GetYaxis()->GetTitle()), nBins, th1Indi[0]->GetXaxis()->GetXbins()->GetArray());
+		
+		if (addRatioBoxInfo == "typeA") ratioPlotEntry->Divide(th1Indi[0], th1Indi[1]);
+		if (addRatioBoxInfo == "typeB"){
+			TH1D *histoStackClone = (TH1D*)th1Stack[0]->Clone();
+			for (size_t iTh1S = 1; iTh1S != th1Stack.size(); ++iTh1S) histoStackClone->Add(th1Stack[iTh1S]);
+			ratioPlotEntry->Divide(th1Indi[0], histoStackClone);
+		}
+		ratioPlotEntry->SetMarkerStyle(20);
+		ratioPlotEntry->SetMarkerSize(0.7);
+		ratioPlotEntry->SetLineColor(kBlack);
+		ratioPlotEntry->SetLineWidth(1.5);
+		if (ratioBoxYAxisMinMax.size()==2){
+			ratioPlotEntry->SetMinimum(ratioBoxYAxisMinMax[0]);
+			ratioPlotEntry->SetMaximum(ratioBoxYAxisMinMax[1]);
+		}
+		ratioPlotEntry->GetXaxis()->SetTitleSize(0.05 * 2.5);
+		ratioPlotEntry->GetXaxis()->SetTitleOffset(1.00);
+		ratioPlotEntry->GetXaxis()->SetLabelSize(0.04 * 2.5);
+		ratioPlotEntry->GetXaxis()->SetLabelOffset(0.007);
+		ratioPlotEntry->GetXaxis()->SetTickLength(0.03 * 2.5);
+
+		ratioPlotEntry->GetYaxis()->SetTitle(ratioBoxYAxisTitle.c_str());
+		ratioPlotEntry->GetYaxis()->CenterTitle(true);
+		ratioPlotEntry->GetYaxis()->SetNdivisions(505);
+		ratioPlotEntry->GetYaxis()->SetTitleSize(0.05 * 2.5);
+		ratioPlotEntry->GetYaxis()->SetTitleOffset(0.4);
+		ratioPlotEntry->GetYaxis()->SetLabelSize(0.04 * 2.5);
+		ratioPlotEntry->GetYaxis()->SetLabelOffset(0.007);
+
+		ratioPlotEntry->Draw("E0");
+		if (addRatioBoxUnityLine){
+			TLine * lineRatio = new TLine(ratioPlotEntry->GetBinLowEdge(1), 1.0, ratioPlotEntry->GetBinLowEdge(ratioPlotEntry->GetNbinsX()+1), 1.0); // xmin, ymin, xmax, ymax
+			lineRatio->SetLineStyle(2);
+			lineRatio->SetLineWidth(1);
+			lineRatio->SetLineColor(36);
+			lineRatio->Draw("same");
+			ratioPlotEntry->Draw("E0, same");
+		}
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////
+
+	c->SaveAs(saveName.c_str());
+	c->Close();
+	std::cout << std::endl;
+
+	// reset the max values of histograms that we altered
+	if (!th1Indi.empty()){
+		th1Indi[0]->SetMaximum(initialMax);
+		th1Indi[0]->SetMinimum(initialMin);
+	}
+	else {
+		th1Stack[0]->SetMaximum(initialMax);
+		th1Stack[0]->SetMinimum(initialMin);
+	}
+
+	if (addRatioBox) th1Indi[0]->SetLabelOffset(0.007);
+
+	return;
+} // closes overloaded function SaveSpec01
+
+
 void Plotter::Save2D(const std::string& saveName){
 
 	if (histos2D.empty()){
