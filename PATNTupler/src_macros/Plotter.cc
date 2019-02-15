@@ -1142,8 +1142,8 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 } // closes function SaveSpec01
 
 
-// Same as SaveSpec01 but with MHT divide
-void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::string> htBins, const std::vector<std::string> mhtBins){
+// Overloaded SaveSpec01 with MHT divide
+void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::string> htBins, const std::vector<std::string> mhtBins){
 
 	if (th1Indi.empty() && th1Stack.empty()){
 		std::cout << "Plotter::SaveSpec01 @@@ Exiting without saving... no histos @@@" << std::endl;
@@ -1346,8 +1346,12 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 		for (unsigned int c = 0; c < numberOfBins; c = c + binsPerDivision){
 			
 			double lineMax = 0.0;
+			double lineAlmostMax = 0.0;
 			if (useLogY == false) lineMax = 1.03 * max;
 			else lineMax = pow(10, 0.92 * (log10(graphMaxLog) - log10(graphMinLog)) + log10(graphMinLog));
+
+			if (useLogY == false) lineAlmostMax = 0.96*lineMax;
+			else lineAlmostMax = 0.7*lineMax;
 
 			if (c != 0){
 				TLine * line = new TLine(c, 0, c, lineMax); // xmin, ymin, xmax, ymax
@@ -1356,10 +1360,11 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 				line->Draw();
 			}
 			TLatex * latexHT = new TLatex();
-		    latexHT->SetTextFont(42);
-		    latexHT->SetTextAlign(11); // align from left
-		    latexHT->DrawLatex(c+1, 0.95*lineMax, htBins[(c/binsPerDivision) % htBins.size()].c_str());
-			latexHT->DrawLatex(c+1, lineMax, htBins[c/( htBins.size() * binsPerDivision )]);
+		        latexHT->SetTextFont(42);
+                        latexHT->SetTextSize(0.04);
+		        latexHT->SetTextAlign(11); // align from left
+		        latexHT->DrawLatex(c+1, lineAlmostMax, htBins[(c/binsPerDivision) % htBins.size()].c_str());
+			if( c/binsPerDivision % htBins.size() == 0 ) latexHT->DrawLatex(c+1, lineMax, mhtBins[c/( htBins.size() * binsPerDivision )].c_str());
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////
@@ -1436,8 +1441,7 @@ void Plotter::SaveSpec02(const std::string& saveName, const std::vector<std::str
 	if (addRatioBox) th1Indi[0]->SetLabelOffset(0.007);
 
 	return;
-} // closes function SaveSpec02
-
+} // closes overloaded function SaveSpec01
 
 
 void Plotter::Save2D(const std::string& saveName){
