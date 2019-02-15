@@ -551,7 +551,7 @@ public:
 		treeVar_fatJetA_p4_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
 		treeVar_fatJetB_p4_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
 
-		treeVar_muon_p4_.SetPtEtaPhiE(muon.pt(), muon.eta(), muon.phi(), muon.et() * cosh(muon.eta()));
+		treeVar_muon_p4_.SetPtEtaPhiE(muon.p4().pt(), muon.p4().eta(), muon.p4().phi(), muon.p4().e());
 
 		treeVar_fatJetA_doubleBtagDiscrim_ = fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags();
 		treeVar_fatJetB_doubleBtagDiscrim_ = fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags();
@@ -1274,7 +1274,7 @@ int main(int argc, char** argv){
 			}
 			else if (centralFatJetVec.size() == 1) {
 				nFatJets = 1;
-				centralFatJets.append(centralFatJets[0]);	// Whaaaaaaaaaaaaaatttttttt???
+				centralFatJetVec.push_back(centralFatJetVec[0]);	// Whaaaaaaaaaaaaaatttttttt???
 			}
 
 			// if (centralFatJetVec.size() >= 2 && nTightMuons > 0) {
@@ -1282,7 +1282,7 @@ int main(int argc, char** argv){
 			if (centralFatJetVec.size() >= 2 && ht > 1499.0 && nTightMuons > 0) { // HACK: INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
 				const ran::NtFatJet& fatJetA = centralFatJetVec.at(0);
 				const ran::NtFatJet& fatJetB = centralFatJetVec.at(1);
-				const ran::NtMuon& muonA = tightMuons.at(0); // SingleMuon region
+				const ran::NtMuon& muonA = tightMu.at(0); // SingleMuon region
 
 				std::vector<ran::NtJet> slimJets;
 				for (const ran::NtJet& jet : jetVec) {
