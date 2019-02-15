@@ -68,7 +68,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_MHT_2019_01_08/MassCutsV09/run2017/QCD/tag/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_SingleMu_2019_01_08/MassCutsV09/run2017/QCD/tag/"; // where we are going to save the output plots (should include the samples name + binning maybe)
 
 
     // TWO: do we want to blind the S mass region? (true for data, false for everything else)
@@ -86,7 +86,7 @@ int main(int argc, char** argv){
     const std::vector<std::vector<int>> cut4_ht = { {1500,2500}, {2500,3500}, {3500,99999} }; // HT BIN
     // const std::vector<std::vector<int>> cut4_ht = { {1500,99999} }; // HT BIN
     const std::vector<std::vector<int>> cut6_mht = { {0,200}, {200,99999} }; // MHT BIN
-    const std::vector<std::vector<int>> cut6_lepVeto = { {0,9999}, {0,1} }; // Lepton Veto BIN
+    const std::vector<std::vector<int>> cut6_lepVeto = { {1,2}, {1,2} }; // Muon Selection BIN
     const std::vector<int> cut5_ak4Pt = {300,-1}; // 1st element for leading pt, 2nd element for secondary pt
     // const std::vector<int> cut5_ak4Pt = {-1,-1}; // 1st element for leading pt, 2nd element for secondary pt
 
@@ -134,7 +134,7 @@ int main(int argc, char** argv){
     CutVariable slimJetB_pt_CV = CutVariable("slimJetB_p4.Pt()", {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown"});
     CutVariable ht_CV = CutVariable("ht", {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown"});
     CutVariable mht_CV = CutVariable("mht", {"jecAK4UncUp", "jecAK4UncDown", "jerAK4UncUp", "jerAK4UncDown"});
-    CutVariable lepVeto_CV = CutVariable("nrVetoObjects", {});
+    CutVariable lepVeto_CV = CutVariable("nrTightMuons", {});
 
 
     // EIGHT: >>>BELOW<<<
