@@ -38,6 +38,7 @@ void CreateHistograms(std::map<std::string,TH1D*>& h_, const std::vector<std::ve
             std::string histogramName = "";
             if (cut2_ak8Dbt[iCut2].size() == 4) histogramName += "dbt" + cut2_ak8Dbt[iCut2][0] + cut2_ak8Dbt[iCut2][1] + "And" + cut2_ak8Dbt[iCut2][2] + cut2_ak8Dbt[iCut2][3];
             if (cut2_ak8Dbt[iCut2].size() == 2 && cut2_ak8Dbt[iCut2][0] == "DIAG_UP") histogramName += "dbtDiagUp" + cut2_ak8Dbt[iCut2][1];
+	    if (cut2_ak8Dbt[iCut2].size() == 2 && cut2_ak8Dbt[iCut2][0] == "DIAG_DOWN") histogramName += "dbtDiagDown" + cut2_ak8Dbt[iCut2][1];
             if (systematicName.substr(0,3) == "SF_") histogramName += "_" + systematicName.substr(3);
             else histogramName += "_" + systematicName;
 
@@ -68,7 +69,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_MHT_2019_01_08/MassCutsV09/run2017/QCD/tag/"; // where we are going to save the output plots (should include the samples name + binning maybe)
+    std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_MHT_2019_01_08/MassCutsV09/run2016/TTJets_MGLO_HTStitched650/controlAB/"; // where we are going to save the output plots (should include the samples name + binning maybe)
 
 
     // TWO: do we want to blind the S mass region? (true for data, false for everything else)
@@ -77,18 +78,21 @@ int main(int argc, char** argv){
 
     // THREE: set the cut params.
     std::vector<std::vector<std::string>> cut2_ak8Dbt;
-    cut2_ak8Dbt.push_back({"DIAG_UP", "Loose"}); // TAG: Top Diagnol Corner Crossing Axis at...--> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
-    // cut2_ak8Dbt.push_back({"Loose", "Max", "Loose", "Max"}); // tagPRIME for TTJets special
-    // cut2_ak8Dbt.push_back({"Off","Loose","Off","Loose"}); // ANTI: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
-    // cut2_ak8Dbt.push_back({"Loose","Med2","Off","IDBTCv23"}); // CONTROL_A: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
-    // cut2_ak8Dbt.push_back({"Off","IDBTCv23","Loose","Med2"}); // CONTROL_B: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    //cut2_ak8Dbt.push_back({"DIAG_UP", "Loose"}); // TAG: Top Diagnol Corner Crossing Axis at...--> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    //cut2_ak8Dbt.push_back({"DIAG_DOWN", "Loose"}); // TAG: Top Diagnol Corner flipped over hypotenuse
+    //cut2_ak8Dbt.push_back({"Loose", "Max", "Loose", "Max"}); // tagPRIME for TTJets special
+    //cut2_ak8Dbt.push_back({"Off","Loose","Off","Loose"}); // ANTI: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    cut2_ak8Dbt.push_back({"Loose","Med2","Off","IDBTCv23"}); // CONTROL_A: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
+    cut2_ak8Dbt.push_back({"Off","IDBTCv23","Loose","Med2"}); // CONTROL_B: 4 elements in sub-vector: 1st for fatJetA min, 2nd for fatJetA max, 3rd for fatJetB min, 4th for fatJetB max --> "Off", "Loose", "Med1", "Med2", "Tight", "Max"
     const int cut3_ak8Pt = 300;
     const std::vector<std::vector<int>> cut4_ht = { {1500,2500}, {2500,3500}, {3500,99999} }; // HT BIN
-    // const std::vector<std::vector<int>> cut4_ht = { {1500,99999} }; // HT BIN
+    //const std::vector<std::vector<int>> cut4_ht = { {1500,99999} }; // HT BIN
     const std::vector<std::vector<int>> cut6_mht = { {0,200}, {200,99999} }; // MHT BIN
     const std::vector<std::vector<int>> cut6_lepVeto = { {0,9999}, {0,1} }; // Lepton Veto BIN
+    //const std::vector<std::vector<int>> cut6_mht = { {0,99999} }; // MHT BIN
+    //const std::vector<std::vector<int>> cut6_lepVeto = { {0,9999} }; // Lepton Veto BIN
     const std::vector<int> cut5_ak4Pt = {300,-1}; // 1st element for leading pt, 2nd element for secondary pt
-    // const std::vector<int> cut5_ak4Pt = {-1,-1}; // 1st element for leading pt, 2nd element for secondary pt
+    //const std::vector<int> cut5_ak4Pt = {-1,-1}; // 1st element for leading pt, 2nd element for secondary pt
 
 
     // FOUR: set the mass regions (use a KEYNAME and keep track of what means what!!!!)
@@ -101,25 +105,27 @@ int main(int argc, char** argv){
     const double sideBandScaleFactor = 0.5;
     const std::string massCutObjectName = "MassCutsV09";
 
-    // const double S1_Node1 = 195.0;
-    // const double S1_Node2 = 100.0;
-    // const double SMAX_Node1 = 201.0;
-    // const double SMAX_Node2 = 170.0;
-    // const std::vector<double> SN_Nodes = {197.0, 199.0};
-    // const double sideBandScaleFactor = 1.0;
-    // const std::string massCutObjectName = "MassCutsSpecialV06";
+    // TT Special
+    //const double S1_Node1 = 195.0;
+    //const double S1_Node2 = 100.0;
+    //const double SMAX_Node1 = 201.0;
+    //const double SMAX_Node2 = 170.0;
+    //const std::vector<double> SN_Nodes = {197.0, 199.0};
+    //const double sideBandScaleFactor = 1.0;
+    //const std::string massCutObjectName = "MassCutsSpecialV06";
 
 
     // FIVE: set up the luminosity
-    // const double luminosity = 35.922; // 2016 DATASET
-    const double luminosity = 41.529; // 2017 DATASET
+    const double luminosity = 35.922; // 2016 DATASET
+    //const double luminosity = 41.529; // 2017 DATASET
 
 
     // SIX: systematics to run over. only need to use them for TAG dbt. start with 'SF_' for scale factors.
-    // const std::vector<std::string> systematicNameVec = {"NOSYS"}; // >> data & no systematic
-    const std::vector<std::string> systematicNameVec = {"NOSYS", "jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_prefireUp", "SF_prefireDown"}; // >> WJets and ZJets
-    // const std::vector<std::string> systematicNameVec = {"NOSYS", "jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_prefireUp", "SF_prefireDown"}; // >> TTJets
-    // const std::vector<std::string> systematicNameVec = {"NOSYS", "jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown"}; // >> SIGNAL
+    //const std::vector<std::string> systematicNameVec = {"NOSYS"}; // >> data & no systematic
+    //const std::vector<std::string> systematicNameVec = {"NOSYS", "SF_dbtTagUp", "SF_dbtTagDown"}; // TTSpecial
+    //const std::vector<std::string> systematicNameVec = {"NOSYS", "jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_prefireUp", "SF_prefireDown"}; // >> WJets and ZJets
+    const std::vector<std::string> systematicNameVec = {"NOSYS", "jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_prefireUp", "SF_prefireDown"}; // >> TTJets
+    //const std::vector<std::string> systematicNameVec = {"NOSYS", "jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown"}; // >> SIGNAL
     // const std::vector<std::string> systematicNameVec = {"jecAKXUncUp", "jecAKXUncDown", "jerAKXUncUp", "jerAKXUncDown", "jmsUncUp", "jmsUncDown", "jmrUncUp", "jmrUncDown", "SF_dbtTagUp", "SF_dbtTagDown", "SF_isrUp", "SF_isrDown", "SF_prefireUp", "SF_prefireDown", "SF_scaleUp", "SF_scaleDown"}; // >> CENTRAL SIGNAL
 
 
@@ -237,6 +243,7 @@ int main(int argc, char** argv){
                 std::string histogramName = "";
                 if (cut2_ak8Dbt[iCut2].size() == 4) histogramName += "dbt" + cut2_ak8Dbt[iCut2][0] + cut2_ak8Dbt[iCut2][1] + "And" + cut2_ak8Dbt[iCut2][2] + cut2_ak8Dbt[iCut2][3];
                 if (cut2_ak8Dbt[iCut2].size() == 2 && cut2_ak8Dbt[iCut2][0] == "DIAG_UP") histogramName += "dbtDiagUp" + cut2_ak8Dbt[iCut2][1];
+		if (cut2_ak8Dbt[iCut2].size() == 2 && cut2_ak8Dbt[iCut2][0] == "DIAG_DOWN") histogramName += "dbtDiagDown" + cut2_ak8Dbt[iCut2][1];
 
                 if (iMassRegion < numberOfSegments) histogramName = "S_" + histogramName;
                 else if (iMassRegion < 2*numberOfSegments) histogramName = "U_" + histogramName;
@@ -250,6 +257,8 @@ int main(int argc, char** argv){
                         std::string dbtCut = "";
                         if (cut2_ak8Dbt[iCut2].size() == 2 && cut2_ak8Dbt[iCut2][0] == "DIAG_UP")
                             dbtCut = Form("%s >= (-1.0 * %s + 1.0 + %f) ", fatJetA_dbt_name.c_str(), fatJetB_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][1]) );
+                        if (cut2_ak8Dbt[iCut2].size() == 2 && cut2_ak8Dbt[iCut2][0] == "DIAG_DOWN")
+                            dbtCut = Form("%s >= 0.3 && %s >= 0.3 && %s < (-1.0 * %s + 1.0 + %f) ", fatJetA_dbt_name.c_str(), fatJetB_dbt_name.c_str(), fatJetA_dbt_name.c_str(), fatJetB_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][1]) );
                         if (cut2_ak8Dbt[iCut2].size() == 4)
                             dbtCut = Form("%s>=%f && %s<%f && %s>=%f && %s<%f ", fatJetA_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][0]), fatJetA_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][1]), fatJetB_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][2]), fatJetB_dbt_name.c_str(), DoubleBTagWPs::dbtNameToDouble(cut2_ak8Dbt[iCut2][3]) );
                         std::string cutToApply = Form("%s && %s>%d && %s>%d && %s>=%d && %s<%d && %s>%d && %s>%d && %s>=%d && %s<%d && %s>=%d && %s<%d", dbtCut.c_str(), fatJetA_pt_name.c_str(), cut3_ak8Pt, fatJetB_pt_name.c_str(), cut3_ak8Pt, ht_name.c_str(), cut4_ht[iCut4][0], ht_name.c_str(), cut4_ht[iCut4][1], slimJetA_pt_name.c_str(), cut5_ak4Pt[0], slimJetB_pt_name.c_str(), cut5_ak4Pt[1], mht_name.c_str(), cut6_mht[iCut6][0], mht_name.c_str(), cut6_mht[iCut6][1], lepVeto_name.c_str(), cut6_lepVeto[iCut6][0], lepVeto_name.c_str(), cut6_lepVeto[iCut6][1]);
@@ -259,6 +268,9 @@ int main(int argc, char** argv){
                         TH2D hTemplate = TH2D("hTemplate", ";fatJetA_MassType (GeV);fatJetB_MassType (GeV)", 100, 0, 200, 100, 0, 200);
                         std::string varToPlot = fatJetB_mass_name + ":" + fatJetA_mass_name;
                         PlotEntry2D plotEntry = PlotEntry2D("plotEntry", hTemplate, varToPlot.c_str(), luminosity);
+
+                        std::string cutToApply_lheHTLT = Form("%s && lheHT<650", cutToApply.c_str());
+                        std::string cutToApply_lheHTGT = Form("%s && lheHT>=650", cutToApply.c_str());
 
                         //////////////////////////////////////////////////////////////////////////////////////////////////////
                         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -270,13 +282,25 @@ int main(int argc, char** argv){
                         // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
                         // 2016 (80X)
 
-                        // plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/QCD_HT1000to1500/flatTree.root", cutToApply.c_str(), 1206, SF_weight.c_str());
-                        // plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/QCD_HT1500to2000/flatTree.root", cutToApply.c_str(), 120.4, SF_weight.c_str());
-                        // plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/QCD_HT2000toInf/flatTree.root", cutToApply.c_str(), 25.25, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/QCD_HT1000to1500/flatTree.root", cutToApply.c_str(), 1206, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/QCD_HT1500to2000/flatTree.root", cutToApply.c_str(), 120.4, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/QCD_HT2000toInf/flatTree.root", cutToApply.c_str(), 25.25, SF_weight.c_str());
 
-                        // plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/TTJets/flatTree.root", cutToApply.c_str(), 831.76, SF_weight.c_str());
-                        // plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/ZJets/flatTree.root", cutToApply.c_str(), 52.79, SF_weight.c_str());
-                        // plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/WJets/flatTree.root", cutToApply.c_str(), 95.14, SF_weight.c_str());
+			// TTJets Stitched
+			//plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08_TTSpecial/mc/TTJets/flatTree.root", cutToApply_lheHTLT.c_str(), 831.76, SF_weight.c_str());
+			//plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08_TTSpecial/mc/TTJets_aMCNLO/flatTree.root", cutToApply_lheHTLT.c_str(), 831.76, SF_weight.c_str());
+			plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08_TTSpecial/mc/TTJets_MG/flatTree.root", cutToApply_lheHTLT.c_str(), 831.76, SF_weight.c_str());
+                        plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08_TTSpecial/mc/TTJets_HT600to800/flatTree.root", cutToApply_lheHTGT.c_str(), 2.6665, SF_weight.c_str());
+                        plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08_TTSpecial/mc/TTJets_HT800to1200/flatTree.root", cutToApply_lheHTGT.c_str(), 1.09808, SF_weight.c_str());
+                        plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08_TTSpecial/mc/TTJets_HT1200to2500/flatTree.root", cutToApply_lheHTGT.c_str(), 0.19875, SF_weight.c_str());
+                        plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08_TTSpecial/mc/TTJets_HT2500toInf/flatTree.root", cutToApply_lheHTGT.c_str(), 0.0023684, SF_weight.c_str());
+
+			//plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08_TTSpecial/mc/TTJets_aMCNLO/flatTree.root", cutToApply.c_str(), 831.76, SF_weight.c_str());
+			//plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08_TTSpecial/mc/TTJets_MG/flatTree.root", cutToApply.c_str(), 831.76, SF_weight.c_str());
+
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/TTJets/flatTree.root", cutToApply.c_str(), 831.76, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/ZJets/flatTree.root", cutToApply.c_str(), 52.79, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/WJets/flatTree.root", cutToApply.c_str(), 95.14, SF_weight.c_str());
 
                         // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/CPS_h70s1200/flatTree.root", cutToApply.c_str(), 0.4951000*0.840*0.840, SF_weight.c_str());
                         // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2016/CPS_h70s2000/flatTree.root", cutToApply.c_str(), 0.0091050*0.840*0.840, SF_weight.c_str());
@@ -286,33 +310,43 @@ int main(int argc, char** argv){
                         // plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/mc/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
 
                         // 2016 GOLDEN JSON DATASET
-                        // plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/data/JetHT_Run2016TOTAL/flatTree.root", cutToApply.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08/data/JetHT_Run2016TOTAL/flatTree.root", cutToApply.c_str());
 
                         // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
                         // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
                         // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. 
                         // 2017 (94X)
 
-                        plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/QCD_HT1000to1500/flatTree.root", cutToApply.c_str(), 1005, SF_weight.c_str());
-                        plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/QCD_HT1500to2000/flatTree.root", cutToApply.c_str(), 101.8, SF_weight.c_str());
-                        plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/QCD_HT2000toInf/flatTree.root", cutToApply.c_str(), 20.54, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/QCD_HT1000to1500/flatTree.root", cutToApply.c_str(), 1005, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/QCD_HT1500to2000/flatTree.root", cutToApply.c_str(), 101.8, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/QCD_HT2000toInf/flatTree.root", cutToApply.c_str(), 20.54, SF_weight.c_str());
 
-                        // plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/TTToHadronic/flatTree.root", cutToApply.c_str(), 377.96, SF_weight.c_str());
-                        // plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/TTToSemiLeptonic/flatTree.root", cutToApply.c_str(), 365.34, SF_weight.c_str());
-                        // plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/TTTo2L2Nu/flatTree.root", cutToApply.c_str(), 88.29, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/TTToHadronic/flatTree.root", cutToApply.c_str(), 377.96, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/TTToSemiLeptonic/flatTree.root", cutToApply.c_str(), 365.34, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/TTTo2L2Nu/flatTree.root", cutToApply.c_str(), 88.29, SF_weight.c_str());
 
-                        // plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/ZJets/flatTree.root", cutToApply.c_str(), 18.69, SF_weight.c_str());
-                        // plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/WJets/flatTree.root", cutToApply.c_str(), 34.00, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08_TTSpecial/mc/TTJets_aMCNLO/flatTree.root", cutToApply_lheHTLT.c_str(), 831.76, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/TTJets_MG/flatTree.root", cutToApply_lheHTLT.c_str(), 831.76, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/TTJets_HT600to800/flatTree.root", cutToApply_lheHTGT.c_str(), 2.6665, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/TTJets_HT800to1200/flatTree.root", cutToApply_lheHTGT.c_str(), 1.09808, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/TTJets_HT1200to2500/flatTree.root", cutToApply_lheHTGT.c_str(), 0.19875, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/TTJets_HT2500toInf/flatTree.root", cutToApply_lheHTGT.c_str(), 0.0023684, SF_weight.c_str());
+
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08_TTSpecial/mc/TTJets_aMCNLO/flatTree.root", cutToApply.c_str(), 831.76, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08_TTSpecial/mc/TTJets_MG/flatTree.root", cutToApply.c_str(), 831.76, SF_weight.c_str());
+
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/ZJets/flatTree.root", cutToApply.c_str(), 18.69, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/WJets/flatTree.root", cutToApply.c_str(), 34.00, SF_weight.c_str());
 
                         // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/CPS_h70s1200/flatTree.root", cutToApply.c_str(), 0.4951000*0.840*0.840, SF_weight.c_str());
                         // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/CPS_h70s2000/flatTree.root", cutToApply.c_str(), 0.0091050*0.840*0.840, SF_weight.c_str());
                         // plotEntry.AddInput("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2019_01_01/2017/CPS_h70s2600/flatTree.root", cutToApply.c_str(), 0.0006167*0.840*0.840, SF_weight.c_str());
 
                         // SIGNAL 2017
-                        // plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/NAMEXYZ/flatTree.root", cutToApply.c_str(), 987654321.0, SF_weight.c_str());
 
                         // 2017 GOLDEN JSON DATASET
-                        // plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/data/JetHT_Run2017TOTAL/flatTree.root", cutToApply.c_str());
+                        //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/data/JetHT_Run2017TOTAL/flatTree.root", cutToApply.c_str());
 
                         // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
                         // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.

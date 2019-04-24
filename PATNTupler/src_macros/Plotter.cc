@@ -54,10 +54,10 @@ tdrStyle(TDRStyle())
 	for (size_t iIndi = 0; iIndi != histoIndi.size(); ++iIndi){
 		histoIndi[iIndi].GetHistogram()->SetLineColor(SetColor_stark(iIndi));
 		histoIndi[iIndi].GetHistogram()->SetLineWidth(2);
-		histoIndi[iIndi].GetHistogram()->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
-		histoIndi[iIndi].GetHistogram()->GetXaxis()->SetLabelSize(0.04);
-		histoIndi[iIndi].GetHistogram()->GetYaxis()->SetTitleSize(0.05);
-		histoIndi[iIndi].GetHistogram()->GetYaxis()->SetLabelSize(0.04);
+		histoIndi[iIndi].GetHistogram()->GetXaxis()->SetTitleSize(0.025); // can't get this to work via tstyle
+		histoIndi[iIndi].GetHistogram()->GetXaxis()->SetLabelSize(0.02);
+		histoIndi[iIndi].GetHistogram()->GetYaxis()->SetTitleSize(0.025);
+		histoIndi[iIndi].GetHistogram()->GetYaxis()->SetLabelSize(0.02);
 	}
 }
 
@@ -87,19 +87,19 @@ tdrStyle(TDRStyle())
 	for (size_t iIndi = 0; iIndi != histoIndi.size(); ++iIndi){
 		histoIndi[iIndi].GetHistogram()->SetLineColor(SetColor_stark(iIndi));
 		histoIndi[iIndi].GetHistogram()->SetLineWidth(2);
-		histoIndi[iIndi].GetHistogram()->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
-		histoIndi[iIndi].GetHistogram()->GetXaxis()->SetLabelSize(0.04);
-		histoIndi[iIndi].GetHistogram()->GetYaxis()->SetTitleSize(0.05);
-		histoIndi[iIndi].GetHistogram()->GetYaxis()->SetLabelSize(0.04);
+		histoIndi[iIndi].GetHistogram()->GetXaxis()->SetTitleSize(0.03); // can't get this to work via tstyle
+		histoIndi[iIndi].GetHistogram()->GetXaxis()->SetLabelSize(0.025);
+		histoIndi[iIndi].GetHistogram()->GetYaxis()->SetTitleSize(0.03);
+		histoIndi[iIndi].GetHistogram()->GetYaxis()->SetLabelSize(0.025);
 	}
 
 	for (size_t iStack = 0; iStack != histoStack.size(); ++iStack){
 		histoStack[iStack].GetHistogram()->SetFillColor(SetColor_mellow(iStack, histoStack.size()));	
 		histoStack[iStack].GetHistogram()->SetLineWidth(0.0);
-		histoStack[iStack].GetHistogram()->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
-		histoStack[iStack].GetHistogram()->GetXaxis()->SetLabelSize(0.04);
-		histoStack[iStack].GetHistogram()->GetYaxis()->SetTitleSize(0.05);
-		histoStack[iStack].GetHistogram()->GetYaxis()->SetLabelSize(0.04);
+		histoStack[iStack].GetHistogram()->GetXaxis()->SetTitleSize(0.03); // can't get this to work via tstyle
+		histoStack[iStack].GetHistogram()->GetXaxis()->SetLabelSize(0.025);
+		histoStack[iStack].GetHistogram()->GetYaxis()->SetTitleSize(0.03);
+		histoStack[iStack].GetHistogram()->GetYaxis()->SetLabelSize(0.025);
 	}
 }
 
@@ -180,18 +180,18 @@ tdrStyle(TDRStyle())
 	for (size_t iTh1I = 0; iTh1I != th1Indi.size(); ++iTh1I){
 		th1Indi[iTh1I]->SetLineColor(SetColor_stark(iTh1I));
 		th1Indi[iTh1I]->SetLineWidth(2);
-		th1Indi[iTh1I]->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
-		th1Indi[iTh1I]->GetXaxis()->SetLabelSize(0.04);
-		th1Indi[iTh1I]->GetYaxis()->SetTitleSize(0.05);
-		th1Indi[iTh1I]->GetYaxis()->SetLabelSize(0.04);
+		th1Indi[iTh1I]->GetXaxis()->SetTitleSize(0.03); // can't get this to work via tstyle
+		th1Indi[iTh1I]->GetXaxis()->SetLabelSize(0.025);
+		th1Indi[iTh1I]->GetYaxis()->SetTitleSize(0.03);
+		th1Indi[iTh1I]->GetYaxis()->SetLabelSize(0.025);
 	}
 	for (size_t iTh1S = 0; iTh1S != th1Stack.size(); ++iTh1S){
 		th1Stack[iTh1S]->SetFillColor(SetColor_mellow(iTh1S, th1Stack.size()));
 		th1Stack[iTh1S]->SetLineWidth(0.0);
-		th1Stack[iTh1S]->GetXaxis()->SetTitleSize(0.05); // can't get this to work via tstyle
-		th1Stack[iTh1S]->GetXaxis()->SetLabelSize(0.04);
-		th1Stack[iTh1S]->GetYaxis()->SetTitleSize(0.05);
-		th1Stack[iTh1S]->GetYaxis()->SetLabelSize(0.04);
+		th1Stack[iTh1S]->GetXaxis()->SetTitleSize(0.03); // can't get this to work via tstyle
+		th1Stack[iTh1S]->GetXaxis()->SetLabelSize(0.025);
+		th1Stack[iTh1S]->GetYaxis()->SetTitleSize(0.03);
+		th1Stack[iTh1S]->GetYaxis()->SetLabelSize(0.025);
 	}
 }
 
@@ -1122,7 +1122,10 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
 
+	std::string sourceName = saveName + ".C";
+
 	c->SaveAs(saveName.c_str());
+	c->SaveSource(sourceName.c_str());
 	c->Close();
 	std::cout << std::endl;
 
@@ -1158,7 +1161,8 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 
 	tdrStyle->cd();
 	TCanvas * c = new TCanvas("c","c");
-	
+	c->SetCanvasSize(1200,600);
+
 	if (addRatioBox){
 		TPad *padUp = new TPad("padUp","padUp",0,0.3,1,1);
 		padUp->SetBottomMargin(0.016);
@@ -1351,7 +1355,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			else lineMax = pow(10, 0.92 * (log10(graphMaxLog) - log10(graphMinLog)) + log10(graphMinLog));
 
 			if (useLogY == false) lineAlmostMax = 0.96*lineMax;
-			else lineAlmostMax = 0.7*lineMax;
+			else lineAlmostMax = 0.65*lineMax;
 
 			if (c != 0){
 				TLine * line = new TLine(c, 0, c, lineMax); // xmin, ymin, xmax, ymax
@@ -1361,7 +1365,7 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 			}
 			TLatex * latexHT = new TLatex();
 		        latexHT->SetTextFont(42);
-                        latexHT->SetTextSize(0.04);
+                        latexHT->SetTextSize(0.025);
 		        latexHT->SetTextAlign(11); // align from left
 		        latexHT->DrawLatex(c+1, lineAlmostMax, htBins[(c/binsPerDivision) % htBins.size()].c_str());
 			if( c/binsPerDivision % htBins.size() == 0 ) latexHT->DrawLatex(c+1, lineMax, mhtBins[c/( htBins.size() * binsPerDivision )].c_str());
@@ -1656,6 +1660,7 @@ void Plotter::DrawLatex(const unsigned int& dimensions)
 	TLatex * latex = new TLatex();
     latex->SetNDC();
     latex->SetTextFont(42);
+    latex->SetTextSize(0.03);
 
     latex->SetTextAlign(11); // align from left
     if (dimensions == 1) latex->DrawLatex(0.15,0.92,Form("#bf{CMS} %s", lhsStringAfterCMS.c_str()));
@@ -1763,7 +1768,7 @@ TStyle * Plotter::TDRStyle()
 	tdrStyle->SetLegendBorderSize(0);
 	tdrStyle->SetLegendFillColor(0);
 	tdrStyle->SetLegendFont(42);
-	tdrStyle->SetLegendTextSize(0.05);
+	tdrStyle->SetLegendTextSize(0.05); // was 0.05
 
 	//For the fit/function:
 	tdrStyle->SetOptFit(0);

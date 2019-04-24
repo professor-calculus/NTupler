@@ -35,7 +35,7 @@ int main(){
 
 
     // ONE: save info & luminosity
-    const std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/plots_MHT_2019_01_15/2016_80X/oneDimensionRepresentation/BKG/tag/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/plots_MHT_2019_01_15/2016_80X/oneDimensionRepresentation/QCD_check/data_vs_calc/"; // where we are going to save the output plots (should include the samples name, and any important features)
     
     const double luminosity = 35.867; // 2016 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
     // const double luminosity = 41.370; // 2017 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
@@ -94,20 +94,30 @@ int main(){
     
     // std::vector<TH1D*> indiHistoVec = {h16_["S_control_data"], h16_["predNew_control_data"]};
     // std::vector<TH1D*> stackHistoVec = {h16_["S_tag_WJets"], h16_["S_tag_ZJets"], h16_["S_tag_TTJets"], h16_["S_tag_QCD"]};
-    std::vector<TH1D*> indiHistoVec = {h16_["S_tag_TTJets"], h16_["S_tag_QCD"]};
+    // std::vector<TH1D*> indiHistoVec = {h16_["S_tag_TTJets"], h16_["S_tag_QCD"]};
+    std::vector<TH1D*> indiHistoVec = {h16_["S_tag_TTJets"], h16_["S_tag_TTJets_MGLO_HTStitched650"]};
+    // std::vector<TH1D*> indiHistoVec = {h16_["S_anti_TTJets"], h16_["S_anti_QCD"]};
+
+    // std::vector<TH1D*> indiHistoVec = {h16_["S_tag_P1_1400sq_R0p99"], h16_["S_tag_P1_1400sq_R0p384"], h16_["S_tag_P1_1800sq_R0p99"], h16_["S_tag_P1_1800sq_R0p384"]};
+    // std::vector<TH1D*> indiHistoVec = {h16_["S_anti_P1_1900sq_R0p99"], h16_["S_anti_P1_1900sq_R0p384"], h16_["S_anti_TTJets"], h16_["S_anti_QCD"]};
+    // std::vector<TH1D*> indiHistoVec = {h16_["UnD_tag_P1_1900sq_R0p99"], h16_["UnD_tag_P1_1900sq_R0p384"], h16_["UnD_tag_TTJets"], h16_["UnD_tag_QCD"]};
+    // std::vector<TH1D*> indiHistoVec = {h16_["UnD_anti_P1_1900sq_R0p99"], h16_["UnD_anti_P1_1900sq_R0p384"], h16_["UnD_anti_TTJets"], h16_["UnD_anti_QCD"]};
 
     Plotter plot = Plotter(indiHistoVec);
     // Plotter plot = Plotter({}, stackHistoVec);
     // Plotter plot = Plotter(indiHistoVec, stackHistoVec);
 
     // std::vector<std::string> legendNames = {"control", "control prediction"};
-    std::vector<std::string> legendNames = {"TTJets", "QCD"};
+    // std::vector<std::string> legendNames = {"TTJets", "QCD"};
+    std::vector<std::string> legendNames = {"Powheg", "MGLO HTStitched"};
+
+    //std::vector<std::string> legendNames = {"1400GeV Sq 1GeV LSP", "1400GeV Sq 200GeV LSP", "1800GeV Sq 1GeV LSP", "1800GeV Sq 200GeV LSP", "WJets", "ZJets", "TTJets", "QCD"};
 
     // plot.AddLegend(legendNames, 0.16, 0.38, 0.64, 0.83, 0.028);
     // plot.AddLegend(legendNames, 0.18, 0.38, 0.18, 0.30, 0.040);
     // plot.AddLegend(legendNames, 0.67, 0.88, 0.64, 0.83, 0.028);
-    plot.AddLegend(legendNames, 0.67, 0.88, 0.61, 0.80, 0.040); // with ratio box
-    // plot.AddLegend2Cols(3, legendNames, 0.70, 0.88, 0.64, 0.83, 0.028);
+    plot.AddLegend(legendNames, 0.67, 0.88, 0.61, 0.80, 0.025); // with ratio box
+    // plot.AddLegend2Cols(4, legendNames, 0.70, 0.84, 0.64, 0.79, 0.028);
     
     // plot.AddLatex();
     // plot.AddLatex(luminosity);
@@ -118,7 +128,11 @@ int main(){
     // plot.AddRatioBox("ratio", true);
     // plot.AddRatioBox(0.1, 1.9, "ratio", true);
     // plot.AddRatioBox("true / pred", true);
-    plot.AddRatioBox(0.1,2.4, "true / pred", true);
+    plot.AddRatioBox(0.1, 4.9, "ratio", true);
+
+    //plot.AddRatioBox(0.1,2.4, "true / pred", true);
+    //plot.AddRatioBox(0.1,2.4, "ratio", true);
+
     // plot.AddRatioBox(0.84,1.16, "priv / central", true);
     
     plot.SetErrors();
@@ -132,8 +146,8 @@ int main(){
     
     plotName = "log";
     plot.SetLogY();
-    // plot.SetYValueMin(0.15); // REMEMBER THIS PARAM! (only for log)
-    plot.SetYValueMin(0.50); // REMEMBER THIS PARAM! (only for log)
+    plot.SetYValueMin(0.01); // REMEMBER THIS PARAM! (only for log)
+    // plot.SetYValueMin(0.50); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(1.10); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(3.10); // REMEMBER THIS PARAM! (only for log)
     // plot.SetYValueMin(12.10); // REMEMBER THIS PARAM! (only for log)
@@ -160,8 +174,100 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
     histoNameVec.push_back("data");
     histoNameVec.push_back("QCD");
     histoNameVec.push_back("TTJets");
+    histoNameVec.push_back("TTJets_MGLO_HTStitched650");
     histoNameVec.push_back("ZJets");
     histoNameVec.push_back("WJets");
+
+    histoNameVec.push_back("P1_1200sq_R0p384");
+    histoNameVec.push_back("P1_1200sq_R0p555");
+    histoNameVec.push_back("P1_1200sq_R0p99");
+    histoNameVec.push_back("P1_1400sq_R0p384");
+    histoNameVec.push_back("P1_1400sq_R0p555");
+    histoNameVec.push_back("P1_1400sq_R0p99");
+    histoNameVec.push_back("P1_1800sq_R0p384");
+    histoNameVec.push_back("P1_1800sq_R0p555");
+    histoNameVec.push_back("P1_1800sq_R0p99");
+    histoNameVec.push_back("P1_2200sq_R0p384");
+    histoNameVec.push_back("P1_2200sq_R0p555");
+    histoNameVec.push_back("P1_2200sq_R0p99");
+    histoNameVec.push_back("P1_2600sq_R0p384");
+    histoNameVec.push_back("P1_2600sq_R0p555");
+    histoNameVec.push_back("P1_2600sq_R0p99");
+    histoNameVec.push_back("P3_1300sq_R0p384");
+    histoNameVec.push_back("P3_1300sq_R0p555");
+    histoNameVec.push_back("P3_1300sq_R0p99");
+    histoNameVec.push_back("P3_1500sq_R0p384");
+    histoNameVec.push_back("P3_1500sq_R0p555");
+    histoNameVec.push_back("P3_1500sq_R0p99");
+    histoNameVec.push_back("P3_1900sq_R0p384");
+    histoNameVec.push_back("P3_1900sq_R0p555");
+    histoNameVec.push_back("P3_1900sq_R0p99");
+    histoNameVec.push_back("P3_2300sq_R0p384");
+    histoNameVec.push_back("P3_2300sq_R0p555");
+    histoNameVec.push_back("P3_2300sq_R0p99");
+    histoNameVec.push_back("P3_2700sq_R0p384");
+    histoNameVec.push_back("P3_2700sq_R0p555");
+    histoNameVec.push_back("P3_2700sq_R0p99");
+    histoNameVec.push_back("P5_1200sq_R0p384");
+    histoNameVec.push_back("P5_1200sq_R0p555");
+    histoNameVec.push_back("P5_1200sq_R0p99");
+    histoNameVec.push_back("P5_1400sq_R0p384");
+    histoNameVec.push_back("P5_1400sq_R0p555");
+    histoNameVec.push_back("P5_1400sq_R0p99");
+    histoNameVec.push_back("P5_1800sq_R0p384");
+    histoNameVec.push_back("P5_1800sq_R0p555");
+    histoNameVec.push_back("P5_1800sq_R0p99");
+    histoNameVec.push_back("P5_2200sq_R0p384");
+    histoNameVec.push_back("P5_2200sq_R0p555");
+    histoNameVec.push_back("P5_2200sq_R0p99");
+    histoNameVec.push_back("P5_2600sq_R0p384");
+    histoNameVec.push_back("P5_2600sq_R0p555");
+    histoNameVec.push_back("P5_2600sq_R0p99");
+    histoNameVec.push_back("P6_1200sq_R0p384");
+    histoNameVec.push_back("P6_1200sq_R0p555");
+    histoNameVec.push_back("P6_1200sq_R0p99");
+    histoNameVec.push_back("P6_1400sq_R0p384");
+    histoNameVec.push_back("P6_1400sq_R0p555");
+    histoNameVec.push_back("P6_1400sq_R0p99");
+    histoNameVec.push_back("P6_1800sq_R0p384");
+    histoNameVec.push_back("P6_1800sq_R0p555");
+    histoNameVec.push_back("P6_1800sq_R0p99");
+    histoNameVec.push_back("P6_2200sq_R0p384");
+    histoNameVec.push_back("P6_2200sq_R0p555");
+    histoNameVec.push_back("P6_2200sq_R0p99");
+    histoNameVec.push_back("P6_2600sq_R0p384");
+    histoNameVec.push_back("P6_2600sq_R0p555");
+    histoNameVec.push_back("P6_2600sq_R0p99");
+    histoNameVec.push_back("P7_1300sq_R0p384");
+    histoNameVec.push_back("P7_1300sq_R0p555");
+    histoNameVec.push_back("P7_1300sq_R0p99");
+    histoNameVec.push_back("P7_1500sq_R0p384");
+    histoNameVec.push_back("P7_1500sq_R0p555");
+    histoNameVec.push_back("P7_1500sq_R0p99");
+    histoNameVec.push_back("P7_1900sq_R0p384");
+    histoNameVec.push_back("P7_1900sq_R0p555");
+    histoNameVec.push_back("P7_1900sq_R0p99");
+    histoNameVec.push_back("P7_2300sq_R0p384");
+    histoNameVec.push_back("P7_2300sq_R0p555");
+    histoNameVec.push_back("P7_2300sq_R0p99");
+    histoNameVec.push_back("P7_2700sq_R0p384");
+    histoNameVec.push_back("P7_2700sq_R0p555");
+    histoNameVec.push_back("P7_2700sq_R0p99");
+    histoNameVec.push_back("P8_1300sq_R0p384");
+    histoNameVec.push_back("P8_1300sq_R0p555");
+    histoNameVec.push_back("P8_1300sq_R0p99");
+    histoNameVec.push_back("P8_1500sq_R0p384");
+    histoNameVec.push_back("P8_1500sq_R0p555");
+    histoNameVec.push_back("P8_1500sq_R0p99");
+    histoNameVec.push_back("P8_1900sq_R0p384");
+    histoNameVec.push_back("P8_1900sq_R0p555");
+    histoNameVec.push_back("P8_1900sq_R0p99");
+    histoNameVec.push_back("P8_2300sq_R0p384");
+    histoNameVec.push_back("P8_2300sq_R0p555");
+    histoNameVec.push_back("P8_2300sq_R0p99");
+    histoNameVec.push_back("P8_2700sq_R0p384");
+    histoNameVec.push_back("P8_2700sq_R0p555");
+    histoNameVec.push_back("P8_2700sq_R0p99");
 
 
     for (size_t iH = 0; iH < histoNameVec.size(); ++iH){
@@ -180,7 +286,7 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
         h_[Form("S_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtOffLooseAndOffLoose_NOSYS");
         h_[Form("U_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtOffLooseAndOffLoose_NOSYS");
         h_[Form("D_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtOffLooseAndOffLoose_NOSYS");
-
+/*
         h_[Form("S_control_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtLooseMed2AndOffIDBTCv23_NOSYS");
         h_[Form("U_control_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtLooseMed2AndOffIDBTCv23_NOSYS");
         h_[Form("D_control_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtLooseMed2AndOffIDBTCv23_NOSYS");
@@ -196,7 +302,7 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
 
         h_[Form("UnD_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("U_control_%s", histoToUse.c_str())]->Clone();
         h_[Form("UnD_control_%s", histoToUse.c_str())]->Add(h_[Form("D_control_%s", histoToUse.c_str())]);
-   
+ 
         // NEW METHOD OF PREDICTION
         h_[Form("predNew_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_tag_%s", histoToUse.c_str())]->Clone();
         for (int iBin = 1; iBin < h_[Form("predNew_tag_%s", histoToUse.c_str())]->GetNbinsX() + 1; ++iBin){
@@ -232,7 +338,7 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
         h_[Form("predOld_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
         h_[Form("predOld_control_%s", histoToUse.c_str())]->Multiply(h_[Form("S_anti_%s", histoToUse.c_str())]);
         h_[Form("predOld_control_%s", histoToUse.c_str())]->Divide(h_[Form("UnD_anti_%s", histoToUse.c_str())]);
-
+*/
         // SYSTEMATIC VARIATIONS (for TAG histograms)
         std::vector<std::string> nonTrivialSysVec;
         nonTrivialSysVec.push_back("jecAK4UncUp");
@@ -284,6 +390,97 @@ void GetHistograms2017(std::map<std::string,TH1D*>& h_)
     histoNameVec.push_back("TTJets2L");
     histoNameVec.push_back("ZJets");
     histoNameVec.push_back("WJets");
+
+    histoNameVec.push_back("P1_1200sq_R0p384");
+    histoNameVec.push_back("P1_1200sq_R0p555");
+    histoNameVec.push_back("P1_1200sq_R0p99");
+    histoNameVec.push_back("P1_1400sq_R0p384");
+    histoNameVec.push_back("P1_1400sq_R0p555");
+    histoNameVec.push_back("P1_1400sq_R0p99");
+    histoNameVec.push_back("P1_1800sq_R0p384");
+    histoNameVec.push_back("P1_1800sq_R0p555");
+    histoNameVec.push_back("P1_1800sq_R0p99");
+    histoNameVec.push_back("P1_2200sq_R0p384");
+    histoNameVec.push_back("P1_2200sq_R0p555");
+    histoNameVec.push_back("P1_2200sq_R0p99");
+    histoNameVec.push_back("P1_2600sq_R0p384");
+    histoNameVec.push_back("P1_2600sq_R0p555");
+    histoNameVec.push_back("P1_2600sq_R0p99");
+    histoNameVec.push_back("P3_1300sq_R0p384");
+    histoNameVec.push_back("P3_1300sq_R0p555");
+    histoNameVec.push_back("P3_1300sq_R0p99");
+    histoNameVec.push_back("P3_1500sq_R0p384");
+    histoNameVec.push_back("P3_1500sq_R0p555");
+    histoNameVec.push_back("P3_1500sq_R0p99");
+    histoNameVec.push_back("P3_1900sq_R0p384");
+    histoNameVec.push_back("P3_1900sq_R0p555");
+    histoNameVec.push_back("P3_1900sq_R0p99");
+    histoNameVec.push_back("P3_2300sq_R0p384");
+    histoNameVec.push_back("P3_2300sq_R0p555");
+    histoNameVec.push_back("P3_2300sq_R0p99");
+    histoNameVec.push_back("P3_2700sq_R0p384");
+    histoNameVec.push_back("P3_2700sq_R0p555");
+    histoNameVec.push_back("P3_2700sq_R0p99");
+    histoNameVec.push_back("P5_1200sq_R0p384");
+    histoNameVec.push_back("P5_1200sq_R0p555");
+    histoNameVec.push_back("P5_1200sq_R0p99");
+    histoNameVec.push_back("P5_1400sq_R0p384");
+    histoNameVec.push_back("P5_1400sq_R0p555");
+    histoNameVec.push_back("P5_1400sq_R0p99");
+    histoNameVec.push_back("P5_1800sq_R0p384");
+    histoNameVec.push_back("P5_1800sq_R0p555");
+    histoNameVec.push_back("P5_1800sq_R0p99");
+    histoNameVec.push_back("P5_2200sq_R0p384");
+    histoNameVec.push_back("P5_2200sq_R0p555");
+    histoNameVec.push_back("P5_2200sq_R0p99");
+    histoNameVec.push_back("P5_2600sq_R0p384");
+    histoNameVec.push_back("P5_2600sq_R0p555");
+    histoNameVec.push_back("P5_2600sq_R0p99");
+    histoNameVec.push_back("P6_1200sq_R0p384");
+    histoNameVec.push_back("P6_1200sq_R0p555");
+    histoNameVec.push_back("P6_1200sq_R0p99");
+    histoNameVec.push_back("P6_1400sq_R0p384");
+    histoNameVec.push_back("P6_1400sq_R0p555");
+    histoNameVec.push_back("P6_1400sq_R0p99");
+    histoNameVec.push_back("P6_1800sq_R0p384");
+    histoNameVec.push_back("P6_1800sq_R0p555");
+    histoNameVec.push_back("P6_1800sq_R0p99");
+    histoNameVec.push_back("P6_2200sq_R0p384");
+    histoNameVec.push_back("P6_2200sq_R0p555");
+    histoNameVec.push_back("P6_2200sq_R0p99");
+    histoNameVec.push_back("P6_2600sq_R0p384");
+    histoNameVec.push_back("P6_2600sq_R0p555");
+    histoNameVec.push_back("P6_2600sq_R0p99");
+    histoNameVec.push_back("P7_1300sq_R0p384");
+    histoNameVec.push_back("P7_1300sq_R0p555");
+    histoNameVec.push_back("P7_1300sq_R0p99");
+    histoNameVec.push_back("P7_1500sq_R0p384");
+    histoNameVec.push_back("P7_1500sq_R0p555");
+    histoNameVec.push_back("P7_1500sq_R0p99");
+    histoNameVec.push_back("P7_1900sq_R0p384");
+    histoNameVec.push_back("P7_1900sq_R0p555");
+    histoNameVec.push_back("P7_1900sq_R0p99");
+    histoNameVec.push_back("P7_2300sq_R0p384");
+    histoNameVec.push_back("P7_2300sq_R0p555");
+    histoNameVec.push_back("P7_2300sq_R0p99");
+    histoNameVec.push_back("P7_2700sq_R0p384");
+    histoNameVec.push_back("P7_2700sq_R0p555");
+    histoNameVec.push_back("P7_2700sq_R0p99");
+    histoNameVec.push_back("P8_1300sq_R0p384");
+    histoNameVec.push_back("P8_1300sq_R0p555");
+    histoNameVec.push_back("P8_1300sq_R0p99");
+    histoNameVec.push_back("P8_1500sq_R0p384");
+    histoNameVec.push_back("P8_1500sq_R0p555");
+    histoNameVec.push_back("P8_1500sq_R0p99");
+    histoNameVec.push_back("P8_1900sq_R0p384");
+    histoNameVec.push_back("P8_1900sq_R0p555");
+    histoNameVec.push_back("P8_1900sq_R0p99");
+    histoNameVec.push_back("P8_2300sq_R0p384");
+    histoNameVec.push_back("P8_2300sq_R0p555");
+    histoNameVec.push_back("P8_2300sq_R0p99");
+    histoNameVec.push_back("P8_2700sq_R0p384");
+    histoNameVec.push_back("P8_2700sq_R0p555");
+    histoNameVec.push_back("P8_2700sq_R0p99");
 
     for (size_t iH = 0; iH < histoNameVec.size(); ++iH){
 

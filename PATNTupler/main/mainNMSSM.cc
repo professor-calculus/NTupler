@@ -207,6 +207,9 @@ private:
 	UInt_t treeVar_nGluino_;
 	UInt_t treeVar_nPrefireCandidates_;
 
+        Float_t treeVar_top1_pT_;
+        Float_t treeVar_top2_pT_;
+
 	TLorentzVector* treeVar_fatJetA_p4Ptr_; TLorentzVector treeVar_fatJetA_p4_;
 	TLorentzVector* treeVar_fatJetA_p4Ptr_jecAK8UncUp_; TLorentzVector treeVar_fatJetA_p4_jecAK8UncUp_;
 	TLorentzVector* treeVar_fatJetA_p4Ptr_jecAK8UncDown_; TLorentzVector treeVar_fatJetA_p4_jecAK8UncDown_;
@@ -245,6 +248,8 @@ private:
 	Float_t treeVar_fatJetB_muonEnergyFraction_;
 	Float_t treeVar_fatJetB_nSubjettinessTau1_;
 	Float_t treeVar_fatJetB_nSubjettinessTau2_;
+
+	Float_t treeVar_lheHT_;
 
 	Float_t treeVar_ht_;
 	Float_t treeVar_ht_jecAK4UncUp_;
@@ -338,6 +343,9 @@ public:
 		mainAnaTree_->Branch("nGluino", &treeVar_nGluino_, "nGluino/i");
 		mainAnaTree_->Branch("nPrefireCandidates", &treeVar_nPrefireCandidates_, "nPrefireCandidates/i");
 
+		mainAnaTree_->Branch("top1_pT", &treeVar_top1_pT_, "top1_pT/F");
+                mainAnaTree_->Branch("top2_pT", &treeVar_top2_pT_, "top2_pT/F");
+
 		mainAnaTree_->Branch("fatJetA_p4", &treeVar_fatJetA_p4Ptr_);
 		mainAnaTree_->Branch("fatJetA_p4_jecAK8UncUp", &treeVar_fatJetA_p4Ptr_jecAK8UncUp_);
 		mainAnaTree_->Branch("fatJetA_p4_jecAK8UncDown", &treeVar_fatJetA_p4Ptr_jecAK8UncDown_);
@@ -385,6 +393,8 @@ public:
 		mainAnaTree_->Branch("fatJetB_nSubjettinessTau1", &treeVar_fatJetB_nSubjettinessTau1_, "fatJetB_nSubjettinessTau1/F");
 		mainAnaTree_->Branch("fatJetB_nSubjettinessTau2", &treeVar_fatJetB_nSubjettinessTau2_, "fatJetB_nSubjettinessTau2/F");
 
+		mainAnaTree_->Branch("lheHT", &treeVar_lheHT_, "lheHT/F");
+
 		mainAnaTree_->Branch("ht", &treeVar_ht_, "ht/F");
 		mainAnaTree_->Branch("ht_jecAK4UncUp", &treeVar_ht_jecAK4UncUp_, "ht_jecAK4UncUp/F");
 		mainAnaTree_->Branch("ht_jecAK4UncDown", &treeVar_ht_jecAK4UncDown_, "ht_jecAK4UncDown/F");
@@ -425,7 +435,7 @@ public:
 
 	~FatDoubleBJetPairTree(){}
 
-	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecAK4UncUp, const float& ht_jecAK4UncDown, const float& ht_jerAK4UncUp, const float& ht_jerAK4UncDown, const float& mht, const float& mht_jecAK4UncUp, const float& mht_jecAK4UncDown, const float& mht_jerAK4UncUp, const float& mht_jerAK4UncDown, const float& mhtPhi, const float& mhtPhi_jecAK4UncUp, const float& mhtPhi_jecAK4UncDown, const float& mhtPhi_jerAK4UncUp, const float& mhtPhi_jerAK4UncDown, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision, const int& nPU, const float& nTrueInt, int nISR, const int& nGluino, const double& D_factor, const unsigned int& yearOfRun, const double& muon_maxPt, const double& muon_sumPt, const float& corr_prefire, const float& corr_prefireUp, const float& corr_prefireDown, const unsigned int& nPrefireCandidates, const float& corr_scaleUp, const float& corr_scaleDown, const int& nVetoObjects)
+	void fillTree(const std::string& sampleType, const ran::EventInfo& evtInfo, const ran::NtFatJet& fatJetA, const ran::NtFatJet& fatJetB, const float& ht, const float& ht_jecAK4UncUp, const float& ht_jecAK4UncDown, const float& ht_jerAK4UncUp, const float& ht_jerAK4UncDown, const float& mht, const float& mht_jecAK4UncUp, const float& mht_jecAK4UncDown, const float& mht_jerAK4UncUp, const float& mht_jerAK4UncDown, const float& mhtPhi, const float& mhtPhi_jecAK4UncUp, const float& mhtPhi_jecAK4UncDown, const float& mhtPhi_jerAK4UncUp, const float& mhtPhi_jerAK4UncDown, const std::vector<ran::NtJet>& slimJets, const bool& trigDecision, const int& nPU, const float& nTrueInt, int nISR, const int& nGluino, const double& D_factor, const unsigned int& yearOfRun, const double& muon_maxPt, const double& muon_sumPt, const float& corr_prefire, const float& corr_prefireUp, const float& corr_prefireDown, const unsigned int& nPrefireCandidates, const float& corr_scaleUp, const float& corr_scaleDown, const int& nVetoObjects, const float& lheHT, const float& top1_pT, const float& top2_pT)
 	{
 		
 		// DO THE WEIGHTS
@@ -536,6 +546,9 @@ public:
 		treeVar_nPrefireCandidates_ = nPrefireCandidates;
 		treeVar_nrVetoObjects_ = nVetoObjects;
 
+		treeVar_top1_pT_ = top1_pT;
+		treeVar_top2_pT_ = top2_pT;
+
 		treeVar_fatJetA_p4_.SetPtEtaPhiE(fatJetA.pt(), fatJetA.eta(), fatJetA.phi(), fatJetA.et() * cosh(fatJetA.eta()));
 		treeVar_fatJetB_p4_.SetPtEtaPhiE(fatJetB.pt(), fatJetB.eta(), fatJetB.phi(), fatJetB.et() * cosh(fatJetB.eta()));
 
@@ -561,6 +574,8 @@ public:
 
 		treeVar_fatJetA_muonEnergyFraction_ = fatJetA.muonEnergyFraction();
 		treeVar_fatJetB_muonEnergyFraction_ = fatJetB.muonEnergyFraction();
+
+		treeVar_lheHT_ = lheHT;
 
 		treeVar_ht_ = ht;
 		treeVar_mht_ = mht;
@@ -994,7 +1009,10 @@ int main(int argc, char** argv){
 		TTreeReaderValue<int> nISR_tree(treeReader, "nISR");
 		TTreeReaderValue<int> nGluino_tree(treeReader, "nGluino");
 		TTreeReaderValue<float> rhoMiniIso_tree(treeReader, "RhoMiniIso");
-		
+		TTreeReaderValue<float> lheHT_tree(treeReader, "lheHT");
+                TTreeReaderValue<float> top1_pT_tree(treeReader, "top1_pT");
+                TTreeReaderValue<float> top2_pT_tree(treeReader, "top2_pT");
+
 		TTreeReaderValue<float> prefire_tree(treeReader, "prefweight");
 		TTreeReaderValue<float> prefireUp_tree(treeReader, "prefweightup");
 		TTreeReaderValue<float> prefireDown_tree(treeReader, "prefweightdown");
@@ -1045,11 +1063,14 @@ int main(int argc, char** argv){
 			const int nISR = *nISR_tree;
 			const int nGluino = *nGluino_tree;
 			const float rho = *rhoMiniIso_tree;
+			const float lheHT = *lheHT_tree;
+			const float top1_pT = *top1_pT_tree;
+			const float top2_pT = *top2_pT_tree;
 
 			const float corr_prefire = *prefire_tree;
 			const float corr_prefireUp = *prefireUp_tree;
 			const float corr_prefireDown = *prefireDown_tree;
-		
+
 			const float corr_scaleUp = *scaleUp_tree;
 			const float corr_scaleDown = *scaleDown_tree;
 
@@ -1251,7 +1272,7 @@ int main(int argc, char** argv){
 			std::vector<ran::NtFatJet> centralFatJetVec; // get the *central* fatJets
 			for (const ran::NtFatJet& fatJet : fatJetVec) {
 				if (fabs(fatJet.eta()) < 2.4 && fatJet.PUPPIsoftdrop_mass() > -1.0) centralFatJetVec.push_back(fatJet);
-			}			
+			}
 
 			// if (centralFatJetVec.size() >= 2) {
 			// if (centralFatJetVec.size() >= 2 && ht > 1200.0) { // HACK: INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
@@ -1272,8 +1293,8 @@ int main(int argc, char** argv){
 				std::sort(slimJets.begin(), slimJets.end(), [](const ran::NtJet& a, const ran::NtJet& b) {return b.pt() < a.pt();} );
 
 				// Fat Jets ordered such that 1/2 events have fatJetA with highest DBT discriminator score, the other half have fatJetB with the highest DBT score
-				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt, corr_prefire, corr_prefireUp, corr_prefireDown, nPrefireCandidates, corr_scaleUp, corr_scaleDown, nVetoObjects);
-				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt, corr_prefire, corr_prefireUp, corr_prefireDown, nPrefireCandidates, corr_scaleUp, corr_scaleDown, nVetoObjects);
+				if (evtIdx % 2 == 0) doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt, corr_prefire, corr_prefireUp, corr_prefireDown, nPrefireCandidates, corr_scaleUp, corr_scaleDown, nVetoObjects, lheHT, top1_pT, top2_pT);
+				else doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetB, fatJetA, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, mht, mht_jecUncUp, mht_jecUncDown, mht_jerUncUp, mht_jerUncDown, mht_phi, mht_phi_jecUncUp, mht_phi_jecUncDown, mht_phi_jerUncUp, mht_phi_jerUncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt, corr_prefire, corr_prefireUp, corr_prefireDown, nPrefireCandidates, corr_scaleUp, corr_scaleDown, nVetoObjects, lheHT, top1_pT, top2_pT);
 
 				// Fat Jets ordered by DBT discriminator score
 				// doubleBFatJetPairTree.fillTree(sampleType, *evtInfo, fatJetA, fatJetB, ht, ht_jecAK4UncUp, ht_jecAK4UncDown, ht_jerAK4UncUp, ht_jerAK4UncDown, slimJets, doesEventPassTrigger, nPU, nTrueInt, nISR, nGluino, D_factor, yearOfRun, muon_maxPt, muon_sumPt, corr_prefire, corr_prefireUp, corr_prefireDown, nPrefireCandidates, corr_scaleUp, corr_scaleDown);

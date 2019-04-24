@@ -88,6 +88,27 @@ def f1d_fullCutsData_anti_ht1500to2500_2016(x):
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
 function_1d["fullCutsData_anti_ht1500to2500_2016"] = f1d_fullCutsData_anti_ht1500to2500_2016
 
+def f1d_fullCutsData_anti_ht1500to2500_MHT200_2016(x):
+        p0  =  6.31788e-03
+        p1  =  2.66632e-01
+        p2  = -1.23413e-02
+        p3  = -3.15663e+00
+        p4  = -3.75872e-02
+        p5  =  1.35028e+02
+        p6  =  1.92298e-02
+        p7  = -1.09052e+03
+        p8  = -3.73511e-01
+        p9  = -1.10264e-05
+        p10 =  1.75791e-03
+        p11 = -1.72954e-07
+        p12 = -4.52382e-04
+        p13 = -3.93857e-10
+        p14 = -3.05373e-03
+        p15 =  3.62460e-12
+        p16 =  3.36999e-03
+        return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
+function_1d["fullCutsData_anti_ht1500to2500_MHT200_2016"] = f1d_fullCutsData_anti_ht1500to2500_MHT200_2016
+
 def f1d_fullCutsData_anti_ht2500to3500_2016(x):
 	p0  =  5.43888e-03
 	p1  =  1.17576e-01
@@ -109,26 +130,68 @@ def f1d_fullCutsData_anti_ht2500to3500_2016(x):
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
 function_1d["fullCutsData_anti_ht2500to3500_2016"] = f1d_fullCutsData_anti_ht2500to3500_2016
 
+def f1d_fullCutsData_anti_ht2500to3500_MHT200_2016(x):
+        p0  =  5.43888e-03
+        p1  =  1.17576e-01
+        p2  = -5.79977e-03
+        p3  = -4.73109e-01
+        p4  =  4.66176e-03
+        p5  =  2.18406e+02
+        p6  = -9.46173e-03
+        p7  = -1.97946e+03
+        p8  = -8.18253e-02
+        p9  = -4.55465e-06
+        p10 =  1.16732e-04
+        p11 = -1.25514e-07
+        p12 =  1.84637e-04
+        p13 = -2.94716e-10
+        p14 = -9.89970e-04
+        p15 =  2.52609e-12
+        p16 =  8.25946e-04
+        return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
+function_1d["fullCutsData_anti_ht2500to3500_MHT200_2016"] = f1d_fullCutsData_anti_ht2500to3500_MHT200_2016
+
 def f1d_fullCutsMC_anti_ht3500toInf_2016(x):
-	p0  =  7.68952e-03
-	p1  = -2.69503e-02
-	p2  =  4.64177e-03
-	p3  =  1.00897e+01
-	p4  =  4.64280e-02
-	p5  =  3.77157e+02
-	p6  = -1.64208e-02
-	p7  = -4.68205e+03
-	p8  =  1.83545e-01
-	p9  =  2.80992e-06
-	p10 = -3.88379e-04
-	p11 = -1.87203e-07
-	p12 =  1.34629e-04
-	p13 = -5.81624e-10
-	p14 = -6.78409e-04
-	p15 =  4.17321e-12
-	p16 =  1.89072e-04
+	p0  =  4.66078e-03
+	p1  = -1.63246e-02
+	p2  =  4.20427e-03
+	p3  =  6.45728e+00
+	p4  =  3.76180e-02
+	p5  =  2.32718e+02
+	p6  = -1.42631e-02
+	p7  = -2.98957e+03
+	p8  =  1.20076e-01
+	p9  =  2.22533e-06
+	p10 = -3.25420e-04
+	p11 = -1.17381e-07
+	p12 =  8.26025e-05
+	p13 = -3.72059e-10
+	p14 = -6.88261e-04
+	p15 =  2.70078e-12
+	p16 =  3.02114e-04
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
 function_1d["fullCutsMC_anti_ht3500toInf_2016"] = f1d_fullCutsMC_anti_ht3500toInf_2016
+
+def f1d_fullCutsMC_anti_ht3500toInf_MHT200_2016(x):
+        p0  =  5.34694e-03
+        p1  =  1.29331e-02
+        p2  = -1.96692e-04
+        p3  =  4.33529e+00
+        p4  =  2.77999e-02
+        p5  =  2.55245e+02
+        p6  = -1.68494e-02
+        p7  = -2.98167e+03
+        p8  =  3.36715e-02
+        p9  = -4.97150e-06
+        p10 =  1.13570e-03
+        p11 = -1.71377e-07
+        p12 =  6.35414e-04
+        p13 = -3.79205e-10
+        p14 = -8.73406e-05
+        p15 =  4.41180e-12
+        p16 =  2.67305e-03
+        return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
+function_1d["fullCutsMC_anti_ht3500toInf_MHT200_2016"] = f1d_fullCutsMC_anti_ht3500toInf_MHT200_2016
 
 #*,. #*,. #*,. #*,.
 #*,. 2017 #*,. #*,.
@@ -195,6 +258,27 @@ def f1d_fullCutsData_anti_ht1500to2500_2017(x):
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
 function_1d["fullCutsData_anti_ht1500to2500_2017"] = f1d_fullCutsData_anti_ht1500to2500_2017
 
+def f1d_fullCutsData_anti_ht1500to2500_MHT200_2017(x):
+        p0  =  6.45626e-03
+        p1  =  2.80226e-01
+        p2  = -1.29192e-02
+        p3  = -3.45202e+00
+        p4  = -4.19533e-02
+        p5  =  1.22605e+02
+        p6  =  2.64981e-02
+        p7  = -9.50456e+02
+        p8  = -4.24623e-01
+        p9  = -1.13584e-05
+        p10 =  1.84039e-03
+        p11 = -1.76146e-07
+        p12 = -7.73004e-04
+        p13 = -4.05060e-10
+        p14 = -3.46355e-03
+        p15 =  3.64616e-12
+        p16 =  3.33564e-03
+        return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
+function_1d["fullCutsData_anti_ht1500to2500_MHT200_2017"] = f1d_fullCutsData_anti_ht1500to2500_MHT200_2017
+
 def f1d_fullCutsData_anti_ht2500to3500_2017(x):
 	p0  =  5.63088e-03
 	p1  =  1.13539e-01
@@ -216,6 +300,27 @@ def f1d_fullCutsData_anti_ht2500to3500_2017(x):
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
 function_1d["fullCutsData_anti_ht2500to3500_2017"] = f1d_fullCutsData_anti_ht2500to3500_2017
 
+def f1d_fullCutsData_anti_ht2500to3500_MHT200_2017(x):
+        p0  =  5.63088e-03
+        p1  =  1.13539e-01
+        p2  = -4.89697e-03
+        p3  =  1.38604e-01
+        p4  = -2.72402e-03
+        p5  =  1.77331e+02
+        p6  = -3.35478e-03
+        p7  = -1.61039e+03
+        p8  = -1.25392e-01
+        p9  = -3.67715e-06
+        p10 =  4.11553e-04
+        p11 = -1.46280e-07
+        p12 =  3.75194e-04
+        p13 = -3.85474e-10
+        p14 = -1.15106e-03
+        p15 =  3.31948e-12
+        p16 =  1.67973e-03
+        return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
+function_1d["fullCutsData_anti_ht2500to3500_MHT200_2017"] = f1d_fullCutsData_anti_ht2500to3500_MHT200_2017
+
 def f1d_fullCutsMC_anti_ht3500toInf_2017(x):
 	p0  =  1.04275e-02
 	p1  = -2.33727e-01
@@ -236,6 +341,27 @@ def f1d_fullCutsMC_anti_ht3500toInf_2017(x):
 	p16 = -1.25692e-03
 	return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
 function_1d["fullCutsMC_anti_ht3500toInf_2017"] = f1d_fullCutsMC_anti_ht3500toInf_2017
+
+def f1d_fullCutsMC_anti_ht3500toInf_MHT200_2017(x):
+        p0  =  1.04275e-02
+        p1  = -2.33727e-01
+        p2  =  1.10261e-02
+        p3  =  2.24699e+01
+        p4  =  6.09493e-02
+        p5  =  4.04927e+02
+        p6  = -2.77477e-02
+        p7  = -5.76312e+03
+        p8  =  2.31160e-01
+        p9  =  1.75057e-05
+        p10 = -9.43049e-04
+        p11 = -2.65560e-07
+        p12 =  3.48159e-04
+        p13 = -1.15119e-09
+        p14 = -1.14101e-03
+        p15 =  6.11818e-12
+        p16 = -1.25692e-03
+        return p0 + p1/(x-p2) + p3/((x-p4)*(x-p4)) + p5/((x-p6)*(x-p6)*(x-p6)) + p7/((x-p8)*(x-p8)*(x-p8)*(x-p8)) + p9*(x-p10) + p11*(x-p12)*(x-p12) + p13*(x-p14)*(x-p14)*(x-p14) + p15*(x-p16)*(x-p16)*(x-p16)*(x-p16)
+function_1d["fullCutsMC_anti_ht3500toInf_MHT200_2017"] = f1d_fullCutsMC_anti_ht3500toInf_MHT200_2017
 
 ####################
 ####################
