@@ -23,6 +23,7 @@
 #include "deltaR.h"
 #include "DoubleBTagSF.h"
 #include "IsrWeights.h"
+#include "TopGenPTWeights.h"
 #include "SoftDropPuppiSF.h"
 #include "rhoEACorrections.h"
 #include "objectIDCalculations.h"
