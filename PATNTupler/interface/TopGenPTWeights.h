@@ -16,7 +16,10 @@ namespace TopGenPTWeights{
         sf1_ = TMath::Exp( 0.0615 - (0.0005*top1_pT) );
         sf2_ = TMath::Exp( 0.0615 - (0.0005*top2_pT) );
         
-        double powhegWeight = TMath:Sqrt(sf1_ * sf2_);
+        double powhegWeight = TMath::Sqrt(sf1_ * sf2_);
+
+	// std::cout << "pt1 = " << top1_pT << ", pt2 = " << top2_pT << ", sf1 = " << sf1_ << ", sf2 = " << sf2_ << ", weight = " << powhegWeight << std::endl;
+
         return powhegWeight;
 
 	} // closes function GetWeight

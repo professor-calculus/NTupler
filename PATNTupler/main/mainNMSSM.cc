@@ -346,8 +346,8 @@ public:
 		mainAnaTree_->Branch("nPrefireCandidates", &treeVar_nPrefireCandidates_, "nPrefireCandidates/i");
 
 		mainAnaTree_->Branch("top1_pT", &treeVar_top1_pT_, "top1_pT/F");
-        mainAnaTree_->Branch("top2_pT", &treeVar_top2_pT_, "top2_pT/F");
-		mainAnaTree_->Branch("powhegTopPTWeight", &treeVar_PowhegTopPTWeight_, "powhegTopPTWeight/F");
+                mainAnaTree_->Branch("top2_pT", &treeVar_top2_pT_, "top2_pT/F");
+		mainAnaTree_->Branch("powhegTopPTWeight", &treeVar_PowhegTopPTWeight_, "powhegTopPTWeight/D");
 
 		mainAnaTree_->Branch("fatJetA_p4", &treeVar_fatJetA_p4Ptr_);
 		mainAnaTree_->Branch("fatJetA_p4_jecAK8UncUp", &treeVar_fatJetA_p4Ptr_jecAK8UncUp_);
@@ -449,6 +449,8 @@ public:
 			treeVar_weight_dbtTagUp_ = DoubleBTagSF::getDbtTagScaleFactorUp_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
 			treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_signal(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
 
+			treeVar_PowhegTopPTWeight_ = 1.0;
+
 			// calculate isr weights
 			if (nISR > 6) nISR = 6;
 			double corr_isr = D_factor * IsrWeights::GetWeight(nISR, yearOfRun);
@@ -476,6 +478,7 @@ public:
 			treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
 
 			treeVar_PowhegTopPTWeight_ = TopGenPTWeights::GetPowhegWeight(treeVar_top1_pT_, treeVar_top2_pT_);
+			//std::cout << treeVar_PowhegTopPTWeight_;
 
 			treeVar_weight_isr_ = 1.0;
 			treeVar_weight_isrUp_ = 1.0;
@@ -1283,9 +1286,9 @@ int main(int argc, char** argv){
 				if (fabs(fatJet.eta()) < 2.4 && fatJet.PUPPIsoftdrop_mass() > -1.0) centralFatJetVec.push_back(fatJet);
 			}
 
-			// if (centralFatJetVec.size() >= 2) {
+			if (centralFatJetVec.size() >= 2) {
 			// if (centralFatJetVec.size() >= 2 && ht > 1200.0) { // HACK: INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
-			if (centralFatJetVec.size() >= 2 && ht > 1499.0) { // HACK: INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
+			// if (centralFatJetVec.size() >= 2 && ht > 1499.0) { // HACK: INCLUDE HT CUT TO KEEP SOME DATASETS TRIM
 				const ran::NtFatJet& fatJetA = centralFatJetVec.at(0);
 				const ran::NtFatJet& fatJetB = centralFatJetVec.at(1);
 
