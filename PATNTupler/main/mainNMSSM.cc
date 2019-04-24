@@ -207,8 +207,9 @@ private:
 	UInt_t treeVar_nGluino_;
 	UInt_t treeVar_nPrefireCandidates_;
 
-        Float_t treeVar_top1_pT_;
-        Float_t treeVar_top2_pT_;
+    Float_t treeVar_top1_pT_;
+    Float_t treeVar_top2_pT_;
+	Double_t treeVar_PowhegTopPTWeight_;
 
 	TLorentzVector* treeVar_fatJetA_p4Ptr_; TLorentzVector treeVar_fatJetA_p4_;
 	TLorentzVector* treeVar_fatJetA_p4Ptr_jecAK8UncUp_; TLorentzVector treeVar_fatJetA_p4_jecAK8UncUp_;
@@ -344,7 +345,8 @@ public:
 		mainAnaTree_->Branch("nPrefireCandidates", &treeVar_nPrefireCandidates_, "nPrefireCandidates/i");
 
 		mainAnaTree_->Branch("top1_pT", &treeVar_top1_pT_, "top1_pT/F");
-                mainAnaTree_->Branch("top2_pT", &treeVar_top2_pT_, "top2_pT/F");
+        mainAnaTree_->Branch("top2_pT", &treeVar_top2_pT_, "top2_pT/F");
+		mainAnaTree_->Branch("powhegTopPTWeight", &treeVar_PowhegTopPTWeight_, "powhegTopPTWeight/F");
 
 		mainAnaTree_->Branch("fatJetA_p4", &treeVar_fatJetA_p4Ptr_);
 		mainAnaTree_->Branch("fatJetA_p4_jecAK8UncUp", &treeVar_fatJetA_p4Ptr_jecAK8UncUp_);
@@ -472,6 +474,8 @@ public:
 			treeVar_weight_dbtTagUp_ = DoubleBTagSF::getDbtTagScaleFactorUp_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
 			treeVar_weight_dbtTagDown_ = DoubleBTagSF::getDbtTagScaleFactorDown_ttbar(fatJetA.pt(), fatJetA.pfBoostedDoubleSecondaryVertexAK8BJetTags(), fatJetB.pt(), fatJetB.pfBoostedDoubleSecondaryVertexAK8BJetTags(), yearOfRun);
 
+			treeVar_PowhegTopPTWeight_ = TopGenPTWeights::GetPowhegWeight(treeVar_top1_pT_, treeVar_top2_pT_);
+
 			treeVar_weight_isr_ = 1.0;
 			treeVar_weight_isrUp_ = 1.0;
 			treeVar_weight_isrDown_ = 1.0;
@@ -495,6 +499,8 @@ public:
 			treeVar_weight_dbtTagUp_ = 1.0;
 			treeVar_weight_dbtTagDown_ = 1.0;
 
+			treeVar_PowhegTopPTWeight_ = 1.0;
+
 			treeVar_weight_isr_ = 1.0;
 			treeVar_weight_isrUp_ = 1.0;
 			treeVar_weight_isrDown_ = 1.0;
@@ -516,6 +522,8 @@ public:
 			treeVar_weight_dbtTag_ = 1.0;
 			treeVar_weight_dbtTagUp_ = 1.0;
 			treeVar_weight_dbtTagDown_ = 1.0;
+
+			treeVar_PowhegTopPTWeight_ = 1.0;
 
 			treeVar_weight_isr_ = 1.0;
 			treeVar_weight_isrUp_ = 1.0;
