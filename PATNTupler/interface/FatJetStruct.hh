@@ -33,6 +33,11 @@ namespace ran{
     float chargedEmEnergyFraction;///<chargedEmEnergyFraction
     float chargedHadronEnergyFraction;///<chargedHadronEnergyFraction
     float pfBoostedDoubleSecondaryVertexAK8BJetTags;///< double b tag discrim
+    float pfDeepCSVJetTags_probudsg; // singleb-tag var
+    float pfDeepCSVJetTags_probb; // singleb-tag var
+    float pfDeepCSVJetTags_probc; // singleb-tag var
+    float pfDeepCSVJetTags_probbb; // singleb-tag var
+    float pfDeepCSVJetTags_probcc; // singleb-tag var
 
     double NjettinessAK8_tau1; ///<  Access the n-subjettiness variables
     double NjettinessAK8_tau2;///<  Access the n-subjettiness variables
