@@ -53,23 +53,23 @@ int main(){
 
 
     // ONE: save info (signal specific directories beneath this)
-    const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/combinedDataCards_2018_10_24/TESTING_LATEX/";
+    const std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/combinedDataCards_2019_05_20/TESTING_LATEX/";
   
 
 
     // TWO: physics info - to match the histograms that you use
-    const unsigned int numberOfBins = 30;
+    const unsigned int numberOfBins = 60;
     const unsigned int numberOfHtDivisions = 3;
 
 
 
     // THREE: Samples To Use (different project for each signal sample)
-    const std::string dataSample = "Data";
-    const std::string signal = "mH70_mSusy2400";
+    const std::string dataSample = "data";
+    const std::string signal = "P1_1800sq_R0p99";
                                        
     std::map<unsigned int, std::vector<std::string>> mcbkVec;
-    mcbkVec[2016] = {"TTJets", "ZJets", "WJets"}; // the 2016 MC background samples
-    mcbkVec[2017] = {"TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}; // the 2017 MC background samples
+    mcbkVec[2016] = {"TTJets", "ST", "Ewk"}; // the 2016 MC background samples
+    mcbkVec[2017] = {"TTJets", "ST", "Ewk"}; // the 2017 MC background samples
     const std::string qcdName = "QCD"; // this is just a label as QCD contribution is driven during the fit
 
 
@@ -84,38 +84,39 @@ int main(){
     // NB1 - make the sure the sample names match to the above (for the given year)
     // NB2 - "SIGNAL" refers all signal samples
     // *** 2016 ***
-    CommonSystematicVec[2016].push_back( CommonSystematic("signalPDF", 1.1, {"SIGNAL"}) ); // correlated to 2017
-    CommonSystematicVec[2016].push_back( CommonSystematic("isrReweight", "isr", {"SIGNAL"}) ); // correlated to 2017
-    CommonSystematicVec[2016].push_back( CommonSystematic("luminosity2016", 1.025, {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("xsTTJets2016", 1.5, {"TTJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("xsZJets2016", 1.5, {"ZJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("xsWJets2016", 1.5, {"WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("jecAK4Unc2016", "jecAK4Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("jerAK4Unc2016", "jerAK4Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("jecAK8Unc2016", "jecAK8Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("jerAK8Unc2016", "jerAK8Unc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("jmsUnc2016", "jmsUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("jmrUnc2016", "jmrUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("sigDbtTag2016", "dbtTag", {"SIGNAL"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("ttDbtTag2016", "dbtTag", {"TTJets"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("signalPdfBOTH lnN", 1.1, {"SIGNAL"}) ); // correlated to 2017
+    CommonSystematicVec[2016].push_back( CommonSystematic("isrReweightBOTH lnN", "isr", {"SIGNAL"}) ); // correlated to 2017
+    CommonSystematicVec[2016].push_back( CommonSystematic("luminosity2016 lnN", 1.025, {"SIGNAL", "TTJets", "ST", "Ewk"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("XS_TTJets2016 lnN", 2.0, {"TTJets"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("XS_ST2016 lnN", 1.5, {"ST"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("XS_Ewk2016 lnN", 1.5, {"Ewk"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("jecAKXUncBOTH lnN", "jecAKXUnc", {"SIGNAL", "TTJets", "ST", "Ewk"}) ); // correlated to 2017
+    CommonSystematicVec[2016].push_back( CommonSystematic("jerAKXUnc2016 lnN", "jerAKXUnc", {"SIGNAL", "TTJets", "ST", "Ewk"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("jmsUncBOTH lnN", "jmsUnc", {"SIGNAL", "TTJets", "ST", "Ewk"}) ); // correlated to 2017
+    CommonSystematicVec[2016].push_back( CommonSystematic("jmrUncBOTH lnN", "jmrUnc", {"SIGNAL", "TTJets", "ST", "Ewk"}) ); // correlated to 2017
+    CommonSystematicVec[2016].push_back( CommonSystematic("SigDbtTag2016 lnN", "dbtTag", {"SIGNAL"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("TtDbtTag2016 lnN", "dbtTag", {"TTJets"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("prefire2016 lnN", "prefire", {"SIGNAL", "TTJets", "ST", "Ewk"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("scaleUncSigBoth lnN", 1.25, {"SIGNAL"}) ); // Correlated to 2017
+    CommonSystematicVec[2016].push_back( CommonSystematic("scaleUncBoth lnN", "scale", {"TTJets", "ST", "Ewk"}) ); // Correlated to 2017
     // *** 2017 ***
-    CommonSystematicVec[2017].push_back( CommonSystematic("signalPDF", 1.1, {"SIGNAL"}) ); // correlated to 2016
-    CommonSystematicVec[2017].push_back( CommonSystematic("isrReweight", "isr", {"SIGNAL"}) ); // correlated to 2016
-    CommonSystematicVec[2017].push_back( CommonSystematic("luminosity2017", 1.023, {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("xsTTJets0L2017", 1.5, {"TTJets0L"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("xsTTJets1L2017", 1.5, {"TTJets1L"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("xsTTJets2L2017", 1.5, {"TTJets2L"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("xsZJets2017", 1.5, {"ZJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("xsWJets2017", 1.5, {"WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("jecAK4Unc2017", "jecAK4Unc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("jerAK4Unc2017", "jerAK4Unc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("jecAK8Unc2017", "jecAK8Unc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("jerAK8Unc2017", "jerAK8Unc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("jmsUnc2017", "jmsUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("jmrUnc2017", "jmrUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("sigDbtTag2017", "dbtTag", {"SIGNAL"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("ttDbtTag2017", "dbtTag", {"TTJets0L", "TTJets1L", "TTJets2L"}) );
-
+    CommonSystematicVec[2017].push_back( CommonSystematic("signalPdfBOTH lnN", 1.1, {"SIGNAL"}) ); // correlated to 2016
+    CommonSystematicVec[2017].push_back( CommonSystematic("isrReweightBOTH lnN", "isr", {"SIGNAL"}) ); // correlated to 2016
+    CommonSystematicVec[2017].push_back( CommonSystematic("luminosity2017 lnN", 1.023, {"SIGNAL", "TTJets", "ST", "Ewk"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets2017 lnN", 2.0, {"TTJets"}) );
+    //CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets1L2017 lnN", 3.0, {"TTJets1L"}) );
+    //CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets2L2017 lnN", 3.0, {"TTJets2L"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("XS_ST2017 lnN", 1.5, {"ST"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("XS_Ewk2017 lnN", 1.5, {"Ewk"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("jecAKXUncBOTH lnN", "jecAKXUnc", {"SIGNAL", "TTJets", "ST", "Ewk"}) ); // correlated to 2016
+    CommonSystematicVec[2017].push_back( CommonSystematic("jerAKXUnc2017 lnN", "jerAKXUnc", {"SIGNAL", "TTJets", "ST", "Ewk"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("jmsUncBOTH lnN", "jmsUnc", {"SIGNAL", "TTJets", "ST", "Ewk"}) ); // correlated to 2016
+    CommonSystematicVec[2017].push_back( CommonSystematic("jmrUncBOTH lnN", "jmrUnc", {"SIGNAL", "TTJets", "ST", "Ewk"}) ); // correlated to 2016
+    CommonSystematicVec[2017].push_back( CommonSystematic("SigDbtTag2017 lnN", "dbtTag", {"SIGNAL"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("TtDbtTag2017 lnN", "dbtTag", {"TTJets"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("prefire2017 lnN", "prefire", {"SIGNAL", "TTJets", "ST", "Ewk"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("scaleUncSigBoth lnN", 1.25, {"SIGNAL"}) ); // Correlated to 2016
+    CommonSystematicVec[2017].push_back( CommonSystematic("scaleUncBoth lnN", "scale", {"TTJets", "ST", "Ewk"}) ); // Correlated to 2016
 
 
     // SIX: are we blinded ? if true, uses Fi * data_obs_UnD as a dummy for data_obs_S
@@ -138,7 +139,8 @@ int main(){
     dataCard.open( Form("%stableInfo.tex", outputDir.c_str() ) );
 
     // loop through 2016 and 2017
-    std::vector<unsigned int> yearOfRunVec = {2016, 2017};
+    std::vector<unsigned int> yearOfRunVec = {2016};
+    //std::vector<unsigned int> yearOfRunVec = {2016, 2017};
     for (auto yearOfRun : yearOfRunVec){
 
         std::map<std::string, TH1D*> hOriginal_;
@@ -192,7 +194,7 @@ int main(){
             dataCard << "For each systematic,\n";
             dataCard << "the factors by which the MC yields change under 1$\\sigma$ variation is also given.\n";
             dataCard << "The signal sample corresponds to the signal model\n";
-            dataCard << "with parameters $M_{H} = 70$~GeV and $M_{\\textrm{SUSY}} = 2400$~GeV.\n";
+            dataCard << "with parameters $M_{\text{LSP}} = 1$~GeV and $M_{\\textrm{SUSY}} = 1800$~GeV.\n";
             dataCard << "At the bottom of the table, the $F_{i}$ factor,\n";
             dataCard << "which is used for the QCD estimation, is provided.\n";
             dataCard << "All numbers are given to three decimal places.\n";
@@ -257,6 +259,7 @@ int main(){
                 for (auto mcbk : mcbkVec[yearOfRun]){
                     if (std::find(systematicProcesses.begin(), systematicProcesses.end(), mcbk) != systematicProcesses.end()) {
                         const std::string fullHistogramName = histoPreamble + mcbk;
+			//std::cout << fullHistogramName << "\t" << CommonSystematic.GetSystematicName() << "\t" << iBin << std::endl;
                         const std::string systematicValue = CommonSystematic.GetSystematicValue(fullHistogramName.c_str(), iBin, hOriginal_);
                         WriteBlock(Form("& %s", systematicValue.c_str()), colSize, dataCard);
                     } else {
@@ -376,12 +379,12 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     std::string postamble = "";
 
     if (yearOfRun == 2016){
-        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_08_03/MassCutsV09/run2016/";
-        postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
+        preamble = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_MHT_2019_01_08/MassCutsV10_dPhiMHT_FINAL/run2016/";
+        postamble = "MassCutsV10_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
     }
     else if (yearOfRun == 2017){
-        preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_08_03/MassCutsV09/run2017/";
-        postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi41.root";
+        preamble = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_MHT_2019_01_08/MassCutsV10_dPhiMHT_FINAL/run2017/";
+        postamble = "MassCutsV10_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi41.root";
     }
     else{
         std::cout << "You have not given GetHistograms a valid year" << std::endl;
@@ -389,134 +392,119 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     }
 
     std::vector<std::string> histoNameVec;
-    histoNameVec.push_back("Data");
+    histoNameVec.push_back("data");
     histoNameVec.push_back("TTJets");
-    histoNameVec.push_back("TTJets0L");
-    histoNameVec.push_back("TTJets1L");
-    histoNameVec.push_back("TTJets2L");
-    histoNameVec.push_back("ZJets");
-    histoNameVec.push_back("WJets");
-    
-    histoNameVec.push_back("mH30_mSusy800");
-    histoNameVec.push_back("mH50_mSusy800");
-    histoNameVec.push_back("mH70_mSusy800");
-    histoNameVec.push_back("mH90_mSusy800");
-    histoNameVec.push_back("mH125_mSusy800");
-    histoNameVec.push_back("mH30_mSusy1200");
-    histoNameVec.push_back("mH35_mSusy1200");
-    histoNameVec.push_back("mH40_mSusy1200");
-    histoNameVec.push_back("mH50_mSusy1200");
-    histoNameVec.push_back("mH70_mSusy1200");
-    histoNameVec.push_back("mH90_mSusy1200");
-    histoNameVec.push_back("mH125_mSusy1200");
-    histoNameVec.push_back("mH30_mSusy1600");
-    histoNameVec.push_back("mH35_mSusy1600");
-    histoNameVec.push_back("mH40_mSusy1600");
-    histoNameVec.push_back("mH50_mSusy1600");
-    histoNameVec.push_back("mH70_mSusy1600");
-    histoNameVec.push_back("mH90_mSusy1600");
-    histoNameVec.push_back("mH125_mSusy1600");
-    histoNameVec.push_back("mH30_mSusy2000");
-    histoNameVec.push_back("mH35_mSusy2000");
-    histoNameVec.push_back("mH40_mSusy2000");
-    histoNameVec.push_back("mH50_mSusy2000");
-    histoNameVec.push_back("mH70_mSusy2000");
-    histoNameVec.push_back("mH90_mSusy2000");
-    histoNameVec.push_back("mH125_mSusy2000");
-    histoNameVec.push_back("mH30_mSusy2200");
-    histoNameVec.push_back("mH35_mSusy2200");
-    histoNameVec.push_back("mH40_mSusy2200");
-    histoNameVec.push_back("mH50_mSusy2200");
-    histoNameVec.push_back("mH70_mSusy2200");
-    histoNameVec.push_back("mH90_mSusy2200");
-    histoNameVec.push_back("mH125_mSusy2200");
-    histoNameVec.push_back("mH30_mSusy2400");
-    histoNameVec.push_back("mH35_mSusy2400");
-    histoNameVec.push_back("mH40_mSusy2400");
-    histoNameVec.push_back("mH50_mSusy2400");
-    histoNameVec.push_back("mH70_mSusy2400");
-    histoNameVec.push_back("mH90_mSusy2400");
-    histoNameVec.push_back("mH125_mSusy2400");
-    histoNameVec.push_back("mH30_mSusy2600");
-    histoNameVec.push_back("mH35_mSusy2600");
-    histoNameVec.push_back("mH40_mSusy2600");
-    histoNameVec.push_back("mH50_mSusy2600");
-    histoNameVec.push_back("mH70_mSusy2600");
-    histoNameVec.push_back("mH90_mSusy2600");
-    histoNameVec.push_back("mH125_mSusy2600");
-    histoNameVec.push_back("mH30_mSusy2800");
-    histoNameVec.push_back("mH35_mSusy2800");
-    histoNameVec.push_back("mH40_mSusy2800");
-    histoNameVec.push_back("mH50_mSusy2800");
-    histoNameVec.push_back("mH70_mSusy2800");
-    histoNameVec.push_back("mH90_mSusy2800");
-    histoNameVec.push_back("mH125_mSusy2800");
+    //histoNameVec.push_back("TTJets0L");
+    //histoNameVec.push_back("TTJets1L");
+    //histoNameVec.push_back("TTJets2L");
+    histoNameVec.push_back("ST");
+    histoNameVec.push_back("Ewk");
 
-    histoNameVec.push_back("mH30_mSquark800");
-    histoNameVec.push_back("mH50_mSquark800");
-    histoNameVec.push_back("mH70_mSquark800");
-    histoNameVec.push_back("mH90_mSquark800");
-    histoNameVec.push_back("mH125_mSquark800");
-    histoNameVec.push_back("mH30_mSquark1200");
-    histoNameVec.push_back("mH35_mSquark1200");
-    histoNameVec.push_back("mH40_mSquark1200");
-    histoNameVec.push_back("mH50_mSquark1200");
-    histoNameVec.push_back("mH70_mSquark1200");
-    histoNameVec.push_back("mH90_mSquark1200");
-    histoNameVec.push_back("mH125_mSquark1200");
-    histoNameVec.push_back("mH30_mSquark1600");
-    histoNameVec.push_back("mH35_mSquark1600");
-    histoNameVec.push_back("mH40_mSquark1600");
-    histoNameVec.push_back("mH50_mSquark1600");
-    histoNameVec.push_back("mH70_mSquark1600");
-    histoNameVec.push_back("mH90_mSquark1600");
-    histoNameVec.push_back("mH125_mSquark1600");
-    histoNameVec.push_back("mH30_mSquark2000");
-    histoNameVec.push_back("mH35_mSquark2000");
-    histoNameVec.push_back("mH40_mSquark2000");
-    histoNameVec.push_back("mH50_mSquark2000");
-    histoNameVec.push_back("mH70_mSquark2000");
-    histoNameVec.push_back("mH90_mSquark2000");
-    histoNameVec.push_back("mH125_mSquark2000");
-    histoNameVec.push_back("mH30_mSquark2200");
-    histoNameVec.push_back("mH35_mSquark2200");
-    histoNameVec.push_back("mH40_mSquark2200");
-    histoNameVec.push_back("mH50_mSquark2200");
-    histoNameVec.push_back("mH70_mSquark2200");
-    histoNameVec.push_back("mH90_mSquark2200");
-    histoNameVec.push_back("mH125_mSquark2200");
-    histoNameVec.push_back("mH30_mSquark2400");
-    histoNameVec.push_back("mH35_mSquark2400");
-    histoNameVec.push_back("mH40_mSquark2400");
-    histoNameVec.push_back("mH50_mSquark2400");
-    histoNameVec.push_back("mH70_mSquark2400");
-    histoNameVec.push_back("mH90_mSquark2400");
-    histoNameVec.push_back("mH125_mSquark2400");
-    histoNameVec.push_back("mH30_mSquark2600");
-    histoNameVec.push_back("mH35_mSquark2600");
-    histoNameVec.push_back("mH40_mSquark2600");
-    histoNameVec.push_back("mH50_mSquark2600");
-    histoNameVec.push_back("mH70_mSquark2600");
-    histoNameVec.push_back("mH90_mSquark2600");
-    histoNameVec.push_back("mH125_mSquark2600");
-    histoNameVec.push_back("mH30_mSquark2800");
-    histoNameVec.push_back("mH35_mSquark2800");
-    histoNameVec.push_back("mH40_mSquark2800");
-    histoNameVec.push_back("mH50_mSquark2800");
-    histoNameVec.push_back("mH70_mSquark2800");
-    histoNameVec.push_back("mH90_mSquark2800");
-    histoNameVec.push_back("mH125_mSquark2800");
+    histoNameVec.push_back("P1_1200sq_R0p384");
+    histoNameVec.push_back("P1_1200sq_R0p555");
+    histoNameVec.push_back("P1_1200sq_R0p99");
+    histoNameVec.push_back("P1_1400sq_R0p384");
+    histoNameVec.push_back("P1_1400sq_R0p555");
+    histoNameVec.push_back("P1_1400sq_R0p99");
+    histoNameVec.push_back("P1_1800sq_R0p384");
+    histoNameVec.push_back("P1_1800sq_R0p555");
+    histoNameVec.push_back("P1_1800sq_R0p99");
+    histoNameVec.push_back("P1_2200sq_R0p384");
+    histoNameVec.push_back("P1_2200sq_R0p555");
+    histoNameVec.push_back("P1_2200sq_R0p99");
+    histoNameVec.push_back("P1_2600sq_R0p384");
+    histoNameVec.push_back("P1_2600sq_R0p555");
+    histoNameVec.push_back("P1_2600sq_R0p99");
+    histoNameVec.push_back("P3_1300sq_R0p384");
+    histoNameVec.push_back("P3_1300sq_R0p555");
+    histoNameVec.push_back("P3_1300sq_R0p99");
+    histoNameVec.push_back("P3_1500sq_R0p384");
+    histoNameVec.push_back("P3_1500sq_R0p555");
+    histoNameVec.push_back("P3_1500sq_R0p99");
+    histoNameVec.push_back("P3_1900sq_R0p384");
+    histoNameVec.push_back("P3_1900sq_R0p555");
+    histoNameVec.push_back("P3_1900sq_R0p99");
+    histoNameVec.push_back("P3_2300sq_R0p384");
+    histoNameVec.push_back("P3_2300sq_R0p555");
+    histoNameVec.push_back("P3_2300sq_R0p99");
+    histoNameVec.push_back("P3_2700sq_R0p384");
+    histoNameVec.push_back("P3_2700sq_R0p555");
+    histoNameVec.push_back("P3_2700sq_R0p99");
+    histoNameVec.push_back("P5_1200sq_R0p384");
+    histoNameVec.push_back("P5_1200sq_R0p555");
+    histoNameVec.push_back("P5_1200sq_R0p99");
+    histoNameVec.push_back("P5_1400sq_R0p384");
+    histoNameVec.push_back("P5_1400sq_R0p555");
+    histoNameVec.push_back("P5_1400sq_R0p99");
+    histoNameVec.push_back("P5_1800sq_R0p384");
+    histoNameVec.push_back("P5_1800sq_R0p555");
+    histoNameVec.push_back("P5_1800sq_R0p99");
+    histoNameVec.push_back("P5_2200sq_R0p384");
+    histoNameVec.push_back("P5_2200sq_R0p555");
+    histoNameVec.push_back("P5_2200sq_R0p99");
+    histoNameVec.push_back("P5_2600sq_R0p384");
+    histoNameVec.push_back("P5_2600sq_R0p555");
+    histoNameVec.push_back("P5_2600sq_R0p99");
+    histoNameVec.push_back("P6_1200sq_R0p384");
+    histoNameVec.push_back("P6_1200sq_R0p555");
+    histoNameVec.push_back("P6_1200sq_R0p99");
+    histoNameVec.push_back("P6_1400sq_R0p384");
+    histoNameVec.push_back("P6_1400sq_R0p555");
+    histoNameVec.push_back("P6_1400sq_R0p99");
+    histoNameVec.push_back("P6_1800sq_R0p384");
+    histoNameVec.push_back("P6_1800sq_R0p555");
+    histoNameVec.push_back("P6_1800sq_R0p99");
+    histoNameVec.push_back("P6_2200sq_R0p384");
+    histoNameVec.push_back("P6_2200sq_R0p555");
+    histoNameVec.push_back("P6_2200sq_R0p99");
+    histoNameVec.push_back("P6_2600sq_R0p384");
+    histoNameVec.push_back("P6_2600sq_R0p555");
+    histoNameVec.push_back("P6_2600sq_R0p99");
+    histoNameVec.push_back("P7_1300sq_R0p384");
+    histoNameVec.push_back("P7_1300sq_R0p555");
+    histoNameVec.push_back("P7_1300sq_R0p99");
+    histoNameVec.push_back("P7_1500sq_R0p384");
+    histoNameVec.push_back("P7_1500sq_R0p555");
+    histoNameVec.push_back("P7_1500sq_R0p99");
+    histoNameVec.push_back("P7_1900sq_R0p384");
+    histoNameVec.push_back("P7_1900sq_R0p555");
+    histoNameVec.push_back("P7_1900sq_R0p99");
+    histoNameVec.push_back("P7_2300sq_R0p384");
+    histoNameVec.push_back("P7_2300sq_R0p555");
+    histoNameVec.push_back("P7_2300sq_R0p99");
+    histoNameVec.push_back("P7_2700sq_R0p384");
+    histoNameVec.push_back("P7_2700sq_R0p555");
+    histoNameVec.push_back("P7_2700sq_R0p99");
+    histoNameVec.push_back("P8_1300sq_R0p384");
+    histoNameVec.push_back("P8_1300sq_R0p555");
+    histoNameVec.push_back("P8_1300sq_R0p99");
+    histoNameVec.push_back("P8_1500sq_R0p384");
+    histoNameVec.push_back("P8_1500sq_R0p555");
+    histoNameVec.push_back("P8_1500sq_R0p99");
+    histoNameVec.push_back("P8_1900sq_R0p384");
+    histoNameVec.push_back("P8_1900sq_R0p555");
+    histoNameVec.push_back("P8_1900sq_R0p99");
+    histoNameVec.push_back("P8_2300sq_R0p384");
+    histoNameVec.push_back("P8_2300sq_R0p555");
+    histoNameVec.push_back("P8_2300sq_R0p99");
+    histoNameVec.push_back("P8_2700sq_R0p384");
+    histoNameVec.push_back("P8_2700sq_R0p555");
+    histoNameVec.push_back("P8_2700sq_R0p99");
 
     std::vector<std::string> nonTrivialSysVec;
     nonTrivialSysVec.push_back("NOSYS");
-    nonTrivialSysVec.push_back("jecAK4UncUp");
-    nonTrivialSysVec.push_back("jecAK4UncDown");
-    nonTrivialSysVec.push_back("jerAK4UncUp");
-    nonTrivialSysVec.push_back("jerAK4UncDown");
-    nonTrivialSysVec.push_back("jecAK8UncUp");
-    nonTrivialSysVec.push_back("jecAK8UncDown");
-    nonTrivialSysVec.push_back("jerAK8UncUp");
-    nonTrivialSysVec.push_back("jerAK8UncDown");
+    //nonTrivialSysVec.push_back("jecAK4UncUp");
+    //nonTrivialSysVec.push_back("jecAK4UncDown");
+    //nonTrivialSysVec.push_back("jerAK4UncUp");
+    //nonTrivialSysVec.push_back("jerAK4UncDown");
+    //nonTrivialSysVec.push_back("jecAK8UncUp");
+    //nonTrivialSysVec.push_back("jecAK8UncDown");
+    //nonTrivialSysVec.push_back("jerAK8UncUp");
+    //nonTrivialSysVec.push_back("jerAK8UncDown");
+    nonTrivialSysVec.push_back("jecAKXUncUp");
+    nonTrivialSysVec.push_back("jecAKXUncDown");
+    nonTrivialSysVec.push_back("jerAKXUncUp");
+    nonTrivialSysVec.push_back("jerAKXUncDown");
     nonTrivialSysVec.push_back("jmsUncUp");
     nonTrivialSysVec.push_back("jmsUncDown");
     nonTrivialSysVec.push_back("jmrUncUp");
@@ -525,6 +513,10 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     nonTrivialSysVec.push_back("dbtTagDown");
     nonTrivialSysVec.push_back("isrUp");
     nonTrivialSysVec.push_back("isrDown");
+    nonTrivialSysVec.push_back("prefireUp");
+    nonTrivialSysVec.push_back("prefireDown");
+    nonTrivialSysVec.push_back("scaleUp");
+    nonTrivialSysVec.push_back("scaleDown");
 
     for (size_t iH = 0; iH < histoNameVec.size(); ++iH){
 
@@ -571,6 +563,8 @@ std::string CommonSystematic::GetSystematicValue(const std::string& fullHistogra
     else{
         double count_nominal = hOriginal_[Form("%s_NOSYS", fullHistogramName.c_str())]->GetBinContent(iBin); 
         if (count_nominal == 0) return "-";
+
+	//std::cout << fullHistogramName.c_str() << systematicHistoTag.c_str() << "Up" << std::endl;
 
         double count_sysUp = hOriginal_[Form("%s_%sUp", fullHistogramName.c_str(), systematicHistoTag.c_str())]->GetBinContent(iBin);
         double count_sysDown = hOriginal_[Form("%s_%sDown", fullHistogramName.c_str(), systematicHistoTag.c_str())]->GetBinContent(iBin);

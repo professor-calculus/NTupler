@@ -103,6 +103,7 @@ tdrStyle(TDRStyle())
 	}
 }
 
+
 Plotter::Plotter(std::vector<PlotEntry2D> dummyHistos2D) :
 addRatioBox(false),
 addRatioBoxUnityLine(false),
@@ -550,6 +551,311 @@ void Plotter::SetYValueMin(const double& yValueMinDummy){
 	yValueMin = yValueMinDummy;
 	return;
 }
+
+
+void Plotter::SaveNorm(const std::string& saveName){
+
+	double normScale = 0.0;
+
+        if (histoStack.empty() && histoIndi.empty()){
+                std::cout << "Plotter::Save @@@ Exiting without saving... no histos @@@" << std::endl;
+                return;
+        }
+
+        std::string hsTitles = ""; // NB, can't set title for THStack after construction
+        if (!histoStack.empty()) hsTitles = Form("%s;%s;%s", histoStack[0].GetHistogram()->GetTitle(), histoStack[0].GetHistogram()->GetXaxis()->GetTitle(), histoStack[0].GetHistogram()->GetYaxis()->GetTitle());
+        THStack * hs = new THStack("hs", hsTitles.c_str());
+        for (std::vector<PlotEntry>::const_iterator iStack = histoStack.begin(); iStack != histoStack.end(); ++iStack)
+	{
+                hs->Add(iStack->GetHistogram());
+		normScale += iStack->GetHistogram()->Integral();
+	}
+
+        tdrStyle->cd();
+        TCanvas * c = new TCanvas("c","c");
+        
+        if (addRatioBox){
+                TPad *padUp = new TPad("padUp","padUp",0,0.3,1,1);
+                padUp->SetBottomMargin(0.016);
+                padUp->Draw();
+                padUp->cd();
+                histoIndi[0].GetHistogram()->SetLabelOffset(777.7);
+        }               
+
+        if (useLogY) gPad->SetLogy();
+
+        /////////////////////////////////////////////////////////////////////////////////////////////
+        // find max and min (don't want zero values for min, they won't work properly for logY plots)
+        // NB this currently might not do logY minimums correctly for stacks
+        double max = 0.0;
+        double min = 0.0; // for logY plots
+        bool setMin = false;
+        for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi){
+
+                iIndi->GetHistogram()->Scale(1.0/iIndi->GetHistogram()->Integral());
+
+                // MAX from histoIndi
+                if (plotWithErrorsIndi == false){
+                        if (iIndi->GetHistogram()->GetMaximum() > max || iIndi == histoIndi.begin()) max = iIndi->GetHistogram()->GetMaximum();
+                }
+                else{
+                        for (int i=1; i != iIndi->GetHistogram()->GetNbinsX()+1; ++i){
+                                if (iIndi->GetHistogram()->GetBinContent(i) + sqrt(iIndi->GetStatErrorSquaredVector()[i]) > max || (iIndi == histoIndi.begin() && i==1) ) max = iIndi->GetHistogram()->GetBinContent(i) + sqrt(iIndi->GetStatErrorSquaredVector()[i]);
+                        }
+                }
+
+                // nonzero MIN from histoIndi
+                double histoMinNonZero = 0.0; // lowest non zero value of the histogram
+                bool setHistoMinNonZero = false;
+                // first calculate without error bars
+                for (int i=1; i != iIndi->GetHistogram()->GetNbinsX()+1; ++i)
+                        if (iIndi->GetHistogram()->GetBinContent(i) > 0 && (iIndi->GetHistogram()->GetBinContent(i) < histoMinNonZero || setHistoMinNonZero == false) ){
+                                histoMinNonZero = iIndi->GetHistogram()->GetBinContent(i);
+                                setHistoMinNonZero = true;
+                        }
+                if (setHistoMinNonZero == true && (histoMinNonZero < min || setMin == false)){
+                        min = histoMinNonZero;
+                        setMin = true;
+                }
+                // if (plotWithErrorsStack == true){ // CURRENTLY NOT USING ERRORS BARS IN THE MIN EVALUATION
+                //      for (int i=1; i != iIndi->GetHistogram()->GetNbinsX()+1; ++i)
+                //              if ( (iIndi->GetHistogram()->GetBinContent(i) - sqrt(iIndi->GetStatErrorSquaredVector()[i]) > 0) && ( (iIndi->GetHistogram()->GetBinContent(i) - sqrt(iIndi->GetStatErrorSquaredVector()[i]) < histoMinNonZero) || setHistoMinNonZero == false ) ){
+                //                      histoMinNonZero = iIndi->GetHistogram()->GetBinContent(i) - sqrt(iIndi->GetStatErrorSquaredVector()[i]);
+                //                      setHistoMinNonZero = true;
+                //              }
+                //      if (setHistoMinNonZero == true && (histoMinNonZero < min || setMin == false)){
+                //              min = histoMinNonZero;
+                //              setMin = true;
+                //      }
+                // }
+        } // closes loop through histoIndi elements
+
+        if (!histoStack.empty()){
+
+		histoStack[0].GetHistogram()->Scale(1.0/normScale);
+                TH1D *histoStackClone = (TH1D*)histoStack[0].GetHistogram()->Clone();
+                std::vector<double> histoStackCloneStatErrSqrdVec(histoStackClone->GetNbinsX()+2, 0.0);
+                for (size_t iStack = 0; iStack != histoStack.size(); ++iStack){
+			if (iStack != 0) histoStack[iStack].GetHistogram()->Scale(1.0/normScale);
+                        if (iStack != 0) histoStackClone->Add(histoStack[iStack].GetHistogram());
+                        for (int iBin = 0; iBin < histoStackClone->GetNbinsX()+2; ++iBin) histoStackCloneStatErrSqrdVec[iBin] += histoStack[iStack].GetStatErrorSquaredVector()[iBin];
+                }
+                for (int iBin = 0; iBin < histoStackClone->GetNbinsX()+2; ++iBin) histoStackClone->SetBinError(iBin, sqrt(histoStackCloneStatErrSqrdVec[iBin]));
+
+                // MAX from histoStack
+                if (plotWithErrorsStack == false){
+                        if (histoStackClone->GetMaximum() > max) max = histoStackClone->GetMaximum();
+                }
+                else{
+                        for (int i=1; i != histoStackClone->GetNbinsX()+1; ++i){
+                                if (histoStackClone->GetBinContent(i) + histoStackClone->GetBinError(i) > max) max = histoStackClone->GetBinContent(i) + histoStackClone->GetBinError(i);
+                        }
+                }
+
+                // nonzero MIN from histoStack
+                double histoMinNonZero = 0.0; // lowest non zero value of the histogram
+                bool setHistoMinNonZero = false; // have we found a non zero min value?
+                for (int i=1; i != histoStackClone->GetNbinsX()+1; ++i){
+                        if (histoStackClone->GetBinContent(i) > 0 && (histoStackClone->GetBinContent(i) < histoMinNonZero || setHistoMinNonZero == false) ){
+                                histoMinNonZero = histoStackClone->GetBinContent(i);
+                                setHistoMinNonZero = true;
+                        }
+                        if (setHistoMinNonZero == true && (histoMinNonZero < min || setMin == false)){
+                                min = histoMinNonZero;
+                                setMin = true;
+                        }
+                }
+        } // closes 'if' histoStack has entries
+        if (setYValueMin) min = yValueMin;
+
+        /////////////////////////////////////////////////////////////////////////////////////////////
+
+        // set histo max and min and draw
+        double initialMax = 0.0; // use to reset the histo max and min to what it initially was
+        double initialMin = 0.0;
+
+        double graphMaxLin = 1.05 * max;
+        double graphMaxLog = log10(max/min) * max;
+        double graphMinLin = 0.0;
+        double graphMinLog = 0.1 * min/log10(max/min);
+
+        if (!histoIndi.empty() && !histoStack.empty()){
+                initialMax = histoIndi[0].GetHistogram()->GetMaximum();
+                initialMin = histoIndi[0].GetHistogram()->GetMinimum();
+                if (useLogY == false){
+                        histoIndi[0].GetHistogram()->SetMaximum(graphMaxLin);
+                        histoIndi[0].GetHistogram()->SetMinimum(graphMinLin);
+                }
+                else{
+                        histoIndi[0].GetHistogram()->SetMaximum(graphMaxLog);
+                        histoIndi[0].GetHistogram()->SetMinimum(graphMinLog);
+                }
+                histoIndi[0].GetHistogram()->Draw();
+                hs->Draw("same");
+                for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi)
+                        if (plotWithErrorsIndi == false) iIndi->GetHistogram()->Draw("same");
+                        else iIndi->GetHistogram()->Draw("same P");
+                if (plotWithErrorsStack){
+                        TH1D *histoStackClone = (TH1D*)histoStack[0].GetHistogram()->Clone();
+                        histoStackClone->SetFillColor(kBlack);
+                        histoStackClone->SetFillStyle(3004);
+                        std::vector<double> histoStackCloneStatErrSqrdVec(histoStackClone->GetNbinsX()+2, 0.0);
+                        for (size_t iStack = 0; iStack != histoStack.size(); ++iStack){
+                                if (iStack != 0) histoStackClone->Add(histoStack[iStack].GetHistogram());
+                                for (int iBin = 0; iBin < histoStackClone->GetNbinsX()+2; ++iBin) histoStackCloneStatErrSqrdVec[iBin] += histoStack[iStack].GetStatErrorSquaredVector()[iBin];
+                        }
+                        for (int iBin = 0; iBin < histoStackClone->GetNbinsX()+2; ++iBin) histoStackClone->SetBinError(iBin, sqrt(histoStackCloneStatErrSqrdVec[iBin]));
+                        histoStackClone->Draw("same, E2");
+                }
+        }
+
+        else if (!histoIndi.empty() && histoStack.empty()){
+                initialMax = histoIndi[0].GetHistogram()->GetMaximum();
+                initialMin = histoIndi[0].GetHistogram()->GetMinimum();
+                if (useLogY == false){
+                        histoIndi[0].GetHistogram()->SetMaximum(graphMaxLin);
+                        histoIndi[0].GetHistogram()->SetMinimum(graphMinLin);
+                        // histoIndi[0].GetHistogram()->SetMaximum(1.006);
+                        // histoIndi[0].GetHistogram()->SetMinimum(0.92);
+                }
+                else{
+                        histoIndi[0].GetHistogram()->SetMaximum(graphMaxLog);
+                        histoIndi[0].GetHistogram()->SetMinimum(graphMinLog);
+                }
+                for (std::vector<PlotEntry>::const_iterator iIndi = histoIndi.begin(); iIndi != histoIndi.end(); ++iIndi){
+                        if (iIndi->GetTEff() != NULL){                          
+                                iIndi->GetTEff()->SetLineColor(iIndi->GetHistogram()->GetLineColor());
+                                iIndi->GetTEff()->SetLineWidth(2);
+                                // iIndi->GetTEff()->SetMarkerStyle(1);
+                                iIndi->GetHistogram()->Draw("same P");
+                                iIndi->GetTEff()->Draw("same");
+                                continue;
+                        }
+                        if (plotWithErrorsIndi == false) iIndi->GetHistogram()->Draw("same");
+                        else iIndi->GetHistogram()->Draw("same P");
+                }
+        }
+
+        else if (histoIndi.empty() && !histoStack.empty()){
+                initialMax = histoStack[0].GetHistogram()->GetMaximum();
+                initialMin = histoStack[0].GetHistogram()->GetMinimum();
+                if (useLogY == false){
+                        histoStack[0].GetHistogram()->SetMaximum(graphMaxLin);
+                        histoStack[0].GetHistogram()->SetMinimum(graphMinLin);
+                }
+                else{
+                        histoStack[0].GetHistogram()->SetMaximum(graphMaxLog);
+                        histoStack[0].GetHistogram()->SetMinimum(graphMinLog);
+                }
+                histoStack[0].GetHistogram()->Draw();
+                hs->Draw("same");
+                if (plotWithErrorsStack){
+                        TH1D *histoStackClone = (TH1D*)histoStack[0].GetHistogram()->Clone();
+                        histoStackClone->SetFillColor(kBlack);
+                        histoStackClone->SetFillStyle(3004);
+                        std::vector<double> histoStackCloneStatErrSqrdVec(histoStackClone->GetNbinsX()+2, 0.0);
+                        for (size_t iStack = 0; iStack != histoStack.size(); ++iStack){
+                                if (iStack != 0) histoStackClone->Add(histoStack[iStack].GetHistogram());
+                                for (int iBin = 0; iBin < histoStackClone->GetNbinsX()+2; ++iBin) histoStackCloneStatErrSqrdVec[iBin] += histoStack[iStack].GetStatErrorSquaredVector()[iBin];
+                        }
+                        for (int iBin = 0; iBin < histoStackClone->GetNbinsX()+2; ++iBin) histoStackClone->SetBinError(iBin, sqrt(histoStackCloneStatErrSqrdVec[iBin]));
+                        histoStackClone->Draw("same, E2");
+                }
+        }
+
+        if (addLatex) DrawLatex();
+        if (leg != NULL) leg->Draw("same");
+        if (leg2Cols != NULL) leg2Cols->Draw("same");
+        gPad->RedrawAxis();
+
+        /////////////////////////////////////////////////////////////////////////////////////////////
+
+        // do ratio box plot if implemented
+        if (addRatioBox){
+                c->cd();
+                TPad *padDown = new TPad("padDown","padDown",0,0,1,0.3);
+                padDown->SetTopMargin(0.0);
+                padDown->SetBottomMargin(0.30);
+                padDown->Draw("same");
+                padDown->cd();
+
+                TH1D * ratioPlotEntry;
+                Int_t nBins = histoIndi[0].GetHistogram()->GetNbinsX();
+                if (histoIndi[0].GetHistogram()->GetXaxis()->GetXbins()->GetArray() == NULL) ratioPlotEntry = new TH1D("ratioPlotEntry", Form("%s;%s;%s", histoIndi[0].GetHistogram()->GetTitle(), histoIndi[0].GetHistogram()->GetXaxis()->GetTitle(), histoIndi[0].GetHistogram()->GetYaxis()->GetTitle()), nBins, histoIndi[0].GetHistogram()->GetBinLowEdge(1), histoIndi[0].GetHistogram()->GetBinLowEdge(nBins+1));
+                else ratioPlotEntry = new TH1D("hTotal", Form("%s;%s;%s", histoIndi[0].GetHistogram()->GetTitle(), histoIndi[0].GetHistogram()->GetXaxis()->GetTitle(), histoIndi[0].GetHistogram()->GetYaxis()->GetTitle()), nBins, histoIndi[0].GetHistogram()->GetXaxis()->GetXbins()->GetArray());
+
+                TH1D * histoIndi0 = (TH1D*)histoIndi[0].GetHistogram()->Clone();
+                for (int iBin = 0; iBin < histoIndi[0].GetHistogram()->GetNbinsX()+2; ++iBin) histoIndi0->SetBinError(iBin, sqrt(histoIndi[0].GetStatErrorSquaredVector()[iBin]));
+
+                if (addRatioBoxInfo == "typeA"){
+                        TH1D * histoIndi1 = (TH1D*)histoIndi[1].GetHistogram()->Clone();
+                        for (int iBin = 0; iBin < histoIndi[1].GetHistogram()->GetNbinsX()+2; ++iBin) histoIndi1->SetBinError(iBin, sqrt(histoIndi[1].GetStatErrorSquaredVector()[iBin]));
+                        ratioPlotEntry->Divide(histoIndi0, histoIndi1);
+                }
+                if (addRatioBoxInfo == "typeB"){
+                        TH1D *histoStackClone = (TH1D*)histoStack[0].GetHistogram()->Clone();
+                        std::vector<double> histoStackCloneStatErrSqrdVec(histoStackClone->GetNbinsX()+2, 0.0);
+                        for (size_t iStack = 0; iStack != histoStack.size(); ++iStack){
+                                if (iStack != 0) histoStackClone->Add(histoStack[iStack].GetHistogram());
+                                for (int iBin = 0; iBin < histoStackClone->GetNbinsX()+2; ++iBin) histoStackCloneStatErrSqrdVec[iBin] += histoStack[iStack].GetStatErrorSquaredVector()[iBin];
+                        }
+                        for (int iBin = 0; iBin < histoStackClone->GetNbinsX()+2; ++iBin) histoStackClone->SetBinError(iBin, sqrt(histoStackCloneStatErrSqrdVec[iBin]));
+                        ratioPlotEntry->Divide(histoIndi0, histoStackClone);
+                }
+                ratioPlotEntry->SetMarkerStyle(20);
+                ratioPlotEntry->SetMarkerSize(0.7);
+                ratioPlotEntry->SetLineColor(kBlack);
+                ratioPlotEntry->SetLineWidth(1.5);
+                if (ratioBoxYAxisMinMax.size()==2){
+                        ratioPlotEntry->SetMinimum(ratioBoxYAxisMinMax[0]);
+                        ratioPlotEntry->SetMaximum(ratioBoxYAxisMinMax[1]);
+                }
+                ratioPlotEntry->GetXaxis()->SetTitleSize(0.05 * 2.5);
+                ratioPlotEntry->GetXaxis()->SetTitleOffset(1.00);
+                ratioPlotEntry->GetXaxis()->SetLabelSize(0.04 * 2.5);
+                ratioPlotEntry->GetXaxis()->SetLabelOffset(0.007);
+                ratioPlotEntry->GetXaxis()->SetTickLength(0.03 * 2.5);
+
+                ratioPlotEntry->GetYaxis()->SetTitle(ratioBoxYAxisTitle.c_str());
+                ratioPlotEntry->GetYaxis()->CenterTitle(true);
+                ratioPlotEntry->GetYaxis()->SetNdivisions(505);
+                ratioPlotEntry->GetYaxis()->SetTitleSize(0.05 * 2.5);
+                ratioPlotEntry->GetYaxis()->SetTitleOffset(0.4);
+                ratioPlotEntry->GetYaxis()->SetLabelSize(0.04 * 2.5);
+                ratioPlotEntry->GetYaxis()->SetLabelOffset(0.007);
+
+                ratioPlotEntry->Draw("E0");
+
+                if (addRatioBoxUnityLine){
+                        TLine * lineRatio = new TLine(ratioPlotEntry->GetBinLowEdge(1), 1.0, ratioPlotEntry->GetBinLowEdge(ratioPlotEntry->GetNbinsX()+1), 1.0); // xmin, ymin, xmax, ymax
+                        lineRatio->SetLineStyle(2);
+                        lineRatio->SetLineWidth(1);
+                        lineRatio->SetLineColor(36);
+                        lineRatio->Draw("same");
+                        ratioPlotEntry->Draw("E0, same");
+                }
+        }       
+
+        /////////////////////////////////////////////////////////////////////////////////////////////
+
+        c->SaveAs(saveName.c_str());
+        c->Close();
+        std::cout << std::endl;
+
+        // reset the max values of histograms that we altered
+        if (!histoIndi.empty()){
+                histoIndi[0].GetHistogram()->SetMaximum(initialMax);
+                histoIndi[0].GetHistogram()->SetMinimum(initialMin);
+        }
+        else {
+                histoStack[0].GetHistogram()->SetMaximum(initialMax);
+                histoStack[0].GetHistogram()->SetMinimum(initialMin);
+        }
+        if (addRatioBox) histoIndi[0].GetHistogram()->SetLabelOffset(0.007);
+
+        return;
+} // closes function Save Norm
+
 
 
 void Plotter::Save(const std::string& saveName){
@@ -1367,8 +1673,8 @@ void Plotter::SaveSpec01(const std::string& saveName, const std::vector<std::str
 		        latexHT->SetTextFont(42);
                         latexHT->SetTextSize(0.025);
 		        latexHT->SetTextAlign(11); // align from left
-		        latexHT->DrawLatex(c+1, lineAlmostMax, htBins[(c/binsPerDivision) % htBins.size()].c_str());
-			if( c/binsPerDivision % htBins.size() == 0 ) latexHT->DrawLatex(c+1, lineMax, mhtBins[c/( htBins.size() * binsPerDivision )].c_str());
+		        latexHT->DrawLatex(c+3, lineAlmostMax, htBins[(c/binsPerDivision) % htBins.size()].c_str());
+			if( c/binsPerDivision % htBins.size() == 0 ) latexHT->DrawLatex(c+3, lineMax, mhtBins[c/( htBins.size() * binsPerDivision )].c_str());
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////
@@ -1676,7 +1982,7 @@ void Plotter::DrawLatex(const unsigned int& dimensions)
 
 int Plotter::SetColor_mellow(int position, int maxColors)
 {
-	gStyle->SetPalette(55); // sets what sort of colours we will use	
+	gStyle->SetPalette(103); // sets what sort of colours we will use	(was 55)
 	double modifier = 0.00; // modifier is an offset in the colour spectrum
 	double colorIndex;
 	int colour = 1;

@@ -31,6 +31,7 @@ public:
 	void SetErrors(const std::string& = "ALL_ERRORS");
 	void SetYValueMin(const double&);
 	void Save(const std::string&);
+	void SaveNorm(const std::string&);
 	void Save2D(const std::string&);
 	void Save2D(const std::string&, const MassRegionCuts&);
 	void SaveSpec01(const std::string& saveName, const std::vector<std::string>);

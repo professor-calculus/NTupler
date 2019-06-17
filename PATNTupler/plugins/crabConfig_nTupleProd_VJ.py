@@ -6,7 +6,7 @@ config = config()
 # EDIT the following:
 # uniqueName, config.Data.inputDataset, config.Data.inputDBS, config.Data.unitsPerJob
 
-uniqueName = 'NAMEXYZ_CMSSW8029wDBTV4_fbd67939' # name for this ntuple production (include commit hash so it is unique and can be traced) 
+uniqueName = 'Joe_mH70_1200sq_CMSSW8029' # name for this ntuple production (include commit hash so it is unique and can be traced) 
 
 config.General.requestName = uniqueName # name of the crab job project (eg on dashboard)
 config.General.workArea = 'crab_projects' # name of directory where crab project info is stored
@@ -51,12 +51,15 @@ config.JobType.inputFiles = ['puppiCorr.root', 'L1PrefiringMaps_new.root']
 # config.Data.inputDataset = '/WJetsToQQ_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'
 
 # SIGNAL SAMPLES: 200K events, 100 files = ~2K events per unit (use ten units per job)
-config.Data.inputDataset = 'DATASETXYZ' # use the script quickSignalSubmit_crab.py to deploy
+# config.Data.inputDataset = 'DATASETXYZ' # use the script quickSignalSubmit_crab.py to deploy
 
 # CENTRAL PRODUCTION SIGNAL: (use one unit per job)
 # config.Data.inputDataset = '/NMSSMCascade_mH-70_mSUSY-1200_TuneCUEP8M1_13TeV-madgraph-pythia8/RunIISummer16MiniAODv2-80X_mcRun2_asymptotic_2016_TrancheIV_v6-v2/MINIAODSIM'
 # config.Data.inputDataset = '/NMSSMCascade_mH-70_mSUSY-2000_TuneCUEP8M1_13TeV-madgraph-pythia8/RunIISummer16MiniAODv2-80X_mcRun2_asymptotic_2016_TrancheIV_v6-v2/MINIAODSIM'
 # config.Data.inputDataset = '/NMSSMCascade_mH-70_mSUSY-2600_TuneCUEP8M1_13TeV-madgraph-pythia8/RunIISummer16MiniAODv2-80X_mcRun2_asymptotic_2016_TrancheIV_v6-v2/MINIAODSIM'
+config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH70p0_mSusy1200p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v4_mH70p0_mSusy1200p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+#config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH70p0_mSusy2000p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH70p0_mSusy2000p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
+#config.Data.inputDataset = '/nmssmSignalCascadeV05_13TeV_mH70p0_mSusy2600p0_ratio0p99_splitting0p1/taylor-nmssmSignalCascadeV05_13TeV_processMc04_ed8021v1_mH70p0_mSusy2600p0_ratio0p99_splitting0p1-28028af67189b3de7224b79195bd0e1d/USER'
 
 #################################################################################################
 # config.Data.inputDBS = 'global' # for centrally produced data
@@ -67,6 +70,6 @@ config.Data.unitsPerJob = 10
 
 config.Data.totalUnits = -1 # '-1' does them all
 config.Data.publication = False
-config.Data.outLFNDirBase = '/store/user/taylor/ntuples_MC16_Jan2019' # Wherever you want the ntuples to go on the RAL T2
+config.Data.outLFNDirBase = '/store/user/atittert/ntuples_MC16_Jan2019' # Wherever you want the ntuples to go on the RAL T2
 
 config.Site.storageSite = 'T2_UK_SGrid_RALPP'

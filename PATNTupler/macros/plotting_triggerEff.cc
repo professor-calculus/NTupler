@@ -25,7 +25,7 @@ int main(int argc, char** argv){
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // ONE: save info
-    const std::string outputDir = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/plots_2018_04_16/2016_80X/triggerStudiesV2/singleMuon2016/normalBinning_muonMaxPtLessThan100/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/plots_2019_05_20/2017_94X/triggerStudiesV2/singleMuon2017/normalBinning_muonMaxPtLessThan200/"; // where we are going to save the output plots (should include the samples name, and any important features)
 
     // TWO: plot histogram settings
     // TH1D hTemplate("hTemplate", ";offline H_{T} (GeV);efficiency", 100, 0, 5000);
@@ -40,10 +40,10 @@ int main(int argc, char** argv){
     TH1D hTemplate("hTemplate", ";offline H_{T} (GeV);efficiency", customBinning.size()-1, &(customBinning)[0]);
 
     // THREE: luminosity (if you need it)
-    const double luminosity = 35.867; // 2016 DATASET
-    // const double luminosity = 41.370; // 2017 DATASET
+    // const double luminosity = 35.867; // 2016 DATASET
+    const double luminosity = 41.370; // 2017 DATASET
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
+                 //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     std::string dirExistCommand = "test -e " + outputDir;
@@ -58,9 +58,9 @@ int main(int argc, char** argv){
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
     // THREE: make effiencies
-    PlotEntry plot_ratio1 = PlotEntry("Run2016", hTemplate, "ht");
-    plot_ratio1.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/data/SingleMuon2016TOTAL/flatTree.root", "muon_maxPt < 100.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
-    plotVec.push_back(plot_ratio1);
+    //PlotEntry plot_ratio1 = PlotEntry("Run2016", hTemplate, "ht");
+    //plot_ratio1.AddInputEfficiency("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_singleMu_2019_01_08/data/SingleMuon_Run2016TOTAL/flatTree.root", "muon_maxPt < 200.0 && (fatJetA_p4.Pt() != fatJetB_p4.Pt())", "trgDecision==1"); // flatTree, commonCut, numeratorCut
+    //plotVec.push_back(plot_ratio1);
 
     // PlotEntry plot_ratio2 = PlotEntry("Run2016H", hTemplate, "ht");
     // plot_ratio2.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/data/SingleMuon_Run2016H-03Feb2017_bothVersionsCombined/flatTree.root", "", "trgDecision==1");
@@ -73,16 +73,16 @@ int main(int argc, char** argv){
     // PlotEntry plot_ratio4 = PlotEntry("ZJets", hTemplate, "ht");
     // plot_ratio4.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc/ZJets_HT600toInf/flatTree.root", "", "trgDecision==1"); // flatTree, commonCut, numeratorCut
     // plotVec.push_back(plot_ratio4);
-    
+
     // PlotEntry plot_ratio5 = PlotEntry("WJets", hTemplate, "ht");
     // plot_ratio5.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/mc/WJets_HT600toInf/flatTree.root", "", "trgDecision==1"); // flatTree, commonCut, numeratorCut
     // plotVec.push_back(plot_ratio5);
 
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
 
-    // PlotEntry plot_ratio6 = PlotEntry("Run2017", hTemplate, "ht");
-    // plot_ratio6.AddInputEfficiency("/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/flatTrees_2018_04_11/data17/SingleMuon_Run2017TOTAL/flatTree.root", "muon_maxPt < 100.0", "trgDecision==1"); // flatTree, commonCut, numeratorCut
-    // plotVec.push_back(plot_ratio6);
+    PlotEntry plot_ratio6 = PlotEntry("Run2017", hTemplate, "ht");
+    plot_ratio6.AddInputEfficiency("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_singleMu17_2019_01_08/data/SingleMuon_Run2017TOTAL/flatTree.root", "muon_maxPt < 200.0 && (fatJetA_p4.Pt() != fatJetB_p4.Pt())", "trgDecision==1"); // flatTree, commonCut, numeratorCut
+    plotVec.push_back(plot_ratio6);
 
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.
     // *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,. *,.

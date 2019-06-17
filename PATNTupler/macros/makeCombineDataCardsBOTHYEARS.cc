@@ -171,8 +171,12 @@ int main(){
     //                                         "mH30_mSquark2800", "mH35_mSquark2800", "mH40_mSquark2800", "mH50_mSquark2800", "mH70_mSquark2800", "mH90_mSquark2800", "mH110_mSquark2800", "mH125_mSquark2800", 
     //                                     };                                        
     std::map<unsigned int, std::vector<std::string>> mcbkVec;
-    mcbkVec[2016] = {"TTJets", "ZJets", "WJets"}; // the 2016 MC background samples
-    mcbkVec[2017] = {"TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}; // the 2017 MC background samples
+    // ALEX:
+    mcbkVec[2016] = {"TTJets", "ST", "Ewk"}; // the 2016 MC background samples
+    mcbkVec[2017] = {"TTJets", "ST", "Ewk"}; // the 2017 MC background samples
+    // JOE:
+    //mcbkVec[2016] = {"TTJets", "ZJets", "WJets"}; // the 2016 MC background samples
+    //mcbkVec[2017] = {"TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}; // the 2017 MC background samples
     const std::string qcdName = "QCD"; // this is just a label as QCD contribution is driven during the fit
 
 
@@ -190,33 +194,37 @@ int main(){
     // *** 2016 ***
     // CommonSystematicVec[2016].push_back( CommonSystematic("signalPdfBOTH lnN", 1.1, {"SIGNAL"}) ); // correlated to 2017
     CommonSystematicVec[2016].push_back( CommonSystematic("isrReweightBOTH lnN", "isr", {"SIGNAL"}) ); // correlated to 2017
-    CommonSystematicVec[2016].push_back( CommonSystematic("luminosity2016 lnN", 1.025, {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("XS_TTJets2016 lnN", 3.0, {"TTJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("XS_ZJets2016 lnN", 1.5, {"ZJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("XS_WJets2016 lnN", 1.5, {"WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("jecAKXUncBOTH lnN", "jecAKXUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // correlated to 2017
-    CommonSystematicVec[2016].push_back( CommonSystematic("jerAKXUnc2016 lnN", "jerAKXUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("jmsUncBOTH lnN", "jmsUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // correlated to 2017
-    CommonSystematicVec[2016].push_back( CommonSystematic("jmrUncBOTH lnN", "jmrUnc", {"SIGNAL", "TTJets", "ZJets", "WJets"}) ); // correlated to 2017
+    CommonSystematicVec[2016].push_back( CommonSystematic("luminosity2016 lnN", 1.025, {"SIGNAL", "TTJets", "ST", "Ewk"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("XS_TTJets2016 lnN", 2.0, {"TTJets"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("XS_ST2016 lnN", 1.5, {"ST"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("XS_Ewk2016 lnN", 1.5, {"Ewk"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("jecAKXUncBOTH lnN", "jecAKXUnc", {"SIGNAL", "TTJets", "ST", "Ewk"}) ); // correlated to 2017
+    CommonSystematicVec[2016].push_back( CommonSystematic("jerAKXUnc2016 lnN", "jerAKXUnc", {"SIGNAL", "TTJets", "ST", "Ewk"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("jmsUncBOTH lnN", "jmsUnc", {"SIGNAL", "TTJets", "ST", "Ewk"}) ); // correlated to 2017
+    CommonSystematicVec[2016].push_back( CommonSystematic("jmrUncBOTH lnN", "jmrUnc", {"SIGNAL", "TTJets", "ST", "Ewk"}) ); // correlated to 2017
     CommonSystematicVec[2016].push_back( CommonSystematic("SigDbtTag2016 lnN", "dbtTag", {"SIGNAL"}) );
     CommonSystematicVec[2016].push_back( CommonSystematic("TtDbtTag2016 lnN", "dbtTag", {"TTJets"}) );
-    CommonSystematicVec[2016].push_back( CommonSystematic("prefire2016 lnN", "prefire", {"SIGNAL", "TTJets", "ZJets", "WJets"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("prefire2016 lnN", "prefire", {"SIGNAL", "TTJets", "ST", "Ewk"}) );
+    CommonSystematicVec[2016].push_back( CommonSystematic("scaleUncSigBoth lnN", 1.25, {"SIGNAL"}) ); // Correlated to 2017
+    CommonSystematicVec[2016].push_back( CommonSystematic("scaleUncBoth lnN", "scale", {"TTJets", "ST", "Ewk"}) ); // Correlated to 2017
     // *** 2017 ***
     // CommonSystematicVec[2017].push_back( CommonSystematic("signalPdfBOTH lnN", 1.1, {"SIGNAL"}) ); // correlated to 2016
     CommonSystematicVec[2017].push_back( CommonSystematic("isrReweightBOTH lnN", "isr", {"SIGNAL"}) ); // correlated to 2016
-    CommonSystematicVec[2017].push_back( CommonSystematic("luminosity2017 lnN", 1.023, {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets0L2017 lnN", 3.0, {"TTJets0L"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets1L2017 lnN", 3.0, {"TTJets1L"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets2L2017 lnN", 3.0, {"TTJets2L"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("XS_ZJets2017 lnN", 1.5, {"ZJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("XS_WJets2017 lnN", 1.5, {"WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("jecAKXUncBOTH lnN", "jecAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
-    CommonSystematicVec[2017].push_back( CommonSystematic("jerAKXUnc2017 lnN", "jerAKXUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("jmsUncBOTH lnN", "jmsUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
-    CommonSystematicVec[2017].push_back( CommonSystematic("jmrUncBOTH lnN", "jmrUnc", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) ); // correlated to 2016
+    CommonSystematicVec[2017].push_back( CommonSystematic("luminosity2017 lnN", 1.023, {"SIGNAL", "TTJets", "ST", "Ewk"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets2017 lnN", 2.0, {"TTJets"}) );
+    //CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets1L2017 lnN", 3.0, {"TTJets1L"}) );
+    //CommonSystematicVec[2017].push_back( CommonSystematic("XS_TTJets2L2017 lnN", 3.0, {"TTJets2L"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("XS_ST2017 lnN", 1.5, {"ST"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("XS_Ewk2017 lnN", 1.5, {"Ewk"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("jecAKXUncBOTH lnN", "jecAKXUnc", {"SIGNAL", "TTJets", "ST", "Ewk"}) ); // correlated to 2016
+    CommonSystematicVec[2017].push_back( CommonSystematic("jerAKXUnc2017 lnN", "jerAKXUnc", {"SIGNAL", "TTJets", "ST", "Ewk"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("jmsUncBOTH lnN", "jmsUnc", {"SIGNAL", "TTJets", "ST", "Ewk"}) ); // correlated to 2016
+    CommonSystematicVec[2017].push_back( CommonSystematic("jmrUncBOTH lnN", "jmrUnc", {"SIGNAL", "TTJets", "ST", "Ewk"}) ); // correlated to 2016
     CommonSystematicVec[2017].push_back( CommonSystematic("SigDbtTag2017 lnN", "dbtTag", {"SIGNAL"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("TtDbtTag2017 lnN", "dbtTag", {"TTJets0L", "TTJets1L", "TTJets2L"}) );
-    CommonSystematicVec[2017].push_back( CommonSystematic("prefire2017 lnN", "prefire", {"SIGNAL", "TTJets0L", "TTJets1L", "TTJets2L", "ZJets", "WJets"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("TtDbtTag2017 lnN", "dbtTag", {"TTJets"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("prefire2017 lnN", "prefire", {"SIGNAL", "TTJets", "ST", "Ewk"}) );
+    CommonSystematicVec[2017].push_back( CommonSystematic("scaleUncSigBoth lnN", 1.25, {"SIGNAL"}) ); // Correlated to 2016
+    CommonSystematicVec[2017].push_back( CommonSystematic("scaleUncBoth lnN", "scale", {"TTJets", "ST", "Ewk"}) ); // Correlated to 2016
 
 
 
@@ -554,11 +562,11 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
 
     if (yearOfRun == 2016){
         preamble = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_MHT_2019_01_08/MassCutsV09/run2016/";
-        postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
+        postamble = "MassCutsV10_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
     }
     else if (yearOfRun == 2017){
         preamble = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_MHT_2019_01_08/MassCutsV09/run2017/";
-        postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi42.root";
+        postamble = "MassCutsV10_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi42.root";
     }
     else{
         std::cout << "You have not given GetHistograms a valid year" << std::endl;
@@ -568,11 +576,11 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     std::vector<std::string> histoNameVec;
     histoNameVec.push_back("data");
     histoNameVec.push_back("TTJets");
-    histoNameVec.push_back("TTJets0L");
-    histoNameVec.push_back("TTJets1L");
-    histoNameVec.push_back("TTJets2L");
-    histoNameVec.push_back("ZJets");
-    histoNameVec.push_back("WJets");
+    //histoNameVec.push_back("TTJets0L");
+    //histoNameVec.push_back("TTJets1L");
+    //histoNameVec.push_back("TTJets2L");
+    histoNameVec.push_back("ST");
+    histoNameVec.push_back("Ewk");
     
     histoNameVec.push_back("P1_1200sq_R0p384");
     histoNameVec.push_back("P1_1200sq_R0p555");
@@ -681,6 +689,8 @@ void GetHistograms(std::map<std::string,TH1D*>& h_, const unsigned int& yearOfRu
     nonTrivialSysVec.push_back("isrDown");
     nonTrivialSysVec.push_back("prefireUp");
     nonTrivialSysVec.push_back("prefireDown");
+    nonTrivialSysVec.push_back("scaleUp");
+    nonTrivialSysVec.push_back("scaleDown");
 
     for (size_t iH = 0; iH < histoNameVec.size(); ++iH){
 

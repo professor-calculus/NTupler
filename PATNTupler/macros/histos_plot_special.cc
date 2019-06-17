@@ -32,7 +32,7 @@ int main(){
 
 
     // ONE: save info & luminosity
-    std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/plots_TTControlRegion_2019_03_19/2016_80X/testingTTJets_threeBinz/tt_DDvsMC_MGLO_HTStitched650/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/plots_2019_05_20/TTCR/2016_80X/threeBinz/Sig_Bkg_Compare_MGLO_HTStitched600_Tag_UnD/"; // where we are going to save the output plots (should include the samples name, and any important features)
     double luminosity = 35.867; // NB this is just a label for the plot. It should match the lumi of the histograms!
     // double luminosity = 41.370; // 2017 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
     
@@ -155,9 +155,19 @@ int main(){
 
     // THREE: make plot aesthetics and saving
     // std::vector<TH1D*> indiHistoVec = {h_qcdCorr};
-    std::vector<TH1D*> indiHistoVec = {h_ddTT, h_["S_tag_TTJets"]};
+    //std::vector<TH1D*> indiHistoVec = {h_ddTT, h_["S_tag_TTJets"]};
+    //std::vector<TH1D*> indiHistoVec = {h_ddTT, h_["S_tag_TTJets_Powheg"]};
+    //std::vector<TH1D*> indiHistoVec = {h_ddTT, h_["S_tag_TTJets_Powheg_NoReWeighting"]};
+    //std::vector<TH1D*> indiHistoVec = {h_ddTT, h_["S_tag_TTJets_MG_HTStitched600"]};
+    //std::vector<TH1D*> indiHistoVec = {h_ddTT, h_["S_tag_TTJets_MG_HTStitched600_NoReWeighting"]};
+    //std::vector<TH1D*> indiHistoVec = {h_["S_tag_TTJets_MG_HTStitched600"], h_["S_tag_TTJets_MG_HTStitched600_NoReWeighting"]};
+    //std::vector<TH1D*> indiHistoVec = {h_["S_tag_TTJets_MG_HTStitched600"], h_["S_tag_TTJets_Powheg"]};
     //std::vector<TH1D*> indiHistoVec = {h_ddTT, h_altTT, h_["S_tag_TTJets"]};
-    //std::vector<TH1D*> indiHistoVec = {h_["S_tag_P5_1800sq_R0p99"], h_["S_tag_P5_1800sq_R0p384"], h_["S_tag_P7_1900sq_R0p99"], h_["S_tag_P7_1900sq_R0p384"]};
+    std::vector<TH1D*> indiHistoVec = {h_["S_tag_P5_1800sq_R0p99"], h_["S_tag_P5_1800sq_R0p384"]};
+    //std::vector<TH1D*> indiHistoVec = {h_["S_anti_P5_1800sq_R0p99"], h_["S_anti_P5_1800sq_R0p384"]};
+    //std::vector<TH1D*> indiHistoVec = {h_["UnD_tag_P5_1800sq_R0p99"], h_["UnD_tag_P5_1800sq_R0p384"]};
+    //std::vector<TH1D*> indiHistoVec = {h_["UnD_anti_P5_1800sq_R0p99"], h_["UnD_anti_P5_1800sq_R0p384"]};
+    //std::vector<TH1D*> indiHistoVec = {h_["S_tag_P5_1800sq_R0p99"], h_["S_tag_P5_1800sq_R0p384"], h_["S_tag_P7_1900sq_R0p99"], h_["S_tag_P7_1900sq_R0p384"]}; 
     //std::vector<TH1D*> indiHistoVec = {h_["S_anti_P5_1800sq_R0p99"], h_["S_anti_P5_1800sq_R0p384"], h_["S_anti_P7_1900sq_R0p99"], h_["S_anti_P7_1900sq_R0p384"]};
     //std::vector<TH1D*> indiHistoVec = {h_["UnD_tag_P5_1800sq_R0p99"], h_["UnD_tag_P5_1800sq_R0p384"], h_["UnD_tag_P7_1900sq_R0p99"], h_["UnD_tag_P7_1900sq_R0p384"]};
     //std::vector<TH1D*> indiHistoVec = {h_["UnD_anti_P5_1800sq_R0p99"], h_["UnD_anti_P5_1800sq_R0p384"], h_["UnD_anti_P7_1900sq_R0p99"], h_["UnD_anti_P7_1900sq_R0p384"]};
@@ -169,29 +179,39 @@ int main(){
     //std::vector<TH1D*> indiHistoVec = {h_["UnD_anti_WJets"], h_["UnD_anti_ZJets"], h_["UnD_anti_TTJets"], h_["UnD_anti_QCD"]};
     //std::vector<TH1D*> indiHistoVec = {h_["S_tag_WJets"], h_["S_tag_ZJets"], h_["S_tag_TTJets"], h_["S_tag_QCD"]};
     //std::vector<TH1D*> stackHistoVec = {h_["S_anti_WJets"], h_["S_anti_ZJets"], h_["S_anti_TTJets"], h_["S_anti_QCD"]};
-    //std::vector<TH1D*> stackHistoVec = {h_["UnD_tag_WJets"], h_["UnD_tag_ZJets"], h_["UnD_tag_TTJets"], h_["UnD_tag_QCD"]};
-    //std::vector<TH1D*> stackHistoVec = {h_["UnD_anti_WJets"], h_["UnD_anti_ZJets"], h_["UnD_anti_TTJets"], h_["UnD_anti_QCD"]};
-    //std::vector<TH1D*> stackHistoVec = {h_["S_tag_WJets"], h_["S_tag_ZJets"], h_["S_tag_TTJets"], h_["S_tag_QCD"]};
+    //std::vector<TH1D*> stackHistoVec = {h_["UnD_tag_WJets"], h_["UnD_tag_ZJets"], h_["UnD_tag_TTJets_Powheg_NoReWeighting"], h_["UnD_tag_QCD"]};
+    //std::vector<TH1D*> stackHistoVec = {h_["UnD_anti_WJets"], h_["UnD_anti_ZJets"], h_["UnD_anti_TTJets_Powheg"], h_["UnD_anti_QCD"]};
+    //std::vector<TH1D*> stackHistoVec = {h_["UnD_tag_WJets"], h_["UnD_tag_ZJets"], h_["UnD_tag_TTJets_MG_HTStitched600"], h_["UnD_tag_QCD"]};
+    //std::vector<TH1D*> stackHistoVec = {h_["UnD_anti_WJets"], h_["UnD_anti_ZJets"], h_["UnD_anti_TTJets_MG_HTStitched600_NoReWeighting"], h_["UnD_anti_QCD"]};
+    std::vector<TH1D*> stackHistoVec = {h_["S_tag_WJets"], h_["S_tag_ZJets"], h_["S_tag_TTJets_MG_HTStitched600"], h_["S_tag_QCD"]};
+    //std::vector<TH1D*> stackHistoVec = {h_["S_anti_WJets"], h_["S_anti_ZJets"], h_["S_anti_TTJets_MG_HTStitched600_NoReWeighting"], h_["S_anti_QCD"]};
+    //std::vector<TH1D*> stackHistoVec = {h_["S_tag_WJets"], h_["S_tag_ZJets"], h_["S_tag_TTJets_Powheg_NoReWeighting"], h_["S_tag_QCD"]};
+    //std::vector<TH1D*> stackHistoVec = {h_["S_anti_WJets"], h_["S_anti_ZJets"], h_["S_anti_TTJets_Powheg"], h_["S_anti_QCD"]};
 
-    Plotter plot = Plotter(indiHistoVec);
+    //Plotter plot = Plotter(indiHistoVec);
     //Plotter plot = Plotter({}, stackHistoVec);
-    //Plotter plot = Plotter(indiHistoVec, stackHistoVec);
+    Plotter plot = Plotter(indiHistoVec, stackHistoVec);
 
+    //std::vector<std::string> legendNames = {"MadGraph LO", "Powheg NLO"};
+    //std::vector<std::string> legendNames = {"With Top Quark pT Reweighting", "Without Reweighting"};
     //std::vector<std::string> legendNames = {"S_tag", "S_tag prediction"};
     //std::vector<std::string> legendNames = {"S_anti", "S_anti prediction"};
-    std::vector<std::string> legendNames = {"data driven", "MC"};
+    //std::vector<std::string> legendNames = {"data driven", "MC"};
     //std::vector<std::string> legendNames = {"data driven", "alternative DD", "MC"};
     //std::vector<std::string> legendNames = {"data", "WJets", "ZJets", "TTJets", "QCD"};
     //std::vector<std::string> legendNames = {"WJets", "ZJets", "TTJets", "QCD"};
     //std::vector<std::string> legendNames = {"P5_1800sq_R0p99", "P5_1800sq_R0p384", "P7_1900sq_R0p99", "P7_1900sq_R0p384", "WJets", "ZJets", "TTJets", "QCD"};
+    std::vector<std::string> legendNames = {"P5_1800sq_R0p99", "P5_1800sq_R0p384", "WJets", "ZJets", "TTJets", "QCD"};
 
     plot.AddLegend(legendNames, 0.70, 0.88, 0.68, 0.86, 0.03);
     // plot.AddLegend(legendNames, 0.70, 0.88, 0.63, 0.86, 0.045);
     
     // plot.AddLatex(luminosity);
-    plot.AddLatex(luminosity, "#it{Preliminary}");
-    
-    plot.AddRatioBox(0.10, 1.90, "data / MC", true);
+    plot.AddLatex(luminosity, "#it{Work In Progress}");
+
+    //plot.AddRatioBox(0.10, 1.90, "ratio", true);
+    //plot.AddRatioBox(0.10, 1.90, "with / without", true);
+    //plot.AddRatioBox(0.10, 1.90, "data / MC", true);
     //plot.AddRatioBox(0.10, 1.90, "true / pred", true);
     //plot.AddRatioBox(0.10, 1.90, "MC / Pred", true);
 
@@ -218,7 +238,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
     // ************************
     // *** histos locations ***
     
-    std::string preamble = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_MHT_2019_01_08/MassCutsV06Joe/run2016/";  
+    std::string preamble = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_MHT_2019_01_08/MassCutsV06ThreeBins_FINAL/run2016/";  
     // std::string preamble = "/opt/ppd/scratch/xap79297/Analysis_boostedNmssmHiggs/histos_2018_08_03/MassCutsSpecialV06/run2017_v2/";  
     
     std::string postamble = "MassCutsSpecialV06_ak8pt300_ht1500x_ak4pt-1n-1_lumi36.root";
@@ -229,6 +249,10 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
     // ************************
 
     std::vector<std::string> histoNameVec;
+    histoNameVec.push_back("TTJets_Powheg_NoReWeighting");
+    histoNameVec.push_back("TTJets_Powheg");
+    histoNameVec.push_back("TTJets_MG_HTStitched600");
+    histoNameVec.push_back("TTJets_MG_HTStitched600_NoReWeighting");
     histoNameVec.push_back("TTJets");
     histoNameVec.push_back("data");
     histoNameVec.push_back("ZJets");
@@ -242,6 +266,7 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
     for (size_t iH = 0; iH < histoNameVec.size(); ++iH){
 
         std::string histoToUse = histoNameVec[iH];
+	//std::cout << histoToUse << std::endl;
 
         TFile * f = new TFile(Form("%s/%s/%s", preamble.c_str(), histoToUse.c_str(), postamble.c_str()));
         // explanation of terminology
@@ -262,13 +287,13 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
         h_[Form("U_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtOffLooseAndOffLoose_NOSYS");
         h_[Form("D_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtOffLooseAndOffLoose_NOSYS");
 
-        h_[Form("UnD_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("U_tag_%s", histoToUse.c_str())]->Clone();
-        h_[Form("UnD_tag_%s", histoToUse.c_str())]->Add(h_[Form("D_tag_%s", histoToUse.c_str())]);
+        h_[Form("UnD_tag_%s", histoToUse.c_str())] = (TH1D*)h_[Form("D_tag_%s", histoToUse.c_str())]->Clone();
+        h_[Form("UnD_tag_%s", histoToUse.c_str())]->Add(h_[Form("U_tag_%s", histoToUse.c_str())]);
 
         h_[Form("UnD_anti_%s", histoToUse.c_str())] = (TH1D*)h_[Form("U_anti_%s", histoToUse.c_str())]->Clone();
         h_[Form("UnD_anti_%s", histoToUse.c_str())]->Add(h_[Form("D_anti_%s", histoToUse.c_str())]);
 
-        if (histoToUse == "TTJets"){
+        if (histoToUse == "TTJets" || histoToUse == "TTJets_Powheg" || histoToUse == "TTJets_Powheg_NoReWeighting" || histoToUse == "TTJets_MG_HTStitched600" || histoToUse == "TTJets_MG_HTStitched600_NoReWeighting"){
 
 
             h_["tt_S_up"] = (TH1D*)f->Get("S_dbtLooseMaxAndLooseMax_dbtTagUp");
@@ -339,16 +364,17 @@ void GetHistograms(std::map<std::string,TH1D*>& h_)
             // LOOP THRU BIN ENTRIES
             for (int i = 1; i < 4; ++i){
 
-                double tt_S_dbtErr = 0.5 * (h_["tt_S_up"]->GetBinContent(i) - h_["tt_S_down"]->GetBinContent(i)) / h_["S_tag_TTJets"]->GetBinContent(i);
+                double tt_S_dbtErr = 0.5 * (h_["tt_S_up"]->GetBinContent(i) - h_["tt_S_down"]->GetBinContent(i)) / h_[Form("S_tag_%s", histoToUse.c_str())]->GetBinContent(i);
                 h_errS->SetBinError(i, tt_S_dbtErr);
-                double tt_UnD_dbtErr = 0.5 * (h_["tt_UnD_up"]->GetBinContent(i) - h_["tt_UnD_down"]->GetBinContent(i)) / h_["UnD_tag_TTJets"]->GetBinContent(i);
+                double tt_UnD_dbtErr = 0.5 * (h_["tt_UnD_up"]->GetBinContent(i) - h_["tt_UnD_down"]->GetBinContent(i)) / h_[Form("UnD_tag_%s", histoToUse.c_str())]->GetBinContent(i);
                 h_errUnD->SetBinError(i, tt_UnD_dbtErr);               
             }
 
-            h_["S_tag_TTJets"]->Multiply(h_errS);
-            h_["UnD_tag_TTJets"]->Multiply(h_errUnD);
+	    h_[Form("S_tag_%s", histoToUse.c_str())]->Multiply(h_errS);
+	    h_[Form("UnD_tag_%s", histoToUse.c_str())]->Multiply(h_errUnD);
 
-        } // closes 'if' histosToUse == TTJets
+
+        } // closes 'if' histosToUse == TTJets of whatever type
 
     } // closes loop through histoNameVec
 }

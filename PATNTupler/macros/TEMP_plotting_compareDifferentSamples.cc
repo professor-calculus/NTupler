@@ -30,7 +30,7 @@ int main(int argc, char** argv){
 
 
     // ONE: save info
-    std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/plots_2019_05_20/1D_Variables/Signal_vs_Background_2016/P8_1900sq/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/plots_2019_05_20/1D_Variables/Signal_vs_Background_2016/NAMEXYZ/"; // where we are going to save the output plots (should include the samples name, and any important features)
 
 
 
@@ -334,8 +334,8 @@ int main(int argc, char** argv){
                     P8_1900sq_R0p384.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08_FULL/signal_mc/P8_1900sq_R0p384/flatTree.root", cutToApply.c_str(), 0.0219);
                     //plotEntryVec2.push_back(P8_1900sq_R0p384);
 
-		    plotEntryVec2.push_back(P8_1900sq_R0p99);
-		    plotEntryVec2.push_back(P8_1900sq_R0p384);
+		    plotEntryVec2.push_back(NAMEXYZ_R0p99);
+		    plotEntryVec2.push_back(NAMEXYZ_R0p384);
 
                     //PlotEntry mH70_Down = PlotEntry("Scale Down", hTemplate, "weight_scaleDown", luminosity);
 		    //mH70_Down.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT_2019_01_08_FULL/mc/TTJets_MG/flatTree.root", "lheHT<600.0", 831.76);
@@ -363,7 +363,7 @@ int main(int argc, char** argv){
 
 		    // 2017 TT Powheg vs MG test
                     //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/TTToHadronic/flatTree.root", cutToApply.c_str(), 377.96, SF_weight.c_str());
-                    //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/TTToSemiLeptonic/tmp/flatTree_P8_1900sq.root", cutToApply.c_str(), 365.34, SF_weight.c_str());
+                    //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/TTToSemiLeptonic/tmp/flatTree_NAMEXYZ.root", cutToApply.c_str(), 365.34, SF_weight.c_str());
                     //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/TTTo2L2Nu/flatTree.root", cutToApply.c_str(), 88.29, SF_weight.c_str());
 
                     //plotEntry.AddInput("/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/flatTrees_MHT17_2019_01_08/mc/TTJets_MG/flatTree.root", cutToApply_lheHTLT.c_str(), 831.76, SF_weight.c_str());

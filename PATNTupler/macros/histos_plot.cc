@@ -35,7 +35,7 @@ int main(){
 
 
     // ONE: save info & luminosity
-    const std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/plots_MHT_2019_01_15/2016_80X/oneDimensionRepresentation/QCD_check/data_vs_calc/"; // where we are going to save the output plots (should include the samples name, and any important features)
+    const std::string outputDir = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/plots_2019_05_20/2016_80X/oneDimensionRepresentation/MassCuts_V10/MountainRange/Many_Backgrounds/"; // where we are going to save the output plots (should include the samples name, and any important features)
     
     const double luminosity = 35.867; // 2016 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
     // const double luminosity = 41.370; // 2017 Plots::: NB this is just a label for the plot. It should match the lumi of the histograms!
@@ -52,7 +52,7 @@ int main(){
     std::map<std::string, TH1D*> h16_;
     std::map<std::string, TH1D*> h17_;
     GetHistograms2016(h16_);
-    GetHistograms2017(h17_);
+    //GetHistograms2017(h17_);
     // explanation of terminology
     // 1. S, U, D --> refers to mass space. pred(Old)(New) is the prediction of S. UnD is the sum U+D.
     // 2. tag, anti, control --> refers to 2*DBT space
@@ -93,25 +93,40 @@ int main(){
     // TWO: make plot aesthetics and saving
     
     // std::vector<TH1D*> indiHistoVec = {h16_["S_control_data"], h16_["predNew_control_data"]};
-    // std::vector<TH1D*> stackHistoVec = {h16_["S_tag_WJets"], h16_["S_tag_ZJets"], h16_["S_tag_TTJets"], h16_["S_tag_QCD"]};
+    //std::vector<TH1D*> stackHistoVec = {h16_["S_tag_WJets"], h16_["S_tag_TTJets_MG_HTStitched600_noReWeighting"], h16_["S_tag_QCD"]};
+    //std::vector<TH1D*> stackHistoVec = {h16_["S_tag_DiBoson"], h16_["S_tag_TTZ"], h16_["S_tag_TTW"], h16_["S_tag_WJetstoLNu"], h16_["S_tag_ZJetstoLL"], h16_["S_tag_WJets"], h16_["S_tag_ZJetstoQQ"], h16_["S_tag_ST"], h16_["S_tag_TTJets_MG_HTStitched600_noReWeighting"], h16_["S_tag_QCD"]};
+    std::vector<TH1D*> stackHistoVec = {h16_["S_tag_Ewk"], h16_["S_tag_ST"], h16_["S_tag_TTJets_MG_HTStitched600"], h16_["S_tag_QCD"]};
     // std::vector<TH1D*> indiHistoVec = {h16_["S_tag_TTJets"], h16_["S_tag_QCD"]};
-    std::vector<TH1D*> indiHistoVec = {h16_["S_tag_TTJets"], h16_["S_tag_TTJets_MGLO_HTStitched650"]};
+    // std::vector<TH1D*> indiHistoVec = {h16_["S_tag_TTJets"], h16_["S_tag_TTJets_MGLO_HTStitched650"]};
     // std::vector<TH1D*> indiHistoVec = {h16_["S_anti_TTJets"], h16_["S_anti_QCD"]};
+    //std::vector<TH1D*> indiHistoVec = {h16_["S_tag_TTJets_Powheg"], h16_["S_tag_TTJets_Powheg_NoTopReWeighting"]};
+    //std::vector<TH1D*> indiHistoVec = {h16_["S_tag_TTJets_MGLO_HTStitched600"], h16_["S_tag_TTJets_MGLO_HTStitched600_NoTopReWeighting"]}; 
 
-    // std::vector<TH1D*> indiHistoVec = {h16_["S_tag_P1_1400sq_R0p99"], h16_["S_tag_P1_1400sq_R0p384"], h16_["S_tag_P1_1800sq_R0p99"], h16_["S_tag_P1_1800sq_R0p384"]};
+    //std::vector<TH1D*> indiHistoVec = {h16_["S_tag_P1_1400sq_R0p99"], h16_["S_tag_P1_1400sq_R0p384"], h16_["S_tag_P1_1800sq_R0p99"], h16_["S_tag_P1_1800sq_R0p384"]};
     // std::vector<TH1D*> indiHistoVec = {h16_["S_anti_P1_1900sq_R0p99"], h16_["S_anti_P1_1900sq_R0p384"], h16_["S_anti_TTJets"], h16_["S_anti_QCD"]};
     // std::vector<TH1D*> indiHistoVec = {h16_["UnD_tag_P1_1900sq_R0p99"], h16_["UnD_tag_P1_1900sq_R0p384"], h16_["UnD_tag_TTJets"], h16_["UnD_tag_QCD"]};
     // std::vector<TH1D*> indiHistoVec = {h16_["UnD_anti_P1_1900sq_R0p99"], h16_["UnD_anti_P1_1900sq_R0p384"], h16_["UnD_anti_TTJets"], h16_["UnD_anti_QCD"]};
+    //std::vector<TH1D*> indiHistoVec = {h16_["S_tag_P1_1800sq_R0p99"], h16_["S_tag_P1_1800sq_R0p384"]};
+    //std::vector<TH1D*> indiHistoVec = {h16_["S_tag_P1_1800sq_R0p99_PUleq23"], h16_["S_tag_P1_1800sq_R0p99_PUgeq24"]};
+    //std::vector<TH1D*> indiHistoVec = {h16_["S_tag_CPS_mH70_2600sq_scaleUp"], h16_["S_tag_CPS_mH70_2600sq"], h16_["S_tag_CPS_mH70_2600sq_scaleDown"]};
+    //std::vector<TH1D*> indiHistoVec = {h16_["S_tag_TTJets_scaleUp"], h16_["S_tag_TTJets"], h16_["S_tag_TTJets_scaleDown"]};
 
-    Plotter plot = Plotter(indiHistoVec);
-    // Plotter plot = Plotter({}, stackHistoVec);
-    // Plotter plot = Plotter(indiHistoVec, stackHistoVec);
+    //Plotter plot = Plotter(indiHistoVec);
+    Plotter plot = Plotter({}, stackHistoVec);
+    //Plotter plot = Plotter(indiHistoVec, stackHistoVec);
 
     // std::vector<std::string> legendNames = {"control", "control prediction"};
     // std::vector<std::string> legendNames = {"TTJets", "QCD"};
-    std::vector<std::string> legendNames = {"Powheg", "MGLO HTStitched"};
+    // std::vector<std::string> legendNames = {"Powheg", "MGLO HTStitched"};
 
-    //std::vector<std::string> legendNames = {"1400GeV Sq 1GeV LSP", "1400GeV Sq 200GeV LSP", "1800GeV Sq 1GeV LSP", "1800GeV Sq 200GeV LSP", "WJets", "ZJets", "TTJets", "QCD"};
+    //std::vector<std::string> legendNames = {"1800GeV Sq 1GeV LSP", "1800GeV Sq 200GeV LSP"};
+    //std::vector<std::string> legendNames = {"1400GeV Sq 1GeV LSP", "1400GeV Sq 200GeV LSP", "1800GeV Sq 1GeV LSP", "1800GeV Sq 200GeV LSP", "WJets", "TTJets", "QCD"};
+    //std::vector<std::string> legendNames = {"1800GeV Sq 1GeV LSP", "1800GeV Sq 200GeV LSP", "WJets", "TTJets", "QCD"};
+    std::vector<std::string> legendNames = {"Electroweak", "Single Top", "TTJets", "QCD"};
+    //std::vector<std::string> legendNames = {"DiBoson","TTZ", "TTW", "WJets to LNu", "ZJets to LL", "WJets to QQ", "ZJets to QQ", "Single Top", "TTJets", "QCD"};
+    //std::vector<std::string> legendNames = {"TTJets", "TTJets Without Top pT Reweighting"};
+    //std::vector<std::string> legendNames = {"nPU <= 23", "nPU >= 24"};
+    //std::vector<std::string> legendNames = {"Scale Up", "Nominal", "Scale Down"};
 
     // plot.AddLegend(legendNames, 0.16, 0.38, 0.64, 0.83, 0.028);
     // plot.AddLegend(legendNames, 0.18, 0.38, 0.18, 0.30, 0.040);
@@ -119,19 +134,20 @@ int main(){
     plot.AddLegend(legendNames, 0.67, 0.88, 0.61, 0.80, 0.025); // with ratio box
     // plot.AddLegend2Cols(4, legendNames, 0.70, 0.84, 0.64, 0.79, 0.028);
     
-    // plot.AddLatex();
+    plot.AddLatex();
     // plot.AddLatex(luminosity);
-    // plot.AddLatex("#it{Preliminary}");
-    plot.AddLatex(luminosity, "#it{Preliminary}");
+    // plot.AddLatex("#it{Work In Progress}");
+    //plot.AddLatex(luminosity, "#it{Work In Progress}");
     
     // plot.AddRatioBox("ratio");
     // plot.AddRatioBox("ratio", true);
-    // plot.AddRatioBox(0.1, 1.9, "ratio", true);
+    //plot.AddRatioBox(0.1, 1.9, "ratio", true);
     // plot.AddRatioBox("true / pred", true);
-    plot.AddRatioBox(0.1, 4.9, "ratio", true);
+    // plot.AddRatioBox(0.1, 4.9, "ratio", true);
 
     //plot.AddRatioBox(0.1,2.4, "true / pred", true);
     //plot.AddRatioBox(0.1,2.4, "ratio", true);
+    //plot.AddRatioBox(0.5,1.5, "ratio", true);
 
     // plot.AddRatioBox(0.84,1.16, "priv / central", true);
     
@@ -167,16 +183,33 @@ int main(){
 void GetHistograms2016(std::map<std::string,TH1D*>& h_)
 {
     // histos locations
-    std::string preamble = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_MHT_2019_01_08/MassCutsV09/run2016/";
+    std::string preamble = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_MHT_2019_01_08/MassCutsV10_FINAL/run2016/";
     
-    std::string postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
+    std::string postamble = "MassCutsV10_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi36.root";
     std::vector<std::string> histoNameVec;
-    histoNameVec.push_back("data");
+    //histoNameVec.push_back("data");
     histoNameVec.push_back("QCD");
-    histoNameVec.push_back("TTJets");
-    histoNameVec.push_back("TTJets_MGLO_HTStitched650");
-    histoNameVec.push_back("ZJets");
-    histoNameVec.push_back("WJets");
+    //histoNameVec.push_back("TTJets");
+    //histoNameVec.push_back("TTJets_Powheg");
+    //histoNameVec.push_back("TTJets_Powheg_noReWeighting");
+    histoNameVec.push_back("TTJets_MG_HTStitched600");
+    //histoNameVec.push_back("TTJets_MG_HTStitched600_noReWeighting");
+    //histoNameVec.push_back("ZJetstoQQ");
+    //histoNameVec.push_back("WJets");
+    //histoNameVec.push_back("WJetstoLNu");
+    //histoNameVec.push_back("ZJetstoLL");
+    //histoNameVec.push_back("TTW");
+    //histoNameVec.push_back("TTZ");
+    histoNameVec.push_back("ST");
+    //histoNameVec.push_back("DiBoson");
+    histoNameVec.push_back("Ewk");
+
+    //histoNameVec.push_back("CPS_mH70_1200sq");
+    //histoNameVec.push_back("CPS_mH70_2000sq");
+    //histoNameVec.push_back("CPS_mH70_2600sq");
+
+    //histoNameVec.push_back("P1_1800sq_R0p99_PUleq23");
+    //histoNameVec.push_back("P1_1800sq_R0p99_PUgeq24");
 
     histoNameVec.push_back("P1_1200sq_R0p384");
     histoNameVec.push_back("P1_1200sq_R0p555");
@@ -279,6 +312,8 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
         // 2. tag, anti, control --> refers to 2*DBT space
         // 3. sample name on the end
 
+	//std::cout << histoToUse.c_str() << std::endl;
+
         if (histoToUse != "data") h_[Form("S_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtDiagUpLoose_NOSYS");
         h_[Form("U_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtDiagUpLoose_NOSYS");
         h_[Form("D_tag_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtDiagUpLoose_NOSYS");
@@ -286,7 +321,7 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
         h_[Form("S_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtOffLooseAndOffLoose_NOSYS");
         h_[Form("U_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtOffLooseAndOffLoose_NOSYS");
         h_[Form("D_anti_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtOffLooseAndOffLoose_NOSYS");
-/*
+
         h_[Form("S_control_%s", histoToUse.c_str())] = (TH1D*)f->Get("S_dbtLooseMed2AndOffIDBTCv23_NOSYS");
         h_[Form("U_control_%s", histoToUse.c_str())] = (TH1D*)f->Get("U_dbtLooseMed2AndOffIDBTCv23_NOSYS");
         h_[Form("D_control_%s", histoToUse.c_str())] = (TH1D*)f->Get("D_dbtLooseMed2AndOffIDBTCv23_NOSYS");
@@ -338,7 +373,7 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
         h_[Form("predOld_control_%s", histoToUse.c_str())] = (TH1D*)h_[Form("UnD_control_%s", histoToUse.c_str())]->Clone();
         h_[Form("predOld_control_%s", histoToUse.c_str())]->Multiply(h_[Form("S_anti_%s", histoToUse.c_str())]);
         h_[Form("predOld_control_%s", histoToUse.c_str())]->Divide(h_[Form("UnD_anti_%s", histoToUse.c_str())]);
-*/
+
         // SYSTEMATIC VARIATIONS (for TAG histograms)
         std::vector<std::string> nonTrivialSysVec;
         nonTrivialSysVec.push_back("jecAK4UncUp");
@@ -357,6 +392,10 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
         nonTrivialSysVec.push_back("dbtTagDown");
         nonTrivialSysVec.push_back("isrUp");
         nonTrivialSysVec.push_back("isrDown");
+        if (histoToUse.at(0) != 'P' && histoToUse != "data"){
+		nonTrivialSysVec.push_back("scaleUp");
+                nonTrivialSysVec.push_back("scaleDown");
+	}
 
         for (auto nonTrivialSys : nonTrivialSysVec){
 
@@ -366,6 +405,11 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
             h_[Form("UnD_tag_%s_%s", histoToUse.c_str(), nonTrivialSys.c_str())]->Add((TH1D*)f->Get(Form("D_dbtDiagUpLoose_%s", nonTrivialSys.c_str())));
 
         } // closes loop through nonTrivialSysVec
+
+	if (histoToUse.at(0) != 'P' && histoToUse != "data" && histoToUse != "ZJetstoQQ" && histoToUse != "DiBoson" && histoToUse != "ZJetstoLL" && histoToUse != "WJetstoLNu" && histoToUse != "TTZ" && histoToUse != "TTW" && histoToUse != "ST"){
+                h_[Form("S_tag_%s_scaleUp", histoToUse.c_str())]->Scale(h_[Form("S_tag_%s", histoToUse.c_str())]->Integral() / h_[Form("S_tag_%s_scaleUp", histoToUse.c_str())]->Integral());
+                h_[Form("S_tag_%s_scaleDown", histoToUse.c_str())]->Scale(h_[Form("S_tag_%s", histoToUse.c_str())]->Integral() / h_[Form("S_tag_%s_scaleDown", histoToUse.c_str())]->Integral());
+        }
 
     } // closes loop through histoNameVec
 }
@@ -378,9 +422,9 @@ void GetHistograms2016(std::map<std::string,TH1D*>& h_)
 void GetHistograms2017(std::map<std::string,TH1D*>& h_)
 {
     // histos locations
-    std::string preamble = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_MHT_2019_01_08/MassCutsV09/run2017/";
+    std::string preamble = "/opt/ppd/scratch/titterton/Analysis_boostedNmssmHiggs/histos_MHT_2019_01_08/MassCutsV10/run2017/";
     
-    std::string postamble = "MassCutsV09_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi42.root";
+    std::string postamble = "MassCutsV10_ak8pt300_ht1500x2500x3500x_ak4pt300n-1_lumi42.root";
     std::vector<std::string> histoNameVec;
     histoNameVec.push_back("data");
     histoNameVec.push_back("QCD");
